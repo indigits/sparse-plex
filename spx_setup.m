@@ -1,4 +1,4 @@
-function [globals] = csf_setup()
+function [globals] = spx_setup()
 % Let us get the full path of this file
 globals.filepath = which(mfilename);
 % Get the directory of this file
