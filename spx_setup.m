@@ -3,7 +3,9 @@ function [globals] = spx_setup()
 globals.filepath = which(mfilename);
 % Get the directory of this file
 % This is the directory in which SparsePlex library is hosted.
-globals.spx = fileparts(globals.filepath);
+globals.root = fileparts(globals.filepath);
+% This is the directory where source-plex library code is hosted.
+globals.spx = fullfile(globals.root, 'library');
 
 
 addpath(globals.spx);
