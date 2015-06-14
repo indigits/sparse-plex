@@ -28,7 +28,7 @@ classdef SPX_BasicDictionaryCreator < handle
             result = randn(N, D);
             if normalized_columns
                 % Normalized each column
-                result = CS_Similarity.normalize_l2(result); 
+                result = SPX_Norm.normalize_l2(result); 
             else
                 % Make sure that variance of individual entries is 1/N
                 result = result ./ sqrt(N);

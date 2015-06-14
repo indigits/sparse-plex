@@ -9,6 +9,12 @@ runtests;
 cd (fullfile(globals.dictionary, 'tests'));
 runtests;
 
+cd (fullfile(globals.conjugate_gradient, 'tests'));
+runtests;
+
+cd (fullfile(globals.steepest_descent, 'tests'));
+runtests;
+
 
 % Finally return to the main directory
 cd(globals.root);
