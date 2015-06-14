@@ -1,4 +1,4 @@
-classdef SPX_Checks
+classdef SPX_Checks < handle
 
     methods(Static)
 
