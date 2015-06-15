@@ -85,6 +85,10 @@ addpath(globals.probability);
 globals.pursuit = fullfile(globals.spx, 'pursuit');
 addpath(globals.pursuit);
 
+globals.basis_pursuit = fullfile(globals.pursuit, 'basis_pursuit');
+addpath(globals.basis_pursuit);
+
+
 globals.cosamp = fullfile(globals.pursuit, 'cosamp');
 addpath(globals.cosamp);
 
