@@ -1,76 +1,203 @@
-Commons
+Common utilities
 =====================
+
+
 
 
 .. highlight:: matlab
 
 
-Commons-Checks
+Simple checks on matrices
 ---------------------------------------------------
 
-::
+Let us create a simple matrix::
 
-    CS_Checks.is_square(A)
-    CS_Checks.is_symmetric(A)
-    CS_Checks.is_hermitian(A)
-    CS_Checks.is_positive_definite(A)
-    CS_Checks.
-    CS_Checks.
+    A = magic(3);
 
-Commons-Comparing Signals
+Checking whether the matrix is a square matrix::
+
+    SPX_Checks.is_square(A)
+
+Checking if it is symmetric::
+
+    SPX_Checks.is_symmetric(A)
+
+Checking if it is a Hermitian matrix::
+
+    SPX_Checks.is_hermitian(A)
+
+
+Checking if it is a positive definite matrix::
+
+    SPX_Checks.is_positive_definite(A)
+
+
+Comparing sparse or approximately sparse signals
 ---------------------------------------------------
 
-::
+``SPX_SignalsComparison`` class provides a number of
+methods to compare two sets of sparse signals. It is
+typically used to compare a set of original sparse signals
+with corresponding recovered sparse signals.
 
-    CS_CompareSignals.sparse_approximation(X, K)
-    cs = CS_CompareSignals(References, Estimates, K)
+Let us create two signals of size (N=256)
+with sparsity level (K=4) with the
+non-zero entries having magnitude chosen
+uniformly between [1,2]::
+
+    N = 256;
+    K = 4;
+    % Constructing a sparse vector
+    % Choosing the support randomly
+    Omega = randperm(N, K);
+    % Number of signals
+    S = 2;
+    % Original signals
+    X = zeros(N, S);
+    % Choosing non-zero values uniformly between (-b, -a) and (a, b)
+    a = 1;
+    b = 2; 
+    % unsigned magnitudes of non-zero entries
+    XM = a + (b-a).*rand(K, S);
+    % Generate sign for non-zero entries randomly
+    sgn = sign(randn(K, S));
+    % Combine sign and magnitude
+    XMS = sgn .* XM;
+    % Place at the right non-zero locations
+    X(Omega, :) = XMS;
+
+Let us create a noisy version of these
+signals with noise only in the non-zero
+entries at 15 dB of SNR::
+
+    % Creating noise using helper function
+    SNR = 15;
+    Noise = SPX_NoiseGen.createNoise(XMS, SNR);
+    Y = X;
+    Y(Omega, :) = Y(Omega, :) + Noise;
+
+Let us create an instance of sparse signal comparison class::
+
+    cs = SPX_SignalsComparison(X, Y, K);
+
+Norms of difference signals [X - Y]::
+
     cs.difference_norms()
+
+Norms of original signals [X]::
+
     cs.reference_norms()
+
+Norms of estimated signals [Y]::
+
     cs.estimate_norms()
+
+
+Ratios between signal error norms and original signal norms::
+
     cs.error_to_signal_norms()
+
+SNR for each signal::
+
     cs.signal_to_noise_ratios()
+
+In case the signals X and Y were not 
+truly sparse, then ``SPX_SignalsComparison``
+has the ability to sparsify them 
+by choosing the ``K`` largest (magnitude)
+entries for each signal in reference signal
+set and estimated signal set. ``K``
+is an input parameter taken by the class.
+
+We can access the sparsified reference signals:: 
+
     cs.sparse_references()
+
+We can access the sparsified estimated signals:: 
+
     cs.sparse_estimates()
+
+We can also examine the support index set
+for each sparsified reference signal::
+
     cs.reference_sparse_supports()
+
+Ditto for the supports of sparsified estimated signals:: 
+
     cs.estimate_sparse_supports()
+
+We can measure the support similarity ratio 
+for each signal ::
+
     cs.support_similarity_ratios()
+
+We can find out which of the signals have
+a support similarity above a specified threshold::
+
     cs.has_matching_supports(1.0)
+
+Overall analysis can be easily summarized
+and printed for each signal::
+
     cs.summarize()
 
+Here is the output ::
 
-Commons-Distance
+    Signal dimension: 256
+    Number of signals: 2
+    Combined reference norm: 4.56207362
+    Combined estimate norm: 4.80070407
+    Combined difference norm: 0.81126416
+    Combined SNR: 15.0000 dB
+    Specified sparsity level: 4
+
+    Signal: 1
+      Reference norm: 2.81008750
+      Estimate norm: 2.91691022
+      Error norm: 0.49971207
+      SNR: 15.0000 dB
+      Support similarity ratio: 1.00
+
+    Signal: 2
+      Reference norm: 3.59387311
+      Estimate norm: 3.81292464
+      Error norm: 0.63909106
+      SNR: 15.0000 dB
+      Support similarity ratio: 1.00
+
+Distance
 ---------------------------------------------------
 
 ::
 
 
-    CS_Distance.pairwise_distances(X, distance)
-    CS_Distance.sqrd_l2_distances_cw(X)
-    CS_Distance.sqrd_l2_distances_rw(X)
-    CS_Distance.
-    CS_Distance.
-    CS_Distance.
+    SPX_Distance.pairwise_distances(X, distance)
+    SPX_Distance.sqrd_l2_distances_cw(X)
+    SPX_Distance.sqrd_l2_distances_rw(X)
+    SPX_Distance.
+    SPX_Distance.
+    SPX_Distance.
 
 
-Commons-Matrix
+Matrix
 ---------------------------------------------------
 
 
 ::
 
-    CS_Mat.off_diagonal_elements(X)
-    CS_Mat.off_diagonal_matrix(X)
-    CS_Mat.off_diag_upper_tri_elements(X)
-    CS_Mat.off_diag_upper_tri_matrix(X)
-    CS_Mat.nonzero_density(X)
+    SPX_Mat.off_diagonal_elements(X)
+    SPX_Mat.off_diagonal_matrix(X)
+    SPX_Mat.off_diag_upper_tri_elements(X)
+    SPX_Mat.off_diag_upper_tri_matrix(X)
+    SPX_Mat.nonzero_density(X)
 
 
-Commons-Signal space comparison
+Signal space comparison
 ---------------------------------------------------
 
 ::
 
-    cs = CS_MeasureApproximation(References, Estimates)
+    cs = SPX_MeasureApproximation(References, Estimates)
     cs.difference_norms()
     cs.reference_norms()
     cs.estimate_norms()
@@ -79,36 +206,36 @@ Commons-Signal space comparison
     cs.summarize()
 
 
-Commons-Norm utilities
+Norm utilities
 ---------------------------------------------------
 
 
 ::
 
-    CS_NormUtils.norms_l1_cw(X)
-    CS_NormUtils.norms_l2_cw(X)
-    CS_NormUtils.norms_linf_cw(X)
-    CS_NormUtils.normalize_l1(X)
-    CS_NormUtils.normalize_l2(X)
-    CS_NormUtils.normalize_l2_rw(X)
-    CS_NormUtils.normalize_linf(X)
-    CS_NormUtils.scale_columns(X, factors)
-    CS_NormUtils.scale_rows(X, factors)
-    CS_NormUtils.inner_product_cw(A, B)
+    SPX_NormUtils.norms_l1_cw(X)
+    SPX_NormUtils.norms_l2_cw(X)
+    SPX_NormUtils.norms_linf_cw(X)
+    SPX_NormUtils.normalize_l1(X)
+    SPX_NormUtils.normalize_l2(X)
+    SPX_NormUtils.normalize_l2_rw(X)
+    SPX_NormUtils.normalize_linf(X)
+    SPX_NormUtils.scale_columns(X, factors)
+    SPX_NormUtils.scale_rows(X, factors)
+    SPX_NormUtils.inner_product_cw(A, B)
 
 
-Commons-Problem Description
+Problem Description
 ---------------------------------------------------
 
 
 ::
 
-    pd = CS_ProblemDescription(Dict, Phi, K, ...
+    pd = SPX_ProblemDescription(Dict, Phi, K, ...
                 Representations, Signals, Measurements)
     pd.describe()
 
 
-Commons-Number related utilities
+Number related utilities
 ---------------------------------------------------
 
 
@@ -117,7 +244,7 @@ Commons-Number related utilities
     NumberUtil.findIntegerFactorsCloseToSquarRoot(n)
 
 
-Commons-Others
+Others
 ---------------------------------------------------
 
 ::
@@ -146,7 +273,7 @@ Energy of signal::
 
 Find the first vector with energy less than a given target::
 
-    CS_VectorsUtil.findFirstLessEqEnergy(X, energy)
+    SPX_VectorsUtil.findFirstLessEqEnergy(X, energy)
 
 
 Sparse Signals
@@ -154,32 +281,32 @@ Sparse Signals
 
 Sparse support for a vector::
 
-    CS_SupportUtil.support(x)
+    SPX_SupportUtil.support(x)
 
 l_0 "norm" of a vector::
 
-    CS_SupportUtil.l0norm(x)
+    SPX_SupportUtil.l0norm(x)
 
 Support intersection ratio::
 
-    CS_SupportUtil.intersectionRatio(s1, s2)
+    SPX_SupportUtil.intersectionRatio(s1, s2)
 
 Support similarity::
 
-    CS_SupportUtil.supportSimilarity(X, reference)
+    SPX_SupportUtil.supportSimilarity(X, reference)
 
 Support similarities between two sets of signals::
 
-    CS_SupportUtil.supportSimilarities(X, Y)
+    SPX_SupportUtil.supportSimilarities(X, Y)
 
 Support detection ratios ::
 
-    CS_SupportUtil.supportDetectionRate(X, trueSupport)
+    SPX_SupportUtil.supportDetectionRate(X, trueSupport)
 
 
 K largest indices over a set of vectors::
 
-     CS_SupportUtil.dominantSupportMerged(data, K)
+     SPX_SupportUtil.dominantSupportMerged(data, K)
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# CSF documentation build configuration file, created by
+# sparse-plex documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb 16 22:34:29 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -53,7 +53,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'CSF'
+project = 'sparse-plex'
 copyright = '2015, Shailesh'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -186,7 +186,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CSFdoc'
+htmlhelp_basename = 'sparse-plexdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -206,7 +206,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'CSF.tex', 'CSF ',
+  ('index', 'sparse-plex.tex', 'sparse-plex ',
    'Shailesh', 'manual'),
 ]
 
@@ -236,7 +236,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'csf', 'CSF',
+    ('index', 'csf', 'sparse-plex',
      ['Shailesh'], 1)
 ]
 
@@ -250,8 +250,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'CSF', 'CSF',
-   'Shailesh', 'CSF', 'One line description of project.',
+  ('index', 'sparse-plex', 'sparse-plex',
+   'Shailesh', 'sparse-plex', 'One line description of project.',
    'Miscellaneous'),
 ]
 

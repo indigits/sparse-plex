@@ -46,7 +46,7 @@ Visualizing the dictionary::
 
 Constructing a signal which is a combination of impulses and cosines::
 
-    alpha = zeros(D, 1);
+    alpha = zeros(2*N, 1);
     alpha(20) = 1;
     alpha(30) = -.4;
     alpha(100) = .6;
@@ -73,7 +73,7 @@ Sparse representation in the Dirac DCT dictionary
 
 Obtaining the sparse representation using matching pursuit algorithm::
 
-    solver = CS_MatchingPursuit(Phi, K);
+    solver = SPX_MatchingPursuit(Phi, K);
     result = solver.solve(x);
     mp_solution = result.z;
     mp_diff = alpha - mp_solution;
@@ -88,7 +88,7 @@ Matching pursuit recovery error: 0.0353.
 
 Obtaining the sparse representation using orthogonal matching pursuit algorithm::
 
-    solver = CS_OMPApprox(Phi, K);
+    solver = SPX_OrthogonalMatchingPursuit(Phi, K);
     result = solver.solve(x);
     omp_solution = result.z;
     omp_diff = alpha - omp_solution;
@@ -102,7 +102,7 @@ Orthogonal Matching pursuit recovery error: 0.0000.
 Obtaining a sparse approximation via basis pursuit::
 
 
-    solver = CS_L1SparseRecovery(Phi, x);
+    solver = SPX_L1SparseRecovery(Phi, x);
     result = solver.solve_l1_noise();
     l1_solution = result;
     l1_diff = alpha - l1_solution;

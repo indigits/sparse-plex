@@ -10,6 +10,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   start
    demos/index
    library/index
    datasets
