@@ -4,8 +4,10 @@ clc;
 rng('default');
 png_export = true;
 pdf_export = false;
+% Create the directory for storing images
+[status_code,message,message_id] = mkdir('bin');
 
-mf = MultiFigures();
+mf = SPX_MultiFigures();
 
 
 % Signal space dimension
@@ -26,10 +28,10 @@ colorbar;
 axis image;
 title('\Psi');
 if png_export
-export_fig images\dct_256.png -r120 -nocrop;
+export_fig bin\dct_256.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\dct_256.pdf;
+export_fig bin\dct_256.pdf;
 end
 
 % Visualizing the dictionary
@@ -40,10 +42,10 @@ colorbar;
 axis image;
 title('\Phi');
 if png_export
-export_fig images\dirac_dct_256.png -r120 -nocrop;
+export_fig bin\dirac_dct_256.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\dirac_dct_256.pdf;
+export_fig bin\dirac_dct_256.pdf;
 end
 
 % A combination of impulses and cosines.
@@ -65,10 +67,10 @@ xlabel('Index');
 ylabel('Value');
 title('Signal vector');
 if png_export
-export_fig images\impulse_cosine_combination_signal.png -r120 -nocrop;
+export_fig bin\impulse_cosine_combination_signal.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\impulse_cosine_combination_signal.pdf;
+export_fig bin\impulse_cosine_combination_signal.pdf;
 end
 
 mf.newFigure('Impulses + Cosines DCT representation');
@@ -77,10 +79,10 @@ xlabel('Index');
 ylabel('Value');
 title('Representation in DCT space');
 if png_export
-export_fig images\impulse_cosine_dct_basis.png -r120 -nocrop;
+export_fig bin\impulse_cosine_dct_basis.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\impulse_cosine_dct_basis.pdf;
+export_fig bin\impulse_cosine_dct_basis.pdf;
 end
 
 
@@ -90,14 +92,14 @@ xlabel('Index');
 ylabel('Value');
 title('Representation vector');
 if png_export
-export_fig images\impulse_cosine_dirac_dct.png -r120 -nocrop;
+export_fig bin\impulse_cosine_dirac_dct.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\impulse_cosine_dirac_dct.pdf;
+export_fig bin\impulse_cosine_dirac_dct.pdf;
 end
 
 % Matching pursuit
-solver = CS_MatchingPursuit(Phi, K);
+solver = SPX_MatchingPursuit(Phi, K);
 result = solver.solve(x);
 mf.newFigure('Matching pursuit solution');
 mp_solution = result.z;
@@ -113,10 +115,10 @@ xlabel('Index');
 ylabel('Value');
 title('Matching pursuit recovery error');
 if png_export
-export_fig images\dirac_dct_mp_solution.png -r120 -nocrop;
+export_fig bin\dirac_dct_mp_solution.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\dirac_dct_mp_solution.pdf;
+export_fig bin\dirac_dct_mp_solution.pdf;
 end
 
 % Recovery error
@@ -125,7 +127,7 @@ fprintf('Matching pursuit recovery error: %0.4f\n', mp_recovery_error);
 
 
 % Orthogonal Matching pursuit
-solver = CS_OMPApprox(Phi, K);
+solver = SPX_OrthogonalMatchingPursuit(Phi, K);
 result = solver.solve(x);
 mf.newFigure('Orthogonal Matching pursuit solution');
 omp_solution = result.z;
@@ -141,10 +143,10 @@ xlabel('Index');
 ylabel('Value');
 title('Orthogonal Matching pursuit recovery error');
 if png_export
-export_fig images\dirac_dct_omp_solution.png -r120 -nocrop;
+export_fig bin\dirac_dct_omp_solution.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\dirac_dct_omp_solution.pdf;
+export_fig bin\dirac_dct_omp_solution.pdf;
 end
 
 % Recovery error
@@ -153,7 +155,7 @@ fprintf('Orthogonal Matching pursuit recovery error: %0.4f\n', omp_recovery_erro
 
 
 % Basis pursuit
-solver = CS_L1SparseRecovery(Phi, x);
+solver = SPX_L1SparseRecovery(Phi, x);
 result = solver.solve_l1_noise();
 mf.newFigure('l_1 minimization solution');
 l1_solution = result;
@@ -169,10 +171,10 @@ xlabel('Index');
 ylabel('Value');
 title('l_1 minimization recovery error');
 if png_export
-export_fig images\dirac_dct_l_1_solution.png -r120 -nocrop;
+export_fig bin\dirac_dct_l_1_solution.png -r120 -nocrop;
 end
 if pdf_export
-export_fig images\dirac_dct_l_1_solution.pdf;
+export_fig bin\dirac_dct_l_1_solution.pdf;
 end
 
 % Recovery error

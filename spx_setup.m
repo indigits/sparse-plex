@@ -8,6 +8,7 @@ globals.root = fileparts(globals.filepath);
 globals.spx = fullfile(globals.root, 'library');
 
 
+addpath(globals.root);
 addpath(globals.spx);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,6 +47,7 @@ addpath(globals.combinatorics);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.graphics = fullfile(globals.spx, 'graphics');
 addpath(globals.graphics);
+addpath(fullfile(globals.graphics, 'export_fig'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.image_processing = fullfile(globals.spx, 'image_processing');
