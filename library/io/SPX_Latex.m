@@ -36,6 +36,23 @@ classdef SPX_Latex < handle
             fprintf('\\end{bmatrix}\n');
         end
 
+        function [] = printSet( x )
+        %PRINTSET Prints a set suitable for LaTeX
+        n = length(x);
+        if n == 0
+            fprintf('\\EmptySet \n');
+            return;
+        end
+        fprintf('\\{ ');
+        for i=1:n-1
+            fprintf('%g , ', x(i));
+            if mod(i,10) == 0
+                fprintf('\n');
+            end
+        end
+        fprintf('%g \\} \n', x(n));
+        end
+
         function printTabular(cells, headers)
             [rows, cols] = size(cells);
             fprintf('\\begin{table}[ht]\n');

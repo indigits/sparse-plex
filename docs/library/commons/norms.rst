@@ -1,6 +1,9 @@
 Norms and distances
 ==================================
 
+.. highlight:: matlab
+
+
 Distance measurement utilities
 ---------------------------------------------------
 

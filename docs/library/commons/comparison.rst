@@ -1,6 +1,8 @@
 Comparing signals
 ===============================
 
+.. highlight:: matlab
+
 
 Comparing sparse or approximately sparse signals
 ---------------------------------------------------

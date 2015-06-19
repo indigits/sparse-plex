@@ -1,2 +1,4 @@
 Sparse signals
 ======================
+
+.. highlight:: matlab
