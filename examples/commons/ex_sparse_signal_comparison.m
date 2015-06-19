@@ -28,7 +28,7 @@ Noise = SPX_NoiseGen.createNoise(XMS, SNR);
 Y = X;
 Y(Omega, :) = Y(Omega, :) + Noise;
 
-cs = SPX_SignalsComparison(X, Y, K);
+cs = SPX_SparseSignalsComparison(X, Y, K);
 cs.difference_norms()
 cs.reference_norms()
 cs.estimate_norms()
