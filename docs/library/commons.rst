@@ -65,57 +65,10 @@ Find the first vector with energy less than a given target::
 Sparse Signals
 ----------------------------------
 
-Sparse support for a vector::
-
-    SPX_SupportUtil.support(x)
-
-l_0 "norm" of a vector::
-
-    SPX_SupportUtil.l0norm(x)
-
-Support intersection ratio::
-
-    SPX_SupportUtil.intersectionRatio(s1, s2)
-
-Support similarity::
-
-    SPX_SupportUtil.supportSimilarity(X, reference)
-
-Support similarities between two sets of signals::
-
-    SPX_SupportUtil.supportSimilarities(X, Y)
-
-Support detection ratios ::
-
-    SPX_SupportUtil.supportDetectionRate(X, trueSupport)
-
-
-K largest indices over a set of vectors::
-
-     SPX_SupportUtil.dominantSupportMerged(data, K)
-
-
 
 Printing functions
 -------------------------------
 
-Print a matrix for putting in Latex::
-
-    printMatrixForLatex(Phi);
-
-
-Print a set for putting in Latex::
-
-    printSetForLatex(x);
-
-Print a vector for Latex::
-
-    printVectorForLatex(x)
-
-    
-Print a matrix for putting in SciRust::
-
-    printMatrixForSciRust(Phi);
 
 Print a sparse vector as pairs of indices and values::
 

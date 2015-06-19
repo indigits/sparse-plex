@@ -3,6 +3,19 @@ Printing utilities
 
 .. highlight:: matlab
 
+
+Sparse vectors
+--------------------
+
+
+Printing a sparse vector as pairs of
+locations and values::
+
+    >> x = [0 0 0  1 0 0 -1 0 0 -2 0 0 -3 0 0 7 0 0 4 0 0 -6];
+    >> SPX_IO.printSparseVector(x)
+    (4,1) (7,-1) (10,-2) (13,-3) (16,7) (19,4) (22,-6)   N=22, K=7
+
+
 Latex
 -----------------------------
 
