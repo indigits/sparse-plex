@@ -7,7 +7,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   commons
+   commons/index
    graphics
    dictionaries
    pursuit
