@@ -19,6 +19,27 @@ helper utility functions which provide
 extra functionality on top of existing
 support in MATLAB.
 
+
+Sparsification
+---------------------------
+
+Finding the K-largest indices of a given signal::
+
+    >> x = [0 0 0  1 0 0 -1 0 0 -2 0 0 -3 0 0 7 0 0 4 0 0 -6];
+    >> K=4;
+    >> SPX_Signals.largestIndices(x, K)'
+    16    22    19    13
+
+Constructing the sparse approximation of ``x``
+with ``K`` largest indices::
+
+    >> SPX_Signals.sparseApproximation(x, K)'
+    0     0     0     0     0     0     0     0     0     0     0     0    -3     0     0     7     0     0     4     0     0    -6
+
+Searching
+----------------------
+
+
 ``SPX_Signals.findFirstLessEqEnergy`` 
 finds the first signal in a signal matrix ``X``
 with an energy less than or equal to 
