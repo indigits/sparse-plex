@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_MultiFigures();
+mf = SPX_Figures();
 
 % Signal space 
 N = 256;
@@ -24,7 +24,7 @@ x = zeros(N, 1);
 if 0
 % Filling it with non-zero Gaussian entries at specified support
 x(Omega) = 4 * randn(K, 1);
-mf.newFigure('Gaussian sparse signal');
+mf.new_figure('Gaussian sparse signal');
 stem(x, '.');
 xlabel('Index');
 ylabel('Value');
@@ -46,7 +46,7 @@ xm = a + (b-a).*rand(K, 1);
 sgn = sign(randn(K, 1));
 % Combine sign and magnitude
 x(Omega) = sgn .* xm;
-mf.newFigure('Bi-uniform sparse signal');
+mf.new_figure('Bi-uniform sparse signal');
 stem(x, '.');
 xlabel('Index');
 ylabel('Value');
@@ -73,7 +73,7 @@ Phi = Phi ./ sqrt(M);
 column_norms = sqrt(sum(Phi .* conj(Phi)));
 
 % Let us plot the histogram of norms of each column vector in Phi.
-mf.newFigure('Norm histogram');
+mf.new_figure('Norm histogram');
 hist(SPX_Norm.norms_l2_cw(Phi), 20);
 xlabel('Norm');
 ylabel('Count');
@@ -94,7 +94,7 @@ end
 Phi = SPX_Norm.normalize_l2(Phi);
 
 % Visualizing the sensing matrix
-mf.newFigure('Sensing matrix');
+mf.new_figure('Sensing matrix');
 imagesc(Phi) ;
 colormap(gray);
 colorbar;
@@ -109,7 +109,7 @@ end
 
 
 % Making random measurements
-mf.newFigure('Measurement vector');
+mf.new_figure('Measurement vector');
 y0 = Phi * x;
 stem(y0, '.');
 xlabel('Index');
@@ -140,7 +140,7 @@ noise = gain_factor .* noise;
 e = SPX_NoiseGen.createNoise(y0, SNR);
 % Measurement vector with noise.
 y = y0 + e;
-mf.newFigure('Measurement vector with noise');
+mf.new_figure('Measurement vector with noise');
 stem(y, '.');
 xlabel('Index');
 ylabel('Value');
@@ -156,7 +156,7 @@ end
 % Matching pursuit
 solver = SPX_MatchingPursuit(Phi, K);
 result = solver.solve(y);
-mf.newFigure('Matching pursuit solution');
+mf.new_figure('Matching pursuit solution');
 mp_solution = result.z;
 subplot(211);
 stem(mp_solution, '.');
@@ -184,7 +184,7 @@ fprintf('Matching pursuit recovery error: %0.4f\n', mp_recovery_error);
 % Orthogonal Matching pursuit
 solver = SPX_OrthogonalMatchingPursuit(Phi, K);
 result = solver.solve(y);
-mf.newFigure('Orthogonal Matching pursuit solution');
+mf.new_figure('Orthogonal Matching pursuit solution');
 omp_solution = result.z;
 subplot(211);
 stem(omp_solution, '.');
@@ -212,7 +212,7 @@ fprintf('Orthogonal Matching pursuit recovery error: %0.4f\n', omp_recovery_erro
 % Basis pursuit
 solver = SPX_L1SparseRecovery(Phi, y);
 result = solver.solve_l1_noise();
-mf.newFigure('l_1 minimization solution');
+mf.new_figure('l_1 minimization solution');
 l1_solution = result;
 subplot(211);
 stem(l1_solution, '.');

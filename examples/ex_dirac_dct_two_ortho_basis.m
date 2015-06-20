@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_MultiFigures();
+mf = SPX_Figures();
 
 
 % Signal space dimension
@@ -21,7 +21,7 @@ Psi = dctmtx(N)';
 Phi = [I  Psi];
 
 % Visualizing the DCT basis
-mf.newFigure('DCT basis');
+mf.new_figure('DCT basis');
 imagesc(Psi) ;
 colormap(gray);
 colorbar;
@@ -35,7 +35,7 @@ export_fig bin\dct_256.pdf;
 end
 
 % Visualizing the dictionary
-mf.newFigure('Dictionary');
+mf.new_figure('Dictionary');
 imagesc(Phi) ;
 colormap(gray);
 colorbar;
@@ -61,7 +61,7 @@ K  = 5;
 % Finding the representation in DCT 
 x_dct = Psi' * x;
 
-mf.newFigure('Impulses + Cosines');
+mf.new_figure('Impulses + Cosines');
 stem(x, '.');
 xlabel('Index');
 ylabel('Value');
@@ -73,7 +73,7 @@ if pdf_export
 export_fig bin\impulse_cosine_combination_signal.pdf;
 end
 
-mf.newFigure('Impulses + Cosines DCT representation');
+mf.new_figure('Impulses + Cosines DCT representation');
 stem(x_dct, '.');
 xlabel('Index');
 ylabel('Value');
@@ -86,7 +86,7 @@ export_fig bin\impulse_cosine_dct_basis.pdf;
 end
 
 
-mf.newFigure('Sparse representation in Dirac DCT dictionary');
+mf.new_figure('Sparse representation in Dirac DCT dictionary');
 stem(alpha, '.');
 xlabel('Index');
 ylabel('Value');
@@ -101,7 +101,7 @@ end
 % Matching pursuit
 solver = SPX_MatchingPursuit(Phi, K);
 result = solver.solve(x);
-mf.newFigure('Matching pursuit solution');
+mf.new_figure('Matching pursuit solution');
 mp_solution = result.z;
 subplot(211);
 stem(mp_solution, '.');
@@ -129,7 +129,7 @@ fprintf('Matching pursuit recovery error: %0.4f\n', mp_recovery_error);
 % Orthogonal Matching pursuit
 solver = SPX_OrthogonalMatchingPursuit(Phi, K);
 result = solver.solve(x);
-mf.newFigure('Orthogonal Matching pursuit solution');
+mf.new_figure('Orthogonal Matching pursuit solution');
 omp_solution = result.z;
 subplot(211);
 stem(omp_solution, '.');
@@ -157,7 +157,7 @@ fprintf('Orthogonal Matching pursuit recovery error: %0.4f\n', omp_recovery_erro
 % Basis pursuit
 solver = SPX_L1SparseRecovery(Phi, x);
 result = solver.solve_l1_noise();
-mf.newFigure('l_1 minimization solution');
+mf.new_figure('l_1 minimization solution');
 l1_solution = result;
 subplot(211);
 stem(l1_solution, '.');

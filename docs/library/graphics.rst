@@ -6,17 +6,32 @@ Graphics
 
 Create a full screen figure::
 
-    fullScreenFigure;
+    SPX_Figures.full_screen_figure;
 
 
 Put a title over all subplots::
 
     suptitle(title);
 
+This function is by *Drea Thomas*.
+
 Multiple figures::
 
-    mf = MultiFigures();
-    mf.newFigure("fig 1");
+    mf = SPX_Figures();
+    mf.new_figure("fig 1");
+    mf.new_figure("fig 2");
+    mf.new_figure("fig 3");
+
+All these figures will be created with same 
+width and height. They will be placed 
+one after another in a stacked manner.
+
+Controlling size of multiple figures::
+
+    width = 1000;
+    height = 400;
+    mf = SPX_Figures(width, height);
+
 
 Display a Gram matrix::
 

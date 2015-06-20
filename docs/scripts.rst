@@ -31,7 +31,7 @@ Creating the figure manager::
 
 Creating a figure::
 
-    mf.newFigure('Example faces');
+    mf.new_figure('Example faces');
 
 
 Exporting figures::

@@ -1,4 +1,4 @@
-classdef SPX_MultiFigures < handle
+classdef SPX_Figures < handle
     %SPX_MULTIFIGURES Helps manage multiple figures in a demo
     
     properties
@@ -10,7 +10,7 @@ classdef SPX_MultiFigures < handle
     end
     
     methods
-        function self = SPX_MultiFigures(width, height)
+        function self = SPX_Figures(width, height)
             if ~exist('width', 'var')
                 width = 800;
             end
@@ -24,13 +24,24 @@ classdef SPX_MultiFigures < handle
             self.number = 0;
         end
         
-        function figH = newFigure(self, title)
+        function figH = new_figure(self, title)
             self.number = self.number + 1;
             figH = figure('Name', title...
                 , 'Position', [self.x,self.y, self.width, self.height]...
                 ,'NumberTitle','off', 'Color', 'w');
             self.x = self.x + 50;
             self.y = self.y - 50;
+        end
+
+    end
+
+    methods(Static)
+        function [ h ] = full_screen_figure()
+            %FULL_SCREEN_FIGURE Creates a full screen figure
+            scrsz = get(0,'ScreenSize');
+            w = scrsz(3);
+            h = scrsz(4);
+            h = figure('Position', [1 1 w h]);
         end
     end
     
