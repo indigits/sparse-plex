@@ -13,20 +13,20 @@ Let us create a simple matrix::
 
 Checking whether the matrix is a square matrix::
 
-    SPX_Checks.is_square(A)
+    SPX_Mat.is_square(A)
 
 Checking if it is symmetric::
 
-    SPX_Checks.is_symmetric(A)
+    SPX_Mat.is_symmetric(A)
 
 Checking if it is a Hermitian matrix::
 
-    SPX_Checks.is_hermitian(A)
+    SPX_Mat.is_hermitian(A)
 
 
 Checking if it is a positive definite matrix::
 
-    SPX_Checks.is_positive_definite(A)
+    SPX_Mat.is_positive_definite(A)
 
 
 Matrix utilities
@@ -86,4 +86,20 @@ with the size of the matrix::
     SPX_Mat.nonzero_density(A)
     ans = 1
 
+
+diagonally dominant matrices
+-----------------------------------------
+
+Checking whether a matrix is diagonally dominant::
+
+    SPX_Mat.is_diagonally_dominant(A)
+
+
+Making a matrix diagonally dominant::
+
+    A = SPX_Mat.make_diagonally_dominant(A)
+
+Both these functions have an extra parameter 
+named ``strict``. When set to true, strict
+diagonal dominance is considered / enforced. 
 
