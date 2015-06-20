@@ -47,6 +47,14 @@ classdef SPX_Signals
             approxX = zeros(N,1);
             approxX(indices) = x(indices);
         end
+
+        function [ e ] = unitVector( N, i )
+            %UNITVECTOR Creates a unit vector in the ith dimension of an N dimensional
+            %space.
+            e = zeros(N,1);
+            e(i) = 1;
+        end
+
         
     end
     

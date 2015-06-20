@@ -20,6 +20,17 @@ extra functionality on top of existing
 support in MATLAB.
 
 
+General
+-----------
+
+ Constructing unit (column) vector in a given co-ordinate::
+    
+    >> N = 8; i = 2;    
+    >> SPX_Signals.unitVector(N, i)'
+    0     1     0     0     0     0     0     0
+
+
+
 Sparsification
 ---------------------------
 
