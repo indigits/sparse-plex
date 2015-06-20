@@ -1,6 +1,9 @@
 Signals
 ========================
 
+.. highlight:: matlab
+
+
 Our focus is usually on finite 
 dimensional signals. Such signals
 are usually stored as column vectors

@@ -72,10 +72,10 @@ Printing functions
 
 Print a sparse vector as pairs of indices and values::
 
-    printSparseVector(x)
+    printSparseSignal(x)
 
 Print the sorted non-zero elements of a sparse vector along with their indices::
 
-    printSortedSparseVector(x);
+    printSortedSparseSignal(x);
 
 
