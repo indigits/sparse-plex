@@ -65,6 +65,35 @@ classdef SPX_Support
             trueSupportSize = sum(trueSupport);
             result = commonSizes / trueSupportSize;
         end
+
+        function [ result ] = sortedNonZeroElements( x )
+        %SORTEDNONZEROELEMENTS Returns the nonzero components of x sorted
+        %descending order based on their magnitude.
+        % Number of elements in x
+        N = length(x);
+        % Identify the number of non-zero elements
+        K = sum(x ~= 0);
+        % Create a matrix of size Kx3 to hold non-zero elements
+        nonZeroElements = zeros(K, 3);
+        k = 0;
+        % Iterate over all  elements in x
+        for i=1:N
+            tmp = x(i);
+            % Check if  element at this index is non-zero
+            if tmp
+                k = k +1;
+                % store the magnitude, actual value and the index for the
+                % nonzero  element
+                nonZeroElements(k, :)  = [abs(tmp), tmp, i];
+            end
+        end
+        % Sort the rows in non-zero elements matrix
+        nonZeroElements = sortrows(nonZeroElements);
+        % Finally return the sorted values in descending magnitude order
+        result = nonZeroElements(end:-1:1,3:-1:2)';
+        end
+
+
     end
     
 end

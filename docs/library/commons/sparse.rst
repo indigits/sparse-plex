@@ -4,6 +4,11 @@ Sparse signals
 .. highlight:: matlab
 
 
+Working with signal support
+----------------------------------------
+
+
+
 Let's create a sparse vector::
 
     >> x = [0 0 0  1 0 0 -1 0 0 -2 0 0 -3 0 0 7 0 0 4 0 0 -6];
@@ -55,3 +60,15 @@ K largest indices over a set of vectors::
      SPX_Support.dominantSupportMerged(data, K)
 
 
+Sometimes it's useful to identify and arrange the non-zero
+entries in a signal in descending order of their magnitude::
+
+    >> SPX_Support.sortedNonZeroElements(x)
+    16    22    19    13    10     4     7
+     7    -6     4    -3    -2     1    -1
+
+Given a signal ``x``, the function ``SPX_Support.sortedNonZeroElements``
+returns a two row matrix where the first row contains the locations
+of non-zero elements sorted by their magnitude and second row
+contains their magnitude. If the magnitude of two non-zero elements
+is same, then the original order is maintained. The sorting is stable.
