@@ -1,139 +1,119 @@
-Graphics and visualization
-================================
+% RGB  Rgb triple for given CSS color name
+%
+%   RGB = RGB('COLORNAME') returns the red-green-blue triple corresponding
+%     to the color named COLORNAME by the CSS3 proposed standard [1], which
+%     contains 139 different colors (an rgb triple is a 1x3 vector of
+%     numbers between 0 and 1). COLORNAME is case insensitive, and for gray
+%     colors both spellings (gray and grey) are allowed.
+%
+%   RGB CHART creates a figure window showing all the available colors with
+%     their names.
+%
+%   EXAMPLES
+%     c = rgb('DarkRed')               gives c = [0.5430 0 0]
+%     c = rgb('Green')                 gives c = [0 0.5 0]
+%     plot(x,y,'color',rgb('orange'))  plots an orange line through x and y
+%     rgb chart                        shows all the colors
+%
+%   BACKGROUND
+%     The color names of [1] have already been ratified in [2], and
+%     according to [3] they are accepted by almost all web browsers and are
+%     used in Microsoft's .net framework. All but four colors agree with
+%     the X11 colornames, as detailed in [4]. Of these the most important
+%     clash is green, defined as [0 0.5 0] by CSS and [0 1 0] by X11. The
+%     definition of green in Matlab matches the X11 definition and gives a
+%     very light green, called lime by CSS (many users of Matlab have
+%     discovered this when trying to color graphs with 'g-'). Note that
+%     cyan and aqua are synonyms as well as magenta and fuchsia.
+%
+%   ABOUT RGB
+%     This program is public domain and may be distributed freely.
+%     Author: Kristján Jónasson, Dept. of Computer Science, University of
+%     Iceland (jonasson@hi.is). June 2009.
+%
+%   REFERENCES
+%     [1] "CSS Color module level 3", W3C (World Wide Web Consortium)
+%         working draft 21 July 2008, http://www.w3.org/TR/css3-color
+%
+%     [2] "Scalable Vector Graphics (SVG) 1.1 specification", W3C
+%         recommendation 14 January 2003, edited in place 30 April 2009,
+%         http://www.w3.org/TR/SVG
+%
+%     [3] "Web colors", http://en.wikipedia.org/wiki/Web_colors
+%
+%     [4] "X11 color names" http://en.wikipedia.org/wiki/X11_color_names
 
+function rgb = rgb(s)
+  persistent num name
+  if isempty(num) % First time rgb is called
+    [num,name] = getcolors();
+    name = lower(name);
+    num = reshape(hex2dec(num), [], 3);
+    % Divide most numbers by 256 for "aesthetic" reasons (green=[0 0.5 0])
+    I = num < 240;  % (interpolate F0--FF linearly from 240/256 to 1.0)
+    num(I) = num(I)/256;
+    num(~I) = ((num(~I) - 240)/15 + 15)/16; + 240;
+  end
+  if strcmpi(s,'chart')
+    showcolors()
+  else
+    k = find(strcmpi(s, name));
+    if isempty(k)
+      error(['Unknown color: ' s]);
+    else
+      rgb = num(k(1), :);
+    end
+  end
+end
 
-.. highlight:: matlab
+function showcolors()
+  [num,name] = getcolors();
+  grp = {'White', 'Gray', 'Red', 'Pink', 'Orange', 'Yellow', 'Brown'...
+    , 'Green', 'Blue', 'Purple', 'Grey'};
+  J = [1,3,6,8,9,10,11];
+  fl = lower(grp);
+  nl = lower(name);
+  for i=1:length(grp)
+    n(i) = strmatch(fl{i}, nl, 'exact'); 
+  end
+  clf
+  p = get(0,'screensize');
+  wh = 0.6*p(3:4);
+  xy0 = p(1:2)+0.5*p(3:4) - wh/2;
+  set(gcf,'position', [xy0 wh]);
+  axes('position', [0 0 1 1], 'visible', 'off');
+  hold on
+  x = 0;
+  N = 0;
+  for i=1:length(J)-1
+    N = max(N, n(J(i+1)) - n(J(i)) + (J(i+1) - J(i))*1.3); 
+  end
+  h = 1/N;
+  w = 1/(length(J)-1);
+  d = w/30;
+  for col = 1:length(J)-1;
+    y = 1 - h;
+    for i=J(col):J(col+1)-1
+      t = text(x+w/2, y+h/10 , [grp{i} ' colors']);
+      set(t, 'fontw', 'bold', 'vert','bot', 'horiz','cent', 'fontsize',10);
+      y = y - h;
+      for k = n(i):n(i+1)-1
+        c = rgb(name{k});
+        bright = (c(1)+2*c(2)+c(3))/4;
+        if bright < 0.5, txtcolor = 'w'; else txtcolor = 'k'; end
+        rectangle('position',[x+d,y,w-2*d,h],'facecolor',c);
+        t = text(x+w/2, y+h/2, name{k}, 'color', txtcolor);
+        set(t, 'vert', 'mid', 'horiz', 'cent', 'fontsize', 9);
+        y = y - h;
+      end
+      y = y - 0.3*h;
+    end
+    x = x + w;
+  end
+end
 
-In this section we cover:
-
-* Some utility classes which help 
-  in specific visualization tasks
-* Some external open source libraries / functions
-  which have been integrated in ``sparse-plex`` 
-  to make visualization tasks easier
-* Some general techniques for specific visualization
-  tasks
-
-
-
-Create a full screen figure::
-
-    SPX_Figures.full_screen_figure;
-
-
-Multiple figures::
-
-    mf = SPX_Figures();
-    mf.new_figure("fig 1");
-    mf.new_figure("fig 2");
-    mf.new_figure("fig 3");
-
-All these figures will be created with same 
-width and height. They will be placed 
-one after another in a stacked manner.
-
-Controlling size of multiple figures::
-
-    width = 1000;
-    height = 400;
-    mf = SPX_Figures(width, height);
-
-
-Display a Gram matrix for a given dictionary ``Phi``::
-
-    SPX_Display.display_gram_matrix(Phi);
-
-Canvas of a grid of images
----------------------------------
-
-Sometimes we wish to show a set of small
-images in the form of  a grid. These
-images may be patches from a larger
-image or may be small independent images
-themselves.
-
-``SPX_Canvas`` helps in
-combining the images in the form 
-of a grid on a  canvas image.
-
-We provide all the images to be
-displayed in the form of a
-matrix where each column consists
-of one image. 
-
-
-Creating a canvas of image patches::
-
-    % Let us create some random images of size 50x50
-    width = 50;
-    height = 50;
-    rows = 10;
-    cols = 10;
-    images = 255* rand(width*height, rows*cols);
-    % Let's create a canvas of these images formed into a
-    % 10 x 10 grid.
-    canvas = SPX_Canvas.create_image_grid(images, rows, cols, ...
-        height, width);
-    % Let's convert the canvas to UINT8 image
-    canvas = uint8(canvas);
-    % Let's show the image
-    imshow(canvas);
-    % Let's set the proper colormap.
-    colormap(gray);
-    % Axis sizing etc.
-    axis image;
-    axis off;
-
-
-Displaying a set of signals in the form of a matrix
------------------------------------------------------
-
-While working on joint signal recovery 
-problems, we need to visualize a set of
-signals together. They can be put together
-in a signal matrix where each column is
-one (finite dimensional) signal. It
-is straightforward to create a visualization
-for these signals::
-
-    num_signals = 100;
-    signal_size = 80;
-    signal_matrix = randn(signal_size, num_signals);
-    % Let's create a canvas and put all the signals on it.
-    canvas = SPX_Canvas.create_signal_matrix_canvas(signal_matrix);
-    % Let's show the image
-    imshow(canvas);
-    % Let's set the proper colormap.
-    colormap(gray);
-    % Axis sizing etc.
-    axis image;
-    axis off;
-
-
-Some third party open source libraries
------------------------------------------
-
-
-Put a title over all subplots::
-
-    suptitle(title);
-
-This function is by *Drea Thomas*.
-
-
-
-
-RGB code for given colorname::
-
-     c = rgb('DarkRed')
-     c = rgb('Green') 
-     plot(x,y,'color',rgb('orange'))
-     
-This function is by KristjÃ¡n JÃ³nasson and is
-in public domain.
-
-Supported colors::
-
+function [hex,name] = getcolors()
+  css = {
     %White colors
     'FF','FF','FF', 'White'
     'FF','FA','FA', 'Snow'
@@ -293,3 +273,7 @@ Supported colors::
     '77','88','99', 'LightSlateGrey'
     '70','80','90', 'SlateGrey'
     '2F','4F','4F', 'DarkSlateGrey'
+    };
+  hex = css(:,1:3);
+  name = css(:,4);
+end
