@@ -6,7 +6,7 @@ classdef SPX_RecoveryProblems < handle
             m = 64;
             n = 121;
             k = 4;
-            dict = SPX_SimpleDicts.Gaussian(m, n);
+            dict = SPX_SimpleDicts.gaussian_dict(m, n);
             gen = SPX_SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();
@@ -21,7 +21,7 @@ classdef SPX_RecoveryProblems < handle
             m = 1000;
             n = 2000;
             k = 100;
-            dict = SPX_SimpleDicts.Gaussian(m, n);
+            dict = SPX_SimpleDicts.gaussian_dict(m, n);
             gen = SPX_SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();

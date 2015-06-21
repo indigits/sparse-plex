@@ -5,7 +5,7 @@ end
 function test_gaussian
     D = 10;
     N = 4;
-    Dict = SPX_SimpleDicts.Gaussian(N, D);
+    Dict = SPX_SimpleDicts.gaussian_dict(N, D);
     assertTrue(isa(Dict, 'SPX_MatrixOperator'));
     assertTrue(isa(Dict, 'SPX_Operator'));
     % Check size
@@ -23,7 +23,7 @@ end
 
 function test_dirac_fourier
     N = 16;
-    Dict = SPX_SimpleDicts.DiracFourier(N);
+    Dict = SPX_SimpleDicts.dirac_fourier_dict(N);
     sz = size(Dict);
     assertEqual(sz, [N, 2*N]);
     % Validate that norms of each column are unity

@@ -7,7 +7,7 @@ function [A, x, b, k] = problem_1()
     m = 100;
     n = 1000;
     k = 4;
-    A = SPX_SimpleDicts.Gaussian(m, n);
+    A = SPX_SimpleDicts.gaussian_dict(m, n);
     gen = SPX_SparseSignalGenerator(n, k);
     % create a sparse vector
     x =  gen.biGaussian();
@@ -19,7 +19,7 @@ function [dict, reps, signals, k] = problem_2()
     n = 1000;
     k = 10;
     s = 500;
-    dict = SPX_SimpleDicts.Gaussian(m, n);
+    dict = SPX_SimpleDicts.gaussian_dict(m, n);
     gen = SPX_SparseSignalGenerator(n, k, s);
     % create a sparse vector
     reps =  gen.biGaussian();

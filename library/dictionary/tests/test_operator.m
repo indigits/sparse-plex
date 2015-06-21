@@ -14,8 +14,10 @@ function test_1
     assertEqual(b*v, bb*v);
     v = [1 2]';
     assertEqual(b'*v, bb'*v);
-    assertEqual(b', bb');
-    assertEqual(b.', bb.');
+    c = bb';
+    assertEqual(b', c.A);
+    c = bb.';
+    assertEqual(b.', c.A);
     b2 = bb.columns_operator([1 2]);
     assertEqual(double(b2), b(:, [1 2]));
 end

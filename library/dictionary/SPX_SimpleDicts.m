@@ -1,23 +1,23 @@
 classdef SPX_SimpleDicts < handle
-    %CS_BASICDICTIONARYCREATOR Creates basic dictionaries
+    %SPX_SIMPLEDICTS Creates basic dictionaries
     properties
     end
     
     methods(Static)
-        function result = DiracFourier(N)
+        function result = dirac_fourier_dict(N)
             % Constructs a Dirac Fourier two-ortho basis
             result = [eye(N) dftmtx(N)' ./ sqrt(N) ];
             % Wrap it into a Matrix operator
             result = SPX_MatrixOperator(result);
         end
-        function result = DiracDCT(N)
+        function result = dirac_dct_dict(N)
             % Constructs a Dirac DCT two-ortho basis
             result = [eye(N) dctmtx(N)' ];
             % Wrap it into a Matrix operator
             result = SPX_MatrixOperator(result);
         end
 
-        function result = Gaussian(N, D, normalized_columns)
+        function result = gaussian_dict(N, D, normalized_columns)
             % Constructs a Gaussian dictionary with normalized columns
             if nargin < 3
                 % By default columns will be normalized

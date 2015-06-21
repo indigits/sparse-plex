@@ -16,16 +16,16 @@ as defined below.
 Dirac Fourier Dictionary ::
 
 
-    SPX_SimpleDicts.DiracFourier(N)
+    SPX_SimpleDicts.dirac_fourier_dict(N)
 
 Dirac DCT Dictionary::
 
-    SPX_SimpleDicts.DiracDCT(N)
+    SPX_SimpleDicts.dirac_dct_dict(N)
 
 
 Gaussian Dictionary::
 
-    SPX_SimpleDicts.Gaussian(N, D, normalized_columns)
+    SPX_SimpleDicts.gaussian_dict(N, D, normalized_columns)
 
 
 Over complete 1-D DCT dictionary::
@@ -237,7 +237,7 @@ Sensing matrices
 
 Estimating the RIP  constants using Monte Carlo simulation::
 
-    deltas = estimateRIPDelta(Phi, KMax)
+    deltas = estimate_delta(Phi, KMax)
 
 
 Gaussian  sensing matrix::
