@@ -55,6 +55,19 @@ classdef SPX_Signals
             e(i) = 1;
         end
 
+        function [ x ] = unitNormSparseUniformVector( N, K )
+            %UNITNORMSPARSEUNIFORMVECTOR Generates a K sparse vector of unit norm
+            % Let us construct a zero vector
+            x = zeros(N,1);
+            % let us generate a random permutation of numbers from 1 to N
+            q = randperm(N);
+            % let us put Uniform distributed values in K randomly chosen positions 
+            x(q(1:K)) = 2*rand(K,1)-1;
+            % Let us measure the norm of this vector
+            n = norm(x);
+            % Let us normalize the vector
+            x = x / n;
+        end
         
     end
     
