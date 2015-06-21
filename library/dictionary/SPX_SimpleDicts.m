@@ -1,4 +1,4 @@
-classdef SPX_BasicDictionaryCreator < handle
+classdef SPX_SimpleDicts < handle
     %CS_BASICDICTIONARYCREATOR Creates basic dictionaries
     properties
     end
@@ -70,7 +70,7 @@ classdef SPX_BasicDictionaryCreator < handle
             dr = floor(dr);
             nr = floor(nr); 
             % Let us construct a 1D-DCT matrix of size 8x11.
-            DCT = SPX_BasicDictionaryCreator.overcomplete1DDCT(nr, dr);
+            DCT = SPX_SimpleDicts.overcomplete1DDCT(nr, dr);
             DCT = DCT.A;
             Dictionary = kron(DCT, DCT);
             % Wrap it into a Matrix operator

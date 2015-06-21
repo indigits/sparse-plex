@@ -6,7 +6,7 @@ classdef SPX_RecoveryProblems < handle
             m = 64;
             n = 121;
             k = 4;
-            dict = SPX_BasicDictionaryCreator.Gaussian(m, n);
+            dict = SPX_SimpleDicts.Gaussian(m, n);
             gen = SPX_SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();
@@ -21,7 +21,7 @@ classdef SPX_RecoveryProblems < handle
             m = 1000;
             n = 2000;
             k = 100;
-            dict = SPX_BasicDictionaryCreator.Gaussian(m, n);
+            dict = SPX_SimpleDicts.Gaussian(m, n);
             gen = SPX_SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();
@@ -44,7 +44,7 @@ classdef SPX_RecoveryProblems < handle
             % Let's prepare a dictionary for the image
             N = 64;
             D = 121;
-            problem.dictionary = SPX_BasicDictionaryCreator.overcomplete2DDCT(N, D);
+            problem.dictionary = SPX_SimpleDicts.overcomplete2DDCT(N, D);
         end
 
         function problem = problem_test_image_blocks(image_name, block_type)

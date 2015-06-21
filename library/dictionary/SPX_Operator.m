@@ -21,12 +21,12 @@ classdef SPX_Operator < handle
 
         function result = transpose(self)
             [m, ~] = self.size();
-            result = self.apply_transpose(speye(m, m));
+            result = SPX_MatrixOperator(self.apply_transpose(speye(m, m)));
         end
 
         function result = ctranspose(self)
             [m, ~] = self.size();
-            result = self.apply_ctranspose(speye(m, m));
+            result = SPX_MatrixOperator(self.apply_ctranspose(speye(m, m)));
         end
 
         function result = columns(self, columns)
