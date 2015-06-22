@@ -4,12 +4,24 @@ classdef SPX_SimpleDicts < handle
     end
     
     methods(Static)
+        
+        function result = dirac_fourier_mtx(N)
+            % Constructs a Dirac Fourier two-ortho basis
+            result = [eye(N) dftmtx(N)' ./ sqrt(N) ];
+        end
+
         function result = dirac_fourier_dict(N)
             % Constructs a Dirac Fourier two-ortho basis
             result = [eye(N) dftmtx(N)' ./ sqrt(N) ];
             % Wrap it into a Matrix operator
             result = SPX_MatrixOperator(result);
         end
+
+        function result = dirac_dct_mtx(N)
+            % Constructs a Dirac DCT two-ortho basis
+            result = [eye(N) dctmtx(N)' ];
+        end
+
         function result = dirac_dct_dict(N)
             % Constructs a Dirac DCT two-ortho basis
             result = [eye(N) dctmtx(N)' ];
@@ -17,7 +29,7 @@ classdef SPX_SimpleDicts < handle
             result = SPX_MatrixOperator(result);
         end
 
-        function result = gaussian_dict(N, D, normalized_columns)
+        function result = gaussian_mtx(N, D, normalized_columns)
             % Constructs a Gaussian dictionary with normalized columns
             if nargin < 3
                 % By default columns will be normalized
@@ -33,6 +45,48 @@ classdef SPX_SimpleDicts < handle
                 % Make sure that variance of individual entries is 1/N
                 result = result ./ sqrt(N);
             end
+        end
+
+        function result = gaussian_dict(N, D, normalized_columns)
+            if nargin < 3
+                % By default columns will be normalized
+                normalized_columns = true;
+            end
+            result = SPX_SimpleDicts.gaussian_mtx(N, D, normalized_columns);
+            % Wrap it into a Matrix operator
+            result = SPX_MatrixOperator(result);
+        end
+
+        function result = rademacher_mtx(M, N)
+        %RADEMACHER_MTX Constructs a simple rademacher sensing matrix
+        % result: The constructed sensing matrix
+            % We will create the measurement matrix using 
+            % Uniform discrete Random Number Generator
+            result = 2*randi([0, 1], M, N)-1;
+            % Make sure that variance is 1/M
+            result = result ./ sqrt(M);
+        end
+
+        function result = rademacher_dict(M, N)
+            %RADEMACHER_DICT Constructs a Rademacher random dictionary
+            result = SPX_SimpleDicts.rademacher_mtx(M, N);
+            % Wrap it into a Matrix operator
+            result = SPX_MatrixOperator(result);
+        end
+
+        function result = partial_fourier_mtx( M,N )
+            %PARTIAL_FOURIER_MTX Constructs a partial Fourier matrix
+
+            % We first construct an NxN DFT matrix
+            dftMatrix  =   dftmtx(N);
+            % We now select M rows randomly
+            rows = randperm(N, M);
+            % Also we need to scale the matrix Phi for norm preservation
+            result = (1/sqrt(M)).* dftMatrix(rows, :);
+        end
+
+        function result = partial_fourier_dict( M, N)
+            result = SPX_SimpleDicts.partial_fourier_mtx(M, N);
             % Wrap it into a Matrix operator
             result = SPX_MatrixOperator(result);
         end
@@ -77,7 +131,7 @@ classdef SPX_SimpleDicts < handle
             result = SPX_MatrixOperator(Dictionary);
         end
 
-        function result = SPIE2011(name)
+        function result = spie_2011(name)
             switch name
                 case 'ahoc'
                     fname = 'dict_ahoc.mat';

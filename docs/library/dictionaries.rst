@@ -9,9 +9,25 @@ Basic Dictionaries
 ----------------------------------
 
 Some simple dictionaries can be constructed
-using library functions. These dictionaries
-implement the ``SPX_Operator`` abstraction 
-as defined below.
+using library functions. 
+
+The dictionaries are available in
+two flavors: 
+
+#. As simple matrices
+#. As objects which implement the ``SPX_Operator`` abstraction defined below.
+
+The functions returning the dictionary
+as a simple matrix have a suffix "mtx".
+The functions returning the dictionary
+as a ``SPX_Operator`` have the suffix
+"dict" at the end.
+
+These functions can also be used
+to construct random **sensing matrices**
+which are essentially random 
+dictionaries. 
+
 
 Dirac Fourier Dictionary ::
 
@@ -28,6 +44,14 @@ Gaussian Dictionary::
     SPX_SimpleDicts.gaussian_dict(N, D, normalized_columns)
 
 
+Rademacher Dictionary::
+
+    Phi = SPX_SimpleDicts.rademacher_dict(N, D);
+
+Partial Fourier Dictionary::
+
+    Phi = SPX_SimpleDicts.partial_fourier_dict(N, D);
+
 Over complete 1-D DCT dictionary::
 
     SPX_SimpleDicts.overcomplete1DDCT(N, D)
@@ -39,7 +63,26 @@ Over complete 2-D DCT dictionary::
 
 Dictionaries from SPIE2011 paper::
 
-    SPX_SimpleDicts.SPIE2011(name) % ahoc, orth, rand, sine
+    SPX_SimpleDicts.spie_2011(name) % ahoc, orth, rand, sine
+
+
+Sensing matrices
+-------------------------
+
+
+Gaussian  sensing matrix::
+    
+    Phi = SPX_SimpleDicts.gaussian_mtx(M, N);
+
+
+Rademacher sensing matrix::
+
+    Phi = SPX_SimpleDicts.rademacher_mtx(M, N);
+  
+Partial Fourier matrix::
+
+    Phi = SPX_SimpleDicts.partial_fourier_mtx(M, N);
+
 
 
 
@@ -231,27 +274,4 @@ Grassmannian Frames
     SPX_Grassmannian.alternate_projections(dict, options)
 
 
-
-Sensing matrices
-----------------------------------
-
-Estimating the RIP  constants using Monte Carlo simulation::
-
-    deltas = estimate_delta(Phi, KMax)
-
-
-Gaussian  sensing matrix::
-    
-    cmd = SPX_SensingMatrixDesigner(M, N);
-    Phi = cmd.gaussian();
-
-
-Rademacher sensing matrix::
-
-    cmd = SPX_SensingMatrixDesigner(M, N);
-    Phi = cmd.rademacher();
-  
-Partial Fourier matrix::
-
-    Phi = partialFourierMatrix(M, N);
 
