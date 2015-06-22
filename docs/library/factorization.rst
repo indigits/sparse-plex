@@ -1,7 +1,17 @@
-Factorization Algorithms
+Matrix factorization algorithms
 ========================================
 
 .. highlight:: matlab
+
+
+.. note::
+
+    Better implementations for these algorithms may be available
+    in stock MATLAB distribution or other third party libraries.
+    These codes were developed for instructional purposes as
+    variations of these algorithms were needed in development
+    of other algorithms in this package.
+
 
 
 
@@ -10,18 +20,18 @@ Various versions of QR Factorization
 
 Gram Schmidt::
 
-    [Q, R] =  CS_QR.gram_schmidt(A)
+    [Q, R] =  SPX_QR.gram_schmidt(A)
 
 
 Householder UR::
 
-    [U, R] = CS_QR.householder_ur(A)
+    [U, R] = SPX_QR.householder_ur(A)
 
 
 Householder QR::
 
-    [Q, R] =  CS_QR.householder_qr(A)
+    [Q, R] =  SPX_QR.householder_qr(A)
 
 Householder matrix for a given vector::
 
-    [H, v] = CS_QR.householder_matrix(x)
+    [H, v] = SPX_QR.householder_matrix(x)

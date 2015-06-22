@@ -25,14 +25,6 @@ Export management flag::
 Figures
 ---------------
 
-Creating the figure manager::
-
-    mf = MultiFigures();
-
-Creating a figure::
-
-    mf.new_figure('Example faces');
-
 
 Exporting figures::
 

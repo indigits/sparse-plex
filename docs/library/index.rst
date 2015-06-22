@@ -14,17 +14,18 @@ Contents:
    vectorspace
    combinatorics
    factorization
-   clustering
-   diclearn
-   bht
-   synthetic
-   noise
    external
 
 
 
 
+..
 
+   synthetic
+   noise
+   clustering
+   diclearn
+   bht
 
 
 

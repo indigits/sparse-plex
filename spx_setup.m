@@ -27,6 +27,10 @@ addpath(globals.commons);
 globals.data = fullfile(globals.spx, 'data');
 addpath(globals.data);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+globals.ext = fullfile(globals.spx, 'ext');
+addpath(globals.ext);
+
 globals.noise = fullfile(globals.data, 'noise');
 addpath(globals.noise);
 
