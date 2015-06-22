@@ -1,6 +1,8 @@
 Matching pursuit
 ================================
 
+.. highlight:: matlab
+
 
 Constructing the solver with dictionary and expected sparsity level::
 
