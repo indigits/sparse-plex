@@ -37,6 +37,7 @@ the off-diagonal elements of a given matrix
 in a column vector arranged in column major order.
 
 ::
+
     A = magic(3);
     SPX_Mat.off_diagonal_elements(A)'
     ans =

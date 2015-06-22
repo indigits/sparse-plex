@@ -1,6 +1,31 @@
 Getting Started
 ================================
 
+
+Requirements
+---------------------------
+
+While much of the library can be used on stock MATLAB
+distribution with standard toolboxes, some parts of
+the library are dependent on some specific third party
+libraries. These dependencies are explained below.
+
+MATLAB toolboxes
+
+* Signal processing toolbox
+* Image processing toolbox
+* Statistics toolbox
+* Optimization toolbox
+
+
+Third party library dependencies
+
+* CVX http://cvxr.com/cvx/
+
+
+
+
+
 Installation
 ---------------------
 

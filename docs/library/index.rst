@@ -7,10 +7,10 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   pursuit/index
    commons/index
    graphics
    dictionaries
-   pursuit
    vectorspace
    combinatorics
    factorization

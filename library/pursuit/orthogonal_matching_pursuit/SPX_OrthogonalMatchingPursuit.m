@@ -241,7 +241,7 @@ classdef SPX_OrthogonalMatchingPursuit < handle
 
 
 
-        function result  = solveAll(self,Y)
+        function result  = solve_all(self,Y)
             % Initialization
             % Solves approximation problem using OMP
             d = self.D;
