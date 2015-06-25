@@ -238,7 +238,10 @@ classdef SPX_YaleFaces < handle
     methods(Static)
         function root_dir = yale_faces_dir()
             % This should be changed to whatever place the faces are maintained.
-            root_dir = 'D:\Phd\TestFiles\Images\Faces\CroppedYale';
+            % The changes need to be done in ``spx_local.ini`` file.
+            % Alternative is to subclass this class and override this method.
+            env = spx_get_env();
+            root_dir = env.local_settings.yale_faces_db_dir;
         end
 
         function result = cach_file_path()
