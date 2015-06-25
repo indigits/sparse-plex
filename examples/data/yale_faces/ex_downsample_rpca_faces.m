@@ -1,5 +1,12 @@
+% This script depends on
+% - ex_run_rpca.m
+% Please execute the dependencies before
+% running this script.
+
 close all; clear all; clc;
-load yale_rpca_cache.mat;
+fprintf('Loading RPCA images.\n');
+load bin/yale_rpca_cache.mat;
+fprintf('Loaded RPCA images.\n');
 full_width = 168;
 full_height = 192;
 full_image_size = full_width * full_height;
@@ -17,5 +24,7 @@ for i=1:n
     resized_image = imresize(image, [height, width]);
     Y(:, i) = reshape(resized_image, sz, 1);
 end
-save('yale_rpca_downsampled_images', 'Y');
+fprintf('Saving resized RPCA images.\n');
+save('bin/yale_rpca_downsampled_images', 'Y');
+fprintf('Saved resized RPCA images.\n');
 
