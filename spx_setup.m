@@ -14,8 +14,17 @@ addpath(globals.spx);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.clustering = fullfile(globals.spx, 'clustering');
 addpath(globals.clustering);
+
+globals.clustering_kmeans = fullfile(globals.clustering, 'kmeans');
+addpath(globals.clustering_kmeans);
+
+globals.sparse_representation_clustering = fullfile(globals.clustering, 'sparse_representation_clustering');
+addpath(globals.sparse_representation_clustering);
+
+
 globals.sparse_subspace_clustering = fullfile(globals.clustering, 'sparse_subspace_clustering');
 addpath(globals.sparse_subspace_clustering);
+
 globals.spectral_clustering = fullfile(globals.clustering, 'spectral_clustering');
 addpath(globals.spectral_clustering);
 
@@ -27,14 +36,18 @@ addpath(globals.commons);
 globals.data = fullfile(globals.spx, 'data');
 addpath(globals.data);
 
-globals.noise = fullfile(globals.data, 'noise');
-addpath(globals.noise);
+globals.data_clustering = fullfile(globals.data, 'clustering');
+addpath(globals.data_clustering);
 
-globals.synthetic = fullfile(globals.data, 'synthetic');
-addpath(globals.synthetic);
 
-globals.yale_faces = fullfile(globals.data, 'yale_faces');
-addpath(globals.yale_faces);
+globals.data_noise = fullfile(globals.data, 'noise');
+addpath(globals.data_noise);
+
+globals.data_synthetic = fullfile(globals.data, 'synthetic');
+addpath(globals.data_synthetic);
+
+globals.data_yale_faces = fullfile(globals.data, 'yale_faces');
+addpath(globals.data_yale_faces);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.ext = fullfile(globals.spx, 'ext');
