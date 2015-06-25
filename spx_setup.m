@@ -110,6 +110,16 @@ addpath(globals.orthogonal_matching_pursuit);
 globals.thresholding = fullfile(globals.pursuit, 'thresholding');
 addpath(globals.thresholding);
 
+% Joint recovery algorithms
+globals.joint_recovery = fullfile(globals.pursuit, 'joint_recovery');
+addpath(globals.joint_recovery);
+
+% cluster omp
+globals.comp = fullfile(globals.joint_recovery, 'comp');
+addpath(globals.comp);
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.signal_processing = fullfile(globals.spx, 'signal_processing');
 addpath(globals.signal_processing);
