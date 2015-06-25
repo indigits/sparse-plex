@@ -43,6 +43,17 @@ Installation
   * Run ``spx_setup`` function.
   * Change back to whatever directory you want to be in.
 
+.. note::
+
+    Make sure that MATLAB has write permissions to
+    the directory in which you install sparse-plex.
+    Some functions in sparse-plex create  
+    some MAT files for caching
+    of intermediate results. 
+    Moreover, the sparse-plex setup script also
+    creates a local settings file. For creating these
+    files, write access is needed.
+
 Getting acquainted
 ---------------------------
 
@@ -77,6 +88,35 @@ included with the library.
 * Execute the ``run_all_unit_tests.m`` script.
 * Verify that all unit tests pass.
 
+Configuring test data directories
+----------------------------------------
+
+Several examples in sparse-plex are developed
+on top of standard data sets. These include
+(but not limited to):
+
+* Standard test images
+* Yale Extended B Faces database (cropped images)
+
+In order to execute these examples, access to the
+data is needed. The data is not distributed along
+with this software. You can download data and store
+it on your computer wherever you wish. In order
+to provide access to this data, you need to tell
+sparse-plex where does the data lie. This can
+be done by changing ``spx_local.ini`` file. 
+When you download and unzip the library, this file
+doesn't exist. When you run ``spx_setup``, ``spx_defaults.ini`` is copied into ``spx_local.ini``. 
+
+All you need to do is to point to the right directories
+which hold the test datasets.
+
+Specific settings in ``spx_local.ini`` are:
+
+* ``standard_test_images_dir``
+* ``yale_faces_db_dir``
+
+For more information, read the file.
 
 Building documentation
 ------------------------------
