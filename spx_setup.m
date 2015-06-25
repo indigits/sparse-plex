@@ -1,6 +1,4 @@
 function [globals] = spx_setup()
-
-global spx_env;
 % Let us get the full path of this file
 globals.filepath = which(mfilename);
 % Get the directory of this file
@@ -143,6 +141,7 @@ if ~exist(local_settings_path, 'file')
     copyfile(default_settings_path, local_settings_path);
 end
 globals.local_settings = spx_ini2struct(local_settings_path);
-spx_env = globals;
+spx_settings_cache = fullfile(globals.root, 'spx_local_settings.mat');
+save(spx_settings_cache, 'globals');
 end
 

@@ -1,3 +1,4 @@
 docs/_build/
 bin/
 *.mat
+spx_local.ini
