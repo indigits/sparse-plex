@@ -27,15 +27,18 @@ addpath(globals.commons);
 globals.data = fullfile(globals.spx, 'data');
 addpath(globals.data);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-globals.ext = fullfile(globals.spx, 'ext');
-addpath(globals.ext);
-
 globals.noise = fullfile(globals.data, 'noise');
 addpath(globals.noise);
 
 globals.synthetic = fullfile(globals.data, 'synthetic');
 addpath(globals.synthetic);
+
+globals.yale_faces = fullfile(globals.data, 'yale_faces');
+addpath(globals.yale_faces);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+globals.ext = fullfile(globals.spx, 'ext');
+addpath(globals.ext);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.dictionary = fullfile(globals.spx, 'dictionary');

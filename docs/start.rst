@@ -21,8 +21,14 @@ MATLAB toolboxes
 Third party library dependencies
 
 * CVX http://cvxr.com/cvx/
+* LRS library https://github.com/andrewssobral/lrslibrary
+* Wavelab http://statweb.stanford.edu/~wavelab/
+* 
 
-
+We repeat that only some parts of the library and 
+examples depend on the third party libraries. You
+can install them on need basis. You don't need to
+install them in advance.
 
 
 
