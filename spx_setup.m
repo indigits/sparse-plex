@@ -1,4 +1,6 @@
 function [globals] = spx_setup()
+
+global spx_env;
 % Let us get the full path of this file
 globals.filepath = which(mfilename);
 % Get the directory of this file
@@ -39,6 +41,8 @@ addpath(globals.yale_faces);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.ext = fullfile(globals.spx, 'ext');
 addpath(globals.ext);
+% support for spx_ini2struct function
+addpath(fullfile(globals.ext, 'ini2struct'));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.dictionary = fullfile(globals.spx, 'dictionary');
@@ -129,4 +133,16 @@ globals.statistical_signal_processing = fullfile(globals.spx, 'statistical_signa
 addpath(globals.statistical_signal_processing);
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Following process is for getting the default settings
+% for different data directories in local environment.
+default_settings_path = fullfile(globals.root, 'spx_defaults.ini');
+local_settings_path = fullfile(globals.root, 'spx_local.ini');
+if ~exist(local_settings_path, 'file')
+    fprintf('Copying default settings file to local settings file.\n');
+    copyfile(default_settings_path, local_settings_path);
 end
+globals.local_settings = spx_ini2struct(local_settings_path);
+spx_env = globals;
+end
+
