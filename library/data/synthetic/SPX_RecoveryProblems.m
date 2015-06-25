@@ -34,7 +34,10 @@ classdef SPX_RecoveryProblems < handle
 
 
         function problem = problem_barbara_blocks()
-            image = SPX_RecoveryProblems.read_image('D:\Phd\TestFiles\Images\standard_test_images\barbara.png');
+            env = spx_get_env();
+            images_dir = env.local_settings.standard_test_images_dir;
+            image_path = fullfile(images_dir, 'barbara.png');
+            image = SPX_RecoveryProblems.read_image(image_path);
             blkSize = 8;
             patches = im2col(image, [blkSize, blkSize], 'distinct');
             problem.signals = patches;
@@ -51,7 +54,8 @@ classdef SPX_RecoveryProblems < handle
             if nargin < 2
                 block_type = 'distinct';
             end
-            rootdir = 'D:\Phd\TestFiles\Images\standard_test_images';
+            env = spx_get_env();
+            rootdir = env.local_settings.standard_test_images_dir;
             switch image_name
                 case 'barbara'
                     fname = 'barbara.png';
