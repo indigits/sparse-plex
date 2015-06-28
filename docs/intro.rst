@@ -35,12 +35,34 @@ The library provides
   * Matching pursuit
   * Orthogonal matching pursuit
   * Compressive sampling matching pursuit
+  * Basis pursuit
+
+* Some joint recovery algorithms
+
+  * Cluster orthogonal matching pursuit
+
+
+* Some clustering algorithms
+  
+  * Spectral clustering
+  * Sparse subspace clustering using l_1 minimization
+  * Sparse subspace clustering using orthogonal matching pursuit
+
+
 
 * Various utilities for working with matrices, signals, 
   norms, distances, signal comparison, vector spaces
 * Some visualization utilities
 * Some combinatoric systems
 * Various constructions for synthetic sparse signals
+* Some optimization algorithms
+
+  * steepest descent
+  * conjugate gradient descent 
+
+* Detection and estimation algorithms
+
+  * Compressive binary detector
 
 
 The documentation contains several how-to-do tutorials.
