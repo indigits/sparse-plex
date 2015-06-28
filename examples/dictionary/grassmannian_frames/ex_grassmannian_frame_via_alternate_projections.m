@@ -1,6 +1,8 @@
 % Shows the usage of alternate projections to construct a Grassmannian frame
 close all; clear all; clc;
 rng('default');
+% Create the directory for storing images
+[status_code,message,message_id] = mkdir('bin');
 N = 64;
 D = 121;
 dict = SPX_SimpleDicts.gaussian_dict(N, D);
@@ -18,7 +20,7 @@ fprintf('Initial coherence: %12.8f\n', initial_coherence);
 fprintf('Target coherence: %12.8f\n', result.target_coherence);
 fprintf('Iterations: %6i\n', result.iterations);
 fprintf('Final coherence: %12.8f\n', coherence(final_dictionary));
-save('dictionary.mat', 'final_dictionary');
+save('bin/dictionary.mat', 'final_dictionary');
 
 mf = SPX_Figures();
 mf.new_figure('Gram matrices');
