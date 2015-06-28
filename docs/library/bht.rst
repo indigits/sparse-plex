@@ -43,7 +43,7 @@ Thresholding::
 
 Detection results::
 
-    result = measureBinaryHypothesisTestingPerformance(...
+    result = SPX_BinaryHypothesisTest.performance(...
         transmittedBits, receivedBits)
 
     % Number of False sent, False received
