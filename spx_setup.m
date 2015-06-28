@@ -145,6 +145,16 @@ addpath(globals.statistical_signal_processing);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+globals.statistics = fullfile(globals.spx, 'statistics');
+addpath(globals.statistics);
+globals.statistics_detection = fullfile(globals.statistics, 'detection');
+addpath(globals.statistics_detection);
+globals.statistics_estimation = fullfile(globals.statistics, 'estimation');
+addpath(globals.statistics_estimation);
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Following process is for getting the default settings
 % for different data directories in local environment.
 default_settings_path = fullfile(globals.root, 'spx_defaults.ini');
