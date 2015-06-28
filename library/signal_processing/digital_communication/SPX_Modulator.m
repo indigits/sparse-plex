@@ -52,6 +52,29 @@ classdef SPX_Modulator < handle
 
         end
 
+        function [ outputSequence ] = modulate_mary_symbols_with_signals( inputSequence, signals )
+            %MODULATE_MARY_SYMBOLS_WITH_SIGNALS Modulates a sequence of M-ary symbols to create
+            %an output signal
+            %
+            % Input:
+            %   inputSequence: Sequence of M-ary symbols. 
+            %       We assume that the symbols are in [1,M]
+            %   signals: signals to be used for each symbol
+            %       Every signal has length N[as a column vector]
+            %       and there are M such signals.
+
+            % The size of signal and number of signals
+            [N, M] = size(signals);
+            % Number of symbols
+            E = length(inputSequence);
+            % The modulation process
+            % First generate signal for each symbol
+            % column by column
+            outputSequence  = signals(1:N, inputSequence);
+            % Then reshape the output to a column vector
+            outputSequence = reshape(outputSequence, N*E,1);
+        end
+
 
     end
 

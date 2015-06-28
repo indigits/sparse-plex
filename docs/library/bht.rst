@@ -26,7 +26,7 @@ Adding noise::
 
 Matched filtering::
 
-    matchedFilterOutput = matchedFilter(receivedSequence, signal);
+    matchedFilterOutput = SPX_MatchedFilter.filter(receivedSequence, signal);
 
 
 Generating sufficient statistics::
