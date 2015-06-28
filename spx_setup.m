@@ -139,6 +139,9 @@ addpath(globals.comp);
 globals.signal_processing = fullfile(globals.spx, 'signal_processing');
 addpath(globals.signal_processing);
 
+globals.digital_communication = fullfile(globals.signal_processing, 'digital_communication');
+addpath(globals.digital_communication);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.statistical_signal_processing = fullfile(globals.spx, 'statistical_signal_processing');
 addpath(globals.statistical_signal_processing);

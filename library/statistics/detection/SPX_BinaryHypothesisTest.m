@@ -1,7 +1,33 @@
 classdef SPX_BinaryHypothesisTest < handle
+    
     methods (Static)
-function [ result ] = performance(...
-    original, detected, previousResult)
+
+        function [ R] = bayes_risk( C, PF, PD, P1)
+            %BAYES_RISK Computes the Bayes risk
+            PM = 1 - PD;
+            P0 = 1 - P1;
+            C00 = C(1,1);
+            C10 = C(2,1);
+            C01 = C(1,2);
+            C11 = C(2,2);
+            R = (1 - PF) * P0 * C00 + PM * P1 * C01 ...
+                + PF * P0 * C10 + PD * P1 * C11;
+        end
+
+        function [ eta ] = bayes_criterion_threshold( C, P1)
+            %BAYES_CRITERION_THRESHOLD Computes the threshold for Bayes criterion
+            C00 = C(1,1);
+            C10 = C(2,1);
+            C01 = C(1,2);
+            C11 = C(2,2);
+            P0 = 1 - P1;
+            num = P0 * (C10 - C00);
+            den = P1 * (C01 - C11);
+            eta =  num/ den; 
+        end
+
+        function [ result ] = performance(...
+            original, detected, previousResult)
         %PERFORMANCE Measures the performance of a
         % binary hypothesis testing algorithm. 
         %

@@ -15,7 +15,7 @@ Modulation::
     N = 10;
     % The signal shape
     signal = ones(N, 1);
-    transmittedSequence = modulateBinarySequence(transmittedBits, signal);
+    transmittedSequence = SPX_Modulator.modulate_bits_with_signals(transmittedBits, signal);
 
 Adding noise::
 
