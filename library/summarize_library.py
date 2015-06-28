@@ -2,8 +2,8 @@
 import os
 from os import path 
 
-library_dir = os.path.dirname(__file__);
-
+# our imports
+import pathsetup
 
 text_files = 0
 matlab_files = 0
@@ -16,7 +16,7 @@ functions = []
 unit_tests = []
 scripts = []
 
-for root, dirs, files in os.walk(library_dir):
+for root, dirs, files in os.walk(pathsetup.library_dir):
     if 'bin' in dirs:
         dirs.remove('bin')  # don't visit bin directories
     for filename in files:
@@ -48,7 +48,7 @@ for root, dirs, files in os.walk(library_dir):
         elif extn == '.txt':
             text_files += 1
 
-
+print 'Library directory: %s' % pathsetup.library_dir
 print 'Text files: %d' % text_files
 print 'Matlab files: %d' % matlab_files
 print 'Classes: %d' % num_classes
