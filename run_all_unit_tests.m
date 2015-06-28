@@ -10,6 +10,19 @@ include_long_tests = 0;
 cd (fullfile(globals.commons, 'tests'));
 runtests;
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd (fullfile(globals.clustering, 'tests'));
+runtests;
+cd (fullfile(globals.spectral_clustering, 'tests'));
+runtests;
+cd (fullfile(globals.clustering_kmeans, 'tests'));
+runtests;
+if include_long_tests
+cd (fullfile(globals.sparse_subspace_clustering, 'tests'));
+runtests;
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cd (fullfile(globals.dictionary, 'tests'));
 runtests;
