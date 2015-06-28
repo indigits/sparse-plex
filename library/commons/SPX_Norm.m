@@ -65,5 +65,12 @@ classdef SPX_Norm < handle
         function result = inner_product_cw(A, B)
             result = sum (A.* conj(B));
         end
+
+        function [ sumsqr ] = sum_square( input )
+            %SUMSQUARE Computes the squared sum of input vector
+            %   Detailed explanation goes here
+            sumsqr = sum(input.^2);
+        end
+
     end    
 end
