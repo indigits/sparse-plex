@@ -11,17 +11,23 @@ num_classes = 0
 num_functions = 0
 num_scripts = 0
 num_unit_tests = 0
-classes = []
+class_names = []
+class_paths = []
 functions = []
 unit_tests = []
 scripts = []
 
+num_chars = len(pathsetup.library_dir)
+
 for root, dirs, files in os.walk(pathsetup.library_dir):
+    relative_dir = root[num_chars:]
+    relative_dir = relative_dir.replace('\\', '/')
     if 'bin' in dirs:
         dirs.remove('bin')  # don't visit bin directories
     for filename in files:
-        filepath = path.join(root, filename);
-        filename, extn = path.splitext(filename);
+        filepath = path.join(root, filename)
+        filename, extn = path.splitext(filename)
+        relative_path = relative_dir + '/' + filename
         if extn == '.m':
             matlab_files += 1
             if filename.startswith('test_'):
@@ -34,7 +40,8 @@ for root, dirs, files in os.walk(pathsetup.library_dir):
                     if 'classdef' in line:
                         num_classes += 1
                         detected = True
-                        classes.append(filename)
+                        class_names.append(filename)
+                        class_paths.append(relative_path)
                         break
                     elif 'function' in line:
                         num_functions += 1
@@ -56,14 +63,21 @@ print 'Functions: %d' % num_functions
 print 'Unit test files: %d' % num_unit_tests
 print 'Scripts: %d' % num_scripts
 
-classes.sort()
+class_names.sort()
+class_paths.sort()
 functions.sort()
 scripts.sort()
 unit_tests.sort()
 
 print '\nClasses:\n'
-for classname in classes:
+for classname in class_names:
     print classname
+
+print '\nClasses by relative path:\n'
+for classname in class_paths:
+    print classname
+
+
 print '\nFunctions: \n'
 for funcname in functions:
     print funcname
