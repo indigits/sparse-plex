@@ -1,4 +1,4 @@
-function test_suite = test_cs_checks
+function test_suite = test_spx_checks
   initTestSuite;
 end
 
