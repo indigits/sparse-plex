@@ -46,6 +46,9 @@ addpath(globals.data_noise);
 globals.data_synthetic = fullfile(globals.data, 'synthetic');
 addpath(globals.data_synthetic);
 
+globals.data_signals = fullfile(globals.data, 'signals');
+addpath(globals.data_signals);
+
 globals.data_yale_faces = fullfile(globals.data, 'yale_faces');
 addpath(globals.data_yale_faces);
 
