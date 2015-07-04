@@ -8,6 +8,8 @@ classdef SPX_Prob
         y = 1/2 - (1/2) * erf(x / sqrt(2));
 
         end
+
+
         function [ x ] = q_inv_function( y )
         % DESCRIPTION  y = SPX_Prob.q_function(x) 
         %  The inverse Q function
@@ -24,5 +26,20 @@ classdef SPX_Prob
         %  plot(-2:0.1:2,SPX_Prob.q_inv_function(SPX_Prob.q_function(-2:0.1:2)),'.-')
         x = erfinv(1-2*y)*sqrt(2);
         end
+
+
+        function result = is_pmf(pmf)
+            % IS_PMF checks if the given array of probabilities 
+            % is a probability mass function or not
+            if ~isvector(pmf)
+                result = false;
+            elseif any(pmf < 0)
+                result = false;
+            elseif abs(sum(pmf) - 1.0) > 1e-4
+                result = false;
+            else
+                result = true;
+            end
+        end 
     end
 end

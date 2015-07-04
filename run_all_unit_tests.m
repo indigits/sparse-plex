@@ -35,6 +35,11 @@ cd (fullfile(globals.steepest_descent, 'tests'));
 runtests;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd (fullfile(globals.probability, 'tests'));
+runtests;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if include_long_tests
 cd (fullfile(globals.basis_pursuit, 'tests'));
