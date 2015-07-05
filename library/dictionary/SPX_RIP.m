@@ -52,7 +52,7 @@ while true
     newEstimatedMinDelta = estimatedMinDelta;
     for i=1:trials;
         % generate a unit norm Cauchy random vector
-        x = SPX_Signals.unitNormSparseUniformVector(N, K);
+        x = SPX_Signals.unit_norm_sparse_uniform_signal(N, K);
         % generate a unit norm Gaussian random vector
         %x = unitNormSparseGaussianVector(N, K);
         % Compute the projection

@@ -2,7 +2,15 @@ classdef SPX_Vec
 % Utility functions related to working with vectors
 
     methods(Static)
+        function [ e ] = unit_vector( N, i )
+            %unit_vector Creates a unit vector in the ith dimension of an N dimensional
+            %space.
+            e = zeros(N,1);
+            e(i) = 1;
+        end
+
         function r = reverse(v)
+            % Reverses the contents of a vector
             r  = v(length(v): -1 : 1);
         end
 

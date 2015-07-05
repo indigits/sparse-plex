@@ -1,12 +1,11 @@
 classdef SPX_Signals
-    %SPX_SIGNALS Summary of this class goes here
-    %   Detailed explanation goes here
+    %SPX_Signals Helper functions for working with signals
     
     properties
     end
     
     methods(Static)
-        function [x,i] = findFirstLessEqEnergy(X, energy)
+        function [x,i] = find_first_signal_with_energy_le(X, energy)
             % Returns the first signal with energy less than or equal to
             % given threshold
             s = size(X, 2);
@@ -22,7 +21,7 @@ classdef SPX_Signals
             x = [];
         end
 
-        function [ indices ] = largestIndices( x, K )
+        function [ indices ] = largest_indices( x, K )
             %LARGESTINDICES Returns the set of K largest indices
             N = length(x);
             tmp = zeros(N,2);
@@ -42,21 +41,14 @@ classdef SPX_Signals
             %   K: Number of terms to keep in sparse approximation
             N = length(x);
             % Let us find the K-sparse approximation of x directly
-            indices = SPX_Signals.largestIndices(x, K);
+            indices = SPX_Signals.largest_indices(x, K);
             % K-sparse approximation of x
             approxX = zeros(N,1);
             approxX(indices) = x(indices);
         end
 
-        function [ e ] = unitVector( N, i )
-            %UNITVECTOR Creates a unit vector in the ith dimension of an N dimensional
-            %space.
-            e = zeros(N,1);
-            e(i) = 1;
-        end
-
-        function [ x ] = unitNormSparseUniformVector( N, K )
-            %UNITNORMSPARSEUNIFORMVECTOR Generates a K sparse vector of unit norm
+        function [ x ] = unit_norm_sparse_uniform_signal( N, K )
+            %unit_norm_sparse_uniform_signal Generates a K sparse signal of unit norm
             % Let us construct a zero vector
             x = zeros(N,1);
             % let us generate a random permutation of numbers from 1 to N
@@ -67,6 +59,15 @@ classdef SPX_Signals
             n = norm(x);
             % Let us normalize the vector
             x = x / n;
+        end
+
+        function y = resize_signals(x, n)
+            % Resizes a signals via resampling
+            %
+            % A row vector is resampled into a row vector
+            % A column vector is resampled into a column vector
+            % A matrix is resampled column wise.
+            y = resample(x, n, length(x));
         end
         
     end
