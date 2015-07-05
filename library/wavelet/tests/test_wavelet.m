@@ -59,3 +59,13 @@ function test_dyad_length
     assertEqual([n , j, f], [17, 5, 0]);
 end
 
+
+function test_cut_dyad
+    x  = [1 2 3 4 5];
+    y = SPX_Wavelet.cut_dyadic(x);
+    assertEqual(y, 1:4);
+    x = x';
+    y = SPX_Wavelet.cut_dyadic(x);
+    assertEqual(y, (1:4)');
+end
+

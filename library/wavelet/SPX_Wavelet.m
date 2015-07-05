@@ -55,6 +55,20 @@ methods(Static)
         j = ceil (log2(n));
         consistent = (n == 2^j);
     end
+
+    function dyad_signal = cut_dyadic(signal)
+        % Cuts the signal to the largest dyadic length
+        n = length(signal);
+        j = floor(log2(n));
+        dyad_length = round(2^j);
+        if dyad_length == n
+            % no change is required
+            dyad_signal = signal;
+        else
+            % We need to cut
+            dyad_signal = signal(1:dyad_length);
+        end
+    end
 end
 
 end
