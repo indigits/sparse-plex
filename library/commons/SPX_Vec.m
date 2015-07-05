@@ -1,10 +1,47 @@
 classdef SPX_Vec
-% functions related to a vector
+% Utility functions related to working with vectors
 
     methods(Static)
         function r = reverse(v)
             r  = v(length(v): -1 : 1);
         end
+
+        function row = reshape_as_row_vec(x)
+            % Converts x to a row vector
+            row = x(:)';
+        end
+
+        function col = reshape_as_col_vec(x)
+            % Converts x to a column vector
+            col = x(:);
+        end
+
+        function vec = reshape_as_prototype(x, proto)
+            % Shapes a vector as the prototype vector
+            % Both x and proto must be vectors.
+            % if proto is row vec, then x would be made row
+            % if proto is col vec, then x would be made col
+            if ~isvector(x)
+                error('x must be a vector');
+            end
+            if ~isvector(proto)
+                error('proto must be a vector');
+            end
+            if isrow(proto)
+                if isrow(x)
+                    vec = x;
+                else
+                    vec = SPX_Vec.reshape_as_row_vec(x);
+                end
+            else
+                if iscolumn(x)
+                    vec = x;
+                else
+                    vec = SPX_Vec.reshape_as_col_vec(x);
+                end
+            end
+        end
+
     end
 
 
