@@ -158,6 +158,10 @@ addpath(globals.statistics_detection);
 globals.statistics_estimation = fullfile(globals.statistics, 'estimation');
 addpath(globals.statistics_estimation);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+globals.wavelet = fullfile(globals.spx, 'wavelet');
+addpath(globals.wavelet);
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

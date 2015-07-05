@@ -55,6 +55,10 @@ runtests;
 cd (fullfile(globals.orthogonal_matching_pursuit, 'tests'));
 runtests;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd (fullfile(globals.statistical_signal_processing, 'tests'));
+runtests;
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cd (fullfile(globals.statistics, 'tests'));
@@ -62,7 +66,7 @@ runtests;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cd (fullfile(globals.statistical_signal_processing, 'tests'));
+cd (fullfile(globals.wavelet, 'tests'));
 runtests;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
