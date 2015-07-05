@@ -2,9 +2,9 @@ classdef SPX_DaubechiesWavelet
 
 methods(Static)
 
-    function qmf = on_qmf_filter(parameter)
+    function qmf = on_qmf_filter(filter_length)
         % Generates orthonormal quadrature mirror filter for Daubechies wavelet transform
-        switch parameter
+        switch filter_length
             case 4
                 qmf = [   .482962913145   .836516303738   ...
                 .224143868042   -.129409522551  ];
@@ -56,7 +56,7 @@ methods(Static)
                 .001992405295   -.000685856695  -.000116466855  ...
                 .000093588670   -.000013264203                  ];
             otherwise
-                error('Unsupported parameter');
+                error('Unsupported filter length');
         end
     end
 

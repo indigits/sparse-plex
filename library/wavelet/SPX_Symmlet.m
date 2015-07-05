@@ -2,9 +2,9 @@ classdef SPX_Symmlet
 
 methods(Static)
 
-    function qmf = on_qmf_filter(parameter)
+    function qmf = on_qmf_filter(num_vanishing_moments)
         % Generates orthonormal quadrature mirror filter for Symmlets
-        switch parameter
+        switch num_vanishing_moments
             case 4
                 qmf = [   -.107148901418  -.041910965125  .703739068656   ...
                 1.136658243408  .421234534204   -.140317624179  ...
@@ -48,7 +48,7 @@ methods(Static)
                 -.028786231926  -.001137535314  .006495728375   ...
                 .000080661204   -.000649589896                  ];
             otherwise
-                error('Unsupported parameter');
+                error('Unsupported number of vanishing moments');
         end
         % Normalize the coefficients
         qmf = qmf ./ sqrt(2);
