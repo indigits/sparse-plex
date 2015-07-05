@@ -69,3 +69,24 @@ function test_cut_dyad
     assertEqual(y, (1:4)');
 end
 
+
+function test_aconv
+    x = [-1 0 2 1];
+    f = [.2 .2];
+    y = SPX_Wavelet.aconv(f , x);
+    y0 = [-.2 .4 .6 0];
+    assertVectorsAlmostEqual(y, y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f' , x), y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f , x'), y0');
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f' , x'), y0');
+
+
+    x = [-1 0 2 1];
+    f = [.2 .2 .2 .2 .2];
+    y = SPX_Wavelet.aconv(f , x);
+    y0 = [.2 .4 .8 .6];
+    assertVectorsAlmostEqual(y, y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f' , x), y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f , x'), y0');
+    assertVectorsAlmostEqual(SPX_Wavelet.aconv(f' , x'), y0');
+end
