@@ -1,17 +1,28 @@
 classdef SPX_Norm < handle
-
+% SPX_Norm provides helper functions for working with norms of rows and columns
     methods(Static)
 
+        function result = is_unit_norm_vec(x)
+            % Checks if a vector is unit norm or not
+            if ~isvector(x)
+                result = false;
+                return;
+            end
+            result = abs(norm(x) - 1) < 1e-6;
+        end
 
         function result = norms_l1_cw(X)
+            % Returns the $l_1$ norm of each column in X
             result = sum(abs(X));
         end
 
         function result = norms_l2_cw(X)
+            % Returns the $l_2$ norm of each column in X
             result = sqrt(sum(X .* conj(X), 1));
         end
 
         function result = norms_linf_cw(X)
+            % Returns the $l_{\infty}$ norm of each column in X
             result = max(abs(X));
         end
 
