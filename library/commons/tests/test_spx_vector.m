@@ -80,3 +80,39 @@ function test_shift_lc
     y = SPX_Vec.shift_lc(x);
     assertEqual(y, [2 3 1]');
 end
+
+function test_shift_rn
+    x = [1 2 3 4];
+    y = SPX_Vec.shift_rn(x, 2);
+    assertEqual(y, [0 0 1 2]);
+    x = x';
+    y = SPX_Vec.shift_rn(x, 2);
+    assertEqual(y, [0 0 1 2]');
+end
+
+function test_shift_rcn
+    x = [1 2 3 4];
+    y = SPX_Vec.shift_rcn(x, 2);
+    assertEqual(y, [3 4 1 2]);
+    x = x';
+    y = SPX_Vec.shift_rcn(x, 2);
+    assertEqual(y, [3 4 1 2]');
+end
+
+function test_shift_ln
+    x = [1 2 3 4];
+    y = SPX_Vec.shift_ln(x, 2);
+    assertEqual(y, [3 4 0 0]);
+    x = x';
+    y = SPX_Vec.shift_ln(x, 2);
+    assertEqual(y, [3 4 0 0]');
+end
+
+function test_shift_lcn
+    x = [1 2 3 4];
+    y = SPX_Vec.shift_lcn(x, 2);
+    assertEqual(y, [3 4 1 2]);
+    x = x';
+    y = SPX_Vec.shift_lcn(x, 2);
+    assertEqual(y, [3 4 1 2]');
+end

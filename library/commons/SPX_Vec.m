@@ -76,6 +76,33 @@ classdef SPX_Vec
             y(1:end-1) = x(2:end);
             y(end)  = x(1);
         end
+
+        function y = shift_rn(x, n)
+            % Right shift the contents of the vector by n places
+            y = zeros(size(x));
+            y(n+1:end) = x(1:end-n);
+        end
+
+        function y = shift_rcn(x, n)
+            % Circular right shift the contents of the vector by n places
+            y = zeros(size(x));
+            y(n+1:end) = x(1:end-n);
+            y(1:n)  = x(end-n+1:end);
+        end
+
+
+        function y = shift_ln(x, n)
+            % Left shift the contents of the vector by n places
+            y = zeros(size(x));
+            y(1:end-n) = x(1+n:end);
+        end
+
+        function y = shift_lcn(x, n)
+            % Circular left shift the contents of the vector by n places
+            y = zeros(size(x));
+            y(1:end-n) = x(1+n:end);
+            y(end-n+1:end)  = x(1:n);
+        end
     end
 
 
