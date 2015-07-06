@@ -105,7 +105,7 @@ methods(Static)
         g = modulation .* h;
     end
 
-    function y = upsample(x, s)
+    function y = up_sample(x, s)
         % Upsample x by a factor s by introducing zeros in between
         if nargin == 1
             % By default upsample by a factor of 2.
@@ -137,6 +137,15 @@ methods(Static)
         % Perform downsampling
         n = length(y);
         y = y(1:2:(n-1));
+    end
+
+    function y = up_sample_lo_pass(h, x)
+        % Performs upsampling followed by low pass filtering
+
+        % Upsample by a factor of 2 and introduce zeros
+        x = SPX_Wavelet.up_sample(x);
+        % Perform low pass filtering
+        y = SPX_Wavelet.iconv(h, x);
     end
 
 end
