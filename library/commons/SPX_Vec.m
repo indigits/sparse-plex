@@ -103,6 +103,69 @@ classdef SPX_Vec
             y(1:end-n) = x(1+n:end);
             y(end-n+1:end)  = x(1:n);
         end
+
+
+        function x_extended = repeat_vector_at_end(x, p)
+            % Repeats the vector at the end for p more samples to create its periodic extension
+            %
+            % Inputs 
+            %  x - vector
+            %  p - number of samples to repeat
+
+            n = length(x);
+            % ensure that x is a column vector
+            % all intermediate calculations are happening with the assumption
+            % that x is a column vector
+            % but we maintain a flag to note that x was originally a row vector
+            row = false;
+            if isrow(x)
+                x = x';
+                row = true;
+            end
+            if p < n
+                % The usual case, we pad x with first p samples of x
+                x_extended = [x ; x(1:p)];
+            else
+                padding = zeros(p, 1);
+                indices = 1:p;
+                modular_indices = rem(indices - 1, n) + 1;
+                padding(indices) = x(modular_indices);
+                x_extended = [x ; padding];
+            end
+            if row
+                % Restore the shape as row vector
+                x_extended = x_extended';
+            end
+        end
+
+        function x_extended = repeat_vector_at_start(x, p)
+            % Repeats the vector at the start for p more samples to create its periodic extension
+            %
+            % Inputs 
+            %  x - vector
+            %  p - number of samples to repeat
+
+            n = length(x);
+            row = false;
+            if isrow(x)
+                x = x';
+                row = true;
+            end
+            if p <= n
+                % The usual case, we copy the last p samples of x at the beginning
+                x_extended = [x((n-p+1):n) ; x];
+            else
+                padding = zeros(p, 1);
+                indices = 1:p;
+                modular_indices = rem(p*n - p + indices - 1, n) + 1;
+                padding(indices) = x(modular_indices);
+                x_extended = [padding ; x];
+            end
+            if row
+                % Restore the shape as row vector
+                x_extended = x_extended';
+            end
+        end
     end
 
 

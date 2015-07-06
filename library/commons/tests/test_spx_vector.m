@@ -116,3 +116,24 @@ function test_shift_lcn
     y = SPX_Vec.shift_lcn(x, 2);
     assertEqual(y, [3 4 1 2]');
 end
+
+function test_repeat_at_end
+    x  = 1:4;
+    y = SPX_Vec.repeat_vector_at_end(x, 2);
+    assertEqual(y, [1:4 1:2]);
+    y = SPX_Vec.repeat_vector_at_end(x, 4);
+    assertEqual(y, [1:4 1:4]);
+    y = SPX_Vec.repeat_vector_at_end(x, 6);
+    assertEqual(y, [1:4 1:4 1:2]);
+end
+
+function test_repeat_at_start
+    x  = 1:4;
+    y = SPX_Vec.repeat_vector_at_start(x, 2);
+    assertEqual(y, [3:4 1:4]);
+    y = SPX_Vec.repeat_vector_at_start(x, 4);
+    assertEqual(y, [1:4 1:4]);
+    y = SPX_Vec.repeat_vector_at_start(x, 6);
+    assertEqual(y, [3:4 1:4 1:4]);
+end
+
