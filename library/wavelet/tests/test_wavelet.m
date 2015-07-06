@@ -133,6 +133,15 @@ function test_mirror_filter
     assertEqual(c, g);
 end
 
+function test_upsample
+    x = [1 2 3];
+    y = SPX_Wavelet.upsample(x);
+    assertEqual(y, [1 0 2 0 3 0]);
+    y = SPX_Wavelet.upsample(x, 3);
+    assertEqual(y, [1 0 0 2 0 0 3 0 0]);
+end
+
+
 
 function test_hi_pass_down_sample
     h = SPX_DaubechiesWavelet.on_qmf_filter(20);
@@ -142,3 +151,14 @@ function test_hi_pass_down_sample
     y = SPX_Wavelet.hi_pass_down_sample(h, x);
     assertVectorsAlmostEqual(y, y0);
 end
+
+
+function test_lo_pass_down_sample
+    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    x = [1 -1  2 -2  3 -3  4 -4  3 -3  2 -2  1 -1  2 -2];
+    y0 = [0.196575453299000   0.640838188043000  -0.132150600147000  -0.099914489637000...
+      -0.844400789821000   0.449878806033000 -0.315491816913000   0.104665249143000];
+    y = SPX_Wavelet.lo_pass_down_sample(h, x);
+    assertVectorsAlmostEqual(y, y0);
+end
+

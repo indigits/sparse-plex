@@ -105,10 +105,31 @@ methods(Static)
         g = modulation .* h;
     end
 
-    function y = hi_pass_down_sample(qmf, x)
-        % Performs hi pass filtering followed by downsampling on periodic extension of x
+    function y = upsample(x, s)
+        % Upsample x by a factor s by introducing zeros in between
+        if nargin == 1
+            % By default upsample by a factor of 2.
+            s = 2;
+        end
+        n = length(x)*s;
+        y = zeros(1,n);
+        y(1:s:(n-s+1) )=x;
+
+    end
+
+    function y = lo_pass_down_sample(h, x)
+        % Performs low pass filtering followed by downsampling on periodic extension of x
+        % Perform filtering
+        y = SPX_Wavelet.aconv(h, x);
+        % Perform downsampling
+        n = length(y);
+        y = y(1:2:(n-1));
+    end
+
+    function y = hi_pass_down_sample(h, x)
+        % Performs high pass filtering followed by downsampling on periodic extension of x
         % Construct  the high pass mirror filter 
-        g = SPX_Wavelet.mirror_filter(qmf);
+        g = SPX_Wavelet.mirror_filter(h);
         % circular left shift the contents of x by 1.
         x  = SPX_Vec.shift_lc(x);
         % Perform filtering
