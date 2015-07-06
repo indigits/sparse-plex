@@ -132,3 +132,13 @@ function test_mirror_filter
     c = b(:)';
     assertEqual(c, g);
 end
+
+
+function test_hi_pass_down_sample
+    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    x = [1 -1  2 -2  3 -3  4 -4  3 -3  2 -2  1 -1  2 -2];
+    y0 = [-2.605103540984999  -1.674153156387000  -2.989131414576999  -4.540466300308999...
+      -5.490742088699001  -4.031099687953000 -2.537344480928999  -1.587803452929000];
+    y = SPX_Wavelet.hi_pass_down_sample(h, x);
+    assertVectorsAlmostEqual(y, y0);
+end
