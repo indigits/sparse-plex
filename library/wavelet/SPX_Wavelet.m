@@ -75,33 +75,29 @@ methods(Static)
         % Filtering by periodic convolution of x with the time reverse of f.
         n = length(x);
         p = length(f);
-        % ensure that x is a column vector
-        row = false;
-        if isrow(x)
-            x = x';
-            row = true;
-        end
-        if p < n
-            % The usual case, we pad x with first p samples of x
-            x_padded = [x ; x(1:p)];
-        else
-            padding = zeros(p, 1);
-            indices = 1:p;
-            modular_indices = rem(indices - 1, n) + 1;
-            padding(indices) = x(modular_indices);
-            x_padded = [x ; padding];
-        end
+        % pad x with its periodic repetitions at the end
+        x_padded =  SPX_Vec.repeat_vector_at_end(x, p);
         % Reverse the filter
         f_reversed = SPX_Vec.reverse(f);
         % Perform the filtering
         y_padded = filter(f_reversed, 1, x_padded);
         % Remove the padding (remove first p-1 samples ) and keep n samples
         y = y_padded(p:(n+p-1));
-        if row
-            % Make sure y is a row vector
-            y = y';
-        end
     end
+
+
+    function y = iconv(f, x)
+        % Filtering by periodic convolution of x with the time reverse of f.
+        n = length(x);
+        p = length(f);
+        % pad x with its periodic repetitions at the beginning
+        x_padded =  SPX_Vec.repeat_vector_at_start(x, p);
+        % Perform the filtering
+        y_padded = filter(f, 1, x_padded);
+        % Remove the padding (remove first p samples ) and keep n samples
+        y = y_padded((p+1):(n+p));
+    end
+
 end
 
 end

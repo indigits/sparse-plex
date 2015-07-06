@@ -90,3 +90,25 @@ function test_aconv
     assertVectorsAlmostEqual(SPX_Wavelet.aconv(f , x'), y0');
     assertVectorsAlmostEqual(SPX_Wavelet.aconv(f' , x'), y0');
 end
+
+
+function test_iconv
+    x = [-1 0 2 1];
+    f = [.2 .2];
+    y = SPX_Wavelet.iconv(f , x);
+    y0 = [ 0 -.2 .4 .6];
+    assertVectorsAlmostEqual(y, y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f' , x), y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f , x'), y0');
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f' , x'), y0');
+
+
+    x = [-1 0 2 1];
+    f = [.2 .2 .2 .2 .2];
+    y = SPX_Wavelet.iconv(f , x);
+    y0 = [.2 .4 .8 .6];
+    assertVectorsAlmostEqual(y, y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f' , x), y0);
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f , x'), y0');
+    assertVectorsAlmostEqual(SPX_Wavelet.iconv(f' , x'), y0');
+end
