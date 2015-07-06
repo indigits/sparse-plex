@@ -112,3 +112,23 @@ function test_iconv
     assertVectorsAlmostEqual(SPX_Wavelet.iconv(f , x'), y0');
     assertVectorsAlmostEqual(SPX_Wavelet.iconv(f' , x'), y0');
 end
+
+
+function test_mirror_filter
+    h = SPX_HaarWavelet.on_qmf_filter;
+    g = SPX_Wavelet.mirror_filter(h);
+    assertEqual(g, [1 -1] ./ sqrt(2));
+    h2 = SPX_Wavelet.mirror_filter(g);
+    assertEqual(h2, h);
+    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    g = SPX_Wavelet.mirror_filter(h);
+    h2 = SPX_Wavelet.mirror_filter(g);
+    assertEqual(h2, h);
+    h = ones(1, 10);
+    g = SPX_Wavelet.mirror_filter(h);
+    assertEqual(sum(h  == g), 5);
+    a= ones(1, 5);
+    b = [a ; -a];
+    c = b(:)';
+    assertEqual(c, g);
+end

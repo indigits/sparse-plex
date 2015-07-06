@@ -98,6 +98,13 @@ methods(Static)
         y = y_padded((p+1):(n+p));
     end
 
+    function g = mirror_filter(h)
+        % Constructs the mirror filter for a given qmf filter by applying (-1)^t modulation
+        n = length(h);
+        modulation = (-1).^(0:n-1);
+        g = modulation .* h;
+    end
+
 end
 
 end
