@@ -2,7 +2,7 @@ classdef SPX_Coiflet
 
 methods(Static)
 
-    function qmf = on_qmf_filter(parameter)
+    function qmf = quad_mirror_filter(parameter)
         % Generates orthonormal quadrature mirror filter for Coiflets
         switch parameter
         case 1

@@ -2,7 +2,7 @@ classdef SPX_Symmlet
 
 methods(Static)
 
-    function qmf = on_qmf_filter(num_vanishing_moments)
+    function qmf = quad_mirror_filter(num_vanishing_moments)
         % Generates orthonormal quadrature mirror filter for Symmlets
         switch num_vanishing_moments
             case 4

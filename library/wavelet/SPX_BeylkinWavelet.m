@@ -2,7 +2,7 @@ classdef SPX_BeylkinWavelet
 
 methods(Static)
 
-    function qmf = on_qmf_filter()
+    function qmf = quad_mirror_filter()
         % Generates orthonormal quadrature mirror filter for Haar wavelet transform
         qmf = [ .099305765374   .424215360813   .699825214057   ...
             .449718251149   -.110927598348  -.264497231446  ...

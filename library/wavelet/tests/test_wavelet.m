@@ -115,12 +115,12 @@ end
 
 
 function test_mirror_filter
-    h = SPX_HaarWavelet.on_qmf_filter;
+    h = SPX_HaarWavelet.quad_mirror_filter;
     g = SPX_Wavelet.mirror_filter(h);
     assertEqual(g, [1 -1] ./ sqrt(2));
     h2 = SPX_Wavelet.mirror_filter(g);
     assertEqual(h2, h);
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     g = SPX_Wavelet.mirror_filter(h);
     h2 = SPX_Wavelet.mirror_filter(g);
     assertEqual(h2, h);
@@ -144,7 +144,7 @@ end
 
 
 function test_hi_pass_down_sample
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     x = [1 -1  2 -2  3 -3  4 -4  3 -3  2 -2  1 -1  2 -2];
     y0 = [-2.605103540984999  -1.674153156387000  -2.989131414576999  -4.540466300308999...
       -5.490742088699001  -4.031099687953000 -2.537344480928999  -1.587803452929000];
@@ -154,7 +154,7 @@ end
 
 
 function test_lo_pass_down_sample
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     x = [1 -1  2 -2  3 -3  4 -4  3 -3  2 -2  1 -1  2 -2];
     y0 = [0.196575453299000   0.640838188043000  -0.132150600147000  -0.099914489637000...
       -0.844400789821000   0.449878806033000 -0.315491816913000   0.104665249143000];
@@ -165,7 +165,7 @@ end
 
 
 function test_up_sample_low_pass
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     x = [1    -1     2    -2 ];
     y0 = [-0.112524198664000  -1.977171657814000  -0.579863964746000   1.384874954135000...
        0.414126633328000  -1.007629168268000 0.278261530082000   1.599925871947000];
@@ -175,7 +175,7 @@ end
 
 
 function test_up_sample_hi_pass
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     x = [1    -1     2    -2 ];
     y0 = [1.384874954135000   0.579863964746000  -1.977171657814000   0.112524198664000...
        1.599925871947000  -0.278261530082000 -1.007629168268000  -0.414126633328000];

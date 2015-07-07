@@ -2,7 +2,7 @@ classdef SPX_VaidyanathanWavelet
 
 methods(Static)
 
-    function qmf = on_qmf_filter()
+    function qmf = quad_mirror_filter()
         % Generates orthonormal quadrature mirror filter for Vaidyanathan wavelet transform
         qmf = [   -.000062906118  .000343631905   -.000453956620  ...
             -.000944897136  .002843834547   .000708137504   ...

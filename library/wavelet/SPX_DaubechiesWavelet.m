@@ -2,7 +2,7 @@ classdef SPX_DaubechiesWavelet
 
 methods(Static)
 
-    function qmf = on_qmf_filter(filter_length)
+    function qmf = quad_mirror_filter(filter_length)
         % Generates orthonormal quadrature mirror filter for Daubechies wavelet transform
         switch filter_length
             case 4

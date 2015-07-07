@@ -5,7 +5,7 @@ end
 
 function test_fwd_po_wavelet_transform
     x = [0 5 -3 3 -4 -6 -1 6 1 -7 -2 -7 1 -8 1 -3];
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     L = 1;
     w = SPX_WaveletTransform.forward_periodized_orthogonal(h, x, L);
     w_expected = [-0.886174910726689  -7.599106463564170  -4.126070413696197  -3.831372392026132...
@@ -38,7 +38,7 @@ end
 
 function test_inv_po_wavelet_transform
     x = [0 5 -3 3 -4 -6 -1 6 1 -7 -2 -7 1 -8 1 -3];
-    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    h = SPX_DaubechiesWavelet.quad_mirror_filter(20);
     L = 1;
     w = SPX_WaveletTransform.forward_periodized_orthogonal(h, x, L);
     y = SPX_WaveletTransform.inverse_periodized_orthogonal(h, w, L);
