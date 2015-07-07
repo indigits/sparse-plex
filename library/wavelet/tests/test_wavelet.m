@@ -172,3 +172,14 @@ function test_up_sample_low_pass
     y = SPX_Wavelet.up_sample_lo_pass(h, x);
     assertVectorsAlmostEqual(y, y0);
 end
+
+
+function test_up_sample_hi_pass
+    h = SPX_DaubechiesWavelet.on_qmf_filter(20);
+    x = [1    -1     2    -2 ];
+    y0 = [1.384874954135000   0.579863964746000  -1.977171657814000   0.112524198664000...
+       1.599925871947000  -0.278261530082000 -1.007629168268000  -0.414126633328000];
+    y = SPX_Wavelet.up_sample_hi_pass(h, x);
+    assertVectorsAlmostEqual(y, y0);
+end
+

@@ -148,6 +148,19 @@ methods(Static)
         y = SPX_Wavelet.iconv(h, x);
     end
 
+    function y = up_sample_hi_pass(h, x)
+        % Performs upsampling followed by high pass filtering
+
+        % Construct  the high pass mirror filter 
+        g = SPX_Wavelet.mirror_filter(h);
+        % Upsample by a factor of 2 and introduce zeros
+        x = SPX_Wavelet.up_sample(x);
+        % circular right shift the contents of x by 1.
+        x  = SPX_Vec.shift_rc(x);
+        % Perform low pass filtering
+        y = SPX_Wavelet.aconv(g, x);
+    end
+
 end
 
 end
