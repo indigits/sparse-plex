@@ -45,6 +45,34 @@ methods(Static)
         end
     end
 
+
+    function wave = wavelet_function(j, k, n, parameter)
+        % Makes an orthogonal wavelet function
+        %
+        % Inputs: 
+        %  j, k - scale and location indices
+        %  n - signal length (dyadic)
+        qmf = SPX_Coiflet.quad_mirror_filter(parameter);
+        w = zeros(1, n);
+        % identify the index of the j-th scale at k-th translation
+        index = SPX_Wavelet.dyad_to_index(j, k);
+        w(index) = 1;         
+        wave = SPX_WaveletTransform.inverse_periodized_orthogonal(qmf, w, j);
+    end
+
+    function wave = scaling_function(j, k, n, parameter)
+        % Makes an orthogonal scaling function
+        %
+        % Inputs: 
+        %  j, k - scale and location indices
+        %  n - signal length (dyadic)
+        qmf = SPX_Coiflet.quad_mirror_filter(parameter);
+        w = zeros(1, n);
+        % k-th translate in the coarsest part of the wavelet coefficients
+        w(k) = 1;
+        wave = SPX_WaveletTransform.inverse_periodized_orthogonal(qmf, w, j);
+    end
+
 end
 
 
