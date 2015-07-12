@@ -1,5 +1,26 @@
 classdef SPX_Wavelet
 % SPX_Wavelet provides common functions for implementation of wavelets
+% 
+% Dyadic index structure
+% -----------------------------
+% Let us say we are working with a signal s_n which has n=2^J samples.
+% 1st level transform will lead to s_{n-1} with 2^{J-1} and 
+% d_{n - 1} with 2^{J-2} samples. Applying the transform again on s_{n-1}, 
+% we will obtain s_{n-2} with 2^{J-2} and d_{n-2} with 2^{J-2} samples.
+% Consider a specific case of J=4.
+% s_4 has 16 samples.
+% s_3 and d_3 both have 8 samples each.
+% s_2 and d_2 both have 4 samples each.
+% s_1 and d_1 both have 2 samples each.
+% s_0 and d_0 both have 1 samples each.
+% No further filtering is possible.
+% The final wavelet coefficients are arranged as
+% [s_0 d_0 d_1 d_2 d_3].
+% They occupy the indices as:
+% [1, 2, 3-4, 5-8, 9-16].
+% s_0 is placed at the beginning.
+% d_j has 2^j samples and is placed between [2^j + 1, 2^{ j + 1}]
+
 
 methods(Static)
 
