@@ -7,31 +7,44 @@ classdef SPX_Number
     methods (Static)
 
         function result = is_integer(value)
+            % Returns if the value is an integer
             result = (mod(value, 1) == 0);
         end
 
         function result = is_positive_integer(value)
+            % Returns if the value is a positive integer
             result = (value > 0) & (mod(value, 1) == 0);
         end
 
         function result = is_negative_integer(value)
+            % Returns if the value is a negative integer
             result = (value < 0) & (mod(value, 1) == 0);
         end
 
         function result = is_odd(value)
+            % Returns if the value is an odd integer
             result = (mod(value, 2) == 1);
         end
 
         function result = is_even(value)
+            % Returns if the value is an even integer
             result = (mod(value, 2) == 0);
         end
 
         function result = is_odd_natural(value)
+            % Returns if the value is an odd natural number
             result = (mod(value, 2) == 1) & (value > 0);
         end
 
         function result = is_even_natural(value)
+            % Returns if the value is an even natural number
             result = (mod(value, 2) == 0) & (value > 0);
+        end
+
+        function result = is_power_of_2(value)
+            % Returns if a value is a power of 2.
+            % For an array, returns the flag for each value in array
+            result = ~bitand(value , value - 1);
         end
 
         function [a, b] =  findIntegerFactorsCloseToSquarRoot(n)
