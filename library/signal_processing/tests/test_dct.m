@@ -37,3 +37,10 @@ function test_dct_basis_strang
         end
     end
 end
+
+
+function test_quasi_dct
+    x = cos((1:16) * .1);
+    alpha = SPX_DCT.inverse_quasi(x);
+    y = SPX_DCT.forward_quasi(alpha(1:16));
+end
