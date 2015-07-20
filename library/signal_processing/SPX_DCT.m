@@ -109,9 +109,10 @@ end
 
 
 
-function alpha = dct_2_impl(x, n)
+function alpha = dct_2_impl(x)
     % Forward transform for DCT type 2.
     % Inverse transform for DCT type 3.
+    n = length(x);
     % Intersperse x with 0s.
     % 0 x1 0 x2 0 x3 and so on
     rx  = reshape([ zeros(1,n) ; x ],1,2*n);
@@ -125,9 +126,10 @@ function alpha = dct_2_impl(x, n)
 end
 
 
-function alpha = dct_3_impl(x, n)
+function alpha = dct_3_impl(x)
     % Forward transform for DCT type 3.
     % Inverse transform for DCT type 2.
+    n = length(x);
     x(1) = x(1)/sqrt(2);
     % Pad further with 3 n zeros.
     y    = [x zeros(1,3*n)];
@@ -138,7 +140,9 @@ function alpha = dct_3_impl(x, n)
 end
 
 
-function alpha = forward_quasi_dct(x, n)
+function alpha = forward_quasi_dct(x)
+    % Forward transform for Quasi DCT
+    n = length(x);
     x(1) = x(1)/sqrt(2); 
     x(n) = x(n)/sqrt(2);
     rx = reshape( [ x ; zeros(1,n) ], 1, (2*n) );
@@ -148,7 +152,9 @@ function alpha = forward_quasi_dct(x, n)
     alpha(1) = alpha(1)/sqrt(2);
 end
 
-function x = inverse_quasi_dct(alpha, n)
+function x = inverse_quasi_dct(alpha)
+    % Inverse transform for Quasi DCT
+    n = length(alpha);
     alpha(1)  = alpha(1)/sqrt(2); 
     y    = reshape( [ alpha ; zeros(1,n) ],1,2*n );
     w     = real(fft(y));

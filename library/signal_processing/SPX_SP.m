@@ -35,7 +35,7 @@ classdef SPX_SP
                     col = true;
                     x = x';
                 end
-                y = transform(x, n);
+                y = transform(x);
                 if col
                     % Convert the resulting vector to a column vector
                     y = y';
@@ -46,7 +46,7 @@ classdef SPX_SP
                 % It is a signal matrix. We will process column by column
                 y = zeros(n, d);
                 for i=1:d
-                    y(:, i) = transform(x(:, i)', n);
+                    y(:, i) = transform(x(:, i)');
                 end
             end
         end
@@ -60,6 +60,12 @@ classdef SPX_SP
             end
         end
 
+        function dyadic_minus_one_length_constraint(n)
+            % Checks if length is 2^j -1 or not
+            if ~SPX_Number.is_power_of_2(n+1)
+                error('signal must be of length like 2^j - 1.');
+            end
+        end
 
     end
 
