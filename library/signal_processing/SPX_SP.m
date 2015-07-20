@@ -18,17 +18,18 @@ classdef SPX_SP
             locations = locations - (den -1);
         end
 
-        function y = apply_transform(x, transform, check_dyadic)
+        function y = apply_transform(x, transform, options)
             % Applies a given transform to a vector (row / column) or all columns of a signal matrix.
             [n, d] = size(x);
             if nargin < 3
-                check_dyadic = false;
+                options.length_constraint = @SPX_Lang.noop;
+            elseif ~isstruct(options)
+                error('Options must be a structure.');                
             end
             if isvector(x)
                 n   = n * d;
-                if check_dyadic & ~SPX_Number.is_power_of_2(n)
-                    error('x must be of dyadic length.');
-                end
+                % Apply any constraints on length
+                options.length_constraint(n);
                 col = false;
                 if iscolumn(x)
                     col = true;
@@ -40,14 +41,22 @@ classdef SPX_SP
                     y = y';
                 end
             else
+                % Apply any constraints on length of signals
+                options.length_constraint(n);
                 % It is a signal matrix. We will process column by column
-                if check_dyadic & ~SPX_Number.is_power_of_2(n)
-                    error('signals must be of dyadic length.');
-                end
                 y = zeros(n, d);
                 for i=1:d
                     y(:, i) = transform(x(:, i)', n);
                 end
+            end
+        end
+
+
+        % These are constraints for apply_transform function
+        function dyadic_length_constraint(n)
+            % Checks if length is dyadic or not
+            if ~SPX_Number.is_power_of_2(n)
+                error('signal must be of dyadic length.');
             end
         end
 

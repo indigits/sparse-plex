@@ -6,32 +6,38 @@ methods(Static)
 
     function alpha = forward_2(x)
         % Forward transform for DCT type 2.
-        alpha = SPX_SP.apply_transform(x, @dct_2_impl, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        alpha = SPX_SP.apply_transform(x, @dct_2_impl, options);
     end
 
     function x = inverse_2(alpha)
         % Inverse transform for DCT type 2.
-        x = SPX_SP.apply_transform(alpha, @dct_3_impl, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        x = SPX_SP.apply_transform(alpha, @dct_3_impl, options);
     end
 
     function alpha = forward_3(x)
         % Forward transform for DCT type 3.
-        alpha = SPX_SP.apply_transform(x, @dct_3_impl, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        alpha = SPX_SP.apply_transform(x, @dct_3_impl, options);
     end
 
     function x = inverse_3(alpha)
         % Inverse transform for DCT type 3.
-        x = SPX_SP.apply_transform(alpha, @dct_2_impl, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        x = SPX_SP.apply_transform(alpha, @dct_2_impl, options);
     end
 
     function alpha = forward_quasi(x)
         % Forward transform for Quasi DCT.
-        alpha = SPX_SP.apply_transform(x, @forward_quasi_dct, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        alpha = SPX_SP.apply_transform(x, @forward_quasi_dct, options);
     end
 
     function x = inverse_quasi(alpha)
         % Inverse transform for Quasi DCT.
-        x = SPX_SP.apply_transform(alpha, @inverse_quasi_dct, true);
+        options.length_constraint = @SPX_SP.dyadic_length_constraint;
+        x = SPX_SP.apply_transform(alpha, @inverse_quasi_dct);
     end
 
     function result = basis_mtx_2(n)
@@ -150,3 +156,6 @@ function x = inverse_quasi_dct(alpha, n)
     x(1)   = x(1)/sqrt(2);
     x(n+1) = x(n+1)/sqrt(2);
 end
+
+
+
