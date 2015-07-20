@@ -24,7 +24,17 @@ methods(Static)
         x = SPX_SP.apply_transform(alpha, @dct_2_impl, true);
     end
 
-    function result = dct_2_mtx(n)
+    function alpha = forward_quasi(x)
+        % Forward transform for Quasi DCT.
+        alpha = SPX_SP.apply_transform(x, @forward_quasi_dct, true);
+    end
+
+    function x = inverse_quasi(alpha)
+        % Inverse transform for Quasi DCT.
+        x = SPX_SP.apply_transform(alpha, @inverse_quasi_dct, true);
+    end
+
+    function result = basis_mtx_2(n)
         % Returns the DCT basis for R^n in matrix form .
         if ~SPX_Number.is_power_of_2(n)
             error('n must be of dyadic length.');
@@ -122,3 +132,21 @@ function alpha = dct_3_impl(x, n)
 end
 
 
+function alpha = forward_quasi_dct(x, n)
+    x(1) = x(1)/sqrt(2); 
+    x(n) = x(n)/sqrt(2);
+    rx = reshape( [ x ; zeros(1,n) ], 1, (2*n) );
+    y = [ rx zeros(1,2*n-4) ];
+    w = real(fft(y)) ;
+    alpha = sqrt(2/(n-1))*w(1:2:n);
+    alpha(1) = alpha(1)/sqrt(2);
+end
+
+function x = inverse_quasi_dct(alpha, n)
+    alpha(1)  = alpha(1)/sqrt(2); 
+    y    = reshape( [ alpha ; zeros(1,n) ],1,2*n );
+    w     = real(fft(y));
+    x     = sqrt(2/n)*w(1:n+1);
+    x(1)   = x(1)/sqrt(2);
+    x(n+1) = x(n+1)/sqrt(2);
+end
