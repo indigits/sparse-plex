@@ -1,5 +1,9 @@
 classdef SPX_DCT
 % Functions related to discrete cosine transform
+% 
+%
+%  Influenced by:
+%  - WaveLab
 
 
 methods(Static)

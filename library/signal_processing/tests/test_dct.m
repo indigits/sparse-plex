@@ -2,15 +2,19 @@ function test_suite = test_dct
   initTestSuite;
 end
 
-function test_forward()
+function test_dct_2_3()
     n = 256;
     for i=randperm(n, 40)
         x = SPX_Vec.unit_vector(n, i);
         alpha = SPX_DCT.forward_2(x);
+        assertElementsAlmostEqual(norm(x), norm(alpha));
         y = SPX_DCT.inverse_2(alpha);
+        assertElementsAlmostEqual(norm(y), norm(alpha));
         assertVectorsAlmostEqual(x, y);
         alpha = SPX_DCT.forward_3(x);
+        assertElementsAlmostEqual(norm(x), norm(alpha));
         y = SPX_DCT.inverse_3(alpha);
+        assertElementsAlmostEqual(norm(y), norm(alpha));
         assertVectorsAlmostEqual(x, y);
     end
     x  = cos(1:n);
