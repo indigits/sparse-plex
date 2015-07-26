@@ -28,6 +28,31 @@ methods(Static)
     end
 
 
+
+    function figure_handle = dictionary_atoms_as_images(dict, options)
+        figure_handle = SPX_Figures.full_screen_figure;
+        [N, D] = size(dict);
+        [rows, cols] = SPX_Number.integer_factors_close_to_sqr_root(D);
+        counter = 0;
+        [pixel_rows, pixel_cols] = SPX_Number.integer_factors_close_to_sqr_root(N);
+        for r=1:rows
+            for c=1:cols
+                counter = counter + 1;
+                subplot(rows, cols, counter);
+                atom = dict(:, counter);
+                atomImage = reshape(atom, pixel_rows, pixel_cols);
+                atomImage = mat2gray(atomImage);
+                subimage(atomImage);
+                axis off;
+            end
+        end
+        if nargin > 1
+            if isfield(options, 'title')
+                suptitle(options.title);
+            end
+        end
+    end
+
     function [ figH ] = display_gram_matrix( Phi )
         % Displays the Gram matrix of a given matrix
         G = Phi' * Phi;
