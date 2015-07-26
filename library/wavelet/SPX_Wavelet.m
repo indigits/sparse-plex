@@ -21,6 +21,11 @@ classdef SPX_Wavelet
 % s_0 is placed at the beginning.
 % d_j has 2^j samples and is placed between [2^j + 1, 2^{ j + 1}]
 
+%  n=256 , J = 8,  we start from j=9 and go down to j=0.
+%  s_J = s_L + sum(L <= j < J) d_j.
+%  s_8 = s_0 + sum(0 <= j < 8) d_j.  [1, 2, 3-4, 5-8, 9-16, 17-32, 33-64, 65-128, 129-256]
+%  s_8 = s_4 + sum(4 <= j < 8) d_j.  [s_4(1-16), d_4(17-32), d_5(33-64), d_6(65-128), d_7(129-256)]
+
 
 methods(Static)
 
@@ -132,10 +137,19 @@ methods(Static)
             % By default upsample by a factor of 2.
             s = 2;
         end
+        col = false;
+        if iscolumn(x)
+            col = true;
+            % Convert it to row vector
+            x = x';
+        end
         n = length(x)*s;
         y = zeros(1,n);
         y(1:s:(n-s+1) )=x;
-
+        if col
+            % Convert the resulting vector to a column vector
+            y = y';
+        end
     end
 
     function y = lo_pass_down_sample(h, x)
@@ -180,6 +194,44 @@ methods(Static)
         x  = SPX_Vec.shift_rc(x);
         % Perform low pass filtering
         y = SPX_Wavelet.aconv(g, x);
+    end
+
+    function y = up_sample_cdjv(x, h, left_edge, right_edge)
+        % Performs upsampling with filtering and boundary correction
+        n = length(x);
+        h_len = length(h);
+        m = h_len / 2;
+        col = false;
+        if iscolumn(x)
+            col = true;
+            % Convert it to row vector
+            x = x';
+        end
+        % Create a padded version of y
+        y_padded = zeros(1, 2*n + 3*m + 1);
+        % fill the middle part with data from x with zero filling
+        % copy n - 2 * m values.
+        y_padded(m + 2: 2 : (m + 2 + 2 * (n  - 2* m - 1))) = ...
+        x(m + 1 : n - m);
+        % filter
+        y_padded = conv(h, y_padded);
+        % Identify left and right edge values
+        left_data = x(1:m)';
+        right_data = x(n:-1:(n - (m  - 1)))';
+        % Computed the left and right boundary corrected values
+        left_bc = left_edge' * left_data;
+        right_bc = right_edge' * right_data;
+        % final computation of y
+        y = zeros(1, 2*n);
+        % copy left boundary corrected values
+        y(1:3*m - 1) = left_bc(:);
+        y(2*n:-1:(2*n - 3*m + 2)) = right_bc(:);
+        % add the middle values
+        y = y + y_padded(1:2*n);
+        if col
+            % Convert the resulting vector to a column vector
+            y = y';
+        end
     end
 
 end

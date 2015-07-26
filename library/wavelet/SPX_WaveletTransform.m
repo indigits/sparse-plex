@@ -1,5 +1,12 @@
 classdef SPX_WaveletTransform
 % Implements different versions of wavelet transform
+% n=1024, J=10, L=6
+% L - J = 10 - 6 = 4.
+% s_10 = s_6 + d_6 + d_7 + d_8 + d_9
+% j=J-1:-1:L = [9, 8, 7, 6]
+% n = 256, J=8, L=0
+% s_8 = s_0 + d_0 + d_1 + d_2 + d_3 + d_4 + d_5 + d_6 + d_7.
+% s_J = s_L + sum(L <= j < J) d_j.
 
 methods(Static)
 
@@ -9,6 +16,10 @@ methods(Static)
         % Uses the periodized version of x 
         % with an orthogonal wavelet basis
         % length of x must be dyadic.
+        if nargin < 3
+            % We perform full wavelet decomposition
+            L = 0;
+        end
 
         % Let's get the dyadic length of x and verify that
         % length of x is a power of 2.
@@ -52,6 +63,10 @@ methods(Static)
         % Uses the periodized version of x 
         % with an orthogonal wavelet basis
         % length of x must be dyadic.
+        if nargin < 3
+            % We perform full wavelet composition
+            L = 0;
+        end
 
         % Let's get the dyadic length of w and verify that
         % length of w is a power of 2.
