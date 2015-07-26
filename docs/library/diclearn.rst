@@ -16,7 +16,7 @@ Measuring coherence and finding corresponding atoms::
 
 Estimating the ratio of atoms matching between original and learned Dictionary::
 
-    result = CS_DICTUtil.matchingAtomsRatio(original, new)
+    result = SPX_DictionaryComparison.matching_atoms_ratio(original, new)
 
 Plotting the contents of a dictionary::
 

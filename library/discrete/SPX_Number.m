@@ -47,7 +47,7 @@ classdef SPX_Number
             result = ~bitand(value , value - 1);
         end
 
-        function [a, b] =  findIntegerFactorsCloseToSquarRoot(n)
+        function [a, b] =  integer_factors_close_to_sqr_root(n)
             % a cannot be greater than the square root of n
             % b cannot be smaller than the square root of n
             % we get the maximum allowed value of a
