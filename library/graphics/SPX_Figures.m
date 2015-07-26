@@ -7,6 +7,8 @@ classdef SPX_Figures < handle
         x
         y
         number
+        X_SHIFT = 50
+        Y_SHIFT = -50
     end
     
     methods
@@ -29,8 +31,8 @@ classdef SPX_Figures < handle
             figH = figure('Name', title...
                 , 'Position', [self.x,self.y, self.width, self.height]...
                 ,'NumberTitle','off', 'Color', 'w');
-            self.x = self.x + 50;
-            self.y = self.y - 50;
+            self.x = self.x + self.X_SHIFT;
+            self.y = self.y + self.Y_SHIFT;
         end
 
     end
