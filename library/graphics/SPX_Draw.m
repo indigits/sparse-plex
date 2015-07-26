@@ -3,6 +3,34 @@ classdef SPX_Draw < handle
 
     methods(Static)
 
+
+        function circle(x0, y0, r, options)
+            % Draws a circle at specified location
+            % the angular coordinates of the points on the circle which will be drawn
+            theta = 0:pi/500:2*pi;
+            % the x-cordinates of the points
+            x = x0 + r*cos(theta);
+            y = y0 + r*sin(theta);
+            color = 'r';
+            center_color = 'k';
+            if nargin == 4
+                if isfield(options, 'color')
+                    color = options.color;
+                end
+                if isfield(options, 'center_color')
+                    center_color = options.center_color;
+                end
+            end
+            % we have a number of things to draw
+            hold on;
+            % we now draw the circle in red color
+            spec = ['-' , color];
+            plot( x, y, spec);
+            % Lets plot the center of the circle
+            spec = ['+' , center_color];
+            plot(x0, y0, spec);
+        end
+
         function varargout = norm_ball_2d(x0, y0, r, p, varargin)
         %DRAWNORMBALL2D Draw a 2D norm ball on the current axis
         %
