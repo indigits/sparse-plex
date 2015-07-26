@@ -81,13 +81,25 @@ classdef SPX_DictProps < handle
         end
 
         function result = coherence(self)
+            % Returns the coherence of the dictionary
             if isempty(self.Coherence)
-                absG = self.abs_gram_matrix();
-                absG(logical(eye(size(absG)))) = 0;
-                [mu, index] = max(absG(:));
-                self.Coherence = mu;
+                result = self.coherence_with_index();
             end
             result = self.Coherence;
+        end
+
+        function [ mu, i, j, absG ] = coherence_with_index(self)
+            absG = self.abs_gram_matrix();
+            absG(logical(eye(size(absG)))) = 0;
+            [mu, index] = max(absG(:));
+            self.Coherence = mu;
+            [i, j] = ind2sub(size(G), index);
+            % Make sure that column numbers are reported in increasing order
+            if i > j
+                t = i;
+                i = j;
+                j = t;
+            end
         end
     end
 end
