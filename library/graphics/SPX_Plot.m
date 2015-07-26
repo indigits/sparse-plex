@@ -200,6 +200,31 @@ methods(Static)
         axis square;
     end
 
+
+    function figure_handle = quadratic_form(A, b, x1_min, x1_max, x2_min, x2_max)
+        % Plots a quadratic form given by A x - b
+        % Evaluation of the quadratic form 
+        f = @(x,y) 0.5*[x;y]'*A*[x;y]-b'*[x;y];
+
+        % Create the grid of points where the function would be plotted.
+        [X,Y] = meshgrid(x1_min:x1_max, x2_min:x2_max);
+
+        % Storage for the value of f.
+        Z = zeros(size(X));
+
+        % Evaluate the quadratic form at all points in the mess
+        for i = 1:length(X)
+            for j = 1:length(Y)
+                Z(i,j) = f(X(i,j),Y(i,j));
+            end
+        end
+        figure_handle = SPX_Figures.full_screen_figure;
+        subplot(121);
+        % Plot the quadratic form.
+        surf(X,Y,Z);
+        subplot(122);
+        contour(X, Y, Z, 15);
+    end
 end
 
 
