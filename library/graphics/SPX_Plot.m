@@ -133,7 +133,33 @@ methods(Static)
     end
 
 
+    function [ figure_handle ] = rational_poles_zeros( b,a)
+        % Plots the poles and zeros of a rational filter
 
+        % Zeros from B(z)
+        zeros = roots(b);
+        % Poles from A(z)
+        poles = roots(a);
+        % Points on the unit circle in complex plane
+        N = 2000;
+        unit_circle = exp(2*pi*j*[0:N]/N);
+        % Create a full screen figure 
+        figure_handle = SPX_Figures.full_screen_figure;
+        % We draw the unit circle
+        plot(unit_circle);
+        % Actually the command above, plots real part and
+        % imaginary part of unit_circle on x and y axes 
+        % respectively.
+        hold on;
+        % We draw the zeros in green
+        plot(zeros, 'kx', 'MarkerSize', 10, 'LineWidth',2);
+        grid;
+        % We draw the poles in red
+        plot(poles, 'rx', 'MarkerSize', 10, 'LineWidth',2);
+        axis square;
+        legend('Unit circle', 'Zeros', 'Poles');
+        title('Poles and Zeros of H(z)= B(z)/A(z)');
+    end
 
 end
 
