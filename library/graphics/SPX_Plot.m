@@ -161,6 +161,45 @@ methods(Static)
         title('Poles and Zeros of H(z)= B(z)/A(z)');
     end
 
+
+    function [figure_handle] = polyhedron(A, b, span)
+        % Plots the lines for a polyhedron given by Ax = b
+        % in the region given by span.
+        % span = [XMin, XMax, YMin, YMax]
+        [num_lines , dimension]  = size(A);
+        if dimension ~= 2
+            error('Only polyhedrons in 2 d space are supported.');
+        end
+        XMin = span(1);
+        XMax = span(2);
+        YMin = span(3);
+        YMax = span(4);
+        x_min = min(XMin, YMin);
+        x_max = max(XMax, YMax);
+        % Identify the range of x values for which points will be computed.
+        range  = x_max - x_min;
+        x_min = x_min - range / 2;
+        x_max = x_max + range / 2;
+        x = linspace(x_min,x_max);
+
+        % Create a full screen figure 
+        figure_handle = SPX_Figures.full_screen_figure;
+        hold on;
+        for i=1:num_lines
+            a = A(i, :);
+            % the equation of line is given by a'x = b
+            % => a1 * x1 + a2 * x2 = b
+            % => x2 = -a1*x1 / a2 + b/a2
+            plot( x, -x*a(1)./a(2) + b(i)./a(2),'b-');
+        end
+        xlabel('x_1');
+        ylabel('x_2');
+        % the range of axes [XMin, XMax, YMin, YMax]
+        axis(span);
+        % We want to make sure that both axes are equal scale
+        axis square;
+    end
+
 end
 
 
