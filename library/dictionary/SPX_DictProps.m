@@ -93,7 +93,7 @@ classdef SPX_DictProps < handle
             absG(logical(eye(size(absG)))) = 0;
             [mu, index] = max(absG(:));
             self.Coherence = mu;
-            [i, j] = ind2sub(size(G), index);
+            [i, j] = ind2sub(size(absG), index);
             % Make sure that column numbers are reported in increasing order
             if i > j
                 t = i;

@@ -10,6 +10,11 @@ methods(Static)
             % Assumes that all atoms in dictionary are normalized.
             % Works well if the dictionaries have low coherence.
             distance_threshold=0.01;
+            if nargin > 2
+                if isfield(options, 'distance_threshold')
+                    distance_threshold = options.distance_threshold;
+                end
+            end
             % Number of atoms which could be 
             % identified properly
             atomsFound=0;

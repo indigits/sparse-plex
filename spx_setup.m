@@ -61,6 +61,8 @@ addpath(fullfile(globals.ext, 'ini2struct'));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.dictionary = fullfile(globals.spx, 'dictionary');
 addpath(globals.dictionary);
+globals.dictionary_learning = fullfile(globals.dictionary, 'learning');
+addpath(globals.dictionary_learning);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 globals.discrete = fullfile(globals.spx, 'discrete');
