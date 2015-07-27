@@ -8,13 +8,6 @@ properties
     % Optional initial dictionary if specified the iterations will
     % start from here.
     InitialDictionary = []
-    % True dictionary (if available then error w.r.t. true dictionary
-    % is captured)
-    TrueDictionary = []
-    % Shows progress if set
-    DisplayProgress = true
-    % Capture dictionaries in each iteration
-    CaptureDictionaries = false
     % Allowed maximum sparsity level of signal
     % if 0 then arbitrary sparsity level is allowed
     K = 0
@@ -23,6 +16,9 @@ properties
     MaxError = 0
     % Special atoms. They are never removed or modified.
     SpecialAtoms = []
+    % Dictionary Update Tracker
+    Tracker
+
 end
 
 properties(SetAccess=protected)
@@ -32,14 +28,6 @@ properties(SetAccess=protected)
     N
     % Learnt dictionary
     Dict
-    % Iteration by iteration error
-    TotalErrors
-    % Iteration by iteration non zero entries
-    NumNonZeroEntries
-    % Ratio of atoms which got matched in each iteration
-    MatchedAtomRatios
-    % Dictionaries obtained in each iteration
-    Dictionaries
     % Number of iterations the algorithm ran
     Iterations = 0
     % Unused atoms
@@ -47,14 +35,7 @@ properties(SetAccess=protected)
     % Too close atoms
     CloseAtoms
     % Replaced atoms
-    ReplacedAToms
-    % Coherence of each dictionary
-    Coherences
-    % Time in each iteration
-    IterationTimes
-    % Total dictionary learning time
-    TotalLearningTime
-    
+    ReplacedAToms    
     % K-SVD-CC related stuff
     % atom updates which were rejected due to coherence constraint
     RejectedUpdates = 0;
@@ -78,8 +59,6 @@ properties(GetAccess=protected,SetAccess=protected)
     counter
     % Indicates if we should stop now
     stopIterations = false
-    % start time
-    tstart
 end
 
 
@@ -102,8 +81,6 @@ methods
         self.S = size(X,2);
         % Initialize storage counter.
         self.counter = 1;
-        self.tstart = tic;
-        oldTimeSpent = 0;
         if self.InitialDictionary
             dict = self.InitialDictionary(1:n, 1:d);
         else
@@ -111,21 +88,13 @@ methods
             % as our atoms
             dict = X(:,1:d);
         end
-        if self.CaptureDictionaries
-            self.Dictionaries = cell(self.MaxIterations, 1);
-        end
         % normalize the dictionary
         dict = SPX_Norm.normalize_l2(dict);
         self.Dict = dict;
         % Initialize representation
         self.update_representations();
-        % We capture time spent so far in learning
-        newTimeSpent = toc(self.tstart);
-        self.IterationTimes(self.counter) =  newTimeSpent - oldTimeSpent;
-        self.TotalLearningTime = newTimeSpent;
-        oldTimeSpent = newTimeSpent; 
-        if self.DisplayProgress
-            self.print_progress();
+        if ~isempty(self.Tracker)
+            self.Tracker(self.Dict, self.Alpha, self.R);
         end
         % A flag which can be signaled from any part of code
         % to stop further learning.
@@ -133,14 +102,10 @@ methods
         for iter=1:self.MaxIterations
             self.counter = self.counter + 1;
             self.update_dictionary();
-            %self.clean_dictionary();
+            self.clean_dictionary();
             self.update_representations();
-            newTimeSpent = toc(self.tstart);
-            self.IterationTimes(self.counter) =  newTimeSpent - oldTimeSpent;
-            self.TotalLearningTime = newTimeSpent;
-            oldTimeSpent = newTimeSpent; 
-            if self.DisplayProgress
-                self.print_progress();
+            if ~isempty(self.Tracker)
+                self.Tracker(self.Dict, self.Alpha, self.R);
             end
             if self.stopIterations
                 break;
@@ -162,8 +127,6 @@ methods(Access=protected)
         self.Alpha = result.Z;
         self.R = result.R;
         c  = self.counter;
-        self.TotalErrors(c) = sqrt(sum(sum(self.R.^2))/numel(self.R));
-        self.NumNonZeroEntries(c) = length(find(self.Alpha)) / self.S;
     end
     
     function update_dictionary(self)
@@ -180,7 +143,7 @@ methods(Access=private)
         dict = self.Dict;
         alpha = self.Alpha;
         % compute gram matrix
-        [muBeforeCleanup, ~, ~, gram] =  CS_DICTUtil.coherence(dict);
+        [muBeforeCleanup, ~, ~, gram] =  SPX_DictProps(dict).coherence_with_index();
         % Number of atoms
         d = self.D;
         % If inner product crosses this threshold then the atoms are
@@ -250,7 +213,7 @@ methods(Access=private)
                     % replace atom
                     dict(:, j) = x;
                     % update gram matrix
-                    [~, ~, ~, gram] =  CS_DICTUtil.coherence(dict);
+                    [~, ~, ~, gram] =  SPX_DictProps(dict).coherence_with_index();
                     updates = updates + 1;
                     % We won't use this signal as replacement later
                     errorEnergy(s) = 0;
@@ -265,8 +228,7 @@ methods(Access=private)
             updates, closeAtoms, unusedAtoms);
         end
         % Lets measure the coherence of dictionary
-        [muAfterCleanup, i, j] = CS_DICTUtil.coherence(dict);
-        self.Coherences(c) = muAfterCleanup;
+        [muAfterCleanup, i, j] = SPX_DictProps(dict).coherence_with_index();
         self.UnusedAtoms(c) = unusedAtoms;
         self.CloseAtoms(c) = closeAtoms;
         self.ReplacedAToms(c) = unusedAtoms + closeAtoms; 
@@ -277,26 +239,6 @@ methods(Access=private)
         end
     end
     
-    function print_progress(self)
-        c = self.counter;
-        td  = self.TrueDictionary;
-        if ~isempty(td)
-            self.MatchedAtomRatios(c) = ...
-                SPX_DictionaryComparison.matching_atoms_ratio(td, self.Dict);
-        end
-        if self.CaptureDictionaries
-            self.Dictionaries{c} = self.Dict;
-        end
-        averageCardinality =  length(find(self.Alpha))/self.S;
-        fprintf('Iteration: %d, Time (total): %.2f sec, (iteration): %.2f: , Error=%f'...
-            , c - 1, self.TotalLearningTime, self.IterationTimes(c), self.TotalErrors(c));
-        if ~isempty(td)
-            fprintf(', Matched atoms: %.2f%%', self.MatchedAtomRatios(c)*100);
-        end
-        fprintf(', cardinality: %d', averageCardinality);
-        fprintf(', Rank: %d', rank(self.Dict));
-        fprintf('\n');
-    end
 end
 
 
