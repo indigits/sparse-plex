@@ -4,8 +4,12 @@ classdef SPX_Support
     end
     
     methods (Static)
-        function result = support(x)
-            result = find(x ~= 0);
+        function result = support(x, threshold)
+            if nargin < 2
+                result = find(x ~= 0);
+            else
+                result = find (abs(x) > threshold);
+            end
         end
         
         function result = l0norm(x)
