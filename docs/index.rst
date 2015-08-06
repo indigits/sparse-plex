@@ -14,6 +14,7 @@ Contents:
    start
    demos/index
    library/index
+   exercises/index
    scripts
 
 ..
