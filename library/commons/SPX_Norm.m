@@ -16,15 +16,138 @@ classdef SPX_Norm < handle
             result = sum(abs(X));
         end
 
+        function result = norms_l1_rw(X)
+            % Returns the $l_1$ norm of each row in X
+            result = SPX_Norm.norms_l1_cw(X')';
+        end
+
         function result = norms_l2_cw(X)
             % Returns the $l_2$ norm of each column in X
             result = sqrt(sum(X .* conj(X), 1));
+        end
+
+        function result = norms_l2_rw(X)
+            % Returns the $l_2$ norm of each row in X
+            result = SPX_Norm.norms_l2_cw(X')';
         end
 
         function result = norms_linf_cw(X)
             % Returns the $l_{\infty}$ norm of each column in X
             result = max(abs(X));
         end
+        function result = norms_linf_rw(X)
+            % Returns the $l_{\infty}$ norm of each row in X
+            result = SPX_Norm.norms_linf_cw(X')';
+        end
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %
+        %  Row column norms
+        %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        function result = cr_l1_l1(X)
+            % l1 norm over columns followed by l1 norm over rows
+            result = sum(sum(abs(X)));
+        end
+
+        function result = rc_l1_l1(X)
+            % l1 norm over rows followed by l1 norm over columns
+            result = SPX_Norm.cr_l1_l1(X');
+        end
+
+        function result = cr_l1_l2(X)
+            % l1 norm over columns followed by l2 norm over rows
+            result = SPX_Norm.norms_l1_cw(X);
+            result = norm(result, 2);
+        end
+
+        function result = rc_l1_l2(X)
+            % l1 norm over rows followed by l2 norm over columns
+            result = SPX_Norm.cr_l1_l2(X');
+        end
+
+        function result = cr_l1_linf(X)
+            % l1 norm over columns followed by l_{\infty} norm over rows
+            result = SPX_Norm.norms_l1_cw(X);
+            result = norm(result, Inf);
+        end
+
+        function result = rc_l1_linf(X)
+            % l1 norm over rows followed by l_{\infty} norm over columns
+            result = SPX_Norm.cr_l1_linf(X');
+        end
+
+        function result = cr_l2_l1(X)
+            % l2 norm over columns followed by l1 norm over rows
+            result = SPX_Norm.norms_l2_cw(X);
+            result = norm(result, 1);
+        end
+
+        function result = rc_l2_l1(X)
+            % l2 norm over rows followed by l1 norm over columns
+            result = SPX_Norm.cr_l2_l1(X');
+        end
+
+        function result = cr_l2_l2(X)
+            % l2 norm over columns followed by l2 norm over rows
+            result = SPX_Norm.norms_l2_cw(X);
+            result = norm(result, 2);
+        end
+
+        function result = rc_l2_l2(X)
+            % l2 norm over rows followed by l2 norm over columns
+            result = SPX_Norm.cr_l2_l2(X');
+        end
+
+        function result = cr_l2_linf(X)
+            % l2 norm over columns followed by l_{\infty} norm over rows
+            result = SPX_Norm.norms_l2_cw(X);
+            result = norm(result, Inf);
+        end
+
+        function result = rc_l2_linf(X)
+            % l2 norm over rows followed by l_{\infty} norm over columns
+            result = SPX_Norm.cr_l2_linf(X');
+        end
+
+        function result = cr_linf_l1(X)
+            % l_{\infty} norm over columns followed by l1 norm over rows
+            result = max(abs(X));
+            result = sum(result);
+        end
+
+        function result = rc_linf_l1(X)
+            % l_{\infty} norm over rows followed by l1 norm over columns
+            result = SPX_Norm.cr_linf_l1(X');
+        end
+
+        function result = cr_linf_l2(X)
+            % l_{\infty} norm over columns followed by l2 norm over rows
+            result = max(abs(X));
+            result = norm(result, 2);
+        end
+
+        function result = rc_linf_l2(X)
+            % l_{\infty} norm over rows followed by l2 norm over columns
+            result = SPX_Norm.cr_linf_l2(X');
+        end
+
+        function result = cr_linf_linf(X)
+            % l_{\infty} norm over columns followed by l_{\infty} norm over rows
+            result = max(max(abs(X)));
+        end
+
+        function result = rc_linf_linf(X)
+            % l_{\infty} norm over rows followed by l_{\infty} norm over columns
+            result = SPX_Norm.cr_linf_linf(X);
+        end
+
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %
+        %  Normalization of rows / columns
+        %
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         function X = normalize_l1(X)
             % Normalizes all points in X by the column-wise l-1 norm
