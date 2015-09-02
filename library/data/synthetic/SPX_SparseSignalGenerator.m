@@ -28,9 +28,11 @@ classdef SPX_SparseSignalGenerator < handle
         
         function result = uniform(self, a,b)
             % Generates sparse signals from uniform distribution
-            if nargin < 3
+            if nargin < 2
                 a = 0; b =1;
-            elseif nargin < 4
+            elseif nargin < 3
+                % make the range to be [-a a]
+                a = -a;
                 b = -a;
             end
             if b <= a
@@ -44,9 +46,9 @@ classdef SPX_SparseSignalGenerator < handle
             % Generates sparse vectors where each non-zero values
             % is picked up uniformly from the ranges
             % [-b, -a] and [a, b]
-            if nargin < 3
+            if nargin < 2
                 a = 1; b =2;
-            elseif nargin < 4
+            elseif nargin < 3
                 b = 2*a;
             end
             if a < 0 || b < 0
