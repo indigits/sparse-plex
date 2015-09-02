@@ -9,6 +9,7 @@ Contents:
 
    pursuit/index
    commons/index
+   synthetic
    graphics
    dictionaries
    vectorspace
@@ -21,7 +22,6 @@ Contents:
 
 ..
 
-   synthetic
    noise
    clustering
    diclearn

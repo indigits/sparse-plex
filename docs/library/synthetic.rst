@@ -12,8 +12,8 @@ General approach::
     m = 64;
     n = 121;
     k = 4;
-    dict = CS_BasicDictionaryCreator.Gaussian(m, n);
-    gen = CS_SparseSignalGenerator(n, k);
+    dict = SPX_SimpleDicts.gaussian_dict(m, n);
+    gen = SPX_SparseSignalGenerator(n, k);
     % create a sparse vector
     rep =  gen.biGaussian();
     signal = dict*rep;
@@ -25,9 +25,9 @@ General approach::
 
 The problems::
 
-    problem = CS_RecoveryProblems.problem_small_1()    
-    problem = CS_RecoveryProblems.problem_large_1()    
-    problem = CS_RecoveryProblems.problem_barbara_blocks()    
+    problem = SPX_RecoveryProblems.problem_small_1()    
+    problem = SPX_RecoveryProblems.problem_large_1()    
+    problem = SPX_RecoveryProblems.problem_barbara_blocks()    
 
 
 Sparse signal generation
@@ -35,7 +35,8 @@ Sparse signal generation
 
 Create generator::
 
-    gen  = CS_SparseSignalGenerator(N, K, S);
+    N = 256; K = 4; S = 10;
+    gen  = SPX_SparseSignalGenerator(N, K, S);
 
 Uniform signals::
 
@@ -66,9 +67,23 @@ BiGuassian signals::
 Compressible signal generation
 ------------------------------------------------
 
-::
+We can use ``randcs`` function by *Cevher, V.*
+for constructing compressible signals::
 
-    x = randcs(N, q, lambda, dist)
+    N = 100;
+    q = 1;
+    x = randcs(N, q);
+    plot(x);
+    plot(randcs(100, .9));
+    plot(randcs(100, .8));
+    plot(randcs(100, .7));
+    plot(randcs(100, .6));
+    plot(randcs(100, .5));
+    plot(randcs(100, .4));
+    lambda = 2;
+    x = randcs(N, q, lambda);
+    dist = 'logn';
+    x = randcs(N, q, lambda, dist);
 
 
 
@@ -86,7 +101,7 @@ Signals with disjoint supports::
     % Sparsity level of each signal (subspace dimension)
     K = 4;
     % Create signal generator
-    sg = CS_MultiSubspaceSignalGenerator(N, K);
+    sg = SPX_MultiSubspaceSignalGenerator(N, K);
     % Create disjoint supports
     sg.createDisjointSupports(P);
     sg.setNumSignalsPerSubspace(SS);
