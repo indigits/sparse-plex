@@ -71,6 +71,11 @@ classdef SPX_SparseSignalGenerator < handle
             result = self.X;
         end
 
+        function result = rademacher(self)
+            self.X(self.Omega, :) =  2*randi([0, 1], self.K,self.S)-1;
+            result = self.X;
+        end
+
         function result = biGaussian(self, offset, sigma)
             if nargin < 3
                 sigma = 1;
