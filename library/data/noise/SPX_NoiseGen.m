@@ -54,6 +54,86 @@ classdef SPX_NoiseGen
                 noise(:,i) = factor .* noise(:,i);
             end
         end
+
+        function noises = createNoise2(signals, snrDb)
+            row = false;
+            if isrow(signals)
+                row = true;
+                signals = signals';
+            end
+            [signal_size, num_signals] = size(signals);
+            noises = randn(signal_size, num_signals);
+            signal_powers = sum(signals .^2) / signal_size;
+            noise_powers = sum(noises .^2) / signal_size;
+            scale_factors = (signal_powers./noise_powers)*10^(-snrDb/10);
+            for s=1:num_signals
+                noises(:, s) = sqrt(scale_factors(s)) * noises(:, s);
+            end
+            if row
+                % restore row vector
+                noises = noises';
+            end
+        end
+
+
+        function noises = createNoise3(signals, snrDb)
+            % See http://www.gaussianwaves.com/2015/06/how-to-generate-awgn-noise-in-matlaboctave-without-using-in-built-awgn-function/
+            row = false;
+            if isrow(signals)
+                row = true;
+                signals = signals';
+            end
+            [signal_size, num_signals] = size(signals);
+            SNR = 10^(snrDb/10); %SNR to linear scale
+            signal_powers = sum(abs(signals) .^2) / signal_size;
+            noise_powers = signal_powers ./ SNR;
+            noises = zeros(signal_size, num_signals);
+            for s=1:num_signals
+                N0 = noise_powers(s);
+                if isreal(signals)
+                    sigma = sqrt(N0);
+                    noise = sigma * randn(signal_size, 1);
+                else
+                    sigma = sqrt(N0/2);
+                    noise = sigma * ( randn(signal_size, 1) + 1i * randn(signal_size, 1));
+                end
+                noises(:, s) = noise;
+            end
+            if row
+                % restore row vector
+                noises = noises';
+            end
+        end
+
+
+        function noises = createNoise4(signals, snrDb)
+            row = false;
+            if isrow(signals)
+                row = true;
+                signals = signals';
+            end
+            [signal_size, num_signals] = size(signals);
+            SNR = 10^(snrDb/10); %SNR to linear scale
+            signal_energies = sum(abs(signals) .^2);
+            noise_powers = signal_energies ./ SNR;
+            noises = zeros(signal_size, num_signals);
+            for s=1:num_signals
+                N0 = noise_powers(s);
+                if isreal(signals)
+                    sigma = sqrt(N0);
+                    noise = sigma * randn(signal_size, 1);
+                else
+                    sigma = sqrt(N0/2);
+                    noise = sigma * ( randn(signal_size, 1) + 1i * randn(signal_size, 1));
+                end
+                noises(:, s) = noise;
+            end
+            if row
+                % restore row vector
+                noises = noises';
+            end
+        end
+
     end
     
 end
