@@ -13,7 +13,7 @@ mf.new_figure('Average Hamming distance');
 average_hamming_distances = mean(hamming_distances, 2);
 std_hamming_distances = std(hamming_distances, 0, 2);
 
-errorbar(Ks, average_hamming_distances, std_hamming_distances);
+errorbar(Ks, average_hamming_distances, std_hamming_distances, '-o');
 xlabel('Sparsity level K');
 ylabel('Average Hamming distance');
 xlim([60, 125]);
