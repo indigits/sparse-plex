@@ -60,6 +60,14 @@ classdef SPX_Support
             commonSizes = sum(Common);
             result  = commonSizes ./ (max(xSizes, ySizes));
         end
+
+        function result = hammingDistances(X, Y)
+            % Computes hamming distances of supports for two sets of vectors
+            XSupport = X ~= 0;
+            YSupport = Y ~= 0;
+            difference = XSupport - YSupport;
+            result = sum(abs(difference));
+        end
         
         function result = supportDetectionRate(X, trueSupport)
             XSupport = X ~= 0;
