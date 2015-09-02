@@ -10,12 +10,28 @@ Noise generation
 
 Gaussian noise::
 
-    ng = CS_NoiseGenerator(N, S);
+    ng = SPX_NoiseGen(N, S);
+    sigma = 1;
+    mean = 0;
     ng.gaussian(sigma, mean);
 
 Creating noise at a specific SNR::
 
-    noises = CS_NoiseGenerator.createNoise(signals, snrDb)
+    % Sparse signal dimension
+    N = 100;
+    % Sparsity level
+    K = 20;
+    % Number of signals
+    S = 4;
+    % Create sparse signals
+    signals = SPX_SparseSignalGenerator(N, K, S).gaussian();
+    % Create noise at specific SNR level.
+    snrDb = 10;
+    noises = SPX_NoiseGen.createNoise(signals, snrDb);
+    % add signal to noise
+    signals_with_noise = signals + noises;
+    % Verify SNR level
+    20 * log10 (SPX_Norm.norms_l2_cw(signals) ./ SPX_Norm.norms_l2_cw(noises))
 
 
 
@@ -26,38 +42,39 @@ Noise measurement
 
 SNR in dB::
 
-    result = CS_SNRUtil.SNR(signal, noise)
+    result = SPX_SNR.SNR(signals, noises)
 
 SNR in dB from signal and reconstruction::
 
-    result = CS_SNRUtil.recSNRdB(signal, reconstruction)
+    reconstructions = signals_with_noise;
+    result = SPX_SNR.recSNRdB(signals, reconstructions)
 
 Signal energy in DB ::
 
-    result = CS_SNRUtil.energyDB(signal)
+    result = SPX_SNR.energyDB(signals)
 
 
 Reconstruction SNR as energy ratio::
 
-    result = CS_SNRUtil.recSNR(signal, reconstruction)
+    result = SPX_SNR.recSNR(signal, reconstruction)
 
 Error energy normalized by signal energy::
 
-    result = CS_SNRUtil.normalizedErrorEnergy(signal, reconstruction)
+    result = SPX_SNR.normalizedErrorEnergy(signal, reconstruction)
 
 Reconstruction SNRs over multiple signals in dB::
 
-    result = CS_SNRUtil.recSNRsdB(signals, reconstructions)
+    result = SPX_SNR.recSNRsdB(signals, reconstructions)
 
 Reconstruction SNRs over multiple signals as energy ratios::
 
-    result = CS_SNRUtil.recSNRs(signals, reconstructions)
+    result = SPX_SNR.recSNRs(signals, reconstructions)
 
 Signal energies::
 
-    result = CS_SNRUtil.energies(signals)
+    result = SPX_SNR.energies(signals)
 
 Signal energies in dB::
 
-    result = CS_SNRUtil.energiesDB(signals)
+    result = SPX_SNR.energiesDB(signals)
 

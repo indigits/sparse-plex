@@ -16,13 +16,13 @@ Contents:
    combinatorics
    factorization
    external
+   noise
 
 
 
 
 ..
 
-   noise
    clustering
    diclearn
    bht
