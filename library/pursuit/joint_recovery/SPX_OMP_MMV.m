@@ -97,8 +97,8 @@ classdef SPX_OMP_MMV < handle
                 Z(omega, :) = tmp;
                 % Let us update the residual.
                 R = Y - dict.apply(Z);
+                resNorm = norm(R, 'fro');
                 if self.StopOnResidualNorm || self.StopOnResNormStable
-                    resNorm = norm(R, 'fro');
                     if resNorm < self.MaxResNorm
                         break;
                     end
@@ -120,6 +120,8 @@ classdef SPX_OMP_MMV < handle
             result.iterations = iter;
             % Solution support
             result.support = omega;
+            % residual Frobenius norm
+            result.residual_frobenius_norm = resNorm;
             self.result = result;
         end
                 
