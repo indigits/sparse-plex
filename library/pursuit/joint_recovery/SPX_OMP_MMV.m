@@ -1,5 +1,5 @@
 classdef SPX_OMP_MMV < handle
-    %CSOMPAPPROX Implements OMP-MMV algorithm for sparse approximation
+    % Implements OMP-MMV algorithm for sparse approximation
     
     properties
         % Maximum residual norm
