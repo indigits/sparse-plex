@@ -29,6 +29,20 @@ classdef SPX_SimpleDicts < handle
             result = SPX_MatrixOperator(result);
         end
 
+        function result = dirac_hadamard_mtx(N)
+            % Constructs a Dirac Hadamard two-ortho basis
+            H = hadamard(N);
+            H = 1/sqrt(N)  * H;
+            result = [eye(N) H ];
+        end
+
+        function result = dirac_hadamard_dict(N)
+            % Constructs a Dirac Hadamard two-ortho basis
+            result = SPX_SimpleDicts.dirac_hadamard_mtx(N);
+            % Wrap it into a Matrix operator
+            result = SPX_MatrixOperator(result);
+        end
+
         function result = gaussian_mtx(N, D, normalized_columns)
             % Constructs a Gaussian dictionary with normalized columns
             if nargin < 3
