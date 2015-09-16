@@ -71,6 +71,37 @@ classdef SPX_SparseSignalGenerator < handle
             result = self.X;
         end
 
+        function result = complex_gaussian(self)
+            real_part = randn(self.K,self.S);
+            imag_part = randn(self.K,self.S);
+            samples = real_part + i * imag_part;
+            self.X(self.Omega, :) =  samples;
+            result = self.X;
+        end
+
+        function result = real_spherical_rows(self)
+            % Returns a multi-channel ensemble where each non-zero row is unit norm.
+
+            % Generate Gaussian entries
+            samples = randn(self.K,self.S);
+            % Normalize the rows
+            samples = SPX_Norm.normalize_l2_rw(samples);
+            self.X(self.Omega, :) = samples;
+            result = self.X;
+        end
+
+        function result = complex_spherical_rows(self)
+            %  Returns a multi-channel ensemble where each non-zero row is unit norm.
+            % Generate Complex Gaussian entries
+            real_part = randn(self.K,self.S);
+            imag_part = randn(self.K,self.S);
+            samples = real_part + i * imag_part;
+            % Normalize the rows
+            samples = SPX_Norm.normalize_l2_rw(samples);
+            self.X(self.Omega, :) = samples;
+            result = self.X;
+        end
+
         function result = rademacher(self)
             self.X(self.Omega, :) =  2*randi([0, 1], self.K,self.S)-1;
             result = self.X;
