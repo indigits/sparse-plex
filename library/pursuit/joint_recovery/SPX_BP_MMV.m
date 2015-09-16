@@ -47,6 +47,25 @@ classdef SPX_BP_MMV < handle
             result.Z = Z;
         end
 
+        function result  = solve_l2_l1(self, Y)
+            % Solves using l_2 l_1 row column norm
+
+            % Initialization
+            % Solves approximation problem using basis pursuit.
+            d = self.D;
+            n = self.N;
+            % The number of signals being approximated.
+            s = size(Y, 2);
+            Phi = self.Dict;
+            cvx_begin quiet
+                variable Z(d, s);
+                minimize( sum(norms(Z,2, 2)) )
+                subject to 
+                    Phi * Z == Y
+            cvx_end
+            result.Z = Z;
+        end
+
         function result  = solve_linf_l1(self, Y)
             % Solves using l_{\infty} l_1 row column norm
 
