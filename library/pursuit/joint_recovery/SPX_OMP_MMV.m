@@ -16,6 +16,8 @@ classdef SPX_OMP_MMV < handle
         MinK = 4
         % Ignored atom (which won't be considered in identification step)
         IgnoredAtom = -1
+        % The norm to be chosen for rows
+        P
     end
     
     properties(SetAccess=private)
@@ -32,7 +34,15 @@ classdef SPX_OMP_MMV < handle
     end
     
     methods
-        function self  = SPX_OMP_MMV(Dict, K)
+        function self  = SPX_OMP_MMV(Dict, K, P)
+            if nargin < 3
+                % By default we apply l_1 norm on rows
+                P = 1;
+            end
+            if P ~= 1 &&  P ~= 2
+                error('Only l_1 and l_2 norms are supported.');
+            end
+            self.P = P;
             % We assume that all the columns in dictionary are normalized.
             if isa(Dict, 'SPX_Operator')
                 self.Dict = Dict;
@@ -77,13 +87,21 @@ classdef SPX_OMP_MMV < handle
                 oldResNorm = norm(R, 'fro');
             end
             maxIter = self.MaxIters;
+            P = self.P;
             for iter=1:maxIter
                 % Compute inner products (DxN  * NxS = DxS )
                 innerProducts = apply_ctranspose(dict, R);
                 % Compute absolute values of inner products
                 innerProducts = abs(innerProducts);
-                % Compute sum of inner products over each row
-                innerProducts = sum(innerProducts, 2);
+                if P == 1
+                    % Compute sum of inner products over each row
+                    innerProducts = sum(innerProducts, 2);
+                elseif P == 2
+                    % Compute l2 norm inner products over each row
+                    innerProducts = SPX_Norm.norms_l2_rw(innerProducts);
+                else
+                    error('Impossible');
+                end
                 % Mark the inner products of already selected columns as 0.
                 innerProducts(omega) = 0;
                 % Find the highest inner product
