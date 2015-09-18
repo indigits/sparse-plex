@@ -46,19 +46,13 @@ runtests;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+cd (fullfile(globals.single_recovery, 'tests'));
+runtests;
+
 if include_long_tests
-cd (fullfile(globals.basis_pursuit, 'tests'));
+cd (fullfile(globals.single_recovery, 'tests', 'long'));
 runtests;
 end
-
-cd (fullfile(globals.cosamp, 'tests'));
-runtests;
-
-cd (fullfile(globals.matching_pursuit, 'tests'));
-runtests;
-
-cd (fullfile(globals.orthogonal_matching_pursuit, 'tests'));
-runtests;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cd (fullfile(globals.signal_processing, 'tests'));

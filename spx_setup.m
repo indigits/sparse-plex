@@ -114,21 +114,9 @@ addpath(globals.probability);
 globals.pursuit = fullfile(globals.spx, 'pursuit');
 addpath(globals.pursuit);
 
-globals.basis_pursuit = fullfile(globals.pursuit, 'basis_pursuit');
-addpath(globals.basis_pursuit);
+globals.single_recovery = fullfile(globals.pursuit, 'single_recovery');
+addpath(globals.single_recovery);
 
-
-globals.cosamp = fullfile(globals.pursuit, 'cosamp');
-addpath(globals.cosamp);
-
-globals.matching_pursuit = fullfile(globals.pursuit, 'matching_pursuit');
-addpath(globals.matching_pursuit);
-
-globals.orthogonal_matching_pursuit = fullfile(globals.pursuit, 'orthogonal_matching_pursuit');
-addpath(globals.orthogonal_matching_pursuit);
-
-globals.thresholding = fullfile(globals.pursuit, 'thresholding');
-addpath(globals.thresholding);
 
 % Joint recovery algorithms
 globals.joint_recovery = fullfile(globals.pursuit, 'joint_recovery');
