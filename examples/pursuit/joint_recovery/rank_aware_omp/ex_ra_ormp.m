@@ -1,0 +1,52 @@
+% Demonstration of Rank Aware Order Recursive Matching Pursuit.
+
+close all;
+clear all;
+clc;
+rng('default');
+png_export = true;
+pdf_export = false;
+% Create the directory for storing images
+[status_code,message,message_id] = mkdir('bin');
+
+mf = SPX_Figures();
+
+% Signal space 
+N = 256;
+% Number of measurements
+M = 64;
+% Sparsity level
+K = 8;
+% Number of signals
+S = 4;
+% Construct the signal generator.
+gen  = SPX_SparseSignalGenerator(N, K, S);
+% Generate bi-uniform signals
+X = gen.biUniform(1, 2);
+% Sensing matrix
+Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+% Measurement vectors
+Y = Phi.apply(X);
+% Rank Aware ORMP MMV solver instance
+solver = SPX_RankAwareORMP(Phi, K);
+% Solve the sparse recovery problem
+result = solver.solve(Y);
+% Solution vector
+Z = result.Z;
+
+for s=1:S
+    mf.new_figure(sprintf('Rank Aware ORMP signal: %d', s));
+    subplot(411);
+    stem(X(:, s), '.');
+    title('Sparse vector');
+    subplot(412);
+    stem(Z(:, s), '.');
+    title('Recovered sparse vector');
+    subplot(413);
+    stem(abs(X(:, s) - Z(:, s)), '.');
+    title('Recovery error');
+    subplot(414);
+    stem(Y(:, s), '.');
+    title('Measurement vector');
+end
+
