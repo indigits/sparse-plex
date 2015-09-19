@@ -30,6 +30,10 @@ result = solver.solve(y);
 % Solution vector
 z = result.z;
 
+
+stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+SPX_SparseRecovery.print_recovery_performance(stats);
+
 mf.new_figure('OMP solution');
 subplot(411);
 stem(x, '.');
