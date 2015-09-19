@@ -6,7 +6,7 @@ clear all; close all; clc;
 
 N  = 256;
 
-x = SPX_Signals.picket_fence(N);
+x = SPX_SimpleSignals.picket_fence(N);
 
 fx = fft(x);
 
