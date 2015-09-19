@@ -21,6 +21,22 @@ function result = is_class(classpath)
     % Returns true if classpath points to a MATLAB class.
     result = (exist(classpath, 'class') ~= 0);
 end
+
+function result = yes_no(flag)
+    if flag == 0
+        result = 'No';
+    else
+        result = 'Yes';
+    end
+end
+
+function result = true_false(flag)
+    if flag == 0
+        result = 'false';
+    else
+        result = 'true';
+    end
+end
     
 end
 
