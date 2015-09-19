@@ -1,4 +1,4 @@
-classdef SPX_Signals 
+classdef SPX_SimpleSignals 
 
 methods(Static)
 
