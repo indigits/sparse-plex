@@ -26,6 +26,7 @@ y = Phi.apply(x);
 % Hard thresholding pursuit solver instance
 solver = SPX_HardThresholdingPursuit(Phi, K);
 solver.Verbose = true;
+solver.NormalizedMode = true;
 % Solve the sparse recovery problem
 result = solver.solve(y);
 % Solution vector

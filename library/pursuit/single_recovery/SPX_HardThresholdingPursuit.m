@@ -10,6 +10,10 @@ classdef SPX_HardThresholdingPursuit < handle
         StopOnResNormStable = true
         % Printing additional debugging information
         Verbose = false
+        % scaling factor mu for the update stage
+        ScalingFactor = 0.8
+        % Work in normalized hard thresholding pursuit mode
+        NormalizedMode = false
     end
     
     properties(SetAccess=private)
@@ -60,12 +64,13 @@ classdef SPX_HardThresholdingPursuit < handle
                 prev_residual_norm = norm(r);
             end
             y_hat = zeros(n, 1);
+            % Initialize the proxy of the residual
+            residual_proxy = apply_ctranspose(dict, r);
             max_iterations = d;
+            scaling_factor = self.ScalingFactor;
             for iterations=1:max_iterations
-                % Find the proxy of the residual
-                residual_proxy = apply_ctranspose(dict, r);
                 % Find a new estimate by adding the residual proxy to old estimate
-                estimate = z + residual_proxy;
+                estimate = z + scaling_factor * residual_proxy;
                 % Apply hard thresholding to pick K largest entries in the new estimate
                 omega = sort(SPX_Signals.largest_indices(estimate, k));
                 % If support hasn't changed, then there is no need to proceed further
@@ -86,6 +91,8 @@ classdef SPX_HardThresholdingPursuit < handle
                 r = y - y_hat;
                 % Track the current index set for next step.
                 omega_prev = omega;
+                % Update the proxy of the residual
+                residual_proxy = apply_ctranspose(dict, r);
                 % Check if residual has stopped changing.
                 if self.StopOnResidualNorm || self.StopOnResNormStable
                     residual_norm = norm(r);
@@ -100,6 +107,18 @@ classdef SPX_HardThresholdingPursuit < handle
                             if self.Verbose fprintf('Breaking on norm stability\n'); end
                             break;
                         end
+                    end
+                end
+                if self.NormalizedMode
+                    % We need to update the scaling factor.
+                    % Pick the K indices from residual proxy
+                    residual_proxy_t0 = residual_proxy(omega);
+                    residual_double_proxy = subdict * residual_proxy_t0;
+                    scaling_factor = ...
+                        (residual_proxy_t0' * residual_proxy_t0) / ...
+                        (residual_double_proxy' * residual_double_proxy);
+                    if self.Verbose
+                        fprintf('Scaling factor: %0.4f\n', scaling_factor);
                     end
                 end
             end
