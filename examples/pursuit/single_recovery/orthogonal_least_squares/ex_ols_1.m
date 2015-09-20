@@ -23,14 +23,16 @@ x = gen.biUniform(1, 2);
 Phi = SPX_SimpleDicts.gaussian_dict(M, N);
 % Measurement vectors
 y = Phi.apply(x);
-% OMP MMV solver instance
+% OLS MMV solver instance
 solver = SPX_OrthogonalLeastSquares(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(y);
 % Solution vector
 z = result.z;
+stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+SPX_SparseRecovery.print_recovery_performance(stats);
 
-mf.new_figure('OMP solution');
+mf.new_figure('OLS solution');
 subplot(411);
 stem(x, '.');
 title('Sparse vector');
