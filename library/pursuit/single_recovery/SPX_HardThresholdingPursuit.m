@@ -11,7 +11,7 @@ classdef SPX_HardThresholdingPursuit < handle
         % Printing additional debugging information
         Verbose = false
         % scaling factor mu for the update stage
-        ScalingFactor = 0.8
+        ScalingFactor = 1
         % Work in normalized hard thresholding pursuit mode
         NormalizedMode = false
     end
