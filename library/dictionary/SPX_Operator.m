@@ -6,6 +6,7 @@ classdef SPX_Operator < handle
         result = apply(self, vectors)
         result = apply_transpose(self, vectors)
         result = apply_ctranspose(self, vectors)
+        result = norm(self)
      end
 
      methods

@@ -51,6 +51,10 @@ classdef SPX_MatrixOperator < SPX_Operator
             result = self.AH * vectors;
         end
 
+        function result = norm(self)
+            result = norm(self.A);
+        end
+
     end
 
     methods
