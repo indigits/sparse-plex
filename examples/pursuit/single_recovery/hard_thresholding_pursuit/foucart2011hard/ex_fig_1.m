@@ -22,16 +22,24 @@ num_trials = num_dict_trials * num_signal_trials;
 
 nhtp_success_rates_with_k = zeros(numel(Ks), 1);
 nhtp_average_iterations_with_k = zeros(numel(Ks), 1);
+nhtp_maximum_iterations_with_k = zeros(numel(Ks), 1);
+
+
 csmp_success_rates_with_k = zeros(numel(Ks), 1);
 csmp_average_iterations_with_k = zeros(numel(Ks), 1);
+csmp_maximum_iterations_with_k = zeros(numel(Ks), 1);
 
 for K=Ks
     % Trial number
     nt = 0;
     nhtp_num_successes = 0;
     nhtp_num_iterations = 0;
+    nhtp_max_iterations = 0;
+
     csmp_num_successes = 0;
     csmp_num_iterations = 0;
+    csmp_max_iterations = 0;
+
     for ndt=1:num_dict_trials
         % Sensing matrix
         Phi = SPX_SimpleDicts.gaussian_dict(M, N);
@@ -54,6 +62,9 @@ for K=Ks
             z = nhtp_result.z;
             nhtp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
             nhtp_num_iterations = nhtp_num_iterations + nhtp_result.iterations;
+            if nhtp_max_iterations < nhtp_result.iterations
+                nhtp_max_iterations = nhtp_result.iterations;
+            end
             nhtp_num_successes = nhtp_num_successes + nhtp_stats.success;
 
 
@@ -65,6 +76,9 @@ for K=Ks
             z = csmp_result.z;
             csmp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
             csmp_num_iterations = csmp_num_iterations + csmp_result.iterations;
+            if csmp_max_iterations < csmp_result.iterations
+                csmp_max_iterations = csmp_result.iterations;
+            end
             csmp_num_successes = csmp_num_successes + csmp_stats.success;
 
 
@@ -77,11 +91,13 @@ for K=Ks
     nhtp_average_iterations = nhtp_num_iterations / num_trials;
     nhtp_success_rates_with_k(K) = nhtp_success_rate;
     nhtp_average_iterations_with_k (K) = nhtp_average_iterations;
+    nhtp_maximum_iterations_with_k(K) = nhtp_max_iterations;
 
     csmp_success_rate = csmp_num_successes / num_trials;
     csmp_average_iterations = csmp_num_iterations / num_trials;
     csmp_success_rates_with_k(K) = csmp_success_rate;
     csmp_average_iterations_with_k (K) = csmp_average_iterations;
+    csmp_maximum_iterations_with_k(K) = csmp_max_iterations;
 end
 
 save('bin/fig_1.mat');
