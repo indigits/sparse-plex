@@ -287,6 +287,86 @@ by the equation :math:`y = \Phi x`.
 
 When we make measurement noisy, the equation would be :math:`y = \Phi x + e`.
 
+Before we jump into sparse recovery, let us spend some time
+studying some simple properties of dictionaries.
+
+Measuring dictionary properties
+-------------------------------------
+
+Gram matrix
+'''''''''''''''''''
+
+You have already done this before. The straight forward 
+calculation is :math:`G = \Phi' * \Phi` where we are
+considering the conjugate transpose of the dictionary :math:`\Phi`.
+
+* Write a function to measure the Gram matrix of any dictionary.
+* Compute the Gram matrix for all the dictionaries discussed above.
+* Verify that Gram matrix is 
+
+For most of our purposes, the sign or phase of entries in the Gram
+matrix is not important.  We may use the symbol ``G`` to refer to
+the Gram matrix in the sequel.
+
+* Compute absolute value Gram matrix ``abs(G)``.
+
+Coherence
+'''''''''''''''''
+Recall that the coherence of a dictionary is largest (absolute value)
+inner product between any pair of atoms. 
+Actually it's quite easy to read the coherence from the absolute 
+value Gram matrix.
+
+* We reject the diagonal elements since they correspond to the inner product
+  of an atom with itself. For a properly normalized dictionary, they should
+  be 1 anyway.
+* Since the matrix is symmetric we need to look at only the upper triangular half
+  or the lower triangular half (excluding the diagonal) to read off the
+  coherence.
+* Pick the largest value in the upper triangular half.
+
+
+* Write a Matlab function to compute the coherence.
+* Compute coherence of a Dirac-DFT dictionary for different values of N.
+  Plot the same to see how coherence decreases with N.
+* Do the same for Dirac-DCT.
+* Compute the coherence of Gaussian dictionary (with say N=1024) for 
+  different values of M and plot it.
+* In the case of Gaussian dictionary, it is better to take average coherence
+  for same M and N over different instances of Gaussian dictionary of the
+  specified size.
+
+
+
+Babel function
+''''''''''''''''''''''''''
+
+Babel function is quite interesting. While the definition looks pretty
+scary, it turns out that it can be computed very easily from the Gram matrix.
+
+* Compute the (absolute value) Gram matrix for a dictionary.
+* Sort the rows of the Gram matrix (each row separately) in descending order.
+* Remove the first column (consists of all ones in for a normalized dictionary).
+* Construct a new matrix by accumulating over the columns of the sorted Gram matrix above.
+  In other words, in the new matrix 
+
+  * First column is as it is.
+  * Second column consists of sum of first and second column of sorted matrix.
+  * Third column consists of sum of first to third column of sorted matrix .
+  * Continue accumulating like this.
+
+* Compute the maximum for each column.
+* Your Babel function is in front of you.
+
+* Write a Matlab function to carry out the same for any dictionary.
+* Compute the Babel function for Dirac-DFT and Dirac-DCT dictionary 
+  with (N=256).
+* Compute the Babel function for Gaussian dictionary with N=256. Actually
+  compute Babel functions for many instances of Gaussian dictionary and
+  then compute the average Babel function.
+
+
+
 
 Developing the matching pursuit algorithm
 ----------------------------------------------------
@@ -295,17 +375,6 @@ Developing the matching pursuit algorithm
 Developing the orthogonal matching pursuit algorithm
 ----------------------------------------------------- 
 
-
-Measuring dictionary properties
--------------------------------------
-
-
-Coherence
-'''''''''''''''''
-
-
-Babel function
-''''''''''''''''''''''''''
 
 
 
