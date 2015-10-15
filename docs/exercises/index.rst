@@ -366,6 +366,93 @@ scary, it turns out that it can be computed very easily from the Gram matrix.
   then compute the average Babel function.
 
 
+Getting started with sparse recovery
+-----------------------------------------------
+
+Our first objective will be to develop algorithms for sparse recovery in noiseless case.
+
+The defining equation is :math:`y = \Phi x` where :math:`x` is the sparse representation vector, 
+:math:`\Phi` is the dictionary or sensing matrix 
+and :math:`y` is the signal or measurement vector.
+In any sparse recovery algorithm, following quantities are of core interest:
+
+* :math:`x` which is unknown to us.
+* :math:`\Phi` which is known to us. Sometimes we may know :math:`\Phi` only approximately.
+* :math:`y` which is known to us.
+* Given :math:`\Phi` and :math:`y`, we estimate an approximation of :math:`x` which we will
+  represent as :math:`\widehat{x}`.
+* :math:`\widehat{x}` is (typically) sparse even if :math:`x` may be only approximately sparse or compressible.
+* Given an estimate :math:`\widehat{x}`, we compute the residual :math:`r = y - \Phi \widehat{x}`. This 
+  quantity is computed during the sparse recovery process.
+* Measurement or signal error norm :math:`\| r \|_2`. We strive to reduce this as much as possible.
+* Sparsity level :math:`K`. We try to come up with an :math:`\widehat{x}` which is K-sparse. 
+* Representation error :math:`f = x - \widehat{x}`.  This is unknown to us. The recovery process
+  tends to minimize its norm :math:`\| f \|_2`.
+
+Some notes are in order
+
+* K may or may not be given to us. If K is given to us, we should use it in our recovery process. 
+  If it is not given, then we should work with :math:`\| r \|_2`.
+* While the recovery algorithm itself doesn't know about :math:`x` and hence cannot calculate :math:`f`,
+  a controlled testing environment can carefully choose and :math:`x`, compute :math:`y` and pass
+  :math:`\Phi` and :math:`y` to the recovery algorithm. Thus, the testing environment can easily 
+  compute :math:`f` by using the :math:`x` known to it and :math:`\widehat{x}` given by the 
+  recovery algorithm.
+
+Usually the sparse recovery algorithms are iterative. In each iteration, we improve our
+approximation :math:`\widehat{x}` and reduce :math:`\| r \|_2`.
+
+* We can denote the iteration counter by :math:`k` starting from 0 onwards.
+* We denote k-th approximation by :math:`\widehat{x}^k` and k-th residual by :math:`r^k`.
+* A typical initial estimate is given by :math:`\widehat{x}^0 = 0` and thus, :math:`r^0 = y`.
+
+
+.. rubric:: Objectives of recovery algorithm
+
+There are fundamentally two objectives of a sparse recovery algorithm
+
+* Identification of locations at which :math:`\widehat{x}` has
+  non-zero entries. This corresponds to the sparse support of :math:`x`.
+* Estimation of the values of non-zero entries in :math:`\widehat{x}`.
+
+We will use following notation.
+
+* The identified support will be denoted as :math:`\Lambda`. It is
+  the responsibility of the sparse recovery algorithm to guess it.
+* If the support is identified gradually in each iteration, we can
+  use the notation :math:`\Lambda^k`.
+* The actual support of :math:`x` will be denoted by :math:`\Omega`.
+  Since :math:`x` is unknown to us hence :math:`\Omega` is also 
+  unknown to us within the sparse recovery algorithm. However,
+  the controlled testing environment would know about :math:`\Omega`.
+
+If the support has been identified correctly, then estimation part
+is quite easy. It's nothing but the application of least squares
+over the columns of :math:`\Phi` selected by the support set.
+
+Different recovery algorithms vary in how they approach 
+the support identification and coefficient estimations.
+
+* Some algorithms try to identify whole support at once and then
+  estimate the values of non-zero entries.
+* Some algorithms identify atoms in the support one at a time 
+  and iteratively estimate the non-zero values for the current
+  support.
+
+.. rubric:: The proxy vector
+
+A very interesting quantity which appears in many sparse
+recovery algorithms is the proxy vector  :math:`p = \Phi' r`.
+
+The figure below shows a sparse vector, its measurements and
+corresponding proxy vector :math:`p^0 = \Phi r^0 =\Phi y`.
+
+.. image:: images/proxy_vector.png
+
+While the proxy vector may look quite chaotic on first look,
+it is very interesting to note that it tends to have large
+entries at exactly the same location as the sparse vector :math:`x`
+itself. 
 
 
 Developing the matching pursuit algorithm
