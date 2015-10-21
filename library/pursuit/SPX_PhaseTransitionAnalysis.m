@@ -11,6 +11,8 @@ properties
     Ms
     % Number of trials for each setup
     NumTrials = 500
+    % SNR level (empty means noiseless)
+    SNR = []
 end
 
 properties(SetAccess=private)
@@ -58,7 +60,14 @@ methods
                     % Construct a sparse vector
                     x = data_model(N, K);
                     % Construct measurement vector
-                    y  = Phi * x;
+                    y0  = Phi * x;
+                    if isempty(self.SNR)
+                        y = y0;
+                    else
+                        % we need to corrupt the signal with noise
+                        noises = SPX_NoiseGen.createNoise(y0, self.SNR);
+                        y = y0 + noises;
+                    end
                     % Solve the recovery problem
                     x_rec = recovery_solver(Phi, K, y);
                     % Get the recovery statistics
@@ -157,11 +166,13 @@ methods(Static)
         if isfield(options, 'chosen_ks')
             mf.new_figure('Recovery rate vs  Number of Measurements');
             hold all;
-            legends = cell(1, numel(options.chosen_ks));
+            chosen_ks = intersect(options.chosen_ks,  data.Ks);
+            chosen_ks = sort(chosen_ks);
+            legends = cell(1, numel(chosen_ks));
             plot_styles = SPX.plot_styles;
             num_plot_styles = numel(plot_styles);
-            for k=1:numel(options.chosen_ks)
-                K = options.chosen_ks(k);
+            for k=1:numel(chosen_ks)
+                K = chosen_ks(k);
                 nk = find(data.Ks == K);
                 success_rates = data.SuccessRates(nk, :);
                 plot_style = plot_styles{mod(k,num_plot_styles)+1};
@@ -172,6 +183,12 @@ methods(Static)
             xlabel('Number of measurements');
             ylabel('Recovery probability');
             grid on;
+            if isfield(options, 'export') && options.export
+                file_path = sprintf('%s/%s_%s_recovery_vs_m_over_ks.png', options.export_dir, solver_name, options.export_name);
+                export_fig(file_path, '-r120', '-nocrop');
+                file_path = sprintf('%s/%s_%s_recovery_vs_m_over_ks.pdf', options.export_dir, solver_name, options.export_name);
+                export_fig(file_path);
+            end
         end
 
     end
