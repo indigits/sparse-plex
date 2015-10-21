@@ -21,11 +21,14 @@ classdef SPX_Figures < handle
             end
             self.width = width;
             self.height = height;
-            self.x = 50;
-            self.y = 200;
-            self.number = 0;
             % Identify dual monitor situation
             positions = get(0, 'MonitorPositions');
+            % position of first monitor
+            m1_x = positions(1, 1);
+            m1_y = positions(1, 2);
+            self.x = m1_x + 50;
+            self.y = m1_y + 100;
+            self.number = 0;
             if size(positions, 1) > 1
                 % We have dual monitor situation
                 w1 = positions(1, 3);
