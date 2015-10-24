@@ -32,7 +32,7 @@ classdef SPX_CoSaMP_MMV < handle
     end
     
     methods
-        function self  = SPX_CoSaMP_MMV(Dict, K, P)
+        function self  = SPX_CoSaMP_MMV(Dict, K, P, options)
             if nargin < 3
                 % By default we apply l_1 norm on rows
                 P = 1;
@@ -60,6 +60,12 @@ classdef SPX_CoSaMP_MMV < handle
             % Maximum number of iterations
             maxIter = 30;
             self.MaxIters = maxIter;
+            if nargin >= 4
+                % options have been specified 
+                if isfield(options, 'RankAwareResidual')
+                    self.RankAwareResidual = options.RankAwareResidual;
+                end
+            end
         end
 
         function result  = solve(self,Y)
