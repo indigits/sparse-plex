@@ -34,7 +34,7 @@ function test_naive_omp_1
     result = solver.solve(b);
     cmpare = SPX_SparseSignalsComparison(x, result.z, k);
     %cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end
 
 
@@ -51,7 +51,7 @@ function test_naive_omp_2
     end
     cmpare = SPX_SparseSignalsComparison(reps, recovered, k);
     % cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end
 
 
@@ -61,7 +61,7 @@ function test_omp_qr_1
     result = solver.solve_qr(b);
     cmpare = SPX_SparseSignalsComparison(x, result.z, k);
     %cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end
 
 function test_omp_qr_2
@@ -77,5 +77,5 @@ function test_omp_qr_2
     end
     cmpare = SPX_SparseSignalsComparison(reps, recovered, k);
     % cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end

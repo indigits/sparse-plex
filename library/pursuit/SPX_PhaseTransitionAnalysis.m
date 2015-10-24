@@ -70,10 +70,12 @@ methods
                     end
                     % Solve the recovery problem
                     x_rec = recovery_solver(Phi, K, y);
-                    % Get the recovery statistics
-                    stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, x_rec);
+                    % Compare references and reconstructions 
+                    sscomp = SPX_SparseSignalsComparison(x, x_rec, K);
+                    all_success = sscomp.all_have_matching_supports();
+                    % stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, x_rec);
                     % Check whether we succeeded or failed.
-                    if stats.success
+                    if all_success
                         num_successes = num_successes + 1;
                         fprintf('S');
                     else
@@ -132,14 +134,18 @@ methods(Static)
         % Prints and exports results of phase transition analysis
         data = load(result_file_path);
         mf = SPX_Figures();
-        mf.new_figure(sprintf('%s: Phase Transition Diagram', solver_name));
+        graph_title  = solver_name;
+        if isfield(options, 'subtitle')
+            graph_title = sprintf('%s (%s)', graph_title, options.subtitle);
+        end
+        mf.new_figure(sprintf('%s: Phase Transition Diagram', graph_title));
         imagesc(data.Ms, data.Ks, data.SuccessRates);
         set(gca,'YDir','normal');
         colormap gray;
         ylabel('K (sparsity level)');
         xlabel('M (measurements)');
 
-        title(sprintf('Phase Transition Diagram for %s: N=%d', solver_name, data.N));
+        title(sprintf('Phase Transition Diagram for %s: N=%d', graph_title, data.N));
         colorbar;
 
         if isfield(options, 'export') && options.export

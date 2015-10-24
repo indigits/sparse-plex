@@ -34,7 +34,7 @@ function test_cosamp_1
     result = solver.solve(b);
     cmpare = SPX_SparseSignalsComparison(x, result.z, k);
     %cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end
 
 
@@ -51,7 +51,7 @@ function test_cosamp_2
     end
     cmpare = SPX_SparseSignalsComparison(reps, recovered, k);
     % cmpare.summarize();
-    assertTrue(cmpare.has_matching_supports(1.0));
+    assertTrue(cmpare.all_have_matching_supports(1.0));
 end
 
 

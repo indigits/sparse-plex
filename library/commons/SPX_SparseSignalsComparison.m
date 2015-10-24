@@ -156,8 +156,20 @@ classdef SPX_SparseSignalsComparison < handle
         function result = has_matching_supports(self, threshold)
             % Returns the vectors for which support similarity crosses a threshold.
             % Typical value of threshold 1.0 or .75.
+            if nargin < 2
+                threshold = 1.0;
+            end
             similarity_ratios = self.support_similarity_ratios();
-            result = all(similarity_ratios >= threshold);
+            result = similarity_ratios >= threshold;
+        end
+
+        function result = all_have_matching_supports(self, threshold)
+            if nargin < 2
+                threshold = 1.0;
+            end
+            % Returns true if all signals have same K-sparse support
+            result = self.has_matching_supports(threshold);
+            result = all(result);
         end
 
         function summarize(self)
