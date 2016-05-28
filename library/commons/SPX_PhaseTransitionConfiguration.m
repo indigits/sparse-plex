@@ -8,9 +8,9 @@ properties
     % The value of Ks and Ms for which simulation will be done
     Configuration
     % Number of M values for different undersampling rates
-    NumMValues
-    % Number of K values for a given undersampling rate
-    NumKValues
+    NumEtas
+    % Number of Sparsity levels for a given undersampling rate
+    NumRhos
     Etas
     Rhos
 end
@@ -25,60 +25,61 @@ methods
     	end
         self.N = N_;
     	% Minimum number of measurements
-        if N_ <= 256
-	    	M_min  = 16;
-	    else
-	    	M_min  = 32;
-	    end
+    	M_min = 4;
+     	% if N_ <= 256
+	    % 	M_min  = 16;
+	    % else
+	    % 	M_min  = 32;
+	    % end
     	% Minimum undersampling rate
     	eta_min = M_min / self.N;
     	% Number of possible values of K for each value of M
-    	num_k_values = M_min;
+    	num_rhos = 64;
     	% K/Ms 
-    	rhos = (1:num_k_values) / M_min;
-    	num_m_values = self.N / M_min;
-    	Ms = (1:num_m_values )  * M_min;
+    	rhos = (1:num_rhos) / num_rhos;
+    	num_etas = self.N / M_min;
+    	Ms = (1:num_etas )  * M_min;
     	etas = Ms / self.N;
-    	self.Configuration = zeros(num_m_values, num_k_values, 4);
-		for m=1:num_m_values
+    	self.Configuration = zeros(num_rhos, num_etas, 4);
+		for m=1:num_etas
 			eta  = etas(m);
 			M = Ms(m);
-	    	for k=1:num_k_values
+	    	for k=1:num_rhos
 	    		rho = rhos(k);
-	    		K = rho * M;
-	    		self.Configuration(m, k, :) = [M, K, eta, rho];
+	    		K = ceil(rho * M);
+	    		self.Configuration(k, m, :) = [K, M, eta, rho];
     		end
     	end
-    	self.NumMValues =num_m_values;
-    	self.NumKValues = num_k_values;
+    	self.NumEtas =num_etas;
+    	self.NumRhos = num_rhos;
     	self.Etas = etas;
     	self.Rhos = rhos;
     	self.Ms = Ms;
     end
 
     function result = num_configurations(self)
-    	result = self.NumMValues * self.NumKValues;
+    	result = self.NumEtas * self.NumRhos;
     end
 
     function print_configuration(self)
-    	num_m_values = self.NumMValues;
-    	num_k_values = self.NumKValues;
-		for m=1:num_m_values
-	    	for k=1:num_k_values
-	    		cfg = self.Configuration(m, k, :);
-	    		M = cfg(1);
-	    		K = cfg(2);
+    	num_etas = self.NumEtas;
+    	num_rhos = self.NumRhos;
+		for m=1:num_etas
+	    	for k=1:num_rhos
+	    		cfg = self.Configuration(k, m, :);
+	    		K = cfg(1);
+	    		M = cfg(2);
 	    		eta = cfg(3);
 	    		rho = cfg(4);
-	    		fprintf('eta=%.2f, rho=%.2f, M=%d, K=%d\n', eta, rho, M, K);
-	    		if rho ~= K / M
+	    		fprintf('eta=%.2f, rho=%.2f, K=%d, M=%d\n', eta, rho, K, M);
+	    		if K ~= ceil (rho * M)
 	    			error('Calculation mistake');
 	    		end
     		end
     	end
     	fprintf('\nNumber of configurations: %d\n', self.num_configurations);
-    	fprintf('\nNumber of undersampling rates (etas)=%d\n', self.NumMValues);
-    	fprintf('\nNumber of K values (rhos)=%d\n', self.NumKValues);
+    	fprintf('\nNumber of undersampling rates (etas)=%d\n', self.NumEtas);
+    	fprintf('\nNumber of K values (rhos)=%d\n', self.NumRhos);
     	fprintf('\n Etas: ');
     	fprintf('%.02f ', self.Etas);
     	fprintf('\n');
@@ -91,12 +92,12 @@ methods
     function plot_configuration(self)
     	etas = self.Etas;
     	rhos = self.Rhos;
-    	num_m_values = self.NumMValues;
-    	num_k_values = self.NumKValues;
-    	data = zeros(num_m_values, num_k_values);
-		for m=1:num_m_values
-	    	for k=1:num_k_values
-	    		data(m, k) = etas(m) * rhos(k); 
+    	num_etas = self.NumEtas;
+    	num_rhos = self.NumRhos;
+    	data = zeros(num_rhos, num_etas);
+		for m=1:num_etas
+	    	for k=1:num_rhos
+	    		data(k, m) = rhos(k) * etas(m); 
     		end
     	end
         mf = SPX_Figures();

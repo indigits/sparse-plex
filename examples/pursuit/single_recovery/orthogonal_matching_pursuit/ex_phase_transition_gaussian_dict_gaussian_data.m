@@ -11,7 +11,7 @@ rng('default');
 % Create the directory for storing results
 [status_code,message,message_id] = mkdir('bin');
 target_file_path = 'bin/omp_phase_transition_gaussian_dict_gaussian_data.mat';
-N = 1024;
+N = 64;
 pta = SPX_PhaseTransitionAnalysis(N);
 % pta.NumTrials = 100;
 dict_model = @(M, N) SPX_SimpleDicts.gaussian_dict(M, N);

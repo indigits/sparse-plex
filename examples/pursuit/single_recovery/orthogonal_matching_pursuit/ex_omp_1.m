@@ -12,9 +12,9 @@ mf = SPX_Figures();
 % Signal space 
 N = 256;
 % Number of measurements
-M = 64;
+M = 256;
 % Sparsity level
-K = 8;
+K = 128;
 % Construct the signal generator.
 gen  = SPX_SparseSignalGenerator(N, K);
 % Generate bi-uniform signals

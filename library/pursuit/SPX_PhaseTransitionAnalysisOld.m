@@ -1,10 +1,14 @@
-classdef SPX_PhaseTransitionAnalysis < handle
+classdef SPX_PhaseTransitionAnalysisOld < handle
  % This class defines a framework for phase transition analysis
  % of a sparse recovery solver
 
 properties
-    % Phase Transition Analysis Configuration
-    Configuration
+    % Number of atoms
+    N
+    % The value of Ks for which simulation will be done
+    Ks
+    % The value of Ms for which simulation will be done
+    Ms
     % Number of trials for each setup
     NumTrials = 500
     % SNR level (empty means noiseless)
@@ -18,45 +22,35 @@ properties(SetAccess=private)
     TotalSimulationTimes
     % Average simulation time for each configuration
     AverageSimulationTimes
+    % Minimum M required for a given value of K
+    MinimumMs 
 end
 
 methods
-    function self = SPX_PhaseTransitionAnalysis(N_)
-        self.Configuration = SPX_PhaseTransitionConfiguration(N_);
+    function self = SPX_PhaseTransitionAnalysisOld(N_)
+        self.N = N_;
+        max_k  = round(self.N / 16);
+        self.Ks = 1:max_k;
+        max_n = round(self.N / 2);
+        self.Ms = [1 2:2:max_n];
     end
 
     function result = run(self, dict_model, data_model, recovery_solver)
-        cfg = self.Configuration;
-        num_etas = cfg.NumEtas;
-        num_rhos = cfg.NumRhos;
-        N = cfg.N;
+        ks = self.Ks;
+        ms = self.Ms;
+        num_ks = numel(ks);
+        num_ms = numel(ms);
+        N = self.N;
         num_trials = self.NumTrials;
         % Memory allocations
-        % K is Y-axis (rows), M is X-axis (columns)
-        self.SuccessRates = zeros(num_rhos, num_etas);
-        self.TotalSimulationTimes = zeros(num_rhos, num_etas);
-        self.AverageSimulationTimes = zeros(num_rhos, num_etas);
-        for nm=1:num_etas
-            for nk=1:num_rhos
-                current_cfg = cfg.Configuration(nk, nm, :);
-                K = current_cfg(1);
-                M = current_cfg(2);
-                eta = current_cfg(3);
-                rho = current_cfg(4);
-                fprintf('\n\nSimulating for eta=%.2f, rho=%.2f, K=%d, M=%d\n', eta, rho, K, M);
-                if nk > 1
-                    % It is possible that previous K was same as this one.
-                    pre_nk = nk - 1;
-                    prev_cfg = cfg.Configuration(pre_nk, nm, :);
-                    prev_K = prev_cfg(1);
-                    if prev_K == K
-                        fprintf('Copying data from previous simulation\n');
-                        self.SuccessRates(nk, nm) = self.SuccessRates(pre_nk, nm);
-                        self.TotalSimulationTimes(nk, nm) = self.TotalSimulationTimes(pre_nk, nm);
-                        self.AverageSimulationTimes(nk, nm) = self.AverageSimulationTimes(pre_nk, nm);
-                        continue;
-                    end
-                end
+        self.SuccessRates = zeros(num_ks, num_ms);
+        self.TotalSimulationTimes = zeros(num_ks, num_ms);
+        self.AverageSimulationTimes = zeros(num_ks, num_ms);
+        for nk = 1:num_ks
+            K = ks(nk);
+            for nm = 1:num_ms
+                M = ms(nm);
+                fprintf('\n\nSimulating for K = %d, M = %d\n', K, M);
                 % Construct a sensing matrix.
                 Phi = dict_model(M, N);
                 num_successes = 0;
@@ -105,6 +99,17 @@ methods
             mStart = 1;
         end
 
+        self.MinimumMs  = zeros(num_ks, 1);
+        for nk=1:num_ks
+            row = self.SuccessRates(nk, :);
+            min_m_index = find(row >=1, 1);
+            if isempty(min_m_index)
+                self.MinimumMs(nk) = N;
+            else
+                self.MinimumMs(nk) = ms(min_m_index);
+            end
+        end
+
         result = self
     end
 
@@ -113,19 +118,14 @@ methods
         SuccessRates  = self.SuccessRates;
         TotalSimulationTimes = self.TotalSimulationTimes;
         AverageSimulationTimes = self.AverageSimulationTimes;
-        cfg = self.Configuration;
-        NumEtas = cfg.NumEtas;
-        NumRhos = cfg.NumRhos;
-        Etas = cfg.Etas;
-        Rhos = cfg.Rhos;
-        N = cfg.N;
-        Ms = cfg.Ms;
+        MinimumMs = self.MinimumMs;
+        Ks = self.Ks;
+        Ms = self.Ms;
+        N = self.N;
         NumTrials = self.NumTrials;
-        Configuration = cfg.Configuration;
-        save(target_file_path, 'N', 'NumEtas', 'NumRhos', 'NumTrials', ...
-            'Configuration', 'Etas', 'Rhos', 'Ms', ...
+        save(target_file_path, 'N', 'Ks', 'Ms', 'NumTrials', ...
             'SuccessRates', 'TotalSimulationTimes', ...
-            'AverageSimulationTimes');
+            'AverageSimulationTimes', 'MinimumMs');
     end    
 end
 
@@ -139,11 +139,11 @@ methods(Static)
             graph_title = sprintf('%s (%s)', graph_title, options.subtitle);
         end
         mf.new_figure(sprintf('%s: Phase Transition Diagram', graph_title));
-        imagesc(data.Etas, data.Rhos, data.SuccessRates);
+        imagesc(data.Ms, data.Ks, data.SuccessRates);
         set(gca,'YDir','normal');
         colormap gray;
-        ylabel('Oversampling rate (\rho=K/M)');
-        xlabel('Undersampling Rate (\eta=M/N)');
+        ylabel('K (sparsity level)');
+        xlabel('M (measurements)');
 
         title(sprintf('Phase Transition Diagram for %s: N=%d', graph_title, data.N));
         colorbar;
@@ -154,6 +154,49 @@ methods(Static)
             file_path = sprintf('%s/%s_%s_phase_transition.pdf', options.export_dir, solver_name, options.export_name);
             export_fig(file_path);
         end
+
+        mf.new_figure('K vs Minimum M');
+        plot(data.Ks, data.MinimumMs, '-s');
+        grid on;
+        xlabel('Sparsity level: K');
+        ylabel('Minimum number of measurements');
+        title('Minimum measurements required for different sparsity levels');
+
+        if isfield(options, 'export') && options.export
+            file_path = sprintf('%s/%s_%s_k_vs_min_m.png', options.export_dir, solver_name, options.export_name);
+            export_fig(file_path, '-r120', '-nocrop');
+            file_path = sprintf('%s/%s_%s_k_vs_min_m.pdf', options.export_dir, solver_name, options.export_name);
+            export_fig(file_path);
+        end
+
+        if isfield(options, 'chosen_ks')
+            mf.new_figure('Recovery rate vs  Number of Measurements');
+            hold all;
+            chosen_ks = intersect(options.chosen_ks,  data.Ks);
+            chosen_ks = sort(chosen_ks);
+            legends = cell(1, numel(chosen_ks));
+            plot_styles = SPX.plot_styles;
+            num_plot_styles = numel(plot_styles);
+            for k=1:numel(chosen_ks)
+                K = chosen_ks(k);
+                nk = find(data.Ks == K);
+                success_rates = data.SuccessRates(nk, :);
+                plot_style = plot_styles{mod(k,num_plot_styles)+1};
+                plot(data.Ms, success_rates, plot_style);
+                legends{k} = sprintf('K=%d', K);
+            end
+            legend(legends, 'Location', 'southeast');
+            xlabel('Number of measurements');
+            ylabel('Recovery probability');
+            grid on;
+            if isfield(options, 'export') && options.export
+                file_path = sprintf('%s/%s_%s_recovery_vs_m_over_ks.png', options.export_dir, solver_name, options.export_name);
+                export_fig(file_path, '-r120', '-nocrop');
+                file_path = sprintf('%s/%s_%s_recovery_vs_m_over_ks.pdf', options.export_dir, solver_name, options.export_name);
+                export_fig(file_path);
+            end
+        end
+
     end
 end
 

@@ -23,14 +23,13 @@ classdef SPX_Signals
 
         function [ indices ] = largest_indices( x, K )
             %LARGESTINDICES Returns the set of K largest indices
-            N = length(x);
-            tmp = zeros(N,2);
-            tmp(:,1) = abs(x);
-            tmp(:,2) = 1:N;
-            % sort rows based on absolute value of x
-            tmp = sortrows(tmp);
+            if isempty(x)
+                indices = [];
+                return
+            end
+            [~, idx] = sort(abs(x), 'descend');
             % choose the last K indices
-            indices = tmp(end:-1:end-K+1, 2);
+            indices = idx(1:K);
         end
 
         function [ approxX ] = sparseApproximation( x, K )
