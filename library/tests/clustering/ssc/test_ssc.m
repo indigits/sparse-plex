@@ -1,8 +1,7 @@
 % Tests sparse subspace clustering algorithm
-function tests = test_ssc
-  tests = functiontests(localfunctions);
-end
+classdef (TestTags = {'Long'})  test_ssc < matlab.unittest.TestCase
 
+methods (Test)
 
 function test_1(testCase)
     % dimension of ambient space
@@ -45,4 +44,8 @@ function test_1(testCase)
     comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
     verifyEqual(testCase, result.fMeasure, 1.0);
+end
+
+end
+
 end
