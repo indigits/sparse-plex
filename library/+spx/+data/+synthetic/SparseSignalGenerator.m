@@ -1,5 +1,5 @@
-classdef SPX_SparseSignalGenerator < handle
-    %SPARSESIGNALGENERATOR creates sparse signals
+classdef SparseSignalGenerator < handle
+    %SparseSignalGenerator creates sparse signals
     
     properties
         % The ambient signal dimension
@@ -15,7 +15,7 @@ classdef SPX_SparseSignalGenerator < handle
     end
     
     methods
-        function self = SPX_SparseSignalGenerator(N, K, S)
+        function self = SparseSignalGenerator(N, K, S)
             self.N = N;
             self.K = K;
             if nargin < 3
@@ -85,7 +85,7 @@ classdef SPX_SparseSignalGenerator < handle
             % Generate Gaussian entries
             samples = randn(self.K,self.S);
             % Normalize the rows
-            samples = SPX_Norm.normalize_l2_rw(samples);
+            samples = spx.commons.norm.normalize_l2_rw(samples);
             self.X(self.Omega, :) = samples;
             result = self.X;
         end
@@ -97,7 +97,7 @@ classdef SPX_SparseSignalGenerator < handle
             imag_part = randn(self.K,self.S);
             samples = real_part + i * imag_part;
             % Normalize the rows
-            samples = SPX_Norm.normalize_l2_rw(samples);
+            samples = spx.commons.norm.normalize_l2_rw(samples);
             self.X(self.Omega, :) = samples;
             result = self.X;
         end

@@ -1,5 +1,5 @@
-classdef SPX_ClusterComparison < handle
-    %SPX_CLUSTERCOMPARISON Compares two clusterings
+classdef ClusterComparison < handle
+    %ClusterComparison Compares two clusterings
     % See comparing_clusterings_overview_wagner-06.pdf
     % INPUT 
     % A - a list of labels for items assigned by one Clustering algorithm
@@ -34,7 +34,7 @@ classdef SPX_ClusterComparison < handle
     
     methods
         % Initializes the comparison algorithm
-        function self = SPX_ClusterComparison(A, B)
+        function self = ClusterComparison(A, B)
             self.A = A;
             self.B = B;
             % labels must start from 1.
@@ -43,9 +43,9 @@ classdef SPX_ClusterComparison < handle
             end
             % We group items by their labels
             [self.ALabelToItems, self.ALabelCounts] = ...
-                SPX_ClusterComparison.groupLabelToItems(A);
+                spx.cluster.ClusterComparison.groupLabelToItems(A);
             [self.BLabelToItems, self.BLabelCounts] = ...
-                SPX_ClusterComparison.groupLabelToItems(B);
+                spx.cluster.ClusterComparison.groupLabelToItems(B);
             % We don't allow missing labels. i.e.
             % if labels are in the range [1..n] then every label
             % i between 1 and n (inclusive) must have at least one item in
@@ -151,8 +151,8 @@ classdef SPX_ClusterComparison < handle
             result.recall  = recall;
             result.misclassificationRate  = 1 - recall;
             result.labelMap = labelMap;
-            result.smartLabelMap = SPX_ClusterComparison.createLabelMap(fMatrix);
-            [clustering_error, remapped_labels] = SPX_ClusterComparison.computeClusteringError(self.A, self.B, result.smartLabelMap);
+            result.smartLabelMap = spx.cluster.ClusterComparison.createLabelMap(fMatrix);
+            [clustering_error, remapped_labels] = spx.cluster.ClusterComparison.computeClusteringError(self.A, self.B, result.smartLabelMap);
             result.clusteringError = clustering_error;
             result.remappedLabels = remapped_labels;
             % Number of A labels

@@ -1,4 +1,4 @@
-classdef SPX_Vec
+classdef vector
 % Utility functions related to working with vectors
 
     methods(Static)
@@ -39,13 +39,13 @@ classdef SPX_Vec
                 if isrow(x)
                     vec = x;
                 else
-                    vec = SPX_Vec.reshape_as_row_vec(x);
+                    vec = spx.commons.vector.reshape_as_row_vec(x);
                 end
             else
                 if iscolumn(x)
                     vec = x;
                 else
-                    vec = SPX_Vec.reshape_as_col_vec(x);
+                    vec = spx.commons.vector.reshape_as_col_vec(x);
                 end
             end
         end

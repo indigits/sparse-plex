@@ -1,10 +1,11 @@
-classdef SPX_SimpleSignals 
+classdef simple 
 
 methods(Static)
 
 
     function signal = picket_fence(N)
-        if ~SPX_Number.is_perfect_square(N)
+        import spx.discrete.Number;
+        if ~Number.is_perfect_square(N)
             error('N must be perfect square');
         end
         n = sqrt(N);

@@ -1,4 +1,4 @@
-classdef SPX_SparseSignalsComparison < handle
+classdef SparseSignalsComparison < handle
 
     properties(SetAccess=private)
         % Signal set A of reference signals
@@ -26,7 +26,7 @@ classdef SPX_SparseSignalsComparison < handle
 
     methods
         % Constructor
-        function self = SPX_SparseSignalsComparison(References, Estimates, K)
+        function self = SparseSignalsComparison(References, Estimates, K)
             self.References = References;
             self.Estimates = Estimates;
             % Sizes must be same
@@ -78,7 +78,7 @@ classdef SPX_SparseSignalsComparison < handle
                 error('No sparsity specified');
             end
             if isempty(self.SparseReferences)
-                [self.SparseReferences, self.ReferenceLargestIndices] = SPX_SparseSignalsComparison.sparse_approximation(self.References, self.K);
+                [self.SparseReferences, self.ReferenceLargestIndices] = spx.commons.SparseSignalsComparison.sparse_approximation(self.References, self.K);
             end
             result  = self.SparseReferences;
         end
@@ -88,7 +88,7 @@ classdef SPX_SparseSignalsComparison < handle
                 error('No sparsity specified');
             end
             if isempty(self.SparseEstimates)
-                [self.SparseEstimates, self.EstimateLargestIndices] = SPX_SparseSignalsComparison.sparse_approximation(self.Estimates, self.K);
+                [self.SparseEstimates, self.EstimateLargestIndices] = spx.commons.SparseSignalsComparison.sparse_approximation(self.Estimates, self.K);
             end
             result  = self.SparseEstimates;
         end

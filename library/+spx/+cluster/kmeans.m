@@ -1,4 +1,4 @@
-classdef SPX_KMeans < handle
+classdef kmeans < handle
 
     methods (Static)
         function [seeds, labels] = pp_initialize(X, k)

@@ -1,4 +1,4 @@
-classdef SPX_DictionaryLearningProblems
+classdef dict_learn_problems
 
 methods(Static)
 

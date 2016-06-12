@@ -1,4 +1,4 @@
-classdef SPX_SparseSubspaceClustering < handle
+classdef SSC_L1 < handle
     % Implements sparse subspace clustering algorithm.
     % See 2013_sparse_subspace_clustering_algorithm_theory_applications.pdf
 
@@ -29,7 +29,7 @@ classdef SPX_SparseSubspaceClustering < handle
     end
 
     methods
-        function self = SPX_SparseSubspaceClustering(X, K, NumSubspaces)
+        function self = SSC_L1(X, K, NumSubspaces)
             % Constructor
             self.Data = X;
             self.K = K;

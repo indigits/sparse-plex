@@ -1,4 +1,4 @@
-classdef SPX_SyntheticImages < handle
+classdef images 
 
 methods(Static)
 

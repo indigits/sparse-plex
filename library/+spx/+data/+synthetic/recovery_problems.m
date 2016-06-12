@@ -1,4 +1,4 @@
-classdef SPX_RecoveryProblems < handle
+classdef recovery_problems 
 
     methods(Static)
 

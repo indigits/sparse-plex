@@ -1,4 +1,4 @@
-classdef SPX_Mat < handle
+classdef matrix < handle
 
     methods(Static)
         function result = is_square(A)
@@ -7,7 +7,7 @@ classdef SPX_Mat < handle
         end
 
         function result = is_symmetric(A)
-            result = SPX_Mat.is_square(A);
+            result = spx.commons.matrix.is_square(A);
             if ~result
                 return;
             end
@@ -15,7 +15,7 @@ classdef SPX_Mat < handle
         end
 
         function result = is_hermitian(A)
-            result = SPX_Mat.is_square(A);
+            result = spx.commons.matrix.is_square(A);
             if ~result
                 return;
             end
@@ -23,7 +23,7 @@ classdef SPX_Mat < handle
         end
 
         function result = is_positive_definite(A)
-            result = SPX_Mat.is_hermitian(A);
+            result = spx.commons.matrix.is_hermitian(A);
             if ~result
                 return;
             end

@@ -1,5 +1,5 @@
-classdef SPX_MultiSubspaceSignalGenerator < handle
-    %SPARSESIGNALGENERATOR creates sparse signals
+classdef MultiSubspaceSignalGenerator < handle
+    %MultiSubspaceSignalGenerator creates sparse signals
     % Usage:
     %   - Create generator with ambient dimension N and sparsity level K
     %   - Design the support for subspaces
@@ -21,7 +21,7 @@ classdef SPX_MultiSubspaceSignalGenerator < handle
     end
     
     methods
-        function self = SPX_MultiSubspaceSignalGenerator(N, K)
+        function self = MultiSubspaceSignalGenerator(N, K)
             self.N = N;
             self.K = K;
         end

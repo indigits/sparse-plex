@@ -1,4 +1,4 @@
-classdef SPX_Similarity
+classdef similarity
     % Functions for measuring distances and similarities
     properties
     end
