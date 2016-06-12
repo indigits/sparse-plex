@@ -1,5 +1,5 @@
-classdef SPX_NoiseGen
-    %NOISEGENERATOR Generates noise
+classdef Basic
+    %Basic Generates basic noise
     
     properties
         % noise type as a string
@@ -13,7 +13,7 @@ classdef SPX_NoiseGen
     end
     
     methods
-        function self = SPX_NoiseGen(N , S, noiseType)
+        function self = Basic(N , S, noiseType)
             if ~exist('N', 'var')
                 N = 1024;
             end

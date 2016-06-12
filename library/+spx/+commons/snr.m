@@ -1,12 +1,9 @@
-classdef SPX_SNR
+classdef snr
     %SNR helper functions for calculating SNR
     
     properties
     end
-    methods
-        function snr = SPX_SNR()
-        end
-    end
+
     methods(Static)
         function result = SNR(signal, noise)
             sigEnergy = sum(signal .* conj(signal));

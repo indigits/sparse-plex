@@ -18,10 +18,10 @@ methods(Static)
         % Let us create a random dictionary
         problem.true_dictionary = randn(problem.N, problem.D);
         % Let us normalize its columns
-        problem.true_dictionary = SPX_Norm.normalize_l2(problem.true_dictionary);
+        problem.true_dictionary = spx.commons.norm.normalize_l2(problem.true_dictionary);
         Alpha = zeros(problem.D, problem.S);
         for i=1:problem.S
-            sg = SPX_SparseSignalGenerator(problem.D, problem.K, 1);
+            sg = spx.data.synthetic.SparseSignalGenerator(problem.D, problem.K, 1);
             % Representations of sample signals
             Alpha(:, i) = sg.biUniform();
         end
@@ -29,10 +29,10 @@ methods(Static)
         % Sample signals generated from dictionary
         problem.signals0  = problem.true_dictionary * Alpha;
         % Added noise Gaussian
-        ng = SPX_NoiseGen(problem.N, problem.S);
+        ng = spx.data.noise.Basic(problem.N, problem.S);
         problem.noises = ng.gaussian(problem.sigma);
         problem.signals = problem.signals0 + problem.noises;
-        problem.snrs = SPX_SNR.SNR(problem.signals0, problem.noises);
+        problem.snrs = spx.commons.snr.SNR(problem.signals0, problem.noises);
     end
 
 
