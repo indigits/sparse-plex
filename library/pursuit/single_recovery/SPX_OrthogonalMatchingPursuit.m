@@ -79,11 +79,16 @@ classdef SPX_OrthogonalMatchingPursuit < handle
                 oldResNorm = norm(r);
             end
             maxIter = self.MaxIters;
+            ignored_atom = self.IgnoredAtom;
             for iter=1:maxIter
                 % Compute inner products
                 innerProducts = apply_ctranspose(dict, r);
                 % Mark the inner products of already selected columns as 0.
                 innerProducts(omega) = 0;
+                if ignored_atom > 0
+                    % forcefully ignore this atom
+                    innerProducts(ignored_atom) = 0;
+                end 
                 innerProducts = abs(innerProducts);
                 % Find the highest inner product
                 [~, index] = max(innerProducts);
@@ -99,7 +104,7 @@ classdef SPX_OrthogonalMatchingPursuit < handle
                     ZZ(omega, iter) = tmp;
                 end
                 % Let us update the residual.
-                r = y - dict.apply(z);
+                r = y - subdict * tmp;
                 if self.StopOnResidualNorm || self.StopOnResNormStable
                     resNorm = norm(r);
                     if resNorm < self.MaxResNorm
@@ -114,7 +119,6 @@ classdef SPX_OrthogonalMatchingPursuit < handle
                     end
                 end
             end
-            
             % Solution vector
             result.z = z;
             % Residual obtained
