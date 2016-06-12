@@ -1,5 +1,5 @@
-classdef SPX_Prob
-% functions related to probability theory
+classdef probability
+% basic functions related to probability theory
 
     methods(Static)
         function [ y ] = q_function( x )
