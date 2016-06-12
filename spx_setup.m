@@ -14,6 +14,8 @@ globals.ext = fullfile(globals.spx, 'ext');
 addpath(globals.ext);
 % support for spx_ini2struct function
 addpath(fullfile(globals.ext, 'ini2struct'));
+% support for export_fig
+addpath(fullfile(globals.ext, 'export_fig'));
 
 
 

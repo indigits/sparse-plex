@@ -19,7 +19,7 @@ f = (0:L-1)/L;
 options.title = 'Blackman window';
 options.ylabel = 'w(n)';
 options.xstep = 1;
-SPX_Plot.discrete_signal(w, options);
+spx.graphics.plot.discrete_signal(w, options);
 % Plot the frequency response of the Blackman window
 options.decibels = true;
-SPX_Plot.frequency_response(Wf, options);
+spx.graphics.plot.frequency_response(Wf, options);

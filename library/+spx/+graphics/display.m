@@ -32,9 +32,9 @@ methods(Static)
     function figure_handle = dictionary_atoms_as_images(dict, options)
         figure_handle = spx.graphics.figure.full_screen;
         [N, D] = size(dict);
-        [rows, cols] = SPX_Number.integer_factors_close_to_sqr_root(D);
+        [rows, cols] = spx.discrete.number.integer_factors_close_to_sqr_root(D);
         counter = 0;
-        [pixel_rows, pixel_cols] = SPX_Number.integer_factors_close_to_sqr_root(N);
+        [pixel_rows, pixel_cols] = spx.discrete.number.integer_factors_close_to_sqr_root(N);
         for r=1:rows
             for c=1:cols
                 counter = counter + 1;
@@ -48,7 +48,7 @@ methods(Static)
         end
         if nargin > 1
             if isfield(options, 'title')
-                suptitle(options.title);
+                spx.graphics.suptitle(options.title);
             end
         end
     end

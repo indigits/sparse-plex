@@ -4,8 +4,8 @@ methods(Static)
 
 
     function signal = picket_fence(N)
-        import spx.discrete.Number;
-        if ~Number.is_perfect_square(N)
+        import spx.discrete.number;
+        if ~number.is_perfect_square(N)
             error('N must be perfect square');
         end
         n = sqrt(N);

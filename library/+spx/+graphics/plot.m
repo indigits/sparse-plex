@@ -18,7 +18,7 @@ methods(Static)
                 yLabel = options.ylabel;
             end
         end
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         stem(x, '.');
         grid;
         title(titleStr);
@@ -41,7 +41,7 @@ methods(Static)
         % Three subplots are created one for each h, x, and y.
         % We assume that length(x) = length(y) and both are vectors
         % Also assume that length(h) <= length(x)
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         N = length(x);
 
         % Plot the FIR filter
@@ -99,7 +99,7 @@ methods(Static)
         f = [0:N-1]/N;
         f = f - 0.5;
         % Create a figure in which frequency response will be plotted
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         % Create a sub plot for magnitude response
         subplot(211);
         % Identify the range of magnitude values
@@ -144,7 +144,7 @@ methods(Static)
         N = 2000;
         unit_circle = exp(2*pi*j*[0:N]/N);
         % Create a full screen figure 
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         % We draw the unit circle
         plot(unit_circle);
         % Actually the command above, plots real part and
@@ -183,7 +183,7 @@ methods(Static)
         x = linspace(x_min,x_max);
 
         % Create a full screen figure 
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         hold on;
         for i=1:num_lines
             a = A(i, :);
@@ -218,7 +218,7 @@ methods(Static)
                 Z(i,j) = f(X(i,j),Y(i,j));
             end
         end
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         subplot(121);
         % Plot the quadratic form.
         surf(X,Y,Z);
