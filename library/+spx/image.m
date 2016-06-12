@@ -1,4 +1,4 @@
-classdef SPX_Image
+classdef image
 
 methods(Static)
 
