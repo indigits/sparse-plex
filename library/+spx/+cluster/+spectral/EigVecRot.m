@@ -1,4 +1,4 @@
-classdef SPX_SCEigVecRot < handle
+classdef EigVecRot < handle
 % Rotation of eigen vectors for detection of number of 
 % clusters and identification of clusters in spectral clustering
 % Implements identification of rotation matrix in terms of
@@ -30,7 +30,7 @@ classdef SPX_SCEigVecRot < handle
 
     methods
 
-        function self = SPX_SCEigVecRot(X, S)
+        function self = EigVecRot(X, S)
             self.X = X;
             self.S = S;
             self.N = size(X, 1);

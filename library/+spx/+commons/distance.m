@@ -1,4 +1,4 @@
-classdef SPX_Distance < handle
+classdef distance 
 
     methods(Static)
 

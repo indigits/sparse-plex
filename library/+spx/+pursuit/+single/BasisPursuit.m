@@ -1,4 +1,4 @@
-classdef SPX_L1SparseRecovery < handle
+classdef BasisPursuit < handle
     % Various ways to solve the under-determined problem of A * x - b
     % one or more signals can be approximated. Each signal is approximated 
     % separately, one by one
@@ -25,7 +25,7 @@ classdef SPX_L1SparseRecovery < handle
     end
 
     methods
-        function self = SPX_L1SparseRecovery(A, B)
+        function self = BasisPursuit(A, B)
             % Constructor
             self.A = A;
             self.B = B;

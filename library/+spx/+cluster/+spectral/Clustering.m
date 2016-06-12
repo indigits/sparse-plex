@@ -1,4 +1,4 @@
-classdef SPX_SpectralClustering < handle
+classdef Clustering < handle
     % Uses spectral clustering method for clustering the data
     % See 2007_tutorial_spectral_clustering.pdf
 
@@ -51,7 +51,7 @@ classdef SPX_SpectralClustering < handle
 
 
     methods
-        function self = SPX_SpectralClustering(WeightedAdjacencyMatrix)
+        function self = Clustering(WeightedAdjacencyMatrix)
             % Constructor
             self.W = WeightedAdjacencyMatrix;
             self.N = size(WeightedAdjacencyMatrix, 1);
@@ -173,7 +173,7 @@ classdef SPX_SpectralClustering < handle
             % Finds out the number of clusters from the changes in singular values
             S = self.SingularValues;
             X = self.EigenVectors;
-            vr = SPX_SCEigVecRot(X, S);
+            vr = spx.cluster.spectral.EigVecRot(X, S);
             vr.Debug = self.Debug;
             if self.MaxClusters > 0
                 vr.MaxClusters = self.MaxClusters;
@@ -194,7 +194,7 @@ classdef SPX_SpectralClustering < handle
         end
 
         function cluster_kmeans(self, eigen_vectors, k)
-            eigen_vectors = SPX_Norm.normalize_l2_rw(eigen_vectors);
+            eigen_vectors = spx.commons.norm.normalize_l2_rw(eigen_vectors);
             n = self.N;
             % eigen vectors matrix is of size [n, k]
             % k seeds are needed
@@ -203,10 +203,10 @@ classdef SPX_SpectralClustering < handle
             % Choose initial seed vectors by kmeans plus-plus algorithm
             all_seeds = zeros(k, k, 0);
             for i=1:self.Replications
-                [seeds, labels] = SPX_KMeans.pp_initialize(eigen_vectors', k);
+                [seeds, labels] = spx.cluster.kmeans.pp_initialize(eigen_vectors', k);
                 all_seeds(:, :, end+1) = seeds';
             end
-            [seeds, labels] = SPX_KMeans.pp_initialize(eigen_vectors', k);
+            [seeds, labels] = spx.cluster.kmeans.pp_initialize(eigen_vectors', k);
             self.Labels = kmeans(eigen_vectors, k, ...
                 'start', all_seeds, ...
                 'maxiter',self.MAXiter, ...

@@ -46,7 +46,7 @@ classdef SSC_L1 < handle
             % prepare sparse representations
             self.recover_coefficients();
             self.build_adjacency();
-            clusterer = SPX_SpectralClustering(self.Adjacency);
+            clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
             clusterer.NumClusters = self.NumSubspaces;
             cluster_labels = clusterer.cluster_random_walk();
             self.Labels = cluster_labels;
@@ -79,7 +79,7 @@ classdef SSC_L1 < handle
                 % dimensions are D x (S - 1)
                 A = data(:, cols);
                 % Prepare the l1 solver
-                solver = SPX_L1SparseRecovery(A, x);
+                solver = spx.pursuit.single.BasisPursuit(A, x);
                 solver.Quiet = true;
                 lambda = 2.5;
                 % Run the solver to obtain sparse representation
@@ -101,7 +101,7 @@ classdef SSC_L1 < handle
         function build_adjacency(self)
             C = abs(self.Representation);
             % Normalize the matrix by column wise maximums
-            C = SPX_Norm.normalize_linf(C);
+            C = spx.commons.norm.normalize_linf(C);
             % Make it symmetric
             C = C + C';
             % Keep it

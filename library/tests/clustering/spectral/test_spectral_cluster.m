@@ -1,8 +1,8 @@
-function test_suite = test_spectral_cluster
-  initTestSuite;
+function tests = test_spectral_cluster
+  tests = functiontests(localfunctions);
 end
 
-function test_gaussian_values
+function test_gaussian_values(testCase)
     points_per_set = 100;
     % number of clusters
     num_clusters = 8;
@@ -25,20 +25,20 @@ function test_gaussian_values
     end
     fprintf('Computing distance matrix\n');
     % prepare the distance matrix
-    dist_matrix = SPX_Distance.pairwise_distances(points);
+    dist_matrix = spx.commons.distance.pairwise_distances(points);
     fprintf('Computing similarity matrix\n');
     % prepare the Gaussian similarity matrix
     % Eigen values have a large impact based on the choice of sigma
     % The lower variance, the closure first num_clusters are to zero.
     % At high variance like sigma=2.5, we completely lose out on clustering accuracy 
     sigma = .5;
-    sim_matrix = SPX_Similarity.gaussian_similarity(dist_matrix, sigma);
+    sim_matrix = spx.cluster.similarity.gaussian_similarity(dist_matrix, sigma);
     % lets see the impact of filtering the similarity matrix
     % sim_matrix = SPX_Similarity.filter_k_nearest_neighbors(sim_matrix, points_per_set*1.5);
 
     % We can now run spectral clustering on it
     fprintf('Initializing spectral clustering algorithm for unnormalized laplacian\n');
-    clusterer = SPX_SpectralClustering(sim_matrix);
+    clusterer = spx.cluster.spectral.Clustering(sim_matrix);
     clusterer.NumClusters = num_clusters;
     fprintf('Performing clustering for unnormalized laplacian\n');
     cluster_labels = clusterer.cluster_unnormalized();
@@ -47,14 +47,14 @@ function test_gaussian_values
     singular_values = clusterer.SingularValues';
     % singular_values(end - num_clusters - 4:end);
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
-    assertElementsAlmostEqual(result.fMeasure, 1.0);
+    verifyEqual(testCase, result.fMeasure, 1.0);
 
 
     % Perform spectral clustering using random walk  version of graph laplacian
     fprintf('Initializing spectral clustering algorithm for random walk version\n');
-    clusterer = SPX_SpectralClustering(sim_matrix);
+    clusterer = spx.cluster.spectral.Clustering(sim_matrix);
     clusterer.NumClusters = num_clusters;
     fprintf('Performing clustering for random walk version\n');
     cluster_labels = clusterer.cluster_random_walk();
@@ -63,13 +63,13 @@ function test_gaussian_values
     singular_values = clusterer.SingularValues';
     % singular_values(end - num_clusters - 4:end)
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
-    assertElementsAlmostEqual(result.fMeasure, 1.0);
+    verifyEqual(testCase, result.fMeasure, 1.0);
 
     % Perform spectral clustering using random walk  version of graph laplacian
     fprintf('Initializing spectral clustering algorithm for normalized symmetric version\n');
-    clusterer = SPX_SpectralClustering(sim_matrix);
+    clusterer = spx.cluster.spectral.Clustering(sim_matrix);
     clusterer.NumClusters = num_clusters;
     fprintf('Performing clustering for normalized symmetric version\n');
     cluster_labels = clusterer.cluster_symmetric();
@@ -78,10 +78,9 @@ function test_gaussian_values
     singular_values = clusterer.SingularValues';
     %singular_values(end - num_clusters - 4:end)
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
-    assertElementsAlmostEqual(result.fMeasure, 1.0);
-
+    verifyEqual(testCase, result.fMeasure, 1.0);
 end
 
 
