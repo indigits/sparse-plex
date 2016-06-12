@@ -12,4 +12,4 @@ A = [a1 a2 a3 a4]';
 
 b = ones(4,1);
 span = [-2 2 -2 2];
-SPX_Plot.polyhedron(A, b, span);
+spx.graphics.plot.polyhedron(A, b, span);
