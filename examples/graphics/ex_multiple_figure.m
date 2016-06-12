@@ -1,6 +1,6 @@
 width = 1024;
 height = 600;
-mf = SPX_Figures(width, height);
+mf = spx.graphics.Figures(width, height);
 
 mf.new_figure('Figure 1');
 

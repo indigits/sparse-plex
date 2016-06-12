@@ -1,4 +1,4 @@
-classdef SPX_Statistics < handle
+classdef stats
 
 methods(Static)
 
@@ -7,7 +7,7 @@ methods(Static)
         % Returns the frequencies of values of a discrete random variable in the dataset
         n = length(data);
         % Reshape data to a row vector
-        data = SPX_Vec.reshape_as_row_vec(data);
+        data = spx.commons.vector.reshape_as_row_vec(data);
         % Identify unique labels in the data set and their frequencies
         [labels, ~, label_map] = unique(data);
         % Lets get the number of unique labels
