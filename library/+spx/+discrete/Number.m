@@ -1,4 +1,4 @@
-classdef Number
+classdef number
     %NUMBER Utility functions for number manipulation
     
     properties
@@ -49,7 +49,7 @@ classdef Number
 
         function result = is_perfect_square(value)
             value = sqrt(value);
-            result  = spx.discrete.Number.is_integer(value);
+            result  = spx.discrete.number.is_integer(value);
         end
 
         function [a, b] =  integer_factors_close_to_sqr_root(n)
