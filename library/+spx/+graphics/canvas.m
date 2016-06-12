@@ -1,5 +1,5 @@
-classdef SPX_Canvas
-    %SPX_IMAGEGRIDCANVAS Helps in displaying images in the form of a grid.
+classdef canvas
+    %canvas Helps in displaying images in the form of a grid.
     
     properties
     end

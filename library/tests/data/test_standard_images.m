@@ -5,6 +5,9 @@ end
 function setupOnce(testCase)
     figure;
 end
+function teardownOnce(testCase)
+    close;
+end
 
 function test_barbara(testCase)
     image = spx.data.standard_images.barbara_gray_512x512();
@@ -24,6 +27,3 @@ function test_lake(testCase)
     pause(.1);
 end
 
-function teardownOnce(testCase)
-    close;
-end

@@ -1,4 +1,4 @@
-classdef SPX_Plot
+classdef plot
 
 methods(Static)
 

@@ -1,5 +1,5 @@
-classdef SPX_Draw < handle
-% SPX_DRAW methods for drawing shapes on current axes
+classdef draw < handle
+% draw methods for drawing shapes on current axes
 
     methods(Static)
 

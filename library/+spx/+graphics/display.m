@@ -1,4 +1,4 @@
-classdef SPX_Display
+classdef display
 
 methods(Static)
 
@@ -15,7 +15,7 @@ methods(Static)
             end
         end
         if fresh_figure
-            SPX_Figures.full_screen_figure;
+            spx.graphics.figure.full_screen;
         end
         % The matrix displayed as image
         imagesc(A);
@@ -30,7 +30,7 @@ methods(Static)
 
 
     function figure_handle = dictionary_atoms_as_images(dict, options)
-        figure_handle = SPX_Figures.full_screen_figure;
+        figure_handle = spx.graphics.figure.full_screen;
         [N, D] = size(dict);
         [rows, cols] = SPX_Number.integer_factors_close_to_sqr_root(D);
         counter = 0;
@@ -59,7 +59,7 @@ methods(Static)
         absG = abs(G);
         % Let us set all the diagonal elements to zero
         absG(logical(eye(size(absG)))) = 0;
-        figH = SPX_Figures.full_screen_figure;
+        figH = spx.graphics.figure.full_screen;
         imagesc(absG);
         colormap(gray);
     end
