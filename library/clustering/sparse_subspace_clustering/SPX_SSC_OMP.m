@@ -83,7 +83,7 @@ classdef SPX_SSC_OMP < handle
                 solver.Verbose = false;
                 solver.IgnoredAtom = s;
                 % Run the solver to obtain sparse representation
-                result = solver.solve_qr(x);
+                result = solver.solve(x);
                 % The obtained representation is in R^{S - 1} dimensions
                 % Put back the representation
                 self.Representation(:, s) = result.z;
