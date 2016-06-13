@@ -82,7 +82,7 @@ if perform_ssc_omp
     disp(combined_labels);
 
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
     fprintf('Sparse subspace clustering results:\n');
     comparer.printF1MeasureResult(result);

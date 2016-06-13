@@ -70,7 +70,7 @@ mf = spx.graphics.Figures();
 if perform_sparse_subspace_clustering 
     tstart = tic; 
     % Application of Sparse subspace clustering
-    ssc = SPX_SparseSubspaceClustering(X, d, ns);
+    ssc = spx.cluster.ssc.SSC_L1(X, d, ns);
     result = ssc.solve();
     elapsed_time = toc(tstart);
     fprintf('Sparse subspace clustering time spent: %.2f seconds\n', elapsed_time);
@@ -80,7 +80,7 @@ if perform_sparse_subspace_clustering
     disp(combined_labels);
 
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
     fprintf('Sparse subspace clustering results:\n');
     comparer.printF1MeasureResult(result);

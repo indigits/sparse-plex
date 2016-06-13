@@ -85,7 +85,7 @@ function result = SimulateSSCOMP_3Spaces(D, K, Ng, theta, SNR, shuffle)
     result.cluster_labels = cluster_labels;
 
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result.comparison = comparer.fMeasure();
     % fprintf('Sparse subspace clustering results:\n');
     % comparer.printF1MeasureResult(result.comparison);

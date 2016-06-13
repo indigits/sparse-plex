@@ -42,7 +42,7 @@ combined_labels = [true_labels cluster_labels]';
 disp(combined_labels);
 
 % Time to compare the clustering
-comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
 result = comparer.fMeasure();
 comparer.printF1MeasureResult(result);
 

@@ -44,7 +44,7 @@ combined_labels = [true_labels cluster_labels]';
 % We can print the singular values if required.
 singular_values = clusterer.SingularValues';
 % Time to compare the clustering
-comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
 result = comparer.fMeasure();
 fprintf('Clustering F-measure: %.2f\n', result.fMeasure);
 

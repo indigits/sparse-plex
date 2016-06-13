@@ -102,7 +102,7 @@ if perform_sparse_representation_clustering
     disp(src_combined_labels);
 
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, src_cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, src_cluster_labels);
     result = comparer.fMeasure();
     fprintf('Sparse representation clustering results:\n');
     comparer.printF1MeasureResult(result);
@@ -126,7 +126,7 @@ if perform_sparse_subspace_clustering
     disp(combined_labels);
 
     % Time to compare the clustering
-    comparer = SPX_ClusterComparison(true_labels, cluster_labels);
+    comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
     result = comparer.fMeasure();
     fprintf('Sparse subspace clustering results:\n');
     comparer.printF1MeasureResult(result);
