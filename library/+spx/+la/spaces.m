@@ -1,4 +1,4 @@
-classdef SPX_Spaces < handle
+classdef spaces
 % Utility functions to work with vector spaces
 
     methods(Static)
@@ -38,7 +38,7 @@ classdef SPX_Spaces < handle
             A  = orth(A);
             rank_a = size(A,2);
             C = [A B];
-            Q = qr(C, 0);
+            [Q, R] = qr(C, 0);
             % Leave the first rank_a columns from A
             result = Q(:, rank_a+ 1:end);
         end
