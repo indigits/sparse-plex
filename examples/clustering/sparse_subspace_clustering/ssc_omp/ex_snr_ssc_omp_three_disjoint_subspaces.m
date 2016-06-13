@@ -80,7 +80,7 @@ mf = spx.graphics.Figures();
 if perform_ssc_omp 
     tstart = tic; 
     % Application of Sparse subspace clustering
-    solver = SPX_SSC_OMP(X, K, ns);
+    solver = spx.cluster.ssc.SSC_OMP(X, K, ns);
     result = solver.solve();
     elapsed_time = toc(tstart);
     fprintf('SSC OMPtime spent: %.2f seconds\n', elapsed_time);
@@ -104,7 +104,7 @@ end
 if perform_ssc_nn_omp 
     tstart = tic; 
     % Application of Sparse subspace clustering
-    solver = SPX_SSC_NN_OMP(X, K, ns);
+    solver = spx.cluster.ssc.SSC_NN_OMP(X, K, ns);
     result = solver.solve();
     elapsed_time = toc(tstart);
     fprintf('SSC NN OMP time spent: %.2f seconds\n', elapsed_time);

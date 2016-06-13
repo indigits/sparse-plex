@@ -28,7 +28,7 @@ for nd=1:num_data_sets
     sqrt_dist_mat = SPX_Distance.sqrd_l2_distances_rw(dataset);
     sim_mat = SPX_Similarity.gauss_sim_from_sqrd_dist_mat(sqrt_dist_mat, scale);
     % Run clustering on the dataset
-    clusterer = SPX_SpectralClustering(sim_mat);
+    clusterer = spx.cluster.spectral.Clustering(sim_mat);
     clusterer.NumClusters = num_clusters;
     %cluster_labels = clusterer.cluster_symmetric();
     cluster_labels = clusterer.cluster_random_walk();

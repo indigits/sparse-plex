@@ -52,7 +52,7 @@ classdef SSC_NN_OMP < handle
             % prepare sparse representations
             self.recover_coefficients();
             self.build_adjacency();
-            clusterer = SPX_SpectralClustering(self.Adjacency);
+            clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
             % keep reference for debugging purposes.
             self.Clusterer = clusterer;
             clusterer.NumClusters = self.NumSubspaces;

@@ -54,7 +54,7 @@ classdef SPX_SparseRepClustering < handle
         function result = solve(self)
             % prepare sparse representations
             self.build_adjacency();
-            clusterer = SPX_SpectralClustering(self.Adjacency);
+            clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
             clusterer.Debug = self.Debug;
             self.Spectral = clusterer;
             clusterer.MAXiter = self.SpectralKMeansMaxIter;

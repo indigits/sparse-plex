@@ -72,7 +72,7 @@ mf = spx.graphics.Figures();
 if perform_ssc_omp 
     tstart = tic; 
     % Application of Sparse subspace clustering
-    solver = SPX_SSC_OMP(X, K, ns);
+    solver = spx.cluster.ssc.SSC_OMP(X, K, ns);
     result = solver.solve();
     elapsed_time = toc(tstart);
     fprintf('Sparse subspace clustering time spent: %.2f seconds\n', elapsed_time);

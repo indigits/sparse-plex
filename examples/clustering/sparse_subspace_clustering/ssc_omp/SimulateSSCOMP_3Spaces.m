@@ -72,7 +72,7 @@ function result = SimulateSSCOMP_3Spaces(D, K, Ng, theta, SNR, shuffle)
 
     tstart = tic; 
     % Application of Sparse subspace clustering
-    solver = SPX_SSC_OMP(X, K, ns);
+    solver = spx.cluster.ssc.SSC_OMP(X, K, ns);
     solver.Quiet = true;
     ssc_result = solver.solve();
     elapsed_time = toc(tstart);

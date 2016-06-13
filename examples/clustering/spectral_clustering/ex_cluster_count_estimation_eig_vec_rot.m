@@ -38,7 +38,7 @@ sim_matrix = SPX_Similarity.gauss_sim_from_sqrd_dist_mat(sqrt_dist_mat, sigma);
 % sim_matrix = SPX_Similarity.filter_k_nearest_neighbors(sim_matrix, points_per_set*1.5);
 
 % We can now run spectral clustering on it
-clusterer = SPX_SpectralClustering(sim_matrix);
+clusterer = spx.cluster.spectral.Clustering(sim_matrix);
 cluster_labels = clusterer.cluster_random_walk();
 combined_labels = [true_labels cluster_labels]';
 % We can print the singular values if required.
