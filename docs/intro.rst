@@ -4,6 +4,13 @@ Introduction
 **Sparse-plex** is a MATLAB library for solving
 sparse representation problems. 
 
+
+Currently the library is broken as it is going through
+massive changes. Will update later.
+
+
+
+
 The library website is : http://indigits.github.io/sparse-plex/.
 
 
