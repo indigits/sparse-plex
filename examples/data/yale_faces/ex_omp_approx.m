@@ -25,7 +25,7 @@ A = spx.dict.simple.gaussian_mtx(N, D);
 dc_atom = (1/sqrt(N)) * ones(N, 1);
 % throw away one original atom and replace with DC.
 A = [dc_atom A(:, 1:D-1)];
-dictionary = SPX_MatrixOperator(A);
+dictionary = spx.dict.MatrixOperator(A);
 
 
 yf = SPX_YaleFaces();

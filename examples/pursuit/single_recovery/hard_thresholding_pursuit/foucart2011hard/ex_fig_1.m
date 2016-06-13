@@ -54,7 +54,7 @@ for K=Ks
 
 
             % Hard thresholding pursuit solver instance
-            solver = SPX_HardThresholdingPursuit(Phi, K);
+            solver = spx.pursuit.single.HardThresholdingPursuit(Phi, K);
             solver.NormalizedMode = true;
             % Solve the sparse recovery problem
             nhtp_result = solver.solve(y);

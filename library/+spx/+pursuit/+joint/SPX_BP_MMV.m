@@ -18,10 +18,10 @@ classdef SPX_BP_MMV < handle
     methods
         function self  = SPX_BP_MMV(Dict)
             % We assume that all the columns in dictionary are normalized.
-            if isa(Dict, 'SPX_Operator')
+            if isa(Dict, 'spx.dict.Operator')
                 self.Dict = Dict;
             elseif ismatrix(Dict)
-                self.Dict = SPX_MatrixOperator(Dict); 
+                self.Dict = spx.dict.MatrixOperator(Dict); 
             else
                 error('Unsupported operator.');
             end

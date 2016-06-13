@@ -12,7 +12,7 @@ mf = spx.graphics.Figures();
 % Signal space 
 N = 256;
 % Number of measurements
-M = 32;
+M = 64;
 % Sparsity level
 K = 4;
 % Construct the signal generator.
@@ -24,7 +24,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 y = Phi.apply(x);
 % Hard thresholding pursuit solver instance
-solver = SPX_HardThresholdingPursuit(Phi, K);
+solver = spx.pursuit.single.HardThresholdingPursuit(Phi, K);
 solver.Verbose = true;
 solver.NormalizedMode = true;
 % Solve the sparse recovery problem

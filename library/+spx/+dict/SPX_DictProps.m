@@ -20,7 +20,7 @@ classdef SPX_DictProps < handle
 
     methods
         function self = SPX_DictProps(Dict)
-            if isa(Dict, 'SPX_Operator')
+            if isa(Dict, 'spx.dict.Operator')
                 self.Dict = double(Dict);
             elseif ismatrix(Dict)
                 self.Dict = Dict; 

@@ -40,10 +40,10 @@ classdef SPX_ConjugateDescent < handle
         % Public methods
         function self = SPX_ConjugateDescent(A, B)
             % Constructor
-            if isa(A, 'SPX_Operator')
+            if isa(A, 'spx.dict.Operator')
                 self.A = A;
             elseif ismatrix(A)
-                self.A = SPX_MatrixOperator(A); 
+                self.A = spx.dict.MatrixOperator(A); 
             else
                 error('Unsupported operator.');
             end

@@ -15,12 +15,12 @@ The dictionaries are available in
 two flavors: 
 
 #. As simple matrices
-#. As objects which implement the ``SPX_Operator`` abstraction defined below.
+#. As objects which implement the ``spx.dict.Operator`` abstraction defined below.
 
 The functions returning the dictionary
 as a simple matrix have a suffix "mtx".
 The functions returning the dictionary
-as a ``SPX_Operator`` have the suffix
+as a ``spx.dict.Operator`` have the suffix
 "dict" at the end.
 
 These functions can also be used
@@ -120,7 +120,7 @@ to construct a composite dictionary, e.g. :math:`\Phi \Psi`.
 
 In order to take care of these scenarios, 
 we define the notion of a generic operator
-in an abstract class ``SPX_Operator``.
+in an abstract class ``spx.dict.Operator``.
 All operators support following methods.
 
 
@@ -182,12 +182,12 @@ Matrix operators
 ------------------------------
 
 Matrix operators are constructed by
-wrapping a given matrix into ``SPX_MatrixOperator``
-which is a subclass of ``SPX_Operator``.
+wrapping a given matrix into ``spx.dict.MatrixOperator``
+which is a subclass of ``spx.dict.Operator``.
 
 Constructing the matrix operator from a matrix ``A``::
 
-    op = SPX_MatrixOperator(A)
+    op = spx.dict.MatrixOperator(A)
 
 The matrix operator holds references to the matrix
 as well as its Hermitian transpose::
