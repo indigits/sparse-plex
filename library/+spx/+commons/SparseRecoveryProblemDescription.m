@@ -1,4 +1,4 @@
-classdef SPX_SparseRecoveryProblemDescription < handle
+classdef SparseRecoveryProblemDescription < handle
 
     properties
         Dict
@@ -22,7 +22,7 @@ classdef SPX_SparseRecoveryProblemDescription < handle
     end
 
     methods
-        function self = SPX_SparseRecoveryProblemDescription(Dict, Phi, K, ...
+        function self = SparseRecoveryProblemDescription(Dict, Phi, K, ...
             Representations, Signals, Measurements)
             if isstruct(Dict)
                 % This looks like a problem defined in 

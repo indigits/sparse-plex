@@ -1,5 +1,5 @@
-classdef SPX_Signals
-    %SPX_Signals Helper functions for working with signals
+classdef signals
+    %signals Helper functions for working with signals
     
     properties
     end

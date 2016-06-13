@@ -17,8 +17,8 @@ classdef CompositeOperator < spx.dict.Operator
         end
 
         function [m, n] = size(self)
-            [m, _] = size(f);
-            [_, n] = size(g);
+            [m, ~] = size(f);
+            [~, n] = size(g);
         end
 
         function result = apply(self, vectors)

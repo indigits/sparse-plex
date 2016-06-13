@@ -1,4 +1,4 @@
-classdef SPX_Unitary
+classdef Unitary
     % Ways to create unitary matrices
     properties
     end

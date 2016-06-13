@@ -1,4 +1,4 @@
-classdef SPX_SignalsComparison < handle
+classdef SignalsComparison < handle
     % Compares a signal and its approximation over some dictionary
     % The comparison happens in signal space not in measurement space.
 
@@ -25,7 +25,7 @@ classdef SPX_SignalsComparison < handle
     end
 
     methods
-        function self = SPX_SignalsComparison(References, Estimates)
+        function self = SignalsComparison(References, Estimates)
             self.References = References;
             self.Estimates = Estimates;
             assert(all(size(References) == size(Estimates)));

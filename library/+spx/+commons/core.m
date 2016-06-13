@@ -1,4 +1,4 @@
-classdef SPX
+classdef core
 % General utility functions
 methods(Static)
 

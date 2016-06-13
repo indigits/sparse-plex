@@ -1,4 +1,4 @@
-classdef SPX_PhaseTransitionConfiguration < handle
+classdef PhaseTransitionConfiguration < handle
 
 properties
     % Number of atoms
@@ -16,7 +16,7 @@ properties
 end
 
 methods
-    function self = SPX_PhaseTransitionConfiguration(N_)
+    function self = PhaseTransitionConfiguration(N_)
     	if ~SPX_Number.is_power_of_2(N_)
     		error(sprintf('N=%d must be a power of 2.', N_));
     	end

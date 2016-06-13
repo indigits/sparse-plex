@@ -1,4 +1,4 @@
-classdef SPX_Lang
+classdef lang
 % Useful methods for extending Language core functionality
 
 methods(Static)
