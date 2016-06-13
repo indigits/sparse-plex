@@ -34,7 +34,7 @@ true_labels = [1*ones(s1,1) ; 2*ones(s2,1)];
 % the largest dimension amongst all subspaces
 K = max(d1, d2);
 % All signals are expected to  have a K-sparse representation
-ssc = SPX_SparseSubspaceClustering(X, K, ns);
+ssc = spx.cluster.ssc.SSC_L1(X, K, ns);
 result = ssc.solve();
 
 cluster_labels = result.Labels;
