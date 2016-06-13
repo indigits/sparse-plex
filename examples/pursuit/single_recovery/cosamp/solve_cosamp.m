@@ -23,7 +23,7 @@ function [ z, stats ] = solve_cosamp( Phi, K, y, x)
     hT0C = h(stats.T0C);
     stats.recoveryErrorVectorT0C = hT0C;
     % The K largest indices after T0 in recovery error (set of indices)
-    stats.T1 = SPX_Signals.largest_indices(hT0C, K);
+    stats.T1 = spx.commons.signals.largest_indices(hT0C, K);
     % The recovery error component over T1. [K] length vector.
     hT1 = h(stats.T1);
     stats.recoveryErrorVectorT1 = hT1;
@@ -33,7 +33,7 @@ function [ z, stats ] = solve_cosamp( Phi, K, y, x)
     hTRest = h(stats.TRest);
     stats.recoveryErrorVectorTRest = hTRest;
     % largest indices of the recovered vector
-    stats.TT0 = SPX_Signals.largest_indices(z, K);
+    stats.TT0 = spx.commons.signals.largest_indices(z, K);
     % Support Overlap
     stats.supportOverlap = intersect(stats.T0, stats.TT0);
     % Support recovery ratio

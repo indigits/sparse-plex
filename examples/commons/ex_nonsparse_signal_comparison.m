@@ -19,7 +19,7 @@ SNR = 15;
 Noise = SPX_NoiseGen.createNoise(X, SNR);
 Y = X + Noise;
 
-cs = SPX_SignalsComparison(X, Y);
+cs = spx.commons.signalsComparison(X, Y);
 cs.difference_norms()
 cs.reference_norms()
 cs.estimate_norms()

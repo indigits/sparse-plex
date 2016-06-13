@@ -79,7 +79,7 @@ classdef SSC_OMP < handle
                 % s-th data vector
                 x = data(:, s);
                 % Prepare the l1 solver
-                solver = SPX_OrthogonalMatchingPursuit(data, self.K);
+                solver = spx.pursuit.single.OrthogonalMatchingPursuit(data, self.K);
                 solver.Verbose = false;
                 solver.IgnoredAtom = s;
                 % Run the solver to obtain sparse representation

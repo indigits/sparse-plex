@@ -46,7 +46,7 @@ psnrs = zeros(1, S);
 fprintf('Total images: %d\n', S);
 for s=1:S
     Y = images(:, s);
-    solver = SPX_OrthogonalMatchingPursuit(dictionary);
+    solver = spx.pursuit.single.OrthogonalMatchingPursuit(dictionary);
     solver.MaxResNorm = target.rnorm;
     solver.Verbose = true;
     fprintf('sparsifying image: %d\n', s);

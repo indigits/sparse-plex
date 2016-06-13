@@ -32,8 +32,8 @@ result = solver.solve(y);
 % Solution vector
 z = result.z;
 fprintf('Number of iterations: %d\n', result.iterations);
-stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
-SPX_SparseRecovery.print_recovery_performance(stats);
+stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
+spx.commons.sparse.print_recovery_performance(stats);
 
 mf.new_figure('HTP solution');
 subplot(411);

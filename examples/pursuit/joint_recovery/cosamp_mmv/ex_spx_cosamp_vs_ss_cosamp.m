@@ -60,7 +60,7 @@ for K=Ks
             % sscosamp solver
             singleMatrixOpts = struct;
             [z supp iters] = singleMatrixCoSaMP(y, Phi.A, K, singleMatrixOpts);
-            sscosamp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+            sscosamp_stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
             sscosamp_num_iterations = sscosamp_num_iterations + iters;
             if sscosamp_max_iterations < iters
                 sscosamp_max_iterations = iters;
@@ -74,7 +74,7 @@ for K=Ks
             csmp_result = solver.solve(y);
             % Solution vector
             z = csmp_result.Z;
-            csmp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+            csmp_stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
             csmp_num_iterations = csmp_num_iterations + csmp_result.iterations;
             if csmp_max_iterations < csmp_result.iterations
                 csmp_max_iterations = csmp_result.iterations;

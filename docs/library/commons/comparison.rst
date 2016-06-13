@@ -74,7 +74,7 @@ SNR for each signal::
     cs.signal_to_noise_ratios()
 
 In case the signals X and Y were not 
-truly sparse, then ``SPX_SignalsComparison``
+truly sparse, then ``spx.commons.signalsComparison``
 has the ability to sparsify them 
 by choosing the ``K`` largest (magnitude)
 entries for each signal in reference signal
@@ -144,13 +144,13 @@ Signal space comparison
 ---------------------------------------------------
 
 For comparing signals which are not sparse,
-we have another helper utility class ``SPX_SignalsComparison``. 
+we have another helper utility class ``spx.commons.signalsComparison``. 
 
 Assuming X is a signal matrix (with each column treated
 as a signal), and Y is its noisy version, 
 we created the signal comparison instance as::
 
-    cs = SPX_SignalsComparison(X, Y);
+    cs = spx.commons.signalsComparison(X, Y);
 
 Most functions are similar to what we had for
 ``SPX_SparseSignalsComparison``::

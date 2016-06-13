@@ -135,7 +135,7 @@ classdef sparse < handle
             hT0C = h(result.T0C);
             result.recovery_error_vector_T0C = hT0C;
             % The K largest indices after T0 in recovery error (set of indices)
-            result.T1 = SPX_Signals.largest_indices(hT0C, K);
+            result.T1 = spx.commons.signals.largest_indices(hT0C, K);
             % The recovery error component over T1. [K] length vector.
             hT1 = h(result.T1);
             result.recovery_error_vector_T1 = hT1;
@@ -145,7 +145,7 @@ classdef sparse < handle
             hTRest = h(result.TRest);
             result.recovery_error_vector_TRest = hTRest;
             % largest indices of the recovered vector
-            result.TT0 = sort(SPX_Signals.largest_indices(x_rec, K));
+            result.TT0 = sort(spx.commons.signals.largest_indices(x_rec, K));
             % Support Overlap
             result.support_overlap = intersect(result.T0, result.TT0);
             % Support recovery ratio
@@ -167,7 +167,7 @@ classdef sparse < handle
         end
 
         function print_recovery_performance(result)
-            fprintf('Recovery success: %s\n', SPX.yes_no(result.success));
+            fprintf('Recovery success: %s\n', spx.commons.core.yes_no(result.success));
             fprintf('Representation norm: %0.4f\n', result.representation_norm);
             fprintf('Measurement norm: %0.4f\n', result.measurement_norm);
             fprintf('Reconstruction norm: %0.4f\n', result.reconstruction_norm);

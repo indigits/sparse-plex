@@ -60,7 +60,7 @@ for K=Ks
             nhtp_result = solver.solve(y);
             % Solution vector
             z = nhtp_result.z;
-            nhtp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+            nhtp_stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
             nhtp_num_iterations = nhtp_num_iterations + nhtp_result.iterations;
             if nhtp_max_iterations < nhtp_result.iterations
                 nhtp_max_iterations = nhtp_result.iterations;
@@ -74,7 +74,7 @@ for K=Ks
             csmp_result = solver.solve(y);
             % Solution vector
             z = csmp_result.z;
-            csmp_stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
+            csmp_stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
             csmp_num_iterations = csmp_num_iterations + csmp_result.iterations;
             if csmp_max_iterations < csmp_result.iterations
                 csmp_max_iterations = csmp_result.iterations;

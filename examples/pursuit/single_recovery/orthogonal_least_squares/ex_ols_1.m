@@ -29,8 +29,8 @@ solver = SPX_OrthogonalLeastSquares(Phi, K);
 result = solver.solve(y);
 % Solution vector
 z = result.z;
-stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
-SPX_SparseRecovery.print_recovery_performance(stats);
+stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
+spx.commons.sparse.print_recovery_performance(stats);
 
 mf.new_figure('OLS solution');
 subplot(411);

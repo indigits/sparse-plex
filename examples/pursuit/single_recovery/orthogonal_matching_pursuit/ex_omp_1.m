@@ -7,32 +7,32 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 % Signal space 
 N = 256;
 % Number of measurements
-M = 256;
+M = 64;
 % Sparsity level
-K = 128;
+K = 10;
 % Construct the signal generator.
-gen  = SPX_SparseSignalGenerator(N, K);
+gen  = spx.data.synthetic.SparseSignalGenerator(N, K);
 % Generate bi-uniform signals
 x = gen.biUniform(1, 2);
 % Sensing matrix
-Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 y = Phi.apply(x);
 % OMP MMV solver instance
-solver = SPX_OrthogonalMatchingPursuit(Phi, K);
+solver = spx.pursuit.single.OrthogonalMatchingPursuit(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(y);
 % Solution vector
 z = result.z;
 
 
-stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, z);
-SPX_SparseRecovery.print_recovery_performance(stats);
+stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
+spx.commons.sparse.print_recovery_performance(stats);
 
 mf.new_figure('OMP solution');
 subplot(411);

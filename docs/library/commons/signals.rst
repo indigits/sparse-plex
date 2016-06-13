@@ -38,25 +38,25 @@ Finding the K-largest indices of a given signal::
 
     >> x = [0 0 0  1 0 0 -1 0 0 -2 0 0 -3 0 0 7 0 0 4 0 0 -6];
     >> K=4;
-    >> SPX_Signals.largest_indices(x, K)'
+    >> spx.commons.signals.largest_indices(x, K)'
     16    22    19    13
 
 Constructing the sparse approximation of ``x``
 with ``K`` largest indices::
 
-    >> SPX_Signals.sparseApproximation(x, K)'
+    >> spx.commons.signals.sparseApproximation(x, K)'
     0     0     0     0     0     0     0     0     0     0     0     0    -3     0     0     7     0     0     4     0     0    -6
 
 Searching
 ----------------------
 
 
-``SPX_Signals.find_first_signal_with_energy_le`` 
+``spx.commons.signals.find_first_signal_with_energy_le`` 
 finds the first signal in a signal matrix ``X``
 with an energy less than or equal to 
 a given ``threshold`` energy::
 
-    [x, i] = SPX_Signals.find_first_signal_with_energy_le(X, threshold);
+    [x, i] = spx.commons.signals.find_first_signal_with_energy_le(X, threshold);
 
 ``x`` is the first signal with energy less
 than the given threshold. 

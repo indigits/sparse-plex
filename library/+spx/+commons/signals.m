@@ -40,7 +40,7 @@ classdef signals
             %   K: Number of terms to keep in sparse approximation
             N = length(x);
             % Let us find the K-sparse approximation of x directly
-            indices = SPX_Signals.largest_indices(x, K);
+            indices = spx.commons.signals.largest_indices(x, K);
             % K-sparse approximation of x
             approxX = zeros(N,1);
             approxX(indices) = x(indices);

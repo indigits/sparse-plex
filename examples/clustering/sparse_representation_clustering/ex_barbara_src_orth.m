@@ -42,7 +42,7 @@ fprintf('K-means time spent: %.8f seconds\n', src.Spectral.KMeansTime);
 
 % Now perform full OMP recovery
 tstart = tic;
-omp = SPX_OrthogonalMatchingPursuit(Phi, K);
+omp = spx.pursuit.single.OrthogonalMatchingPursuit(Phi, K);
 omp.StopOnResidualNorm = false;
 omp.StopOnResNormStable = false;
 result = omp.solve_all_linsolve(signals);

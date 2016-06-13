@@ -74,7 +74,7 @@ if perform_sparse_representation_clustering
     tstart = tic; 
     % We will now go for sparse representation clustering
     if strcmp(src_recovery_algo, 'omp')
-        omp_solver = SPX_OrthogonalMatchingPursuit(Dict, K);
+        omp_solver = spx.pursuit.single.OrthogonalMatchingPursuit(Dict, K);
         solutions = omp_solver.solve_all_linsolve(X);
         representations = solutions.Z;
     elseif strcmp(src_recovery_algo ,'l1')

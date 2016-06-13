@@ -72,7 +72,7 @@ classdef HardThresholdingPursuit < handle
                 % Find a new estimate by adding the residual proxy to old estimate
                 estimate = z + scaling_factor * residual_proxy;
                 % Apply hard thresholding to pick K largest entries in the new estimate
-                omega = sort(SPX_Signals.largest_indices(estimate, k));
+                omega = sort(spx.commons.signals.largest_indices(estimate, k));
                 % If support hasn't changed, then there is no need to proceed further
                 if ~isempty(omega_prev) && all(omega == omega_prev)
                     if self.Verbose fprintf('Breaking on support stability\n'); end

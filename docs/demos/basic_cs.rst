@@ -119,7 +119,7 @@ Matching pursuit recovery error: 0.1612.
 
 Sparse recovery using orthogonal matching pursuit::
 
-    solver = SPX_OrthogonalMatchingPursuit(Phi, K);
+    solver = spx.pursuit.single.OrthogonalMatchingPursuit(Phi, K);
     result = solver.solve(y);
     omp_solution = result.z;
     omp_diff = x - omp_solution;

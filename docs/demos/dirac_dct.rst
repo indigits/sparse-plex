@@ -88,7 +88,7 @@ Matching pursuit recovery error: 0.0353.
 
 Obtaining the sparse representation using orthogonal matching pursuit algorithm::
 
-    solver = SPX_OrthogonalMatchingPursuit(Phi, K);
+    solver = spx.pursuit.single.OrthogonalMatchingPursuit(Phi, K);
     result = solver.solve(x);
     omp_solution = result.z;
     omp_diff = alpha - omp_solution;

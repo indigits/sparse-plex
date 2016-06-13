@@ -118,7 +118,7 @@ end
 methods(Access=protected)
     function update_representations(self)
         % We now create sparse representations
-        omp = SPX_OrthogonalMatchingPursuit(self.Dict, self.K);
+        omp = spx.pursuit.single.OrthogonalMatchingPursuit(self.Dict, self.K);
         omp.StopOnResidualNorm = false;
         omp.StopOnResNormStable = false;
         % Solve all sparse approximation problems

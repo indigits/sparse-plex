@@ -79,7 +79,7 @@ methods
                     % Compare references and reconstructions 
                     sscomp = SPX_SparseSignalsComparison(x, x_rec, K);
                     all_success = sscomp.all_have_matching_supports();
-                    % stats = SPX_SparseRecovery.recovery_performance(Phi, K, y, x, x_rec);
+                    % stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, x_rec);
                     % Check whether we succeeded or failed.
                     if all_success
                         num_successes = num_successes + 1;

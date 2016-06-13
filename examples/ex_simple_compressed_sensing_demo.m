@@ -182,7 +182,7 @@ fprintf('Matching pursuit recovery error: %0.4f\n', mp_recovery_error);
 
 
 % Orthogonal Matching pursuit
-solver = SPX_OrthogonalMatchingPursuit(Phi, K);
+solver = spx.pursuit.single.OrthogonalMatchingPursuit(Phi, K);
 result = solver.solve(y);
 mf.new_figure('Orthogonal Matching pursuit solution');
 omp_solution = result.z;
