@@ -7,7 +7,7 @@ Compressive sampling matching pursuit
 
 Constructing the solver with dictionary and expected sparsity level::
 
-    solver = SPX_CoSaMP(Dict, K)
+    solver = spx.pursuit.single.CoSaMP(Dict, K)
 
 
 Using the solver to obtain the sparse representation of one vector::

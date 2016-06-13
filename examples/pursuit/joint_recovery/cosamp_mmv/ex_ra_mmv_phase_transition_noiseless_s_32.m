@@ -22,7 +22,7 @@ P = 2;
 % pta.NumTrials = 100;
 dict_model = @(M, N) spx.dict.simple.gaussian_dict(M, N);
 data_model = @(N, K) spx.data.synthetic.SparseSignalGenerator(N, K, S).gaussian;
-recovery_solver = @(Phi, K, y) SPX_CoSaMP_MMV(Phi, K, P, solver_options).solve(y).Z;
+recovery_solver = @(Phi, K, y) spx.pursuit.single.CoSaMP_MMV(Phi, K, P, solver_options).solve(y).Z;
 pta.run(dict_model, data_model, recovery_solver);
 pta.save_results(target_file_path);
 

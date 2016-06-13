@@ -69,7 +69,7 @@ for K=Ks
 
 
             % CoSaMP solver instance
-            solver = SPX_CoSaMP(Phi, K);
+            solver = spx.pursuit.single.CoSaMP(Phi, K);
             % Solve the sparse recovery problem
             csmp_result = solver.solve(y);
             % Solution vector
@@ -83,8 +83,8 @@ for K=Ks
 
 
             fprintf('K=%d, Trial: %d, NHTP: %s, CSMP: %s\n', ...
-                K, nt, SPX.true_false_short(nhtp_stats.success), ...
-                SPX.true_false_short(csmp_stats.success));
+                K, nt, spx.commons.core.true_false_short(nhtp_stats.success), ...
+                spx.commons.core.true_false_short(csmp_stats.success));
         end
     end
     nhtp_success_rate = nhtp_num_successes / num_trials;

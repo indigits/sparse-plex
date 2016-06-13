@@ -26,7 +26,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi * X;
 
-solver = SPX_CoSaMP_MMV(Phi, K);
+solver = spx.pursuit.single.CoSaMP_MMV(Phi, K);
 solver.RankAwareResidual = true;
 result = solver.solve(Y);
 fprintf('Number of iterations: %d\n', result.iterations);

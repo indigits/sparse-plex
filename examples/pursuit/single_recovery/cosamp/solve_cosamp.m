@@ -3,7 +3,7 @@ function [ z, stats ] = solve_cosamp( Phi, K, y, x)
     [M, N] = size(Phi);
     epsilon = 1e-6;
     %We now setup our recovery program.
-    solver = SPX_CoSaMP(Phi, K);
+    solver = spx.pursuit.single.CoSaMP(Phi, K);
     result = solver.solve(y);
     % recovered representation. N length vector
     z = result.z;
