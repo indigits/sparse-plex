@@ -6,7 +6,7 @@ clc;
 
 export = true;
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 mf.new_figure('Optimum Grassmannian Coherence');
 hold on;
 Ms = [4, 8, 12, 16];

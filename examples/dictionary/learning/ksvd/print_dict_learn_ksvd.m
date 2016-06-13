@@ -10,7 +10,7 @@ matched_atom_ratios = tracker.MatchedAtomRatios;
 total_errors = tracker.TotalErrors;
 iterations = tracker.Counter - 1;
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 SPX_Display.dictionary_atoms_as_images(tracker.TrueDictionary, ...
     struct('title', 'Original Dictionary'));
 

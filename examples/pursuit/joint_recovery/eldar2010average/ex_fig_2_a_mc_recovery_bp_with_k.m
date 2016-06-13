@@ -9,7 +9,7 @@ M = 64;
 % Signal space 
 N = 2 * M;
 % Dirac-Fourier Dictionary
-Phi = SPX_SimpleDicts.dirac_fourier_dict(M);
+Phi = spx.dict.simple.dirac_fourier_dict(M);
 
 % Number of signals
 Ss = [1, 2, 4, 8, 16, 32];
@@ -41,7 +41,7 @@ for ns=1:num_ss
             % Solution vectors
             X_BP = result.Z;
             % Comparison
-            cs = SPX_SparseSignalsComparison(X, X_BP, K);
+            cs = spx.commons.SparseSignalsComparison(X, X_BP, K);
             snr = cs.cum_signal_to_noise_ratio;
             bp_success = snr > snr_threshold;
             num_bp_successes = num_bp_successes + bp_success;

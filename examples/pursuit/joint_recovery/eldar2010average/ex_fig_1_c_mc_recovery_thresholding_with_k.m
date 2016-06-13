@@ -28,7 +28,7 @@ for ns=1:num_ss
         num_thr_successes = 0;
         for nt=1:num_trials
             % Sensing matrix
-            Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+            Phi = spx.dict.simple.gaussian_dict(M, N);
             X = model_1_data(N, K, S);
             % Measurement vectors
             Y = Phi * X;
@@ -40,7 +40,7 @@ for ns=1:num_ss
             % Solution vectors
             X_OMP = result.Z;
             % Comparison
-            cs = SPX_SparseSignalsComparison(X, X_OMP, K);
+            cs = spx.commons.SparseSignalsComparison(X, X_OMP, K);
             snr = cs.cum_signal_to_noise_ratio;
             thr_success = snr > snr_threshold;
             num_thr_successes = num_thr_successes + thr_success;

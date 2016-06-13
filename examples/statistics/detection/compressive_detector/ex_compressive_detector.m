@@ -11,7 +11,7 @@ signal = randn(N, 1);
 % We normalize sample signal
 signal = SPX_Norm.normalize_l2(signal);
 M = 200;
-phi = SPX_SimpleDicts.rademacher_mtx(M, N);
+phi = spx.dict.simple.rademacher_mtx(M, N);
 
 % Signal norm (this is known to be 1)
 sNorm = norm(signal); % 1x1
@@ -51,7 +51,7 @@ fprintf('Detection performance:\n');
 disp(results.detectionResults);
 %% Display of results
 
-SPX_Figures.full_screen_figure;
+spx.graphics.Figures.full_screen_figure;
 subplot(211);
 imshow(mat2gray(phi));
 title(sprintf('Rademacher sensing matrix (%dx%d)', M, N));
@@ -61,7 +61,7 @@ title('Signal');
 
 % We show case some sample bits
 ShowBits = 20;
-SPX_Figures.full_screen_figure;
+spx.graphics.Figures.full_screen_figure;
 subplot(611);
 stem(results.transmittedBits(1:ShowBits));
 title('Transmitted bits');

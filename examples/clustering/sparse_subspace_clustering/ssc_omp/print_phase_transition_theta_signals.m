@@ -4,7 +4,7 @@ export = true;
 
 data_k8 = load('bin/phase_transition_theta_signals_K=8.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 thetas = data_k8.thetas;
 nt  = numel(thetas);

@@ -1,6 +1,6 @@
 
 clear all; close all; clc;
-mf = SPX_Figures(600, 600);
+mf = spx.graphics.Figures(600, 600);
 mf.X_SHIFT = 150;
 mf.Y_SHIFT = 0;
 mf.new_figure('barbara');

@@ -65,7 +65,7 @@ if shuffle_indices
 end
 fprintf('Number of signals: %d\n', size(X, 2));
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 if perform_sparse_subspace_clustering 
     tstart = tic; 

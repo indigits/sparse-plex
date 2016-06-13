@@ -24,11 +24,11 @@ XMS = sgn .* XM;
 X(Omega, :) = XMS;
 % Creating noise using helper function
 SNR = 15;
-Noise = SPX_NoiseGen.createNoise(XMS, SNR);
+Noise = spx.data.noise.Basic.createNoise(XMS, SNR);
 Y = X;
 Y(Omega, :) = Y(Omega, :) + Noise;
 
-cs = SPX_SparseSignalsComparison(X, Y, K);
+cs = spx.commons.SparseSignalsComparison(X, Y, K);
 cs.difference_norms()
 cs.reference_norms()
 cs.estimate_norms()

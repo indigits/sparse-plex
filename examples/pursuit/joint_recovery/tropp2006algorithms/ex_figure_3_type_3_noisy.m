@@ -10,7 +10,7 @@ rng('default');
 % Signal space dimension
 N = 256;
 % Dictionary
-Dict = SPX_SimpleDicts.dirac_fourier_dict(N);
+Dict = spx.dict.simple.dirac_fourier_dict(N);
 [N, D] = size(Dict);
 % sparsity levels
 Ks = 2:4;
@@ -35,19 +35,19 @@ for nk=1:num_ks
         for ns=1:nums_ss
             S = Ss(ns);
             % Noise generator
-            ng = SPX_NoiseGen(N, S);
+            ng = spx.data.noise.Basic(N, S);
             % Trials
             for trial=1:num_trials
                 fprintf('K: %d, SNR: %d dB, S: %d, trial: %d\n', K, SNR, S, trial);
                 % Construct the signal generator.
-                gen  = SPX_SparseSignalGenerator(D, K, S);
+                gen  = spx.data.synthetic.SparseSignalGenerator(D, K, S);
                 true_support = gen.Omega;
                 % Generate sparse signals
                 X = gen.rademacher();
                 % Measurement vectors
                 Y0 = Dict.apply(X);
                 % Create noises at the specified SNR level
-                noises = SPX_NoiseGen.createNoise4(Y0, SNR);
+                noises = spx.data.noise.Basic.createNoise4(Y0, SNR);
                 % noises  = ng.gaussian(sigma);
                 % Created corrupted signals
                 Y = Y0 + noises;

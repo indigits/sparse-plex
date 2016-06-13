@@ -10,7 +10,7 @@ pdf_export = false;
 
 load ('bin/figure_1_spherical_dict_model_1_thresholding_success_with_k.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Recovery probability with K for Thresholding');
 hold all;

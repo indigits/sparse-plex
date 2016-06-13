@@ -41,7 +41,7 @@ maxDistance = max(distances)
 
 
 % We plot them 
-SPX_Figures.full_screen_figure;
+spx.graphics.Figures.full_screen_figure;
 subplot(411);
 plot(selectedSignals(:,1));
 title('Sample unit norm signals (N=1000)');

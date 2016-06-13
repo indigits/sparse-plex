@@ -5,7 +5,7 @@ clc;
 
 load('bin/sscosamp_vs_spx_cosamp.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Iterations');
 

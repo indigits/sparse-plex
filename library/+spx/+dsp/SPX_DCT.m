@@ -46,7 +46,7 @@ methods(Static)
 
     function result = basis_mtx_2(n)
         % Returns the DCT basis for R^n in matrix form .
-        if ~SPX_Number.is_power_of_2(n)
+        if ~spx.discrete.number.is_power_of_2(n)
             error('n must be of dyadic length.');
         end
         result = SPX_DCT.forward_2(eye(n));

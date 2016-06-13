@@ -6,7 +6,7 @@ pdf_export = false;
 
 load('bin/noiseless_s=2_hamming_distances_omp_mmv.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Average Hamming distance');
 

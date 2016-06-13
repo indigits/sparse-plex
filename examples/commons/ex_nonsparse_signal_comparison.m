@@ -16,7 +16,7 @@ sgn = sign(randn(N, S));
 X = sgn .* XM;
 % Creating noise using helper function
 SNR = 15;
-Noise = SPX_NoiseGen.createNoise(X, SNR);
+Noise = spx.data.noise.Basic.createNoise(X, SNR);
 Y = X + Noise;
 
 cs = spx.commons.signalsComparison(X, Y);

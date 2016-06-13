@@ -12,8 +12,8 @@ General approach::
     m = 64;
     n = 121;
     k = 4;
-    dict = SPX_SimpleDicts.gaussian_dict(m, n);
-    gen = SPX_SparseSignalGenerator(n, k);
+    dict = spx.dict.simple.gaussian_dict(m, n);
+    gen = spx.data.synthetic.SparseSignalGenerator(n, k);
     % create a sparse vector
     rep =  gen.biGaussian();
     signal = dict*rep;
@@ -36,7 +36,7 @@ Sparse signal generation
 Create generator::
 
     N = 256; K = 4; S = 10;
-    gen  = SPX_SparseSignalGenerator(N, K, S);
+    gen  = spx.data.synthetic.SparseSignalGenerator(N, K, S);
 
 Uniform signals::
 

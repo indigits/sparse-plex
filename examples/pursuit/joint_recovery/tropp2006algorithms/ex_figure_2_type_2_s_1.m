@@ -7,7 +7,7 @@ rng('default');
 
 N = 128;
 
-Dict = SPX_SimpleDicts.dirac_fourier_dict(N);
+Dict = spx.dict.simple.dirac_fourier_dict(N);
 [N, D] = size(Dict);
 % sparsity levels
 Ks = 60:128;
@@ -24,7 +24,7 @@ for nk=1:num_ks
     for trial=1:num_trials
         fprintf('K: %d, trial: %d\n', K, trial);
         % Construct the signal generator.
-        gen  = SPX_SparseSignalGenerator(D, K, S);
+        gen  = spx.data.synthetic.SparseSignalGenerator(D, K, S);
         true_support = gen.Omega;
         X = gen.gaussian();
         % Measurement vectors

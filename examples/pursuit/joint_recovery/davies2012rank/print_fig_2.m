@@ -6,7 +6,7 @@ rng('default');
 png_export = true;
 pdf_export = false;
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

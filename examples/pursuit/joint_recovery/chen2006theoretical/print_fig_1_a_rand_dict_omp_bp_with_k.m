@@ -6,7 +6,7 @@ pdf_export = false;
 
 load('bin/rand_dict_bp_omp_success_with_k_figure_1.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Recovery probability with K');
 hold all;

@@ -10,7 +10,7 @@ pdf_export = false;
 
 load ('bin/figure_2_dirac_fourier_dict_model_3_somp_success_with_k.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Recovery probability with K for SOMP');
 hold all;

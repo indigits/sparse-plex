@@ -26,7 +26,7 @@ for c=1:R
     for i=1:length(Ms)
         M  = Ms(i);
         % Create a sensing matrix for this size
-        phi = SPX_SimpleDicts.gaussian_mtx(M, N);
+        phi = spx.dict.simple.gaussian_mtx(M, N);
         fprintf('MxN: %dx%d\n', M, N);
         gaussianSensingMatrices{i, c} = phi;
     end
@@ -39,7 +39,7 @@ for c=1:R
     for i=1:length(Ms)
         M  = Ms(i);
         % Create a sensing matrix for this size
-        phi = SPX_SimpleDicts.rademacher_mtx(M, N);
+        phi = spx.dict.simple.rademacher_mtx(M, N);
         fprintf('MxN: %dx%d\n', M, N);
         radamacherSensingMatrices{i, c} = phi;
     end

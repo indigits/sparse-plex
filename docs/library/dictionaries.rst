@@ -32,38 +32,38 @@ dictionaries.
 Dirac Fourier Dictionary ::
 
 
-    SPX_SimpleDicts.dirac_fourier_dict(N)
+    spx.dict.simple.dirac_fourier_dict(N)
 
 Dirac DCT Dictionary::
 
-    SPX_SimpleDicts.dirac_dct_dict(N)
+    spx.dict.simple.dirac_dct_dict(N)
 
 
 Gaussian Dictionary::
 
-    SPX_SimpleDicts.gaussian_dict(N, D, normalized_columns)
+    spx.dict.simple.gaussian_dict(N, D, normalized_columns)
 
 
 Rademacher Dictionary::
 
-    Phi = SPX_SimpleDicts.rademacher_dict(N, D);
+    Phi = spx.dict.simple.rademacher_dict(N, D);
 
 Partial Fourier Dictionary::
 
-    Phi = SPX_SimpleDicts.partial_fourier_dict(N, D);
+    Phi = spx.dict.simple.partial_fourier_dict(N, D);
 
 Over complete 1-D DCT dictionary::
 
-    SPX_SimpleDicts.overcomplete1DDCT(N, D)
+    spx.dict.simple.overcomplete1DDCT(N, D)
 
 
 Over complete 2-D DCT dictionary::
 
-    SPX_SimpleDicts.overcomplete2DDCT(N, D)
+    spx.dict.simple.overcomplete2DDCT(N, D)
 
 Dictionaries from SPIE2011 paper::
 
-    SPX_SimpleDicts.spie_2011(name) % ahoc, orth, rand, sine
+    spx.dict.simple.spie_2011(name) % ahoc, orth, rand, sine
 
 
 Sensing matrices
@@ -72,16 +72,16 @@ Sensing matrices
 
 Gaussian  sensing matrix::
     
-    Phi = SPX_SimpleDicts.gaussian_mtx(M, N);
+    Phi = spx.dict.simple.gaussian_mtx(M, N);
 
 
 Rademacher sensing matrix::
 
-    Phi = SPX_SimpleDicts.rademacher_mtx(M, N);
+    Phi = spx.dict.simple.rademacher_mtx(M, N);
   
 Partial Fourier matrix::
 
-    Phi = SPX_SimpleDicts.partial_fourier_mtx(M, N);
+    Phi = spx.dict.simple.partial_fourier_mtx(M, N);
 
 
 

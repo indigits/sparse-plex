@@ -18,12 +18,12 @@ In this section we cover:
 
 Create a full screen figure::
 
-    SPX_Figures.full_screen_figure;
+    spx.graphics.Figures.full_screen_figure;
 
 
 Multiple figures::
 
-    mf = SPX_Figures();
+    mf = spx.graphics.Figures();
     mf.new_figure("fig 1");
     mf.new_figure("fig 2");
     mf.new_figure("fig 3");
@@ -36,7 +36,7 @@ Controlling size of multiple figures::
 
     width = 1000;
     height = 400;
-    mf = SPX_Figures(width, height);
+    mf = spx.graphics.Figures(width, height);
 
 
 Display a Gram matrix for a given dictionary ``Phi``::

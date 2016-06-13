@@ -6,8 +6,8 @@ classdef recovery_problems
             m = 64;
             n = 121;
             k = 4;
-            dict = SPX_SimpleDicts.gaussian_dict(m, n);
-            gen = SPX_SparseSignalGenerator(n, k);
+            dict = spx.dict.simple.gaussian_dict(m, n);
+            gen = spx.data.synthetic.SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();
             signal = dict*rep;
@@ -21,8 +21,8 @@ classdef recovery_problems
             m = 1000;
             n = 2000;
             k = 100;
-            dict = SPX_SimpleDicts.gaussian_dict(m, n);
-            gen = SPX_SparseSignalGenerator(n, k);
+            dict = spx.dict.simple.gaussian_dict(m, n);
+            gen = spx.data.synthetic.SparseSignalGenerator(n, k);
             % create a sparse vector
             rep =  gen.biGaussian();
             signal = dict*rep;
@@ -47,7 +47,7 @@ classdef recovery_problems
             % Let's prepare a dictionary for the image
             N = 64;
             D = 121;
-            problem.dictionary = SPX_SimpleDicts.overcomplete2DDCT(N, D);
+            problem.dictionary = spx.dict.simple.overcomplete2DDCT(N, D);
         end
 
         function problem = problem_test_image_blocks(image_name, block_type)

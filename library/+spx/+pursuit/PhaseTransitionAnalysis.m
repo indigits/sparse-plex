@@ -1,4 +1,4 @@
-classdef SPX_PhaseTransitionAnalysis < handle
+classdef PhaseTransitionAnalysis < handle
  % This class defines a framework for phase transition analysis
  % of a sparse recovery solver
 
@@ -21,8 +21,8 @@ properties(SetAccess=private)
 end
 
 methods
-    function self = SPX_PhaseTransitionAnalysis(N_)
-        self.Configuration = SPX_PhaseTransitionConfiguration(N_);
+    function self = PhaseTransitionAnalysis(N_)
+        self.Configuration = spx.commons.PhaseTransitionConfiguration(N_);
     end
 
     function result = run(self, dict_model, data_model, recovery_solver)
@@ -71,13 +71,13 @@ methods
                         y = y0;
                     else
                         % we need to corrupt the signal with noise
-                        noises = SPX_NoiseGen.createNoise(y0, self.SNR);
+                        noises = spx.data.noise.Basic.createNoise(y0, self.SNR);
                         y = y0 + noises;
                     end
                     % Solve the recovery problem
                     x_rec = recovery_solver(Phi, K, y);
                     % Compare references and reconstructions 
-                    sscomp = SPX_SparseSignalsComparison(x, x_rec, K);
+                    sscomp = spx.commons.SparseSignalsComparison(x, x_rec, K);
                     all_success = sscomp.all_have_matching_supports();
                     % stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, x_rec);
                     % Check whether we succeeded or failed.
@@ -133,7 +133,7 @@ methods(Static)
     function print_results(result_file_path, solver_name, options)
         % Prints and exports results of phase transition analysis
         data = load(result_file_path);
-        mf = SPX_Figures();
+        mf = spx.graphics.Figures();
         graph_title  = solver_name;
         if isfield(options, 'subtitle')
             graph_title = sprintf('%s (%s)', graph_title, options.subtitle);

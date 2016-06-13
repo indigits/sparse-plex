@@ -20,7 +20,7 @@ dict_name = 'rand';
 
 problem = SPX_RecoveryProblems.problem_test_image_blocks(image_name, block_type);
 
-Phi = SPX_SimpleDicts.spie_2011(dict_name);
+Phi = spx.dict.simple.spie_2011(dict_name);
 blk_size = problem.blkSize;
 signals = problem.signals;
 % keep only 20% of the signals

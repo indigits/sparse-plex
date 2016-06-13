@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 
 % Signal space dimension

@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 % Signal space 
 N = 256;
@@ -18,11 +18,11 @@ K = 5;
 % Number of signals
 S = 5;
 % Construct the signal generator.
-gen  = SPX_SparseSignalGenerator(N, K, S);
+gen  = spx.data.synthetic.SparseSignalGenerator(N, K, S);
 % Generate bi-uniform signals
 X = gen.biUniform(1, 2);
 % Sensing matrix
-Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi.apply(X);
 %  MMV Thresholding solver instance
@@ -32,7 +32,7 @@ result = solver.solve(Y);
 % Solution vector
 Z = result.Z;
 % Comparison
-cs = SPX_SparseSignalsComparison(X, Z, K);
+cs = spx.commons.SparseSignalsComparison(X, Z, K);
 cs.summarize();
 
 for s=randperm(S, 5)

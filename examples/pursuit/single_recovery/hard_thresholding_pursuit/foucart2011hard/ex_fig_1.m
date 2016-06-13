@@ -42,11 +42,11 @@ for K=Ks
 
     for ndt=1:num_dict_trials
         % Sensing matrix
-        Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+        Phi = spx.dict.simple.gaussian_dict(M, N);
         for nst=1:num_signal_trials
             nt = nt + 1;
             % Construct the signal generator.
-            gen  = SPX_SparseSignalGenerator(N, K);
+            gen  = spx.data.synthetic.SparseSignalGenerator(N, K);
             % Generate bi-uniform signals
             x = gen.gaussian;
             % Measurement vectors

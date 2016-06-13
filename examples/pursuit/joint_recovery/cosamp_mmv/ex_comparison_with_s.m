@@ -36,9 +36,9 @@ for ns=1:num_ss
     num_successes.ra_cosamp = 0;
     for nt=1:num_trials
         % Sensing matrix
-        Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+        Phi = spx.dict.simple.gaussian_dict(M, N);
         % Sparse signal generator
-        gen  = SPX_SparseSignalGenerator(N, K, S);
+        gen  = spx.data.synthetic.SparseSignalGenerator(N, K, S);
         % Gaussian distributed non-zero samples
         X = gen.gaussian;
         % Measurement vectors
@@ -51,7 +51,7 @@ for ns=1:num_ss
         % Solution vectors
         X_Rec = result.Z;
         % Comparison
-        cs = SPX_SparseSignalsComparison(X, X_Rec, K);
+        cs = spx.commons.SparseSignalsComparison(X, X_Rec, K);
         % Reconstruction SNR
         snr = cs.cum_signal_to_noise_ratio;
         success = snr > snr_threshold;
@@ -63,7 +63,7 @@ for ns=1:num_ss
         % Solution vectors
         X_Rec = result.Z;
         % Comparison
-        cs = SPX_SparseSignalsComparison(X, X_Rec, K);
+        cs = spx.commons.SparseSignalsComparison(X, X_Rec, K);
         % Reconstruction SNR
         snr = cs.cum_signal_to_noise_ratio;
         success = snr > snr_threshold;
@@ -75,7 +75,7 @@ for ns=1:num_ss
         % Solution vectors
         X_Rec = result.Z;
         % Comparison
-        cs = SPX_SparseSignalsComparison(X, X_Rec, K);
+        cs = spx.commons.SparseSignalsComparison(X, X_Rec, K);
         % Reconstruction SNR
         snr = cs.cum_signal_to_noise_ratio;
         success = snr > snr_threshold;
@@ -87,7 +87,7 @@ for ns=1:num_ss
         % Solution vectors
         X_Rec = result.Z;
         % Comparison
-        cs = SPX_SparseSignalsComparison(X, X_Rec, K);
+        cs = spx.commons.SparseSignalsComparison(X, X_Rec, K);
         % Reconstruction SNR
         snr = cs.cum_signal_to_noise_ratio;
         success = snr > snr_threshold;
@@ -100,7 +100,7 @@ for ns=1:num_ss
         % Solution vectors
         X_Rec = result.Z;
         % Comparison
-        cs = SPX_SparseSignalsComparison(X, X_Rec, K);
+        cs = spx.commons.SparseSignalsComparison(X, X_Rec, K);
         % Reconstruction SNR
         snr = cs.cum_signal_to_noise_ratio;
         success = snr > snr_threshold;

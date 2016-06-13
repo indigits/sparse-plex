@@ -7,7 +7,7 @@ omp_rep = false;
 
 
 orig = load('bin/svd_data');
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 mf.new_figure('Original SVD');
 plot(orig.svd_data);
 ylabel('Singular values of several subjects');

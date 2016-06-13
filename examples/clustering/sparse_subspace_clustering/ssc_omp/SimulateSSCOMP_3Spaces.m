@@ -54,7 +54,7 @@ function result = SimulateSSCOMP_3Spaces(D, K, Ng, theta, SNR, shuffle)
     end
     if ~isinf(SNR)
         % We need to add some noise in the signals.
-        noises = SPX_NoiseGen.createNoise(X, SNR);
+        noises = spx.data.noise.Basic.createNoise(X, SNR);
         % Preserve original data
         X0 = X;
         % Add noise

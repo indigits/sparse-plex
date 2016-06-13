@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 % Signal space 
 N = 256;
@@ -16,11 +16,11 @@ M = 64;
 % Sparsity level
 K = 8;
 % Construct the signal generator.
-gen  = SPX_SparseSignalGenerator(N, K);
+gen  = spx.data.synthetic.SparseSignalGenerator(N, K);
 % Generate bi-uniform signals
 x = gen.biUniform(1, 2);
 % Sensing matrix
-Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 y = Phi.apply(x);
 % OLS MMV solver instance

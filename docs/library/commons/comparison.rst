@@ -7,7 +7,7 @@ Comparing signals
 Comparing sparse or approximately sparse signals
 ---------------------------------------------------
 
-``SPX_SparseSignalsComparison`` class provides a number of
+``spx.commons.SparseSignalsComparison`` class provides a number of
 methods to compare two sets of sparse signals. It is
 typically used to compare a set of original sparse signals
 with corresponding recovered sparse signals.
@@ -44,13 +44,13 @@ entries at 15 dB of SNR::
 
     % Creating noise using helper function
     SNR = 15;
-    Noise = SPX_NoiseGen.createNoise(XMS, SNR);
+    Noise = spx.data.noise.Basic.createNoise(XMS, SNR);
     Y = X;
     Y(Omega, :) = Y(Omega, :) + Noise;
 
 Let us create an instance of sparse signal comparison class::
 
-    cs = SPX_SparseSignalsComparison(X, Y, K);
+    cs = spx.commons.SparseSignalsComparison(X, Y, K);
 
 Norms of difference signals [X - Y]::
 
@@ -153,7 +153,7 @@ we created the signal comparison instance as::
     cs = spx.commons.signalsComparison(X, Y);
 
 Most functions are similar to what we had for
-``SPX_SparseSignalsComparison``::
+``spx.commons.SparseSignalsComparison``::
 
     cs.difference_norms()
     cs.reference_norms()

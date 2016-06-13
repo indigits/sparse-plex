@@ -6,7 +6,7 @@ clear all;
 show_figures = true;
 
 problem = SPX_RecoveryProblems.problem_barbara_blocks();
-Phi = SPX_SimpleDicts.spie_2011('orth');
+Phi = spx.dict.simple.spie_2011('orth');
 blk_size = problem.blkSize;
 signals = problem.signals;
 signal_means = mean(signals);
@@ -53,7 +53,7 @@ end
 
 if show_figures 
 
-    mf = SPX_Figures();
+    mf = spx.graphics.Figures();
 
     mf.new_figure('Cluster OMP performance with K');
 

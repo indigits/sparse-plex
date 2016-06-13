@@ -6,7 +6,7 @@ pdf_export = false;
 
 load('bin/noisy_hamming_distances_k_s_snr_omp_mmv.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Average Hamming distance');
 hold on;

@@ -43,13 +43,13 @@ for k = kStart:NumKs
         mStart = m;
         fprintf('\n\nSimulating for K = %d, M = %d\n', K, M);
         % Construct a sensing matrix.
-        Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+        Phi = spx.dict.simple.gaussian_dict(M, N);
         numSuccesses = 0;
         numFailures = 0;
         tStart = tic;
         for e = 1:NumExamples
             % Construct a sparse vector
-            gen = SPX_SparseSignalGenerator(N, K);
+            gen = spx.data.synthetic.SparseSignalGenerator(N, K);
             x = gen.gaussian;
             % Construct measurement vector
             y  = Phi * x;

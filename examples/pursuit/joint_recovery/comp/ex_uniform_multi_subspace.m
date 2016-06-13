@@ -17,7 +17,7 @@ clc;
 close all;
 clear all;
 % Prepare dictionary
-Phi = SPX_SimpleDicts.spie_2011('rand');
+Phi = spx.dict.simple.spie_2011('rand');
 % Dimension of representation space and signal space
 [M, N] = size(Phi);
 % Number of subspaces
@@ -41,7 +41,7 @@ qs = sg.Supports;
 Y = Phi * X;
 solver = SPX_ClusterOMP(Phi, K);
 result = solver.solve(Y);
-cs = SPX_SparseSignalsComparison(X, result.Z, K);
+cs = spx.commons.SparseSignalsComparison(X, result.Z, K);
 snrs = cs.signal_to_noise_ratios();
 ssrs = cs.support_similarity_ratios();
 fprintf('Average SNR: %.2f \n', mean(snrs));

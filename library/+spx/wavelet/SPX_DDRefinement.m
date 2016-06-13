@@ -7,7 +7,7 @@ classdef SPX_DDRefinement
 methods(Static)
 
     function [left_pred, right_pred] = create_edge_filter(D)
-        if ~SPX_Number.is_odd_natural(D) | D < 3
+        if ~spx.discrete.number.is_odd_natural(D) | D < 3
             error('D must be an odd number greater than 2.');
         end
         % Divide D by half
@@ -49,7 +49,7 @@ methods(Static)
         %  D - Degree of polynomial for interpolation
         % 
         % 
-        if ~SPX_Number.is_odd_natural(D)
+        if ~spx.discrete.number.is_odd_natural(D)
             error('D must be an odd number.');
         end
         % Divide D by half

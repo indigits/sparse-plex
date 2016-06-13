@@ -5,7 +5,7 @@ clc;
 
 load('bin/fig_1.mat');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Iterations');
 

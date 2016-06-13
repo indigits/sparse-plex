@@ -9,7 +9,7 @@ close all; clear all; clc;
 export = true;
 
 orig = load('bin/principal_angles');
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 mf.new_figure('Original Principal angles');
 hist(orig.off_diag_angles, 200);
 xlabel('Principal angle (degrees)');

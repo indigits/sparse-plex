@@ -17,7 +17,7 @@ end
 
 methods
     function self = PhaseTransitionConfiguration(N_)
-    	if ~SPX_Number.is_power_of_2(N_)
+    	if ~spx.discrete.number.is_power_of_2(N_)
     		error(sprintf('N=%d must be a power of 2.', N_));
     	end
     	if mod(N_, 32) ~= 0
@@ -100,7 +100,7 @@ methods
 	    		data(k, m) = rhos(k) * etas(m); 
     		end
     	end
-        mf = SPX_Figures();
+        mf = spx.graphics.Figures();
         mf.new_figure('Phase Transition Configuration');
         imagesc(etas, rhos, data);
         set(gca,'YDir','normal');

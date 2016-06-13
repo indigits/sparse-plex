@@ -12,7 +12,7 @@ M = 20;
 S = 5;
 
 % Sensing matrix
-Phi = SPX_SimpleDicts.gaussian_dict(M, N);
+Phi = spx.dict.simple.gaussian_dict(M, N);
 phi_props = SPX_DictProps(Phi);
 mu = phi_props.coherence();
 upper_limit  = ceil((1 + 1/mu) / 2) + 15;
@@ -32,7 +32,7 @@ for nk=1:num_ks
     num_bp_successes = 0;
     for nt=1:num_trials
         % Construct the signal generator.
-        gen  = SPX_SparseSignalGenerator(N, K, S);
+        gen  = spx.data.synthetic.SparseSignalGenerator(N, K, S);
         % Generate bi-uniform signals
         X = gen.gaussian;
 

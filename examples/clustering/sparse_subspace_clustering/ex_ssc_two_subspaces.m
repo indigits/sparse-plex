@@ -46,7 +46,7 @@ comparer = SPX_ClusterComparison(true_labels, cluster_labels);
 result = comparer.fMeasure();
 comparer.printF1MeasureResult(result);
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Coefficients');
 imagesc(abs(ssc.Representation));

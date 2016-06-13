@@ -10,7 +10,7 @@ Noise generation
 
 Gaussian noise::
 
-    ng = SPX_NoiseGen(N, S);
+    ng = spx.data.noise.Basic(N, S);
     sigma = 1;
     mean = 0;
     ng.gaussian(sigma, mean);
@@ -24,10 +24,10 @@ Creating noise at a specific SNR::
     % Number of signals
     S = 4;
     % Create sparse signals
-    signals = SPX_SparseSignalGenerator(N, K, S).gaussian();
+    signals = spx.data.synthetic.SparseSignalGenerator(N, K, S).gaussian();
     % Create noise at specific SNR level.
     snrDb = 10;
-    noises = SPX_NoiseGen.createNoise(signals, snrDb);
+    noises = spx.data.noise.Basic.createNoise(signals, snrDb);
     % add signal to noise
     signals_with_noise = signals + noises;
     % Verify SNR level

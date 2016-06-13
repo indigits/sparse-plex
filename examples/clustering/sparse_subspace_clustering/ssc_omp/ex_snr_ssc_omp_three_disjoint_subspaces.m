@@ -68,13 +68,13 @@ if shuffle_indices
 end
 fprintf('Number of signals: %d\n', size(X, 2));
 % We need to add some noise in the signals.
-noises = SPX_NoiseGen.createNoise(X, SNR);
+noises = spx.data.noise.Basic.createNoise(X, SNR);
 % Preserve original data
 X0 = X;
 % Add noise
 X = X0 + noises;
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 
 if perform_ssc_omp 

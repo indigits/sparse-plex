@@ -2,7 +2,7 @@ close all; clear all; clc;
 yf = SPX_YaleFaces();
 yf.load();
 yf.describe();
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 mf.new_figure('Example faces');
 canvas = yf.create_random_canvas();
 imshow(canvas);

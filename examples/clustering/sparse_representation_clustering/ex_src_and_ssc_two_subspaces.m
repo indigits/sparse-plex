@@ -15,7 +15,7 @@ n = 40;
 d = 100;
 
 % Construct a Gaussian dictionary
-Dict = SPX_SimpleDicts.gaussian_mtx(n, d);
+Dict = spx.dict.simple.gaussian_mtx(n, d);
 % number of subspaces = number of clusters
 ns = 2;
 % dimensions of individual subspaces 1 and 2
@@ -68,7 +68,7 @@ if shuffle_indices
     true_labels = true_labels(shuffled_indices);
 end
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 if perform_sparse_representation_clustering
     tstart = tic; 
@@ -81,11 +81,11 @@ if perform_sparse_representation_clustering
         l1_solver = SPX_L1SparseRecovery(Dict, X);
         representations = l1_solver.solve_l1_noise();
         % We will threshold out unnecessary stuff
-        % representations = SPX_SparseSignalsComparison.sparse_approximation(representations, K);
+        % representations = spx.commons.SparseSignalsComparison.sparse_approximation(representations, K);
     else
         error('Unknown recovery algorithm specified.');
     end
-    comparer = SPX_SparseSignalsComparison(true_reps, representations, K);
+    comparer = spx.commons.SparseSignalsComparison(true_reps, representations, K);
     ss_ratios = comparer.support_similarity_ratios();
     fprintf('Support similarity ratios: ');
     disp(ss_ratios);

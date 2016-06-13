@@ -19,7 +19,7 @@ image_name = 'cameraman';
 % ahoc, data, orth, rand, sine, rlsdla
 dict_name = 'rlsdla';
 problem = SPX_RecoveryProblems.problem_test_image_blocks(image_name);
-Phi = SPX_SimpleDicts.spie_2011(dict_name);
+Phi = spx.dict.simple.spie_2011(dict_name);
 blk_size = problem.blkSize;
 signals = problem.signals;
 signal_means = mean(signals);

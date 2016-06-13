@@ -55,14 +55,14 @@ classdef SPX_SP
         % These are constraints for apply_transform function
         function dyadic_length_constraint(n)
             % Checks if length is dyadic or not
-            if ~SPX_Number.is_power_of_2(n)
+            if ~spx.discrete.number.is_power_of_2(n)
                 error('signal must be of dyadic length.');
             end
         end
 
         function dyadic_minus_one_length_constraint(n)
             % Checks if length is 2^j -1 or not
-            if ~SPX_Number.is_power_of_2(n+1)
+            if ~spx.discrete.number.is_power_of_2(n+1)
                 error('signal must be of length like 2^j - 1.');
             end
         end

@@ -11,7 +11,7 @@ load('bin/radamacher_sensing_matrices.mat');
 
 % We pickup the first set
 phis = radamacherSensingMatrices(:, 1);
-SPX_Figures.full_screen_figure;
+spx.graphics.Figures.full_screen_figure;
 for i=1:numMatrices
     % We pickup the matrix
     phi  = phis{i};

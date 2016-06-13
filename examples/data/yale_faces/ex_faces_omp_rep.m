@@ -35,7 +35,7 @@ cols = 20;
 k  = rows * cols;
 indices = randperm(total_images, k);
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 mf.new_figure('Example faces');
 %indices = (indices - 1) * images_per_subject + 1;

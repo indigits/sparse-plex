@@ -7,7 +7,7 @@ pdf_export = false;
 % Create the directory for storing images
 [status_code,message,message_id] = mkdir('bin');
 
-mf = SPX_Figures();
+mf = spx.graphics.Figures();
 
 % Signal space 
 N = 256;
@@ -137,7 +137,7 @@ noise = gain_factor .* noise;
 
 
 % Creating noise using helper function
-e = SPX_NoiseGen.createNoise(y0, SNR);
+e = spx.data.noise.Basic.createNoise(y0, SNR);
 % Measurement vector with noise.
 y = y0 + e;
 mf.new_figure('Measurement vector with noise');
