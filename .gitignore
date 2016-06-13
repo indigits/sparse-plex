@@ -5,3 +5,4 @@ spx_local.ini
 *.pyc
 output.txt
 examples/pursuit/single_recovery/diary
+library/listing.txt
