@@ -15,11 +15,11 @@ function result = SimulateSSCOMP_3Spaces(D, K, Ng, theta, SNR, shuffle)
     % number of subspaces = number of clusters
     ns = 3;
     % Let us form the subspaces
-    [A, B, C] = SPX_Spaces.three_disjoint_spaces_at_angle(deg2rad(theta), K); 
+    [A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(deg2rad(theta), K); 
     % Put them together
     X = [A B C];
     % Put them to bigger dimension
-    X = SPX_Spaces.k_dim_to_n_dim(X, D);
+    X = spx.la.spaces.k_dim_to_n_dim(X, D);
     % Perform a random orthonormal transformation
     O = orth(randn(D));
     X = O * X;

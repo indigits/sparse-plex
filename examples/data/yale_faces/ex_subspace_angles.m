@@ -14,7 +14,7 @@ Y = yf.ImageData;
 means = mean(Y);
 %Y = bsxfun(@minus, Y, means);
 
-angles = SPX_Spaces.smallest_angles_deg(Y, ni);
+angles = spx.la.spaces.smallest_angles_deg(Y, ni);
 elapsed = toc(tstart);
 off_diag_angles = SPX_Mat.off_diag_upper_tri_elements(angles);
 off_diag_angles = sort(off_diag_angles);

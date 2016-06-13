@@ -6,7 +6,7 @@ load bin/omp_representations;
 ni = 50;
 fprintf('Computing angles between subspaces');
 tstart = tic;
-angles = SPX_Spaces.smallest_angles_deg(representations(1:end, :), ni);
+angles = spx.la.spaces.smallest_angles_deg(representations(1:end, :), ni);
 elapsed = toc(tstart);
 off_diag_angles = SPX_Mat.off_diag_upper_tri_elements(angles);
 off_diag_angles = sort(off_diag_angles);

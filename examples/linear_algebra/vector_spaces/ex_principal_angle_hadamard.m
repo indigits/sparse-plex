@@ -35,7 +35,7 @@ for d = 1:n/2
         indices = randperm(n, 2*d);
         A = h2(:, indices(1:d));
         B = h2(:, indices(d+1:end));
-        angles = SPX_Spaces.principal_angles_cos(A, B);
+        angles = spx.la.spaces.principal_angles_cos(A, B);
         least_angle = angles(1);
         least_angle_deg = rad2deg(acos(least_angle));
 

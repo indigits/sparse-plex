@@ -60,45 +60,45 @@ classdef spaces
             end
             A = orth(A);
             B = orth(B);
-            result = SPX_Spaces.principal_angles_orth_cos(A, B);
+            result = spx.la.spaces.principal_angles_orth_cos(A, B);
         end
 
         function result = principal_angles_radian(A, B)
             % Returns the principal angles in radians
-            s = SPX_Spaces.principal_angles_cos(A, B);
+            s = spx.la.spaces.principal_angles_cos(A, B);
             % Return the angles as cos inverse of singular values
             result = acos(s);
         end
 
         function result = principal_angles_degree(A, B)
             % Returns the principal angles in degrees
-            radians = SPX_Spaces.principal_angles_radian(A, B);
+            radians = spx.la.spaces.principal_angles_radian(A, B);
             % Return the angles as cos inverse of singular values
             result = rad2deg(radians);
         end
 
         function result = smallest_angle_cos(A, B)
             % Returns the smallest angle between two subspaces as cos(theta)
-            s = SPX_Spaces.principal_angles_cos(A, B);
+            s = spx.la.spaces.principal_angles_cos(A, B);
             result = s(1);
         end
 
         function result = smallest_angle_orth_cos(A, B)
             % Returns the smallest angle between two subspaces as cos(theta)
             % assumes A and B are orthonormal bases
-            s = SPX_Spaces.principal_angles_orth_cos(A, B);
+            s = spx.la.spaces.principal_angles_orth_cos(A, B);
             result = s(1);
         end
 
         function result = smallest_angle_rad(A, B)
             % Returns the smallest angle between two subspaces in radians
-            cos_theta = SPX_Spaces.smallest_angle_cos(A, B);
+            cos_theta = spx.la.spaces.smallest_angle_cos(A, B);
             result = acos(cos_theta);
         end
 
         function result = smallest_angle_deg(A, B)
             % Returns the smallest angle between two subspaces in degree
-            theta = SPX_Spaces.smallest_angle_rad(A, B);
+            theta = spx.la.spaces.smallest_angle_rad(A, B);
             result = rad2deg(theta);
         end
 
@@ -123,19 +123,19 @@ classdef spaces
                 for j=i+1:s
                     % j-th subspace
                     sj = bases{j};
-                    result(i, j) = SPX_Spaces.smallest_angle_orth_cos(si, sj);
+                    result(i, j) = spx.la.spaces.smallest_angle_orth_cos(si, sj);
                     result(j, i) = result(i, j);
                 end
             end
         end
 
         function result = smallest_angles_rad(subspaces, d)
-            result = SPX_Spaces.smallest_angles_cos(subspaces, d);
+            result = spx.la.spaces.smallest_angles_cos(subspaces, d);
             result = acos(result);
         end
 
         function result = smallest_angles_deg(subspaces, d)
-            result = SPX_Spaces.smallest_angles_rad(subspaces, d);
+            result = spx.la.spaces.smallest_angles_rad(subspaces, d);
             result = rad2deg(result);
         end
 
@@ -376,9 +376,9 @@ classdef spaces
                 rank([A B]), rank([B C]), rank([A C]));
             D = [A B C];
             fprintf('Rank [A B C]: %d\n', rank(D));
-            fprintf('Angle between A and B: %.4f deg\n', SPX_Spaces.smallest_angle_deg(A, B));
-            fprintf('Angle between B and C: %.4f deg\n', SPX_Spaces.smallest_angle_deg(B, C));
-            fprintf('Angle between A and C: %.4f deg\n', SPX_Spaces.smallest_angle_deg(A, C));
+            fprintf('Angle between A and B: %.4f deg\n', spx.la.spaces.smallest_angle_deg(A, B));
+            fprintf('Angle between B and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(B, C));
+            fprintf('Angle between A and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(A, C));
             fprintf('Column wise norms: \n');
             fprintf(' %.2f', SPX_Norm.norms_l2_cw(A));
             fprintf('\n');

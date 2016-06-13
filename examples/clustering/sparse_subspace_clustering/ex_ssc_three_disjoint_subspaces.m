@@ -20,11 +20,11 @@ d = 4;
 % Angle between subspaces A-B and B-C.
 theta = 30; % in degree
 % Let us form the subspaces
-[A, B, C] = SPX_Spaces.three_disjoint_spaces_at_angle(deg2rad(theta), d); 
+[A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(deg2rad(theta), d); 
 % Put them together
 X = [A B C];
 % Put them to bigger dimension
-X = SPX_Spaces.k_dim_to_n_dim(X, D);
+X = spx.la.spaces.k_dim_to_n_dim(X, D);
 % Perform a random orthonormal transformation
 O = orth(randn(D));
 X = O * X;
@@ -33,7 +33,7 @@ A = X(:, 1:d);
 B = X(:, d + (1:d));
 C = X(:, 2*d + (1:d));
 fprintf('Spaces after moving to n dimensions and an orthonormal transformation.\n');
-% SPX_Spaces.describe_three_spaces(A, B, C);
+% spx.la.spaces.describe_three_spaces(A, B, C);
 % Number of points per subspace
 Ng = 16*d;
 % coefficients for Ng vectors chosen randomly in subspace A

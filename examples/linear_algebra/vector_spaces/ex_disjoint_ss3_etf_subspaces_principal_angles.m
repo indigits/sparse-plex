@@ -24,9 +24,9 @@ C = F(:, indices + 2*h_size + 1)
 % Compute principal angles between the subspaces
 fprintf('Ranks: [A B]: %d, [B C]: %d, [A C]: %d, [A B C]: %d', ...
     rank([A B]), rank([B C]), rank([A C]), rank([A B C]));
-SPX_Spaces.smallest_angle_deg(A, B)
-SPX_Spaces.smallest_angle_deg(A, C)
-SPX_Spaces.smallest_angle_deg(B, C)
+spx.la.spaces.smallest_angle_deg(A, B)
+spx.la.spaces.smallest_angle_deg(A, C)
+spx.la.spaces.smallest_angle_deg(B, C)
 
 
 

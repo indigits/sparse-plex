@@ -31,7 +31,38 @@ classdef matrix < handle
             [R, p] = chol(A);
             result = (p == 0);
         end
+
+        function result = is_orthogonal(A)
+            G = A' * A;
+            [m, n] = size(G);
+            idx = eye(m, n);
+            G = abs(G(~idx));
+            result = all(G <= 1e-12);
+        end
+
+        function result = is_identity(A)
+            [m, n]  = size(A);
+            if m ~= n
+                result = false;
+                return;
+            end
+            I = eye(m);
+            diff = abs(A - I);
+            result = all(all(diff <= 1e-12));
+        end
         
+        function result = is_orthonormal(A)
+            if ~isreal(A)
+                result = false;
+                return;
+            end
+            G = A' * A;
+            m = size(G, 1);
+            I = eye(m);
+            diff = abs(G - I);
+            result = all(all(diff <= 1e-12));
+        end
+
         function X = off_diagonal_elements(X)
             % Returns a column vector of off diagonal elements
             [m, n] = size(X);
