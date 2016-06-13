@@ -345,7 +345,7 @@ classdef spaces
             C = [c1 Y(:, 2*n/3 + (1:n/3))];
         end
 
-        function [A, B, C] = three_disjoint_spaces_at_angle(theta, d)
+        function [A, B, C] = three_disjoint_spaces_at_angle(N, theta)
             X = eye(4);
             R1 = [cos(theta) -sin(theta); sin(theta) cos(theta)];
             a1 = [1 ; 0];
@@ -360,9 +360,9 @@ classdef spaces
             A = [a1 z; z b1];
             B = [a2 z; z b2];
             C = [a3 z; z b3];
-            A =kron(A , eye(d / 2));
-            B =kron(B , eye(d / 2));
-            C =kron(C , eye(d / 2));
+            A =kron(A , eye(N / 2));
+            B =kron(B , eye(N / 2));
+            C =kron(C , eye(N / 2));
         end
 
 
@@ -380,11 +380,11 @@ classdef spaces
             fprintf('Angle between B and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(B, C));
             fprintf('Angle between A and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(A, C));
             fprintf('Column wise norms: \n');
-            fprintf(' %.2f', SPX_Norm.norms_l2_cw(A));
+            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(A));
             fprintf('\n');
-            fprintf(' %.2f', SPX_Norm.norms_l2_cw(B));
+            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(B));
             fprintf('\n');
-            fprintf(' %.2f', SPX_Norm.norms_l2_cw(C));
+            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(C));
             fprintf('\n');
         end
 
@@ -425,6 +425,23 @@ classdef spaces
             [U S V] = svd(X);
             Y = U(:, size(X, 2)+1:end);
             C = [c1 Y];
+        end
+
+
+        function result = have_same_column_spans(A, B)
+            % Checks if the column spans of two matrices are same.
+            r1 = rank(A);
+            r2 = rank(B);
+            if r1 ~= r2 
+                result = false;
+                return;
+            end
+            r3 = rank([A B]);
+            if r3 ~= r1
+                result = false;
+                return;
+            end
+            result = true;
         end
 
 

@@ -76,7 +76,7 @@ methods
         end
         % Data for use in other helper functions
         self.X = X;
-        self.XNorms = SPX_Norm.norms_l2_cw(X);
+        self.XNorms = spx.commons.norm.norms_l2_cw(X);
         % Number of signals
         self.S = size(X,2);
         % Initialize storage counter.
@@ -89,7 +89,7 @@ methods
             dict = X(:,1:d);
         end
         % normalize the dictionary
-        dict = SPX_Norm.normalize_l2(dict);
+        dict = spx.commons.norm.normalize_l2(dict);
         self.Dict = dict;
         % Initialize representation
         self.update_representations();

@@ -98,7 +98,7 @@ classdef SPX_OMP_MMV < handle
                     innerProducts = sum(innerProducts, 2);
                 elseif P == 2
                     % Compute l2 norm inner products over each row
-                    innerProducts = SPX_Norm.norms_l2_rw(innerProducts);
+                    innerProducts = spx.commons.norm.norms_l2_rw(innerProducts);
                 else
                     error('Impossible');
                 end

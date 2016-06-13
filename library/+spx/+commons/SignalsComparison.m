@@ -34,15 +34,15 @@ classdef SignalsComparison < handle
         end
 
         function result = difference_norms(self)
-            result = SPX_Norm.norms_l2_cw(self.Differences);
+            result = spx.commons.norm.norms_l2_cw(self.Differences);
         end
 
         function result = reference_norms(self)
-            result = SPX_Norm.norms_l2_cw(self.References);
+            result = spx.commons.norm.norms_l2_cw(self.References);
         end
 
         function result = estimate_norms(self)
-            result = SPX_Norm.norms_l2_cw(self.Estimates);
+            result = spx.commons.norm.norms_l2_cw(self.Estimates);
         end
 
         function result = error_to_signal_norms(self)

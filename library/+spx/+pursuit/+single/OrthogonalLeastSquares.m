@@ -100,7 +100,7 @@ classdef OrthogonalLeastSquares < handle
                 % Orthogonalize the remaining atoms of the dictionary
                 qdict = OrthoProjector * dict;
                 % Normalize the columns
-                qdict = SPX_Norm.normalize_l2(qdict);
+                qdict = spx.commons.norm.normalize_l2(qdict);
                 % Compute inner products
                 innerProducts = qdict' * r;
                 % Mark the inner products of already selected columns as 0.

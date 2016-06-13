@@ -5,7 +5,7 @@ n = 20;
 fprintf('Specified subspace dimension (d): %d\n', d);
 fprintf('Specified angle (theta): %d degrees \n', theta);
 fprintf('Ambient dimension (n): %d \n', n);
-[A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(deg2rad(theta), d); 
+[A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(d, deg2rad(theta)); 
 spx.la.spaces.describe_three_spaces(A, B, C);
 % Put them together
 X = [A B C];

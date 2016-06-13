@@ -27,7 +27,7 @@ fprintf('sigma_n: 1\n');
 
 receivedSequence = SPX_Modulator.modulate_bits_with_gaussian_noise(transmittedBits, N, sigma1, sigma0);
 % Let us compute the sufficient statistic for this demo
-statistic = SPX_Statistics.compute_statistic_per_vector(receivedSequence, N, @SPX_Norm.sum_square);
+statistic = SPX_Statistics.compute_statistic_per_vector(receivedSequence, N, @spx.commons.norm.sum_square);
 threshold = 2* sigma0^2 * sigma1^2 / (sigma1^2 - sigma0^2);
 threshold = threshold * (log(eta) - N * log (sigma0 / sigma1));
 % We create the received bits 

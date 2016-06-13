@@ -41,7 +41,7 @@ classdef SPX_EquiangularTightFrame < handle
             end
             % Normalize the columns
             if normalize
-                F = SPX_Norm.normalize_l2(F);
+                F = spx.commons.norm.normalize_l2(F);
             end
             [m, n] = size(F);
             % The frame
@@ -69,7 +69,7 @@ classdef SPX_EquiangularTightFrame < handle
         function result = is_etf(F)
             % Verifies that F is an equiangular tight frame
             [m, n] = size(F);
-            norms = SPX_Norm.norms_l2_cw(F);
+            norms = spx.commons.norm.norms_l2_cw(F);
             if ~isalmost(norms, ones(1, n), 1e-5)
                 result = false;
                 return;

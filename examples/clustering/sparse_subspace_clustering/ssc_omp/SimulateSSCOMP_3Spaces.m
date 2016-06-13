@@ -15,7 +15,7 @@ function result = SimulateSSCOMP_3Spaces(D, K, Ng, theta, SNR, shuffle)
     % number of subspaces = number of clusters
     ns = 3;
     % Let us form the subspaces
-    [A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(deg2rad(theta), K); 
+    [A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(K, deg2rad(theta)); 
     % Put them together
     X = [A B C];
     % Put them to bigger dimension

@@ -88,7 +88,7 @@ classdef SPX_RankAwareOMP < handle
                 % Compute absolute values of inner products
                 innerProducts = abs(innerProducts);
                 % Compute l2 norm inner products over each row
-                innerProducts = SPX_Norm.norms_l2_rw(innerProducts);
+                innerProducts = spx.commons.norm.norms_l2_rw(innerProducts);
                 % Mark the inner products of already selected columns as 0.
                 innerProducts(omega) = 0;
                 % Find the highest inner product

@@ -66,7 +66,7 @@ classdef SPX_ConjugateDescent < handle
             rr = bb  - aa * xx;
             self.Residuals  = rr;
             % Norm squared of initial residual vectors
-            deltas = SPX_Norm.inner_product_cw(rr, rr);
+            deltas = spx.commons.norm.inner_product_cw(rr, rr);
             % The factor with which the norm needs to be reduced
             epsilon = self.NormThreshold;
             % Target limits on norm squared of residuals

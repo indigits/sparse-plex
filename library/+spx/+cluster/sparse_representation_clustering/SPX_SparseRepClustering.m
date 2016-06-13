@@ -82,7 +82,7 @@ classdef SPX_SparseRepClustering < handle
         function build_adjacency(self)
             C = abs(self.Data); % N x S
             % Normalize the matrix by column wise norms
-            C = SPX_Norm.normalize_l2(C);
+            C = spx.commons.norm.normalize_l2(C);
             % Compute inner product of signals with each other
             innerProducts  = C' * C; % S x S.
             % Since the signals are normalized, hence inner products are guaranteed to be 

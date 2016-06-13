@@ -17,7 +17,7 @@ h = hadamard(n);
 % drop one row
 h2 = h(1:end-1, :);
 % normalize the vectors
-h2 = SPX_Norm.normalize_l2(h2);
+h2 = spx.commons.norm.normalize_l2(h2);
 % compute it's Gram matrix
 g = h2' * h2;
 % verify that absolute value of all the non-zero elements is 1/(n -1).

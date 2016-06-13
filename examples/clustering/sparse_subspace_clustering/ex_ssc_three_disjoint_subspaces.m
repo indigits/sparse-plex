@@ -20,7 +20,7 @@ d = 4;
 % Angle between subspaces A-B and B-C.
 theta = 30; % in degree
 % Let us form the subspaces
-[A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(deg2rad(theta), d); 
+[A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(d, deg2rad(theta)); 
 % Put them together
 X = [A B C];
 % Put them to bigger dimension
