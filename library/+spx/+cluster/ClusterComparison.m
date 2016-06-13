@@ -35,6 +35,13 @@ classdef ClusterComparison < handle
     methods
         % Initializes the comparison algorithm
         function self = ClusterComparison(A, B)
+            % Make sure both are column vectors
+            if isrow(A)
+                A = A';
+            end
+            if isrow(B)
+                B = B';
+            end
             self.A = A;
             self.B = B;
             % labels must start from 1.
