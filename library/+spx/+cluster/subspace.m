@@ -1,0 +1,37 @@
+classdef subspace
+
+methods(Static)
+
+function result = ssc_l1_mahdi(X)
+    cvx_solver sdpt3
+    cvx_quiet(true);
+    [M, S] = size(X);
+    % M is ambient dimension 
+    % S is number of signals
+    % storage for coefficients
+    Z = zeros(S, S);
+    for s=1:S
+        fprintf('.');
+        x = X(:, s);
+        cvx_begin
+        % storage for  l1 solver
+        variable z(S, 1);
+        minimize norm(z, 1)
+        subject to
+        x == X*z;
+        z(s) == 0;
+        cvx_end
+        Z(:, s)  = z;
+    end
+    fprintf('\n');
+    W = abs(Z) + abs(Z).';
+    result = spx.cluster.spectral.simple.normalized_symmetric(W);
+    result.Z = Z;
+    result.W = W;
+end
+
+
+end
+
+
+end
