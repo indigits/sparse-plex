@@ -47,14 +47,22 @@ classdef SSC_OMP < handle
             % prepare sparse representations
             self.recover_coefficients();
             self.build_adjacency();
-            clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
+            result = spx.cluster.spectral.simple.normalized_symmetric(self.Adjacency);
+            cluster_labels = result.labels;
+
+            % We are disabling our version of spectral clustering for now.            
+            % clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
             % keep reference for debugging purposes.
-            self.Clusterer = clusterer;
-            clusterer.NumClusters = self.NumSubspaces;
-            cluster_labels = clusterer.cluster_random_walk();
+            % self.Clusterer = clusterer;
+            % clusterer.NumClusters = self.NumSubspaces;
+            % cluster_labels = clusterer.cluster_random_walk();
+
+            
             self.Labels = cluster_labels;
             % Return the labels
             result.Labels = self.Labels;
+            result.Z = self.Representation;
+            result.W = self.Adjacency;
         end
 
     end

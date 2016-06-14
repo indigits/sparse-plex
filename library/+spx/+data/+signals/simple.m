@@ -13,6 +13,15 @@ methods(Static)
         signal(1:n:end) = 1;
     end
 
+    function X = uniform(N, S)
+        % Generates uniformly distributed signals
+
+        % Generate Gaussian vectors
+        X = randn(N, S);
+        % Make them unit length
+        X = spx.commons.norm.normalize_l2(X);
+    end
+
 end
 
 end

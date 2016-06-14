@@ -12,6 +12,9 @@ function result = ssc_l1_mahdi(X)
     Z = zeros(S, S);
     for s=1:S
         fprintf('.');
+        if (mod(s, 10) == 0)
+            fprintf('\n');
+        end
         x = X(:, s);
         cvx_begin
         % storage for  l1 solver
@@ -29,6 +32,7 @@ function result = ssc_l1_mahdi(X)
     result.Z = Z;
     result.W = W;
 end
+
 
 
 end

@@ -78,6 +78,8 @@ methods(Static)
         max_iterations = 1000; 
         % Replication for KMeans Algorithm
         replicates = 100;
+        % maximum number of clusters supported by the algorithm
+        max_clusters = 200;
         % number of nodes
         [m, n] = size(W);
         assert (m == n);
@@ -97,6 +99,12 @@ methods(Static)
         % We need to normalize the rows of kernel
         Kernel = spx.commons.norm.normalize_l2_rw(Kernel);
         % Result of clustering the rows of eigen vectors
+        fprintf('Number of clusters: %d\n', num_clusters);
+        if num_clusters >  max_clusters 
+            % we don't want kmeans to run indefinitely.
+            max_iterations = 2;
+            replicates = 2;
+        end
         labels = kmeans(Kernel, num_clusters, ...
             'start','sample', ...
             'maxiter',max_iterations,...
