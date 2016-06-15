@@ -2,7 +2,12 @@ classdef subspace
 
 methods(Static)
 
-function result = ssc_l1_mahdi(X)
+function result = ssc_l1_mahdi(X, options)
+    if nargin > 1
+    else
+        % empty options
+        options = struct;
+    end
     cvx_solver sdpt3
     cvx_quiet(true);
     [M, S] = size(X);
@@ -12,7 +17,7 @@ function result = ssc_l1_mahdi(X)
     Z = zeros(S, S);
     for s=1:S
         fprintf('.');
-        if (mod(s, 10) == 0)
+        if (mod(s, 50) == 0)
             fprintf('\n');
         end
         x = X(:, s);
@@ -28,7 +33,7 @@ function result = ssc_l1_mahdi(X)
     end
     fprintf('\n');
     W = abs(Z) + abs(Z).';
-    result = spx.cluster.spectral.simple.normalized_symmetric(W);
+    result = spx.cluster.spectral.simple.normalized_symmetric(W, options);
     result.Z = Z;
     result.W = W;
 end

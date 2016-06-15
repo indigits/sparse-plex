@@ -73,13 +73,22 @@ methods(Static)
         result.num_clusters = num_clusters;
     end
 
-    function result = normalized_symmetric(W)
+    function result = normalized_symmetric(W, options)
         % Maximum iteration for KMeans Algorithm
         max_iterations = 1000; 
         % Replication for KMeans Algorithm
         replicates = 100;
         % maximum number of clusters supported by the algorithm
         max_clusters = 200;
+        num_clusters = -1;
+        if nargin > 1 
+            if isfield(options, 'num_clusters')
+                num_clusters = options.num_clusters;
+            end
+            if isfield(options, 'max_clusters')
+                max_clusters = options.max_clusters;
+            end
+        end
         % number of nodes
         [m, n] = size(W);
         assert (m == n);
@@ -90,10 +99,13 @@ methods(Static)
         Laplacian = speye(num_nodes) - DegreeHalfInv * W * DegreeHalfInv;
         [~, S, V] = svd(Laplacian);
         singular_values = diag(S);
-        [ min_val , ind_min ] = min( diff( singular_values(1:end-1) ) ) ;
-        % Number of 0 singular values
-        % Number of clusters
-        num_clusters = size(W, 1) - ind_min;
+        if num_clusters < 0
+            % strategy to compute the number of clusters
+            [ min_val , ind_min ] = min( diff( singular_values(1:end-1) ) ) ;
+            % Number of 0 singular values
+            % Number of clusters
+            num_clusters = size(W, 1) - ind_min;
+        end
         % Choose the last num_clusters eigen vectors
         Kernel = V(:,num_nodes-num_clusters+1:num_nodes);
         % We need to normalize the rows of kernel
@@ -101,9 +113,11 @@ methods(Static)
         % Result of clustering the rows of eigen vectors
         fprintf('Number of clusters: %d\n', num_clusters);
         if num_clusters >  max_clusters 
+            % We will restrict the number of clusters
+            num_clusters = max_clusters;
             % we don't want kmeans to run indefinitely.
-            max_iterations = 2;
-            replicates = 2;
+            % max_iterations = 2;
+            % replicates = 2;
         end
         labels = kmeans(Kernel, num_clusters, ...
             'start','sample', ...
