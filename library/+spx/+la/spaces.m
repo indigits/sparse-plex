@@ -103,21 +103,38 @@ classdef spaces
         end
 
         function result = smallest_angles_cos(subspaces, d)
-            [m, n] = size(subspaces);
-            if mod(n, d) ~= 0
-                error('n must be multiple of d');
+            % subspaces is either a cell array of bases or a concatenated matrix.
+            % d is the dimension of each subspace [needed only if all bases are concatenated]
+            if iscell(subspaces)
+                bases = subspaces;
+                % number of subspaces
+                s = numel(subspaces);
+                % the ambient dimension
+                m = size(bases{1}, 1);
+            else
+                if nargin < 2
+                    error('Dimension of each subspace must be specified.');
+                end
+                [m, n] = size(subspaces);
+                if mod(n, d) ~= 0
+                    error('n must be multiple of d');
+                end
+                % number of subspaces
+                s = n /d;
+                % create the cell array for bases
+                bases = cell(s, 1);
+                for i=0:s-1
+                    %i-th subspace basis
+                    si = subspaces(:, i*d + (1:d));
+                    bases{i+1} = si;
+                end
             end
-            % number of subspaces
-            s = n /d;
+            % Orthogonalize all subspaces
+            for i=1:s
+                bases{i} = orth(bases{i});
+            end
             % The smallest angles result matrix
             result = eye(s);
-            % orthogonalize all subspaces
-            bases = cell(s, 1);
-            for i=0:s-1
-                %i-th subspace
-                si = subspaces(:, i*d + (1:d));
-                bases{i+1} = orth(si);
-            end
             for i=1:s
                 si = bases{i};
                 for j=i+1:s
@@ -130,11 +147,19 @@ classdef spaces
         end
 
         function result = smallest_angles_rad(subspaces, d)
+            if nargin < 2
+                % subspace dimensions are unspecified
+                d = -1;
+            end
             result = spx.la.spaces.smallest_angles_cos(subspaces, d);
             result = acos(result);
         end
 
         function result = smallest_angles_deg(subspaces, d)
+            if nargin < 2
+                % subspace dimensions are unspecified
+                d = -1;
+            end
             result = spx.la.spaces.smallest_angles_rad(subspaces, d);
             result = rad2deg(result);
         end
