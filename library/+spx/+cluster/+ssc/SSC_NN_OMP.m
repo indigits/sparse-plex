@@ -52,7 +52,10 @@ classdef SSC_NN_OMP < handle
             % prepare sparse representations
             self.recover_coefficients();
             self.build_adjacency();
-            result = spx.cluster.spectral.simple.normalized_symmetric(self.Adjacency);
+
+            % conduct spectral clustering
+            options.num_clusters = self.NumSubspaces;
+            result = spx.cluster.spectral.simple.normalized_symmetric(self.Adjacency, options);
             cluster_labels = result.labels;
 
             % We are disabling our version of spectral clustering for now.
@@ -119,7 +122,9 @@ classdef SSC_NN_OMP < handle
             omega = [];
             % max number of iterations
             maxIter = nk;
-            MaxResNorm = 1e-4;
+            MaxResNorm = 1/8;
+            % number of nearest neighbors
+            nn = max(2*(nk-1), 2);
             for iter=1:maxIter
                 % Compute inner products
                 innerProducts = X' * r;
@@ -131,7 +136,7 @@ classdef SSC_NN_OMP < handle
                 index = indices(1);                % Add this index to support
                 omega = [omega, index];
 
-                c(indices(1:nk)) = innerProducts(indices(1:nk));
+                c(indices(1:nn)) = innerProducts(indices(1:nn));
                 % Solve least squares problem
                 subdict = X(:, omega);
                 tmp = linsolve(subdict, x);
