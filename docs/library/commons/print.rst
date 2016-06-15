@@ -12,7 +12,7 @@ Printing a sparse signal as pairs of
 locations and values::
 
     >> x = [0 0 0  1 0 0 -1 0 0 -2 0 0 -3 0 0 7 0 0 4 0 0 -6];
-    >> SPX_IO.printSparseSignal(x)
+    >> spx.io.print.sparse_signal(x)
     (4,1) (7,-1) (10,-2) (13,-3) (16,7) (19,4) (22,-6)   N=22, K=7
 
 
@@ -20,7 +20,7 @@ Printing the non-zero entries in a signal
 in descending order of magnitude with
 location and value::
 
-    >> SPX_IO.printSortedSparseSignal(x)
+    >> spx.io.print.sorted_sparse_signal(x)
     Index:  Value
       16:   7.000000
       22:   -6.000000
