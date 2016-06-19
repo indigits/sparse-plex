@@ -10,6 +10,11 @@ methods(Static)
         root_dir = env.local_settings.yale_faces_db_dir;
     end
 
+    function root_dir = hopkins155_dir()
+        env = spx_get_env();
+        root_dir = env.local_settings.hopkins155_dir;
+    end
+
 end
 
 end
