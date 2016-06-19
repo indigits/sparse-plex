@@ -40,7 +40,7 @@ mf = spx.graphics.Figures();
 mf.new_figure('Example faces');
 %indices = (indices - 1) * images_per_subject + 1;
 images = yf.ImageData(:, indices);
-canvas = SPX_Canvas.create_image_grid(images, rows, cols, ...
+canvas = spx.graphics.canvas.create_image_grid(images, rows, cols, ...
     height, width);
 canvas = uint8(canvas);
 
@@ -57,7 +57,7 @@ end
 mf.new_figure('Example faces from OMP reconstruction');
 %indices = (indices - 1) * images_per_subject + 1;
 images = all_images(:, indices);
-canvas = SPX_Canvas.create_image_grid(images, rows, cols, ...
+canvas = spx.graphics.canvas.create_image_grid(images, rows, cols, ...
     height, width);
 canvas = uint8(canvas);
 
