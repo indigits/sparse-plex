@@ -52,7 +52,7 @@ images may be patches from a larger
 image or may be small independent images
 themselves.
 
-``SPX_Canvas`` helps in
+``spx.graphics.canvas`` helps in
 combining the images in the form 
 of a grid on a  canvas image.
 
@@ -72,7 +72,7 @@ Creating a canvas of image patches::
     images = 255* rand(width*height, rows*cols);
     % Let's create a canvas of these images formed into a
     % 10 x 10 grid.
-    canvas = SPX_Canvas.create_image_grid(images, rows, cols, ...
+    canvas = spx.graphics.canvas.create_image_grid(images, rows, cols, ...
         height, width);
     % Let's convert the canvas to UINT8 image
     canvas = uint8(canvas);
@@ -100,7 +100,7 @@ for these signals::
     signal_size = 80;
     signal_matrix = randn(signal_size, num_signals);
     % Let's create a canvas and put all the signals on it.
-    canvas = SPX_Canvas.create_signal_matrix_canvas(signal_matrix);
+    canvas = spx.graphics.canvas.create_signal_matrix_canvas(signal_matrix);
     % Let's show the image
     imshow(canvas);
     % Let's set the proper colormap.
