@@ -39,7 +39,7 @@ end_indices = points_result.end_indices;
 solver = spx.cluster.ssc.SSC_NN_OMP(X, D, K);
 clustering_result = solver.solve();
 cluster_labels = clustering_result.labels;
-true_labels = spx.cluster.utils.labels_from_cluster_sizes(Ss);
+true_labels = spx.cluster.labels_from_cluster_sizes(Ss);
 % Time to compare the clustering
 comparer = spx.cluster.ClusterComparison(true_labels, cluster_labels);
 comparsion_result = comparer.fMeasure();

@@ -1,7 +1,7 @@
 function print_results(solver_name)
 filepath = sprintf('bin/subspace_preservation_test_%s.mat', solver_name);    
 load(filepath);
-true_labels = spx.cluster.utils.labels_from_cluster_sizes(Ss);
+true_labels = spx.cluster.labels_from_cluster_sizes(Ss);
 for r=1:R
     rho = rhos(r);
     cluster_labels = estimated_labels{r};

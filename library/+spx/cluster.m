@@ -1,4 +1,4 @@
-classdef utils
+classdef cluster
 
 methods(Static)
 

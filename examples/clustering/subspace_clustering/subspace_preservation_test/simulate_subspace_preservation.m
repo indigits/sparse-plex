@@ -2,7 +2,7 @@ function simulate_subspace_preservation(solver, solver_name)
 
 % We will carry out one experiment for each signal density level
 rhos = round(5.^[1:.4:5]);
-rhos = round(5.^[1:.4:3]);
+rhos = round(5.^[1:.4:3.5]);
 % Number of experiments
 R= numel(rhos);
 estimated_num_subspaces = zeros(1, R);
@@ -45,7 +45,7 @@ for r=1:R
     estimated_singular_values{r} = clustering_result.singular_values;
     % estimated_coefficients{r} = clustering_result.Z;
     estimated_num_subspaces(r) = clustering_result.num_clusters;
-    cur_true_labels = spx.cluster.utils.labels_from_cluster_sizes(Ss);
+    cur_true_labels = spx.cluster.labels_from_cluster_sizes(Ss);
     true_labels{r} = cur_true_labels;
     % Time to compare the clustering
     comparer = spx.cluster.ClusterComparison(cur_true_labels, cluster_labels);

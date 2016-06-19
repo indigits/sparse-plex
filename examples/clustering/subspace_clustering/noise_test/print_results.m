@@ -1,6 +1,6 @@
 function print_results(filepath)
 load(filepath);
-true_labels = spx.cluster.utils.labels_from_cluster_sizes(Ss);
+true_labels = spx.cluster.labels_from_cluster_sizes(Ss);
 for r=1:R
     sigma = noise_sigma_levels(r);
     cluster_labels = estimated_labels{r};
