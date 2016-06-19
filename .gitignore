@@ -6,3 +6,4 @@ spx_local.ini
 output.txt
 examples/pursuit/single_recovery/diary
 library/listing.txt
+examples/clustering/subspace_clustering/subspace_preservation_test/scratch.txt
