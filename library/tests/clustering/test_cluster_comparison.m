@@ -49,5 +49,15 @@ function test_cluster_error(testCase)
     [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
     verifyEqual(testCase, error_value, 0);
     verifyEqual(testCase, mapping, true_mapping);
+
+    % change a few of them
+    indices = randperm(100, 10);
+    % change their indices by 1->2->3->4->5->1.
+    estimated_labels(indices) = mod(estimated_labels(indices) + 1, 5) + 1;
+    % calculate the error
+    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
+    verifyEqual(testCase, error_value, 0.1);
+    verifyEqual(testCase, mapping, true_mapping);
+
 end
 
