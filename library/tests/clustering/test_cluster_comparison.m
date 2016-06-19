@@ -27,3 +27,27 @@ function test_one_mismatch_1(testCase)
     verifyEqual(testCase, result.recall, 0.8333, 'RelTol', tolerance);
     %spx.cluster.ClusterComparison.printF1MeasureResult(result);
 end
+
+
+function test_cluster_error(testCase)
+    true_labels = [ 1 1 1 1 2 2 2 2];
+    [error_value, mapping] = spx.cluster.clustering_error(true_labels, true_labels, 2);
+    verifyEqual(testCase, error_value, 0);
+    verifyEqual(testCase, mapping, [1 2]);
+    estimated_labels = [2 2 2 2 1 1 1 1];
+    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
+    verifyEqual(testCase, error_value, 0);
+    verifyEqual(testCase, mapping, [2 1]);
+    estimated_labels = [2 2 2 1 1 1 1 1];
+    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
+    verifyEqual(testCase, error_value, 1/8);
+    verifyEqual(testCase, mapping, [2 1]);
+
+    true_labels  = randi([1, 5], 1, 100);
+    true_mapping = [4 5 3 2 1];
+    estimated_labels = true_mapping(true_labels);
+    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
+    verifyEqual(testCase, error_value, 0);
+    verifyEqual(testCase, mapping, true_mapping);
+end
+
