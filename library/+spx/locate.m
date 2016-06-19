@@ -1,5 +1,5 @@
 function locate()
     % Changes current directory to the folder containing spx.
-    dir = fileparts(fileparts(which('spx.locate')));
+    dir = spx.root_dir;
     cd (dir);
 end
