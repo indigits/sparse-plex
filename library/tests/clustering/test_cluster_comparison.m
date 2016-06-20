@@ -31,33 +31,33 @@ end
 
 function test_cluster_error(testCase)
     true_labels = [ 1 1 1 1 2 2 2 2];
-    [error_value, mapping] = spx.cluster.clustering_error(true_labels, true_labels, 2);
-    verifyEqual(testCase, error_value, 0);
-    verifyEqual(testCase, mapping, [1 2]);
+    result = spx.cluster.clustering_error(true_labels, true_labels, 2);
+    verifyEqual(testCase, result.error, 0);
+    verifyEqual(testCase, result.mapping, [1 2]);
     estimated_labels = [2 2 2 2 1 1 1 1];
-    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
-    verifyEqual(testCase, error_value, 0);
-    verifyEqual(testCase, mapping, [2 1]);
+    result = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
+    verifyEqual(testCase, result.error, 0);
+    verifyEqual(testCase, result.mapping, [2 1]);
     estimated_labels = [2 2 2 1 1 1 1 1];
-    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
-    verifyEqual(testCase, error_value, 1/8);
-    verifyEqual(testCase, mapping, [2 1]);
+    result = spx.cluster.clustering_error(estimated_labels, true_labels, 2);
+    verifyEqual(testCase, result.error, 1/8);
+    verifyEqual(testCase, result.mapping, [2 1]);
 
     true_labels  = randi([1, 5], 1, 100);
     true_mapping = [4 5 3 2 1];
     estimated_labels = true_mapping(true_labels);
-    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
-    verifyEqual(testCase, error_value, 0);
-    verifyEqual(testCase, mapping, true_mapping);
+    result = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
+    verifyEqual(testCase, result.error, 0);
+    verifyEqual(testCase, result.mapping, true_mapping);
 
     % change a few of them
     indices = randperm(100, 10);
     % change their indices by 1->2->3->4->5->1.
     estimated_labels(indices) = mod(estimated_labels(indices) + 1, 5) + 1;
     % calculate the error
-    [error_value, mapping] = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
-    verifyEqual(testCase, error_value, 0.1);
-    verifyEqual(testCase, mapping, true_mapping);
+    result = spx.cluster.clustering_error(estimated_labels, true_labels, 5);
+    verifyEqual(testCase, result.error, 0.1);
+    verifyEqual(testCase, result.mapping, true_mapping);
 
 end
 

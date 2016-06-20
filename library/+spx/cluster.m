@@ -30,7 +30,7 @@ methods(Static)
     end
 
 
-    function [error_value, mapping] = clustering_error(estimated_labels, true_labels, num_clusters)
+    function result = clustering_error(estimated_labels, true_labels, num_clusters)
         % finds out an appropriate mapping between
         % true labels and estimated labels and 
         % calculates the corresponding clustering error
@@ -62,9 +62,13 @@ methods(Static)
         % we choose the mapping with minimum mismatch
         [miss, index] = min(missed_points, [], 1);
         % final clustering error value
-        error_value  = miss / num_labels;
+        result.num_labels = num_labels;
+        result.num_missed_points = miss;
+        result.error  = miss / num_labels;
         % corresponding mapping
-        mapping = possible_mappings(index, :);
+        result.mapping = possible_mappings(index, :);
+        result.mapped_labels = result.mapping(true_labels);
+        result.misses = estimated_labels ~= result.mapped_labels;
     end
 
 
