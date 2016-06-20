@@ -1,5 +1,5 @@
 close all; clear all; clc;
-[status_code,message,message_id] = mkdir('bin/images');
+spx.fs.ensure_dir('bin/images');
 
 export = true;
 omp_rep = false;

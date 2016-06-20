@@ -18,6 +18,13 @@ function result = is_file_or_dir(filepath)
 end
 
 
+function ensure_dir(dirpath)
+    if spx.fs.is_directory(dirpath)
+        return;
+    end
+    [status_code,message,message_id] = mkdir(dirpath);
+end
+
 
 end
 

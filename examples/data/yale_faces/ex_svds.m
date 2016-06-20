@@ -1,6 +1,6 @@
 close all; clear all; clc;
 % Create the directory for storing images
-[status_code,message,message_id] = mkdir('bin');
+spx.fs.ensure_dir('bin');
 
 
 resize_images = false;
