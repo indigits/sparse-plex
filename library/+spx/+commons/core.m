@@ -3,10 +3,6 @@ classdef core
 methods(Static)
 
 
-function result = is_class(classpath)
-    % Returns true if classpath points to a MATLAB class.
-    result = (exist(classpath, 'class') ~= 0);
-end
 
 function result = yes_no(flag)
     if flag == 0

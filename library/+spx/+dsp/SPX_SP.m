@@ -22,7 +22,7 @@ classdef SPX_SP
             % Applies a given transform to a vector (row / column) or all columns of a signal matrix.
             [n, d] = size(x);
             if nargin < 3
-                options.length_constraint = @SPX_Lang.noop;
+                options.length_constraint = @spx.lang.noop;
             elseif ~isstruct(options)
                 error('Options must be a structure.');                
             end
