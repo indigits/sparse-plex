@@ -72,6 +72,16 @@ function result = min_angles_within_between(X, num_points_array)
 end
 
 
+function result = affinity(base1, base2)
+    % compute the subspace angles
+    %  the subspace affinity is used by
+    % local subspace affinity algorithm
+    thetas = spx.la.spaces.principal_angles_radian(base1, base2);
+    % compute the affinity between subspaces
+    tmp = sin(thetas).^2;
+    result = exp(-sum(tmp));
+end
+
 end
 
 
