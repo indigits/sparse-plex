@@ -1,5 +1,5 @@
 close all; clear all; clc;
-% Create the directory for storing images
+% Create the directory for storing results
 spx.fs.ensure_dir('bin');
 
 
