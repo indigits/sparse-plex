@@ -24,6 +24,8 @@ properties(SetAccess=private)
     example_paths
     % data of each example
     examples
+    % number of motions
+    num_motions
 end
 
 methods
@@ -72,6 +74,7 @@ methods
         end
         % data will be loaded in this array
         self.examples = cell(1, length(self.example_names));
+        self.num_motions = zeros(1, length(self.example_names));
     end
 
     function result = num_examples(self)
@@ -93,13 +96,13 @@ methods
             if iscolumn(s)
                 s = s';
             end
-            result.num_clusters = max(s);
+            result.num_motions = max(s);
             % let us work through the labels to reorder them
             % such that points from each subspace are adjacent.
             mapping = [];
             counts = [];
             labels = [];
-            for k=1:result.num_clusters
+            for k=1:result.num_motions
                 % entries for k-th cluster
                 entries = find(s == k);
                 mapping = [mapping entries];
@@ -123,6 +126,7 @@ methods
             % Ambient dimension
             M = 2 * F;
             result.M  = M;
+            self.num_motions(n) = result.num_motions;
             % reshape the data in x for clustering purpose
             % drop the third component of each point in x [homogeneous part]
             x = x(1:2,:,:);
@@ -132,6 +136,8 @@ methods
             % Now map the 2 coordinates of each point in each column
             X = reshape(x,M,S);
             result.X = X;
+            % associate example name
+            result.name = self.example_names{n};
             % clean up unnecessary fields
             %fields = {'x', 'y', 's', 'width', 'height', 'frames', 'K'};
             %rmfield(result, fields);
@@ -151,6 +157,59 @@ methods
         self.load_all_examples();
         result = self.examples;
     end
+
+    function result = get_2_3_motions(self)
+        self.load_all_examples();
+        index2 = find(self.num_motions == 2);
+        index3 = find(self.num_motions == 3);
+        index = [index2 index3];
+        result = self.examples(index);
+    end
+
+    function result = num_2_motions(self)
+        result = sum(self.num_motions == 2);
+    end
+
+    function result = num_3_motions(self)
+        result = sum(self.num_motions == 3);
+    end
+
+    function result = num_5_motions(self)
+        result = sum(self.num_motions == 5);
+    end
+
+
+    function result = get_2_motions(self)
+        self.load_all_examples();
+        % identify 2 motions
+        indices = find(self.num_motions == 2);
+        result = self.examples(indices);
+    end
+
+    function result = get_3_motions(self)
+        self.load_all_examples();
+        % identify 3 motions
+        indices = find(self.num_motions == 3);
+        result = self.examples(indices);
+    end
+
+    function result = get_5_motions(self)
+        self.load_all_examples();
+        % identify 5 motions
+        indices = find(self.num_motions == 5);
+        result = self.examples(indices);
+    end
+
+
+    function describe(self)
+        % ensure that all examples are loaded
+        self.load_all_examples();
+        fprintf('2 motions: %d\n', self.num_2_motions());
+        fprintf('3 motions: %d\n', self.num_3_motions());
+        fprintf('5 motions: %d\n', self.num_5_motions());
+    end
+
 end
+
 
 end
