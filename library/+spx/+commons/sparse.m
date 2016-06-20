@@ -167,7 +167,7 @@ classdef sparse < handle
         end
 
         function print_recovery_performance(result)
-            fprintf('Recovery success: %s\n', spx.commons.core.yes_no(result.success));
+            fprintf('Recovery success: %s\n', spx.io.yes_no(result.success));
             fprintf('Representation norm: %0.4f\n', result.representation_norm);
             fprintf('Measurement norm: %0.4f\n', result.measurement_norm);
             fprintf('Reconstruction norm: %0.4f\n', result.reconstruction_norm);
