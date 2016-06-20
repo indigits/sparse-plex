@@ -12,15 +12,15 @@ methods(Static)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-    function labels = labels_from_cluster_sizes(num_points_array)
+    function labels = labels_from_cluster_sizes(cluster_sizes)
         % total number of points
-        S = sum(num_points_array);
+        S = sum(cluster_sizes);
         % Number of points in array
-        K = numel(num_points_array);
+        K = numel(cluster_sizes);
         labels = zeros(1, S);
         i = 0;
         for k=1:K
-            Sk  = num_points_array(k);
+            Sk  = cluster_sizes(k);
             for s=1:Sk
                 i = i+1;
                 labels(i) = k;
@@ -29,6 +29,12 @@ methods(Static)
         return;
     end
 
+    function [start_indices, end_indices] = start_end_indices(cluster_sizes)
+        % Returns start and end indices from cluster sizes
+        start_indices = cumsum(cluster_sizes) + 1;
+        start_indices = [1 start_indices(1:end-1)];
+        end_indices = start_indices + cluster_sizes -1;
+    end
 
     function result = clustering_error(estimated_labels, true_labels, num_clusters)
         % finds out an appropriate mapping between
