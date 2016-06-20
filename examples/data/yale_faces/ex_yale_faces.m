@@ -1,5 +1,5 @@
 close all; clear all; clc;
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 yf.describe();
 mf = spx.graphics.Figures();

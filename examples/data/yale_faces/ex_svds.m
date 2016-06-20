@@ -6,7 +6,7 @@ close all; clear all; clc;
 resize_images = false;
 fprintf('Loading Yale faces.\n');
 tstart = tic;
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 fprintf('Faces have been loaded.\n');
 elapsed = toc(tstart);

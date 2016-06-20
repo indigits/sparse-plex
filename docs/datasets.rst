@@ -11,7 +11,7 @@ Yale Faces Database
 
 Loading the faces::
 
-    yf = SPX_YaleFaces();
+    yf = spx.data.image.YaleFaces();
     yf.load();
 
 

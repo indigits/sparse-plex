@@ -4,7 +4,7 @@
 
 close all; clear all; clc;
 % Load the Yale face images
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 ns = yf.num_subjects();
 ni = yf.ImagesToLoadPerSubject;

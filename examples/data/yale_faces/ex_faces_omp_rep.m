@@ -19,7 +19,7 @@ load bin/omp_representations;
 
 width = 42;
 height = 48;
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 yf.resize_all(width, height);
 

@@ -28,7 +28,7 @@ A = [dc_atom A(:, 1:D-1)];
 dictionary = spx.dict.MatrixOperator(A);
 
 
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 fprintf('\n Resizing images:\n');
 tstart = tic;

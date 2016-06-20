@@ -3,7 +3,7 @@ close all; clear all; clc;
 
 resize_images = false;
 
-yf = SPX_YaleFaces();
+yf = spx.data.image.YaleFaces();
 yf.load();
 
 ns = yf.num_subjects();
