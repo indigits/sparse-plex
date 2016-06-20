@@ -112,6 +112,8 @@ classdef SSC_NN_OMP < handle
             nk = self.K;
             % current residual
             r = x;
+            % norm of current residual
+            res_norm = norm(r);
             % ambient dimension
             nd = self.N;
             % coefficients
@@ -123,20 +125,37 @@ classdef SSC_NN_OMP < handle
             % max number of iterations
             maxIter = nk;
             MaxResNorm = 1/8;
-            % number of nearest neighbors
-            nn = max(2*(nk-1), 2);
+            % maximum number of nearest neighbors
+            nn = min (max(2*(nk-1), 2), round(ns/2) );
             for iter=1:maxIter
-                % Compute inner products
-                innerProducts = X' * r;
-                innerProducts(s) = 0;
-                innerProducts(omega) = 0;
-                innerProducts = abs(innerProducts);
+                % identify normalized inner product
+                rr = r / res_norm;
+                % Compute inner products with normalized residual
+                inner_products = X' * rr;
+                inner_products(s) = 0;
+                inner_products(omega) = 0;
+                inner_products = abs(inner_products);
                 % Find the highest inner product
-                [~, indices] = sort(innerProducts, 'descend');
+                [sorted_inner_products, indices] = sort(inner_products, 'descend');
                 index = indices(1);                % Add this index to support
                 omega = [omega, index];
-
-                c(indices(1:nn)) = innerProducts(indices(1:nn));
+                angles  = rad2deg(acos(sorted_inner_products(1:nn)'));
+                if false
+                    fprintf('%.0f ', angles);
+                    fprintf('\n');
+                end
+                min_angle = angles(1);
+                % allow for some degree leeway
+                max_angle = min(min_angle + 6, 1.5 * min_angle);
+                max_index = find(angles > max_angle, 1);
+                if isempty(max_index)
+                    % all vectors are too close by
+                    max_index = nn;
+                end
+                % number of neighbors
+                nnn = max(max_index - 1, 1);
+                %fprintf('%d:%d ', nn, nnn);
+                c(indices(1:nnn)) = inner_products(indices(1:nnn));
                 % Solve least squares problem
                 subdict = X(:, omega);
                 tmp = linsolve(subdict, x);
@@ -144,8 +163,8 @@ classdef SSC_NN_OMP < handle
                 z(omega) = tmp;
                 % Let us update the residual.
                 r = x - subdict * tmp;
-                resNorm = norm(r);
-                if resNorm < MaxResNorm
+                res_norm = norm(r);
+                if res_norm < MaxResNorm
                     break;
                 end
             end
