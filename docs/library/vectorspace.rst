@@ -86,7 +86,7 @@ Utility for constructing specific examples
 
 Two spaces at a given angle::
 
-    [A, B]  = spx.la.spaces.two_spaces_at_angle(N, theta)
+    [A, B]  = spx.data.synthetic.subspaces.two_spaces_at_angle(N, theta)
 
 Three spaces at a given angle::
 

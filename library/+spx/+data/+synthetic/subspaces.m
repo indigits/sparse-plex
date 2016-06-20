@@ -60,6 +60,30 @@ methods(Static)
         result.start_indices = start_indices;
         result.end_indices = end_indices;
     end
+
+
+        function [A, B] = two_spaces_at_angle(N, theta)
+            if ~mod(N, 2) == 0
+                error('N must be divisible by 2');
+            end
+            % First create two random orthonormal vectors
+            X = orth(randn(N, 2));
+            % Then tilt the second one w.r.t. first
+            a1 = X(:, 1);
+            a2 = X(:, 2);
+            p = cos(theta);
+            b1 = sqrt(1 - p^2) * a2 + p * a1;
+            X = [a1 b1];
+            % Find the orthogonal complement of X
+            [U S V] = svd(X);
+            Y = U(:, 3:end);
+            [~, n] = size(Y);
+            % Distribute vectors from Y into A and B
+            A = [a1 Y(:, 1:n/2)];
+            B = [b1 Y(:, n/2 + 1:end)];
+        end
+
+
 end
 
 end

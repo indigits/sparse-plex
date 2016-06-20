@@ -67,7 +67,8 @@ classdef spaces
             % Returns the principal angles in radians
             s = spx.la.spaces.principal_angles_cos(A, B);
             % Return the angles as cos inverse of singular values
-            result = acos(s);
+            % ensure that cos-theta values are <= 1. Otherwise complex numbers may appear.
+            result = acos(min(1, s));
         end
 
         function result = principal_angles_degree(A, B)
@@ -289,27 +290,6 @@ classdef spaces
             null_space = U(:, r+1:m);
             row_space = V(:, 1:r);
             left_null_space = V(:, r+1:n);
-        end
-
-        function [A, B] = two_spaces_at_angle(N, theta)
-            if ~mod(N, 2) == 0
-                error('N must be divisible by 2');
-            end
-            % First create two random orthonormal vectors
-            X = orth(randn(N, 2));
-            % Then tilt the second one w.r.t. first
-            a1 = X(:, 1);
-            a2 = X(:, 2);
-            p = cos(theta);
-            b1 = sqrt(1 - p^2) * a2 + p * a1;
-            X = [a1 b1];
-            % Find the orthogonal complement of X
-            [U S V] = svd(X);
-            Y = U(:, 3:end);
-            [~, n] = size(Y);
-            % Distribute vectors from Y into A and B
-            A = [a1 Y(:, 1:n/2)];
-            B = [b1 Y(:, n/2 + 1:end)];
         end
 
         function Y = k_dim_to_n_dim(X, n, indices)
