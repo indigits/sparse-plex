@@ -6,6 +6,8 @@ classdef SSC_L1 < handle
 
     properties
         Quiet = false
+        Affine = false
+        NoiseFactor = 0.01
     end
 
 
@@ -46,12 +48,23 @@ classdef SSC_L1 < handle
             % prepare sparse representations
             self.recover_coefficients();
             self.build_adjacency();
-            clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
-            clusterer.NumClusters = self.NumSubspaces;
-            cluster_labels = clusterer.cluster_random_walk();
+
+            % conduct spectral clustering
+            options.num_clusters = self.NumSubspaces;
+            result = spx.cluster.spectral.simple.normalized_symmetric(self.Adjacency, options);
+            cluster_labels = result.labels;
+
+
+            % We are disabling our version of spectral clustering for now.            
+            %clusterer = spx.cluster.spectral.Clustering(self.Adjacency);
+            %clusterer.NumClusters = self.NumSubspaces;
+            %cluster_labels = clusterer.cluster_random_walk();
+
             self.Labels = cluster_labels;
             % Return the labels
             result.Labels = self.Labels;
+            result.Z = self.Representation;
+            result.W = self.Adjacency;
         end
 
     end
@@ -78,13 +91,34 @@ classdef SSC_L1 < handle
                 cols = all_cols ~= s; % S - 1 columns
                 % dimensions are D x (S - 1)
                 A = data(:, cols);
+                % threshold for the noise norm
+                noise_norm_threshold = self.NoiseFactor * norm(x);
+                if self.Affine
+                    cvx_begin quiet;
+                        cvx_precision high;
+                        variable rep(ns-1,1);
+                        minimize( norm(rep,1) );
+                        subject to
+                            norm(A * rep  - x) <= noise_norm_threshold;
+                            sum(rep) == 1;
+                    cvx_end;
+                else
+                    cvx_begin quiet;
+                        cvx_precision high;
+                        variable rep(ns-1,1);
+                        minimize( norm(rep,1) );
+                        subject to
+                            norm(A * rep  - x) <= noise_norm_threshold;
+                    cvx_end;
+                end
                 % Prepare the l1 solver
-                solver = spx.pursuit.single.BasisPursuit(A, x);
-                solver.Quiet = true;
-                lambda = 2.5;
+                % solver = spx.pursuit.single.BasisPursuit(A, x);
+                % solver.Quiet = true;
+                % lambda = 2.5;
                 % Run the solver to obtain sparse representation
-                rep = solver.solve_l1_noise();
+                % rep = solver.solve_l1_noise();
                 % The obtained representation is in R^{S - 1} dimensions
+
                 % Put back the representation
                 self.Representation(cols, s) = rep;
             end
