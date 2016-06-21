@@ -49,6 +49,8 @@ classdef spaces
             M = A' * B;
             % Compute the SVD of M. The singular values are the cosine of principal angles
             result = svd(M);
+            % make sure that result is bounded by 1.
+            result = min(1, result);
         end
 
         function result = principal_angles_cos(A, B)
@@ -449,6 +451,20 @@ classdef spaces
             result = true;
         end
 
+    function result =  bases(X, counts)
+        % bases for individual subspaces
+        K = length(counts);
+        % bases cell array
+        result = cell(1, K);
+        [start_indices, end_indices] = spx.cluster.start_end_indices(counts);
+        for k=1:K
+            ss = start_indices(k);
+            ee = end_indices(k);
+            XX = X(:, ss:ee);
+            basis = orth(XX);
+            result{k} = basis;
+        end
+    end
 
 
     end
