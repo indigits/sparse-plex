@@ -35,7 +35,7 @@ distance = sqrt(abs(distance))
 
 % We verify the minimum and maximum distances betweeen these
 % signals 
-distances = SPX_Mat.off_diagonal_matrix(distance);
+distances = spx.commons.matrix.off_diagonal_matrix(distance);
 minDistance = min(distances)
 maxDistance = max(distances)
 
