@@ -71,6 +71,7 @@ methods(Static)
         result.num_labels = num_labels;
         result.num_missed_points = miss;
         result.error  = miss / num_labels;
+        result.error_perc = result.error * 100;
         % corresponding mapping
         result.mapping = possible_mappings(index, :);
         result.mapped_labels = result.mapping(true_labels);
