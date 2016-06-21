@@ -90,11 +90,13 @@ classdef BasisPursuit < handle
         end
 
 
-        function result = solve_l1_noise(self, noise_norm_threshold)
+        function result = solve_l1_noise(self, noise_norm_factor)
             if (nargin < 2)
                 % We assign a 40 dB SNR by default
-                noise_norm_threshold = 0.001 * norm(self.B);
+                noise_norm_factor = 0.01;
             end
+            norms = spx.commons.norm.norms_l2_cw(self.B);
+            noise_norm_threshold = noise_norm_factor * mean(norms);
             n = self.N;
             A = self.A;
             B = self.B;
