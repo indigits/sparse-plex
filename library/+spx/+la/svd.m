@@ -30,6 +30,99 @@ methods(Static)
     end
 
 
+    function result = low_rank_approx(X, r)
+        % return low rank approximation of X
+        [U S V] = svd(X);
+        % keep the first r left singular vectors
+        U = U(:, 1:r);
+        % keep the first r singular values
+        S = S(1:r, 1:r);
+        % keep the first r right singular vectors
+        V = V(:, 1:r);
+        % Return the approximation
+        result = U * S * V';
+    end
+
+    function result = low_rank_basis(X, r)
+        % Returns the ON basis for low rank approximation
+        [U S V] = svd(X, 'econ');
+        result = U(:, 1:r);
+    end
+
+    function result = low_rank_bases(X, counts, r)
+        % low rank bases for individual subspaces
+        K = length(counts);
+        % bases cell array
+        result = cell(1, K);
+        [start_indices, end_indices] = spx.cluster.start_end_indices(counts);
+        for k=1:K
+            ss = start_indices(k);
+            ee = end_indices(k);
+            XX = X(:, ss:ee);
+            basis = spx.la.svd.low_rank_basis(XX, r);
+            result{k} = basis;
+        end
+    end
+
+
+    function [result, r] = mahdi_rank_basis(X)
+        [U S V] = svd(X, 'econ');
+        sv = diag(S);
+        r = spx.la.svd.mahdi_rank(sv);
+        % r = r + 1;
+        result = U(:, 1:r);
+    end
+
+    function [result, ranks] = mahdi_rank_bases(X, counts)
+        % low rank bases for individual subspaces
+        K = length(counts);
+        % bases cell array
+        result = cell(1, K);
+        [start_indices, end_indices] = spx.cluster.start_end_indices(counts);
+        ranks = zeros(1, K);
+        for k=1:K
+            ss = start_indices(k);
+            ee = end_indices(k);
+            XX = X(:, ss:ee);
+            [basis,r] = spx.la.svd.mahdi_rank_basis(XX);
+            result{k} = basis;
+            ranks(k) = r;
+        end
+    end
+
+    function [result, r] = vidal_rank_basis(X, kappa)
+        if nargin < 3
+            kappa = 0.1;
+        end
+        [U S V] = svd(X, 'econ');
+        sv = diag(S)';
+        r = spx.la.svd.vidal_rank(sv, kappa);
+        % r = r + 1;
+        result = U(:, 1:r);
+    end
+
+    function [result, ranks] = vidal_rank_bases(X, counts, kappa)
+        if nargin < 3
+            kappa = 0.1;
+        end
+        % low rank bases for individual subspaces
+        K = length(counts);
+        % bases cell array
+        result = cell(1, K);
+        [start_indices, end_indices] = spx.cluster.start_end_indices(counts);
+        ranks = zeros(1, K);
+        for k=1:K
+            ss = start_indices(k);
+            ee = end_indices(k);
+            XX = X(:, ss:ee);
+            [basis,r] = spx.la.svd.vidal_rank_basis(XX, kappa);
+            result{k} = basis;
+            ranks(k) = r;
+        end
+    end
+
+
+
 end
 
 end
