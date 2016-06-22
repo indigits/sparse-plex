@@ -14,3 +14,48 @@ function test_affinity(testCase)
     affinity = spx.cluster.subspace.affinity(A, B);
     verifyEqual(testCase, affinity, 0.223130160148430, 'AbsTol', 1e-12);
 end
+
+
+function test_subspace_preserving_representations(testCase)
+    cluster_sizes = [4 4];
+    C = [
+    0 1 1 1 0 0 0 0 
+    1 0 0 1 0 0 0 0
+    1 1 0 0 0 0 0 0
+    1 0 1 0 0 0 0 0
+    0 0 0 0 0 1 1 1
+    0 0 0 0 1 0 0 1
+    0 0 0 0 1 1 0 0
+    0 0 0 0 1 0 1 0
+    ];
+    % We construct a subspace preserving representation
+    C = C';
+    result = spx.cluster.subspace.subspace_preservation_stats(C, cluster_sizes);
+    verifyEqual(testCase, result.spr_errors, [0 0 0 0 0 0 0 0]);
+    verifyEqual(testCase, result.spr_error, 0);
+    verifyEqual(testCase, result.spr_flags, [1 1 1 1 1 1 1 1]);
+    verifyEqual(testCase, result.spr_flag, true);
+    verifyEqual(testCase, result.spr_component, 1);
+    verifyEqual(testCase, result.spr_perc, 100);
+
+
+    C = [
+    0 1 1 1 0 0 1 0 
+    1 0 0 1 0 0 0 0
+    1 1 0 0 0 0 0 0
+    1 0 1 0 0 0 0 0
+    0 0 0 0 0 1 1 1
+    0 0 0 0 1 0 0 1
+    0 1 0 0 1 1 0 0
+    0 0 0 0 1 0 1 0
+    ];
+    % We construct a subspace preserving representation
+    C = C';
+    result = spx.cluster.subspace.subspace_preservation_stats(C, cluster_sizes)
+    verifyEqual(testCase, result.spr_errors, [1/4 0 0 0 0 0 1/3 0], 'AbsTol', 1e-12);
+    verifyEqual(testCase, result.spr_error, (1/4 + 1/3)/8, 'AbsTol', 1e-12);
+    verifyEqual(testCase, result.spr_flags, [0 1 1 1 1 1 0 1]);
+    verifyEqual(testCase, result.spr_flag, false);
+    verifyEqual(testCase, result.spr_component, 3/4);
+    verifyEqual(testCase, result.spr_perc, 75);
+end

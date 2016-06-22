@@ -82,6 +82,54 @@ function result = affinity(base1, base2)
     result = exp(-sum(tmp));
 end
 
+
+function result = subspace_preservation_stats(C, cluster_sizes)
+    % Returns statistics of subspace preservation
+    % We assume that all points within clusters are adjacent to each other
+    %spr stands for subspace preserving representation
+
+    labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
+    % C must be an SxS square matrix.
+    if ~spx.commons.matrix.is_square(C)
+        error('C must be a square matrix.');
+    end
+    % number of points
+    S = size(C, 1);
+    % checking if the representation is subspace preserving
+    spr_flags = zeros(1, S);
+    spr_errors = zeros(1, S);
+    % we are concerned only with absolute values
+    C = abs(C);
+    for i=1:S
+        % pick the i-th signal
+        ci = C(:, i);
+        % identify its cluster number
+        k = labels(i);
+        % identify non-zero entries
+        non_zero_indices = (ci >= 1e-3);
+        % identify the clusters of corresponding vectors
+        non_zero_labels = labels(non_zero_indices);
+        % verify that they all belong to same subspace
+        spr_flags(i) = all(non_zero_labels == k);
+        % flags for current subspace
+        w = labels == k;
+        % identify entries in current subspace
+        cik = ci(w);
+        spr_errors(i) = 1 - sum(cik) / sum (ci);
+    end
+    %spr stands for subspace preserving representation
+    result.spr_errors = spr_errors;
+    result.spr_error = mean(spr_errors);
+    result.spr_flags = spr_flags;
+    % all representations are subspace preserving
+    result.spr_flag = all(spr_flags);
+    % component of subspace preserving representations
+    result.spr_component = sum(spr_flags) / S;
+    % percentage of subspace preserving representations
+    result.spr_perc = result.spr_component * 100;
+end
+
+
 end
 
 
