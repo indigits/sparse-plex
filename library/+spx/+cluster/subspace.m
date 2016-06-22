@@ -129,6 +129,69 @@ function result = subspace_preservation_stats(C, cluster_sizes)
     result.spr_perc = result.spr_component * 100;
 end
 
+function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_sizes)
+    % it counts the number of nearest neighbors in the same subspace based on inner product. 
+
+    % total number of points
+    S = sum (cluster_sizes);
+    % Number of clusters
+    K = numel(cluster_sizes);
+    [m, n] = size(X);
+    if n ~= S
+        error('Number of points not matching');
+    end
+    [start_indices, end_indices] = spx.cluster.start_end_indices(cluster_sizes);
+    % compute all the inner products
+    G = abs(X' * X);
+    G = min(G, 1);
+    % rad2deg(acos(G))
+    % cluster labels of each point
+    labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
+    result.within_neighbor_counts = zeros(1, S);
+    % angle of the nearest neighbor
+    result.minimum_angles = zeros(1, S);
+    % angle of the nearest neighbor in the same subspace
+    result.within_minimum_angles = zeros(1, S);
+    % angle of the neighbor in the same subspace before the first bad neighbor
+    result.within_maximum_angles = zeros(1, S);
+    result.outside_nearest_neighbor_angles = zeros(1, S);
+    result.nearst_neighbor_indices = zeros(1, S);
+    result.nearst_within_neighbor_indices = zeros(1, S);
+    result.nearst_outside_neighbor_indices = zeros(1, S);
+    for s=1:S
+        % get the inner products with all vectors
+        g = G(:, s);
+        % cluster of current vector
+        k = labels(s);
+        % ignore self.
+        g(s) = 0;
+        % sort them by decreasing inner product
+        [sorted_g, indices] = sort(g, 'descend');
+        % identify corresponding cluster labels
+        neighbor_labels = labels(indices);
+        % find the first entry from a different cluster
+        first_bad_neighbor = find(neighbor_labels ~= k, 1);
+        result.within_neighbor_counts(s) = first_bad_neighbor - 1;
+        if  first_bad_neighbor == 1
+            % nearest neighbor is from different cluster
+            result.within_minimum_angles(s) = -1;
+            result.within_maximum_angles(s) = -1;
+            result.nearst_within_neighbor_indices(s) = -1;
+        else
+            result.within_minimum_angles(s) = rad2deg(acos(sorted_g(1)));
+            result.within_maximum_angles(s) = rad2deg(acos(sorted_g(first_bad_neighbor-1)));
+            result.nearst_within_neighbor_indices(s) = indices(1);
+        end
+        result.outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_bad_neighbor)));
+        result.minimum_angles(s) = rad2deg(acos(sorted_g(1)));
+        result.nearst_neighbor_indices(s) = indices(1);
+        result.nearst_outside_neighbor_indices(s) = indices(first_bad_neighbor);
+
+    end
+    result.no_within_neighbor_count = sum(result.within_neighbor_counts == 0);
+    result.no_within_neighbor_component = result.no_within_neighbor_count/S;
+    result.no_within_neighbor_perc = result.no_within_neighbor_component * 100;
+end
 
 end
 

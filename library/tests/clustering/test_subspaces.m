@@ -51,11 +51,26 @@ function test_subspace_preserving_representations(testCase)
     ];
     % We construct a subspace preserving representation
     C = C';
-    result = spx.cluster.subspace.subspace_preservation_stats(C, cluster_sizes)
+    result = spx.cluster.subspace.subspace_preservation_stats(C, cluster_sizes);
     verifyEqual(testCase, result.spr_errors, [1/4 0 0 0 0 0 1/3 0], 'AbsTol', 1e-12);
     verifyEqual(testCase, result.spr_error, (1/4 + 1/3)/8, 'AbsTol', 1e-12);
     verifyEqual(testCase, result.spr_flags, [0 1 1 1 1 1 0 1]);
     verifyEqual(testCase, result.spr_flag, false);
     verifyEqual(testCase, result.spr_component, 3/4);
     verifyEqual(testCase, result.spr_perc, 75);
+end
+
+
+function test_nearest_same_subspace_neighbors_by_inner_product(testCase)
+    N = 4;
+    theta = pi/100;
+    [A, B] = spx.data.synthetic.subspaces.two_spaces_at_angle(N, theta);
+    % create vectors from both subspaces
+    Sk = 10;
+    XA = A * randn(N/2, Sk);
+    XB = B * randn(N/2, Sk);
+    X = [XA XB];
+    % normalize columns
+    X = spx.commons.norm.normalize_l2(X);
+    result = spx.cluster.subspace.nearest_same_subspace_neighbors_by_inner_product(X, [Sk Sk])
 end
