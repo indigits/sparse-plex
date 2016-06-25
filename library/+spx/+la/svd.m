@@ -43,6 +43,19 @@ methods(Static)
         result = U * S * V';
     end
 
+    function [result, basis] = low_rank_projection(X, r)
+        % Projects X to a low dimensional space
+        % X is NxS
+        % result is RxS
+        % basis is [NxR] orthonormal basis
+
+        % Compute the SVD
+        [U, ~, ~] = svd(X, 0);
+        % Choose the low rank basis
+        basis = U(:, 1:r);
+        % Compute coefficients in this basis
+        result = basis' * X;
+
     function result = low_rank_basis(X, r)
         % Returns the ON basis for low rank approximation
         [U S V] = svd(X, 'econ');
