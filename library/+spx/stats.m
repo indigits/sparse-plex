@@ -45,6 +45,18 @@ methods(Static)
         end
     end
 
+    function result = format_descriptive_statistics(x)
+        mu = mean(x);
+        med = median(x);
+        rng = range(x);
+        r = iqr(x);
+        sigma = std(x);
+        m1 = min(x);
+        m2 = max(x);
+        m3 = mad(x);
+        result = sprintf('Min: %.2f, Max: %.2f, Mean: %.2f, Median: %.2f, Range : %.2f, IQR: %.2f, Deviation: %.2f, MAD: %.2f', m1, m2, mu, med, rng, r, sigma, m3);
+    end
+
 end
 
 end
