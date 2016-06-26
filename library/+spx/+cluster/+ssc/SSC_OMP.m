@@ -82,8 +82,10 @@ classdef SSC_OMP < handle
             all_cols = 1:ns;
             for s=all_cols
                 if ~self.Quiet 
-                    fprintf('.');
                     if mod(s, 50) == 0
+                        fprintf('.');
+                    end
+                    if mod(s, 1000) == 0
                         fprintf('\n');
                     end
                 end
