@@ -7,3 +7,4 @@ output.txt
 examples/pursuit/single_recovery/diary
 library/listing.txt
 scratch.txt
+*.swp
