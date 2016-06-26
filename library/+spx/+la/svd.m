@@ -55,6 +55,7 @@ methods(Static)
         basis = U(:, 1:r);
         % Compute coefficients in this basis
         result = basis' * X;
+    end
 
     function result = low_rank_basis(X, r)
         % Returns the ON basis for low rank approximation
