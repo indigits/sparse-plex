@@ -36,6 +36,8 @@ methods(Static)
         result.singular_values = singular_values;
         result.Laplacian = Laplacian;
         result.num_clusters = num_clusters;
+        % second last element is the connectivity value
+        result.connectivity = singular_values(end-1);
     end
 
 
@@ -71,6 +73,8 @@ methods(Static)
         result.singular_values = singular_values;
         result.Laplacian = Laplacian;
         result.num_clusters = num_clusters;
+        % second last element is the connectivity value
+        result.connectivity = singular_values(end-1);
     end
 
     function result = normalized_symmetric(W, options)
@@ -111,7 +115,7 @@ methods(Static)
         % We need to normalize the rows of kernel
         Kernel = spx.commons.norm.normalize_l2_rw(Kernel);
         % Result of clustering the rows of eigen vectors
-        fprintf('Number of clusters: %d\n', num_clusters);
+        %fprintf('Number of clusters: %d\n', num_clusters);
         if num_clusters >  max_clusters 
             % We will restrict the number of clusters
             num_clusters = max_clusters;
@@ -129,6 +133,8 @@ methods(Static)
         result.singular_values = singular_values;
         result.Laplacian = Laplacian;
         result.num_clusters = num_clusters;
+        % second last element is the connectivity value
+        result.connectivity = singular_values(end-1);
     end
 
 end
