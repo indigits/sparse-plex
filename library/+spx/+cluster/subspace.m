@@ -158,6 +158,7 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
     result.nearst_neighbor_indices = zeros(1, S);
     result.nearst_within_neighbor_indices = zeros(1, S);
     result.nearst_outside_neighbor_indices = zeros(1, S);
+    result.nearst_outside_neighbor_absolute_indices = zeros(1, S);
     for s=1:S
         % get the inner products with all vectors
         g = G(:, s);
@@ -169,25 +170,25 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
         [sorted_g, indices] = sort(g, 'descend');
         % identify corresponding cluster labels
         neighbor_labels = labels(indices);
+        % inner products with faces within the cluster
+        sorted_g_within = sorted_g(neighbor_labels == k);
+        % inner products with faces outside the cluster
+        sorted_g_outside = sorted_g(neighbor_labels ~= k);
         % find the first entry from a different cluster
-        first_bad_neighbor = find(neighbor_labels ~= k, 1);
-        result.within_neighbor_counts(s) = first_bad_neighbor - 1;
-        if  first_bad_neighbor == 1
-            % nearest neighbor is from different cluster
-            result.within_minimum_angles(s) = -1;
-            result.within_maximum_angles(s) = -1;
-            result.nearst_within_neighbor_indices(s) = -1;
-        else
-            result.within_minimum_angles(s) = rad2deg(acos(sorted_g(1)));
-            result.within_maximum_angles(s) = rad2deg(acos(sorted_g(first_bad_neighbor-1)));
-            result.nearst_within_neighbor_indices(s) = indices(1);
-        end
-        result.outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_bad_neighbor)));
+        first_outside_neighbor = find(neighbor_labels ~= k, 1);
+        first_within_neighbor = find(neighbor_labels == k, 1);
+        result.within_neighbor_counts(s) = first_outside_neighbor - 1;
+        result.within_minimum_angles(s) = rad2deg(acos(sorted_g_within(1)));
+        result.within_maximum_angles(s) = rad2deg(acos(sorted_g_within(end-1)));
+        result.nearst_within_neighbor_indices(s) = find(neighbor_labels == k, 1);
         result.minimum_angles(s) = rad2deg(acos(sorted_g(1)));
         result.nearst_neighbor_indices(s) = indices(1);
-        result.nearst_outside_neighbor_indices(s) = indices(first_bad_neighbor);
+        result.outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_outside_neighbor)));
+        result.nearst_outside_neighbor_indices(s) = first_outside_neighbor;
+        result.nearst_outside_neighbor_absolute_indices(s) = indices(first_outside_neighbor);
 
     end
+    result.first_in_out_angle_spreads = result.outside_nearest_neighbor_angles - result.within_minimum_angles;
     result.no_within_neighbor_count = sum(result.within_neighbor_counts == 0);
     result.no_within_neighbor_component = result.no_within_neighbor_count/S;
     result.no_within_neighbor_perc = result.no_within_neighbor_component * 100;
