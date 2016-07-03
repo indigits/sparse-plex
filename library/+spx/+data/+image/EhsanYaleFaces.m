@@ -70,10 +70,10 @@ methods
             error('Invalid experiment number.');
         end
         indices = sets(i, :);
-        Y = []
+        Y = [];
         for k=1:n
             subject_index = indices(k);
-            Y = [Y self.subject_faces_as_columns(k)];
+            Y = [Y self.subject_faces_as_columns(subject_index)];
         end
         labels = self.data.s{n};
     end
