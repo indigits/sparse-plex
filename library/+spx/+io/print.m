@@ -11,11 +11,11 @@ classdef print
         K = 0;
         for i=1:N
             if x(i)
-                if mod(K, 8) == 0
+                if mod(K, 5) == 0
                     % We introduce a new line after every 8 values
                     fprintf('\n');
                 end
-                fprintf('(%d,%d) ',i, x(i));
+                fprintf('(%d,%0.4f) ',i, x(i));
                 K = K+1;
             end
         end
