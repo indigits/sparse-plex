@@ -103,6 +103,16 @@ methods
         labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
     end
     
+    %% Generates data for specified subjects
+    function [Y, cluster_sizes, labels] = data_for_subjects(self, subject_list)
+        cluster_sizes = self.cluster_sizes(subject_list);
+        Y = [];
+        for k=1:numel(subject_list)
+            subject_index = subject_list(k);
+            Y = [Y self.subject_faces_as_columns(subject_index)];
+        end
+        labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
+    end
 
     function [faces, cluster_sizes, labels] = all_faces(self)
         faces = self.Y;
