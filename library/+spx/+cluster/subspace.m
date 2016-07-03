@@ -136,7 +136,7 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
     S = sum (cluster_sizes);
     % Number of clusters
     K = numel(cluster_sizes);
-    [m, n] = size(X);
+    [M, n] = size(X);
     if n ~= S
         error('Number of points not matching');
     end
@@ -147,6 +147,9 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
     % rad2deg(acos(G))
     % cluster labels of each point
     labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
+    result.S = S;
+    result.K = K;
+    result.cluster_sizes = cluster_sizes;
     result.within_neighbor_counts = zeros(1, S);
     % angle of the nearest neighbor
     result.minimum_angles = zeros(1, S);
@@ -192,6 +195,119 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
     result.no_within_neighbor_count = sum(result.within_neighbor_counts == 0);
     result.no_within_neighbor_component = result.no_within_neighbor_count/S;
     result.no_within_neighbor_perc = result.no_within_neighbor_component * 100;
+
+
+    % Let us compute the first residual for each point within its subspace
+    R = zeros(size(X));
+    res_norms = zeros(1, S);
+    for s=1:S
+        x = X(:, s);
+        within_nearest_neighbor_index = result.nearst_within_neighbor_indices(s);
+        z = X(:, within_nearest_neighbor_index);
+        % compute residual
+        r = (eye(M) - z * z') * x; 
+        r_norm = norm(r);
+        res_norms(s) = r_norm;
+        if r_norm ~= 0
+            r = r ./r_norm;
+        end
+        R(:, s) = r;
+    end
+    % Now identify nearest neighbors for residuals
+    for s=1:S
+        % get the inner products with all vectors
+        r = R(:, s);
+        % inner products
+        g = X' * r;
+        % ignore the s-th data-point
+        g (s)  = 0;
+        % clean-up
+        g  = abs(g);
+        g  = min(g, 1);
+        % cluster of current vector
+        k = labels(s);
+        % sort them by decreasing inner product
+        [sorted_g, indices] = sort(g, 'descend');
+        % identify corresponding cluster labels
+        neighbor_labels = labels(indices);
+        % inner products with faces within the cluster
+        sorted_g_within = sorted_g(neighbor_labels == k);
+        % inner products with faces outside the cluster
+        sorted_g_outside = sorted_g(neighbor_labels ~= k);
+        % find the first entry from a different cluster
+        first_outside_neighbor = find(neighbor_labels ~= k, 1);
+        first_within_neighbor = find(neighbor_labels == k, 1);
+        result.r1_within_neighbor_counts(s) = first_outside_neighbor - 1;
+        result.r1_within_minimum_angles(s) = rad2deg(acos(sorted_g_within(1)));
+        result.r1_within_maximum_angles(s) = rad2deg(acos(sorted_g_within(end-1)));
+        result.r1_nearst_within_neighbor_indices(s) = find(neighbor_labels == k, 1);
+        result.r1_minimum_angles(s) = rad2deg(acos(sorted_g(1)));
+        result.r1_nearst_neighbor_indices(s) = indices(1);
+        result.r1_outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_outside_neighbor)));
+        result.r1_nearst_outside_neighbor_indices(s) = first_outside_neighbor;
+        result.r1_nearst_outside_neighbor_absolute_indices(s) = indices(first_outside_neighbor);
+    end    
+    result.r1_first_in_out_angle_spreads = result.r1_outside_nearest_neighbor_angles - result.r1_within_minimum_angles;
+    result.r1_no_within_neighbor_count = sum(result.r1_within_neighbor_counts == 0);
+    result.r1_no_within_neighbor_component = result.r1_no_within_neighbor_count/S;
+    result.r1_no_within_neighbor_perc = result.r1_no_within_neighbor_component * 100;
+end
+
+
+function print_nearest_neighbor_result(result)
+    S = result.S;
+    fprintf('Within Neighbor Counts:\n %s\n', spx.stats.format_descriptive_statistics(result.within_neighbor_counts));
+    fprintf('Nearest Within Neighbor Indices:\n %s\n', spx.stats.format_descriptive_statistics(result.nearst_within_neighbor_indices));
+    nearst_within_neighbor_indices = result.nearst_within_neighbor_indices;
+    % club all those cases where nearest within neighbor is far away.
+    nearst_within_neighbor_indices(nearst_within_neighbor_indices > 10) = -1;
+    tabulate(nearst_within_neighbor_indices);
+
+    fprintf('Within Minimum Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.within_minimum_angles));
+    fprintf('Within Maximum Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.within_maximum_angles));
+    fprintf('Outside Nearest Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.outside_nearest_neighbor_angles));
+
+    fprintf('First In Out Angle Spreads:\n %s\n', spx.stats.format_descriptive_statistics(result.first_in_out_angle_spreads));
+    fioas = result.first_in_out_angle_spreads;
+    %fioas = round(fioas * 10) / 10;
+    fioas = round(fioas/4)*4;
+    fioas(fioas > 8) = 100;
+    fioas(fioas < -8) = 100;
+    angle_gt_zero_flags = result.first_in_out_angle_spreads >= 0;
+    angle_gte_zero = result.first_in_out_angle_spreads(angle_gt_zero_flags);
+    angle_lte_two_flags =  angle_gte_zero <= 2;
+    angle_lte_four_flags =  angle_gte_zero <= 4;
+    angle_lte_eight_flags =  angle_gte_zero <= 8;
+    angle_lt_zero_flags = result.first_in_out_angle_spreads < 0;
+    angle_lt_zero =  result.first_in_out_angle_spreads(angle_lt_zero_flags);
+    angle_gte_minus_two_flags =  angle_lt_zero >= -2;
+    angle_gte_minus_four_flags =  angle_lt_zero >= -4;
+    abs_angle_lte_four_flags = abs(result.first_in_out_angle_spreads) <=4;
+    fprintf('angle greater than equal to 0: %.2f %%\n', sum(angle_gt_zero_flags) * 100 / S);
+    fprintf('angle less than 2: %.2f %%\n', sum(angle_lte_two_flags) * 100 / S);
+    fprintf('angle less than 4: %.2f %%\n', sum(angle_lte_four_flags) * 100 / S);
+    fprintf('angle less than 8: %.2f %%\n', sum(angle_lte_four_flags) * 100 / S);
+    fprintf('angle less than 0: %.2f %%\n', sum(angle_lt_zero_flags) * 100 / S);
+    fprintf('angle greater than -2: %.2f %%\n', sum(angle_gte_minus_two_flags) * 100 / S);
+    fprintf('angle greater than -4: %.2f %%\n', sum(angle_gte_minus_four_flags) * 100 / S);
+    fprintf('abs angle less than 4: %.2f %%\n', sum(abs_angle_lte_four_flags) * 100 / S);
+
+
+    fprintf('\n\n1st Residual\n\n');
+    fprintf('Within Neighbor Counts:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_within_neighbor_counts));
+    fprintf('Nearest Within Neighbor Indices:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_nearst_within_neighbor_indices));
+    r1_nearst_within_neighbor_indices = result.r1_nearst_within_neighbor_indices;
+    % club all those cases where nearest within neighbor is far away.
+    r1_nearst_within_neighbor_indices(r1_nearst_within_neighbor_indices > 35) = -1;
+    tabulate(r1_nearst_within_neighbor_indices);
+
+    fprintf('Within Minimum Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_within_minimum_angles));
+    fprintf('Within Maximum Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_within_maximum_angles));
+    fprintf('Outside Nearest Angles:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_outside_nearest_neighbor_angles));
+
+    fprintf('First In Out Angle Spreads:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_first_in_out_angle_spreads));
+
+
 end
 
 end
