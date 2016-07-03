@@ -29,6 +29,12 @@ methods(Static)
         return;
     end
 
+    function [cluster_sizes, labels] = cluster_sizes_from_labels(labels)
+        tbl = tabulate(labels);
+        labels = tbl(:, 1)';
+        cluster_sizes =  tbl(:, 2)';
+    end
+
     function [start_indices, end_indices] = start_end_indices(cluster_sizes)
         % Returns start and end indices from cluster sizes
         start_indices = cumsum(cluster_sizes) + 1;
