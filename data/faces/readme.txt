@@ -6,3 +6,5 @@ We are providing the names of files which are expected here.
 
 
 YaleBCrop025.mat: This file can be obtained from SSC_ADMM_v1.1.zip provided by Ehsan Elhamifar, 2012.
+
+ExtendedYaleB.mat : is from SSCOMP_Code.zip provided by Chong You. https://sites.google.com/site/chongyou1987/
