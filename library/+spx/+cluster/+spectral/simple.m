@@ -137,6 +137,39 @@ methods(Static)
         result.connectivity = singular_values(end-1);
     end
 
+    % NCut spectral clustering algorithm adopted from Chong You SSC-OMP work.
+    % The computation is equivalent to:
+    % - compute the largest eigenvectors of D^{-1} W
+    % - normalize the rows of the resultant matrix
+    % - then apply kmeans to the rows.
+    function result = normalized_symmetric_sparse(W, num_clusters)
+        if ~issymmetric(W)
+            error('Adjacency matrix must be symmetric.');
+        end
+        % Maximum iteration for KMeans Algorithm
+        max_iterations = 1000; 
+        % Replication for KMeans Algorithm
+        replicates = 20;
+        % number of nodes
+        [m, ~] = size(W);
+        num_nodes = m; 
+        % degree matrix
+        degree_vec = full(sum(W));
+        W2 = bsxfun(@rdivide, W, degree_vec + eps);
+        [Kernel, ~] = eigs(W2, num_clusters, 'LR');
+        % We need to normalize the rows of kernel
+        Kernel = spx.commons.norm.normalize_l2_rw(Kernel);
+        labels = kmeans(Kernel, num_clusters, ...
+            'start','sample', ...
+            'maxiter',max_iterations,...
+            'replicates',replicates, ...
+            'EmptyAction','singleton'...
+            );
+        result.labels = labels;
+        result.num_clusters = num_clusters;
+        % second last element is the connectivity value
+        result.connectivity = -1;
+    end
 end
 
 end
