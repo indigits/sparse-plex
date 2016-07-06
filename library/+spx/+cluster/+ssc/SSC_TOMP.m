@@ -220,6 +220,10 @@ classdef SSC_TOMP < handle
                 max_norm_threshold = min_norm * 2;
                 % identify the candidates which will be retained
                 retained_indices = residual_norms < max_norm_threshold;
+                % We will keep only top ten indices
+                if (sum(retained_indices) > 10)
+                    retained_indices = norm_indices(1:10);
+                end
                 % throw away data for candidates which are not retained.
                 candidate_supports = candidate_supports(:, retained_indices);
                 candidate_residuals= candidate_residuals(:, retained_indices);
@@ -250,10 +254,10 @@ classdef SSC_TOMP < handle
 
         function build_adjacency(self)
             C = abs(self.Affinity);
-            % Normalize the matrix by column wise maximums
-            C = spx.commons.norm.normalize_linf(C);
             % Make it symmetric
             C = C + C';
+            % Normalize the matrix by column wise maximums
+            C = spx.commons.norm.normalize_linf(C);
             % Keep it
             self.Adjacency = C;
         end
