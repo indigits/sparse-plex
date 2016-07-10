@@ -290,7 +290,7 @@ classdef SSC_MC_OMP < handle
                     c_end  = c_ends(ss);
                     c_mask = [c_start:c_end];
                     % compute correlation for current bunch of candidates
-                    corr_mat = abs(data_matrix' * candidate_residuals(:, c_mask));
+                    corr_mat = abs(self.Data' * candidate_residuals(:, c_mask));
                     % set all the diagonal entries (inner product with self) to zero.
                     c = 0;
                     for s=s_start:s_end
@@ -598,11 +598,13 @@ classdef SSC_MC_OMP < handle
         function build_adjacency(self)
             C = abs(self.Representation);
             % Normalize the matrix by column wise maximums
-            % C = spx.commons.norm.normalize_linf(C);
+            C = spx.commons.norm.normalize_linf(C);
+            % disp(C(:, 1));
             % Make it symmetric
             C = C + C';
             % Keep it
             self.Adjacency = C;
+            % disp(self.Adjacency(:, 1));
         end
 
     end
