@@ -13,7 +13,7 @@ function Xp = low_rank_approx(X, n)
         Xp = X;
         return;
     end
-    if min(M, N) > 5000
+    if min(M, S) > 5000
         error('Matrix is too big.');
     end
     if M <= S
@@ -50,9 +50,9 @@ function Xp = low_rank_approx(X, n)
         lambda = lambda .^(.5);
         lambda = diag(lambda);
         % Compute the approximation
-        Xp = lambda * V;
+        Xp = lambda * V';
     end
-
+end
 
 
 
