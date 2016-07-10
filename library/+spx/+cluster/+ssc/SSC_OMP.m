@@ -108,7 +108,7 @@ classdef SSC_OMP < handle
                 end
                 % We correlated data with residual.
                 % to do change this to handle cases where there are too many points to handle
-                correlation_matrix = abs(data_matrix' * residual_matrix); % S x M  times M x S = S x S
+                correlation_matrix = abs(self.Data' * residual_matrix); % S x M  times M x S = S x S
                 % set all the diagonal entries (inner product with self) to zero.
                 correlation_matrix(1:ns+1:end) = 0;
                 % the inner product of a residual with each atom is stored along a column
@@ -159,6 +159,11 @@ classdef SSC_OMP < handle
                 submatrix = self.Data(:, support_set);
                 % solve the least squares problem
                 coeff = submatrix \ x;
+                % if (s == 1)
+                %     disp(submatrix(1:10, :));
+                %     disp(x(1:10));
+                %     disp(coeff);
+                % end
                 % put the coefficients back into coefficients matrix
                 coefficients_matrix(s, 1:k) = coeff';
             end
@@ -188,11 +193,13 @@ classdef SSC_OMP < handle
         function build_adjacency(self)
             C = abs(self.Representation);
             % Normalize the matrix by column wise maximums
-            % C = spx.commons.norm.normalize_linf(C);
+            C = spx.commons.norm.normalize_linf(C);
+            % disp(C(:, 1));
             % Make it symmetric
             C = C + C';
             % Keep it
             self.Adjacency = C;
+            % disp(self.Adjacency(:, 1));
         end
 
     end
