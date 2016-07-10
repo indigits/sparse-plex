@@ -51,10 +51,10 @@ methods(Static)
         rng = range(x);
         r = iqr(x);
         sigma = std(x);
-        m1 = min(x);
-        m2 = max(x);
+        [m1, min_idx] = min(x);
+        [m2, max_idx] = max(x);
         m3 = mad(x);
-        result = sprintf('Min: %.2f, Max: %.2f, Mean: %.2f, Median: %.2f, Range : %.2f, IQR: %.2f, Deviation: %.2f, MAD: %.2f', m1, m2, mu, med, rng, r, sigma, m3);
+        result = sprintf('Min: %.2f (%d), Max: %.2f (%d), Mean: %.2f, Median: %.2f, Range : %.2f, IQR: %.2f, Deviation: %.2f, MAD: %.2f', m1, min_idx, m2, max_idx, mu, med, rng, r, sigma, m3);
     end
 
 end
