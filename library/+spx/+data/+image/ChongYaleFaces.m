@@ -1,6 +1,9 @@
 classdef ChongYaleFaces < handle
 % This class is a wrapper over the dataset created by
-% Chong You, 2016[ExtendedYaleB.mat, https://sites.google.com/site/chongyou1987/] . 
+% Chong You, 2016
+% % C. You, D. Robinson, R. Vidal, Scalable Sparse Subspace Clustering by 
+% Orthogonal Matching Pursuit, CVPR 2016.
+% [ExtendedYaleB.mat, https://sites.google.com/site/chongyou1987/] . 
 % The images are already  cropped.
 properties
 end
