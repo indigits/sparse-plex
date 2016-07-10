@@ -4,6 +4,7 @@ classdef SSC_MC_OMP < handle
         Quiet = false
         % The branching factor
         BranchingFactor = 2
+        MaxCandidatesToRetain = 10
     end
 
 
@@ -110,8 +111,18 @@ classdef SSC_MC_OMP < handle
             % for candidate id, dim 1 is branching direction
             % retaining candidates are filtered over dim 2.
 
-            % number of candidates for each data point
-            bf = self.BranchingFactor;
+            % number of candidates for each data point in each iteration
+            bfs = self.BranchingFactor;
+            if isscalar (bfs)
+                bfs = bfs * ones(1, nk);
+            end
+            if length(bfs) ~= nk
+                error('Branching factor for all iterations must be specified.');
+            end
+            % current branching factor
+            bf = 0;
+            mcrt = self.MaxCandidatesToRetain;
+
             num_candidate_list = ones(1, ns);
             num_total_candidates = sum(num_candidate_list);
             candidate_supports = [];
@@ -213,8 +224,8 @@ classdef SSC_MC_OMP < handle
                         retained = find(r_norms < max_norm_threshold);
                     end
                     % We will keep only top ten indices
-                    if (numel(retained) > 10)
-                        retained = norm_indices(1:10);
+                    if (numel(retained) > mcrt)
+                        retained = norm_indices(1:mcrt);
                     end
                     % absolute position of retained columns
                     retained = retained + cand_start - 1;
@@ -222,12 +233,14 @@ classdef SSC_MC_OMP < handle
                     %  the candidates to be retained
                     retained_indices = [retained_indices retained];
                 end
+                retained_idex_flags = false(1, num_total_candidates);
+                retained_idex_flags(retained_indices) = true;
                 % we clean up all candidates
                 % throw away data for candidates which are not retained.
-                candidate_supports = candidate_supports(:, retained_indices);
-                candidate_ids =  candidate_ids(retained_indices);
-                candidate_residuals= candidate_residuals(:, retained_indices);
-                residual_norms =  residual_norms(:, retained_indices);
+                candidate_supports = candidate_supports(:, retained_idex_flags);
+                candidate_ids =  candidate_ids(retained_idex_flags);
+                candidate_residuals= candidate_residuals(:, retained_idex_flags);
+                residual_norms =  residual_norms(:, retained_idex_flags);
                 num_total_candidates = sum(num_candidate_list);
             end
 
@@ -399,6 +412,7 @@ classdef SSC_MC_OMP < handle
 
             % first iteration
             iter = 1;
+            bf = bfs(iter);
             % initialize first iteration candidates
             initialize_candidates();
             % filter out unlikely candidates
@@ -409,6 +423,7 @@ classdef SSC_MC_OMP < handle
                 if ~self.Quiet 
                     fprintf('.');
                 end
+                bf = bfs(iter);
                 % update candidates
                 update_candidates();
                 % print_processing_status('update candidates');
@@ -425,13 +440,92 @@ classdef SSC_MC_OMP < handle
                     break;
                 end
             end
+            if ~self.Quiet 
+                fprintf('\n');
+            end
 
+            function print_candidate_support_ids()
+                [cand_starts cand_ends] = spx.cluster.start_end_indices(num_candidate_list);
+                misses = 0;
+                miss_indices = false(1, ns);
+                for s=1:ns
+                    cs = cand_starts(s);
+                    ce = cand_ends(s);
+                    fprintf('Point %2d: ', s);
+                    if isempty(find(candidate_ids(cs:ce) == 0))
+                        fprintf('MISSZ ');
+                        misses = misses + 1;
+                        miss_indices(s) =true;
+                    else
+                        fprintf('HITZZ ');
+                    end
+                    for c=cs:ce
+                        fprintf('%s ', dec2bin(candidate_ids(c), nk));
+                    end
+                    fprintf('\n');
+                end
+                fprintf('Number of points retaining zero branch: %d, missing zero branch: %d\n', ns - misses, misses);
+                fprintf('%d ', find(miss_indices));
+                fprintf('\n');
+            end
 
+            function print_residual_norms_stats()
+                [cand_starts cand_ends] = spx.cluster.start_end_indices(num_candidate_list);
+                improvements = zeros(1, ns);
+                pos1_min = 0;
+                cand0_min = 0;
+                for s=1:ns
+                    nc  = num_candidate_list(s);
+                    cs = cand_starts(s);
+                    ce = cand_ends(s);
+                    fprintf('Point %d: ', s);
+                    r_norms = residual_norms(cs:ce);
+                    fprintf('%0.4f ', r_norms);
+                    fprintf('\n');
+                    [min_norm, min_idx] = min(r_norms);
+                    first_norm = r_norms(1);
+                    first_cid = candidate_ids(cs);
+                    min_cid = candidate_ids(min_idx+cs-1);
+                    cand0_min = cand0_min + (min_cid == 0);
+                    pos1_min = pos1_min + (min_idx == 1);
+                    improvement = (first_norm - min_norm) * 100 / min_norm;
+                    improvements(s) = improvement;
+                    fprintf('Minimum: %0.6f, Position: %d, %s, First: %0.6f, Improvement: %0.4f %%\n', min_norm, min_idx, dec2bin(min_cid, iter), first_norm, improvement);
+                end
+                fprintf('Improvements: %s\n', spx.stats.format_descriptive_statistics(improvements));
+                fprintf('Minimums: at 0 branch: %d, at first place: %d\n', cand0_min, pos1_min);
+            end
+
+            function [coeff, support, k] = indentify_coeffs(cm, sm, k)
+                cv = cm(:);
+                sv = sm(:);
+                unique(sv)
+                [sorted_cv, indices] = sort(abs(cv), 'descend');
+                coeff = [];
+                support = [];
+                for i=1:numel(indices)
+                    ind = indices(i);
+                    sind = sv(ind);
+                    if isempty(find(support == sind))
+                        coeff = [coeff cv(ind)];
+                        support = [support sind];
+                    end
+                    if length(support) == k
+                        break;
+                    end
+                end
+                % final number of retained coefficients
+                k = length(support);
+            end
+
+            num_coeffs = nk;
             % the values of coefficients corresponding to support sets
-            coefficients_matrix = zeros(ns, nk);
+            coefficients_matrix = zeros(ns, num_coeffs);
             % support set for each vector [one row for each vector]
-            support_sets = ones(ns, nk);
+            support_sets = ones(ns, num_coeffs);
             function compute_final_coefficients
+                candidate_residuals = zeros(nd, num_total_candidates);
+                residual_norms = zeros(1, num_total_candidates);
                 % final computation of coefficients
                 % Creation of sparse representation matrix
                 % current candidate start and end positions
@@ -444,32 +538,47 @@ classdef SSC_MC_OMP < handle
                     k = num_iterations_vec(s);
                     coeff_norms = zeros(1, nc);
                     coeff_mat = zeros(k, nc);
+                    local_r_norms = zeros(1, nc);
                     x = self.Data(:, s);
                     for c=1:nc
-                        candidate_support = candidate_supports(1:k, c+cs-1);
+                        cc = c+cs-1;
+                        candidate_support = candidate_supports(1:k, cc);
                         % pick atoms from the unnormalized data matrix
                         submatrix = self.Data(:, candidate_support);
                         % solve the least squares problem
                         coeff = submatrix \ x;
                         coeff_mat(:, c) = coeff;
+                        r = x  - submatrix * coeff;
+                        local_r_norms(c) = norm(r);
                         coeff_norms(c) = norm(coeff);
+                        candidate_residuals(:, cc) = r;
+                        residual_norms(cc) = local_r_norms(c);
                     end
                     % choose the best candidate
-                    [best_norm, best_index] = max(coeff_norms);
+                    [best_norm, best_index] = min(local_r_norms);
+                    % [best_norm, best_index] = min(coeff_norms);
+                    
                     coeff = coeff_mat(:, best_index);
                     support_set = candidate_supports(1:k, best_index+cs -1);
-                    support_sets(s, 1:k) = support_set;
+                    kk = k;
+
+                    %[coeff, support_set, kk] = indentify_coeffs(coeff_mat, ...
+                    %    candidate_supports(1:k, cs:ce), num_coeffs)
+
+                    support_sets(s, 1:kk) = support_set;
                     % put the coefficients back into coefficients matrix
-                    coefficients_matrix(s, 1:k) = coeff';
+                    coefficients_matrix(s, 1:kk) = coeff';
                 end
             end
 
             % let us compute final coefficients
             compute_final_coefficients();
+            % print_candidate_support_ids();
+            % print_residual_norms_stats();
 
             % each column varies from 1 to ns
             % each row is just a repetition
-            column_indices  = repmat((1:ns)', 1, nk);
+            column_indices  = repmat((1:ns)', 1, num_coeffs);
 
             % the support set, column_indices and coefficients_matrix are combined to form
             % the representation matrix at the end of function as follows
@@ -479,9 +588,6 @@ classdef SSC_MC_OMP < handle
             % ns, ns is the size of the sparse matrix.
             self.Representation = sparse( support_sets(:), column_indices(:), coefficients_matrix(:), ns, ns);
             self.Iterations = num_iterations_vec;
-            if ~self.Quiet 
-                fprintf('\n');
-            end
         end
 
         function detect_outliers(self)
