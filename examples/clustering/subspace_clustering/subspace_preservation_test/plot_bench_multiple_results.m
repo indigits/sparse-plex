@@ -1,14 +1,14 @@
-function print_bench_results(results, solver_names, legends)
+function plot_bench_multiple_results(results, solver_names, legends)
     mf = spx.graphics.Figures;
     styles = spx.graphics.plot_styles();
 
     n = numel(results);
     mf.new_figure('Clustering error');
-    hold on;
     for i=1:n
         result = results{i};
         style = styles{i};
         semilogx (result.num_points_arr, result.clustering_error_perc_arr, style);
+        hold on;
     end
     xlabel('Points');
     ylabel('Clustering error (%)');
@@ -16,11 +16,11 @@ function print_bench_results(results, solver_names, legends)
     legend(legends);
 
     mf.new_figure('Clustering accuracy');
-    hold on;
     for i=1:n
         result = results{i};
         style = styles{i};
         semilogx (result.num_points_arr, result.clustering_acc_perc_arr, style);
+        hold on;
     end
     xlabel('Points');
     ylabel('Clustering accuracy (%)');
@@ -29,11 +29,11 @@ function print_bench_results(results, solver_names, legends)
     legend(legends);
 
     mf.new_figure('Subspace preserving representation error');
-    hold on;
     for i=1:n
         result = results{i};
         style = styles{i};
         semilogx (result.num_points_arr, result.spr_error_arr * 100, style);
+        hold on;
     end
     xlabel('Points');
     ylabel('Subspace preserving representation error (%)');
@@ -69,11 +69,11 @@ function print_bench_results(results, solver_names, legends)
     legend(legends);
 
     mf.new_figure('Computation time');
-    hold on;
     for i=1:n
         result = results{i};
         style = styles{i};
         loglog (result.num_points_arr, result.elapsed_time_arr, style);
+        hold on;
     end
     xlabel('Points');
     ylabel('Computation time (seconds)');

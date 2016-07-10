@@ -1,12 +1,14 @@
 clear all;
 close all;
 clc;
-results = cell(1, 3);
+results = {};
 results{1} = merge_results('ssc_omp');
-results{2} = merge_results('ssc_nn_omp');
-results{3} = merge_results('ssc_tomp');
+results{2} = merge_results('ssc_mc_omp');
+%results{3} = merge_results('ssc_tomp');
+%results{4} = merge_results('ssc_l1');
 plot_bench_multiple_results(results, ...
-    {'ssc_omp', 'ssc_nn_omp', 'ssc_tomp'}, ...
-    {'SSC-OMP', 'SSC-NN-OMP', 'SSC-TOMP'});
+    {'ssc_omp', 'ssc_mc_omp'}, ...
+    {'SSC-OMP', 'SSC-MC-OMP'});
+
 
 

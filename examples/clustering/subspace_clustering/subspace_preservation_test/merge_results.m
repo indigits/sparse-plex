@@ -53,7 +53,7 @@ function result = merge_results(solver_name)
 
     fprintf('\n\n');
     fprintf('Points: ');
-    fprintf('%d ', result.num_points_arr);
+    fprintf('%d ', result.num_points_arr / 5);
     fprintf('\n\n');
     fprintf('Time: ');
     fprintf('%.2f ', result.elapsed_time_arr);
@@ -68,7 +68,7 @@ function result = merge_results(solver_name)
     fprintf('%.2f ', result.clustering_acc_perc_arr);
     fprintf('\n\n');
     fprintf('Subspace preserving representation error: ');
-    fprintf('%.2f ', result.spr_error_arr);
+    fprintf('%.4f ', result.spr_error_arr);
     fprintf('\n\n');
     fprintf('Subspace preserving representation flag: ');
     fprintf('%.2f ', result.spr_flag_arr);

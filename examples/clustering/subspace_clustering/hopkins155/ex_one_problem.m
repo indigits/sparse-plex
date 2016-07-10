@@ -1,48 +1,52 @@
-function check_hopkins(solver, solver_name)
-
+close all;
+clear all;
+clc;
 
 % Create the directory for storing results
 spx.fs.ensure_dir('bin');
+
+% set number
+r = 1;
 h = spx.data.motion.Hopkins155;
 % pre-load all examples
 h.load_all_examples();
 examples = h.get_2_3_motions();
-R = length(examples);
-fprintf('Number of sequences: %d\n', R);
+example = examples{r};
+solver = @ssc_mc_omp;
 
+Y = example.X;
+% homogenize
+Y = spx.la.affine.homogenize(Y);
+Y = spx.commons.norm.normalize_l2(Y);
+Y = Y;
 
-% We will carry out one experiment for each signal density level
-test_result.failed_examples = [];
-trials = cell(1, R);
+if true 
+    fprintf('\n\n\n Statistics for the pair of motions:\n\n');
+    [M, S]  = size(Y);
+    sizes = example.counts;
+    angle_result = spx.cluster.subspace.nearest_same_subspace_neighbors_by_inner_product(Y, sizes);
+    spx.cluster.subspace.print_nearest_neighbor_result(angle_result);
 
-for r=1:R
-    trial = struct();
-    fprintf('Example (%d): ', r);
-    example = examples{r};
-    fprintf('%s, %d motions, %d points, %d frames\n', example.name, example.num_motions, example.num_points, example.num_frames);
-    % Ambient space dimension
-    trial.M = example.M;
+end
+
+mf = spx.graphics.Figures;
+if true
+    % Ambient space dimension and number of data points
+    [trial.M, trial.S] = size(Y);
     % Number of subspaces
     trial.K = example.num_motions;
     % maximum dimension for each subspace
-    trial.D = 5;
+    trial.D = 3;
     trial.cluster_sizes = example.counts;
-    % total number of points
-    S = sum(trial.cluster_sizes);
-    X = example.X;
-    % homogenize
-    X = spx.la.affine.homogenize(X);
     % Solve the sparse subspace clustering problem
     tstart = tic;
     try
-        clustering_result = solver(X, trial.D, trial.K);
+        clustering_result = solver(Y, trial.D, trial.K);
     catch ME
         % we will move on to next one
         fprintf('Problem in processing this example. %s: %s\n', ME.identifier, ME.message);
-        % add to the list of failed examples
-        test_result.failed_examples = [test_result.failed_examples r];
         % move on to next example
-        continue;
+        error('cannot continue.');
     end
     trial.elapsed_time = toc (tstart);
     trial.singular_values = clustering_result.singular_values;
@@ -61,17 +65,12 @@ for r=1:R
     trial.spr_error = spr_stats.spr_error;
     trial.spr_flag = spr_stats.spr_flag;
     trial.spr_perc = spr_stats.spr_perc;
-    fprintf('\nclustering error: %0.2f %% , clustering accuracy: %0.2f %%\n, mean spr error: %0.2f preserving : %0.2f %%\n, connectivity: %0.2f, elapsed time: %0.2f sec', trial.clustering_error_perc, trial.clustering_acc_perc, spr_stats.spr_error, spr_stats.spr_perc, trial.connectivity, trial.elapsed_time);
+    fprintf('\nclustering error: %0.2f %% , clustering accuracy: %0.2f %%,\n mean spr error: %0.2f preserving : %0.2f %%,\n connectivity: %0.2f, elapsed time: %0.2f sec', trial.clustering_error_perc, trial.clustering_acc_perc, spr_stats.spr_error, spr_stats.spr_perc, trial.connectivity, trial.elapsed_time);
     fprintf('\n\n');
-    trials{r} = trial;
-end
-% clear some variables no more required.
-clear trial;
-clear h;
-clear clustering_result;
-clear comparison_result;
-%  save rest of variables in file.
-filepath = sprintf('bin/hopkins155_test_%s.mat', solver_name);
-save(filepath);
-
+    Z = abs(clustering_result.Z);
+    s = spx.stats.format_descriptive_statistics(Z(:));
+    fprintf(s);
+    fprintf('\n');
+    mf.new_figure('Representations');
+    imshow(Z);
 end
