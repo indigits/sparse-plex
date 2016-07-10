@@ -1,0 +1,65 @@
+function result = merge_results(num_samples_per_digit, solver_name)
+    filepath = sprintf('bin/mnist_%d_points_test_%s.mat', num_samples_per_digit, solver_name);
+    load(filepath);
+    num_trials = numel(trials);
+    fprintf('Samples per digit: %d, Number of trials: %d, solver: %s\n', num_samples_per_digit,  num_trials, solver_name);
+    result = struct;
+    trial = trials{1};
+    result.M = trial.M;
+    result.K = trial.K;
+    result.D = trial.D;
+    result.elapsed_time_vec = zeros(num_trials, 1);
+    result.connectivity_vec = zeros(num_trials, 1);
+    result.clustering_error_perc_vec = zeros(num_trials, 1);
+    result.clustering_acc_perc_vec = zeros(num_trials, 1);
+    result.spr_error_vec = zeros(num_trials, 1);
+    result.spr_flag_vec = zeros(num_trials, 1);
+    result.spr_perc_vec = zeros(num_trials, 1);
+    num_points_vec = zeros(num_trials, 1);
+    result.trials = trials;
+    for i=1:numel(trials)
+        trial = trials{i};
+        result.elapsed_time_vec(i) = trial.elapsed_time;
+        result.connectivity_vec(i) = trial.connectivity;
+        result.clustering_error_perc_vec(i) = trial.clustering_error_perc;
+        result.clustering_acc_perc_vec(i) = trial.clustering_acc_perc;
+        result.spr_error_vec(i) = trial.spr_error;
+        result.spr_flag_vec(i) = trial.spr_flag;
+        result.spr_perc_vec(i) = trial.spr_perc;
+        num_points_vec(i) = trial.S;
+    end
+    result.num_points = mean(num_points_vec);
+    result.elapsed_time = mean(result.elapsed_time_vec);
+    result.connectivity = min(result.connectivity_vec);
+    result.clustering_error_perc = mean(result.clustering_error_perc_vec);
+    result.clustering_acc_perc = mean(result.clustering_acc_perc_vec);
+    result.spr_error = mean(result.spr_error_vec);
+    result.spr_flag = mean(result.spr_flag_vec);
+    result.spr_perc = mean(result.spr_perc_vec);
+
+    fprintf('\n\n');
+    fprintf('Mean Points: ');
+    fprintf('%.2f ', result.num_points);
+    fprintf('\n\n');
+    fprintf('Time: ');
+    fprintf('%.2f ', result.elapsed_time);
+    fprintf('\n\n');
+    fprintf('Connectivity: ');
+    fprintf('%.2f ', result.connectivity);
+    fprintf('\n\n');
+    fprintf('Clustering error(%%): ');
+    fprintf('%.2f ', result.clustering_error_perc);
+    fprintf('\n\n');
+    fprintf('Clustering accuracy (%%): ');
+    fprintf('%.2f ', result.clustering_acc_perc);
+    fprintf('\n\n');
+    fprintf('Subspace preserving representation error: ');
+    fprintf('%.4f ', result.spr_error);
+    fprintf('\n\n');
+    fprintf('Subspace preserving representation flag: ');
+    fprintf('%.2f ', result.spr_flag);
+    fprintf('\n\n');
+    fprintf('Subspace preserving representations(%%): ');
+    fprintf('%.2f ', result.spr_perc);    
+    fprintf('\n\n');
+end
