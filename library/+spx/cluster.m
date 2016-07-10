@@ -84,6 +84,30 @@ methods(Static)
         result.misses = estimated_labels ~= result.mapped_labels;
     end
 
+    function result = clustering_error_hungarian_mapping(estimated_labels, true_labels, num_clusters)
+        % make sure that both are row vectors
+        if ~isrow(estimated_labels)
+            estimated_labels = estimated_labels';
+        end
+        if ~isrow(true_labels)
+            true_labels = true_labels';
+        end
+        if size(estimated_labels) ~= size(true_labels)
+            error('Both estimated and true label arrays should have same size.');
+        end
+        % number of labels
+        num_labels = size(estimated_labels, 2);
+        mapped_labels = bestMap(estimated_labels, true_labels)';
+        miss = sum(estimated_labels ~= mapped_labels);
+        % final clustering error value
+        result.num_labels = num_labels;
+        result.num_missed_points = miss;
+        result.error  = miss / num_labels;
+        result.error_perc = result.error * 100;
+        result.mapped_labels = mapped_labels;
+        result.misses = estimated_labels ~= result.mapped_labels;
+    end
+
 
 end
 
