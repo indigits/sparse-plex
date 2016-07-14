@@ -1,12 +1,18 @@
 classdef figure 
 
     methods(Static)
-        function [ h ] = full_screen()
+        function [ h ] = full_screen(name)
+            if nargin < 1
+                name = [];
+            end
             %full_screen Creates a full screen figure
             scrsz = get(0,'ScreenSize');
             w = scrsz(3);
             h = scrsz(4);
             h = figure('Position', [1 1 w h]);
+            if ~isempty(name)
+                set(h,'Name', name,'NumberTitle','off');
+            end
         end
 
         % This is a bad idea.
