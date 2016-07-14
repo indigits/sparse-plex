@@ -162,6 +162,9 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
     result.nearst_within_neighbor_indices = zeros(1, S);
     result.nearst_outside_neighbor_indices = zeros(1, S);
     result.nearst_outside_neighbor_absolute_indices = zeros(1, S);
+    result.percentile_95 = zeros(1, S);
+    result.percentile_98 = zeros(1, S);
+    result.SORTED_G = zeros(size(G));
     for s=1:S
         % get the inner products with all vectors
         g = G(:, s);
@@ -171,6 +174,7 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
         g(s) = 0;
         % sort them by decreasing inner product
         [sorted_g, indices] = sort(g, 'descend');
+        result.SORTED_G(:, s) = sorted_g;
         % identify corresponding cluster labels
         neighbor_labels = labels(indices);
         % inner products with faces within the cluster
@@ -189,7 +193,10 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
         result.outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_outside_neighbor)));
         result.nearst_outside_neighbor_indices(s) = first_outside_neighbor;
         result.nearst_outside_neighbor_absolute_indices(s) = indices(first_outside_neighbor);
-
+        % divide with the largest inner product value
+        normalized_sorted_g = sorted_g / sorted_g(1);
+        result.percentile_95(s) = sum(normalized_sorted_g > .95);
+        result.percentile_98(s) = sum(normalized_sorted_g > .98);
     end
     result.first_in_out_angle_spreads = result.outside_nearest_neighbor_angles - result.within_minimum_angles;
     result.no_within_neighbor_count = sum(result.within_neighbor_counts == 0);
@@ -246,6 +253,10 @@ function result = nearest_same_subspace_neighbors_by_inner_product(X, cluster_si
         result.r1_outside_nearest_neighbor_angles(s) = rad2deg(acos(sorted_g(first_outside_neighbor)));
         result.r1_nearst_outside_neighbor_indices(s) = first_outside_neighbor;
         result.r1_nearst_outside_neighbor_absolute_indices(s) = indices(first_outside_neighbor);
+        % divide with the largest inner product value
+        normalized_sorted_g = sorted_g / sorted_g(1);
+        result.r1_percentile_95(s) = sum(normalized_sorted_g > .95);
+        result.r1_percentile_98(s) = sum(normalized_sorted_g > .98);
     end    
     result.r1_first_in_out_angle_spreads = result.r1_outside_nearest_neighbor_angles - result.r1_within_minimum_angles;
     result.r1_no_within_neighbor_count = sum(result.r1_within_neighbor_counts == 0);
@@ -292,6 +303,10 @@ function print_nearest_neighbor_result(result)
     fprintf('angle greater than -4: %.2f %%\n', sum(angle_gte_minus_four_flags) * 100 / S);
     fprintf('abs angle less than 4: %.2f %%\n', sum(abs_angle_lte_four_flags) * 100 / S);
 
+    fprintf('95 percentile of maximum inner product:\n %s\n', spx.stats.format_descriptive_statistics(result.percentile_95));
+    tabulate(result.percentile_95);
+    fprintf('98 percentile of maximum inner product:\n %s\n', spx.stats.format_descriptive_statistics(result.percentile_98));
+    tabulate(result.percentile_98);
 
     fprintf('\n\n1st Residual\n\n');
     fprintf('Within Neighbor Counts:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_within_neighbor_counts));
@@ -307,8 +322,13 @@ function print_nearest_neighbor_result(result)
 
     fprintf('First In Out Angle Spreads:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_first_in_out_angle_spreads));
 
-
+    fprintf('95 percentile of maximum inner product:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_percentile_95));
+    tabulate(result.r1_percentile_95);
+    fprintf('98 percentile of maximum inner product:\n %s\n', spx.stats.format_descriptive_statistics(result.r1_percentile_98));
+    tabulate(result.r1_percentile_98);
 end
+
+
 
 end
 
