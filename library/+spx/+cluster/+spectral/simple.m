@@ -170,6 +170,44 @@ methods(Static)
         % second last element is the connectivity value
         result.connectivity = -1;
     end
+
+
+    function conn = connectivity(C, labels)
+        % C \in R^N-by-N: symmetric affinity matrix
+        % s \in {1, 2, ... n}^N: group labels
+        % 
+        % conn: connectivity index
+        % conn = min_{i = 1,...,n} (second-least eigenvalue of L_i);
+        if ~issymmetric(C)
+            warning('(evalConn) affinity matrix not symmetric')
+        end
+        unique_labels = unique(labels);
+        num_labels = length(unique_labels);
+        % start with infinite connectivity
+        conn = inf;
+        for in = 1:num_labels
+            % identify rows and columns of data for a particular group
+            indices = (labels == unique_labels(in));
+            % the submatrix for data belonging to points from a given cluster
+            C_in = C(indices, indices);
+            % conn
+            if min(sum(C_in, 2)) < eps
+                conn_in = 0.0;
+            else
+                OPTS.tol = 1e-3;
+                % normalize the columns of C_in
+                C_in = spx.commons.norm.normalize_l1(C_in);
+                % compute the eigen values
+                [~, eig_in] = eigs( C_in', 2, 'LR', OPTS );
+                % pick the second eigen value and compute connectivity
+                conn_in = 1 - eig_in(2, 2);
+            end
+            % overall connectivity is the minimum of all
+            conn = min( [conn, conn_in] );
+        end
+    end
+
+
 end
 
 end
