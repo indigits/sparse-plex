@@ -1,4 +1,7 @@
-function check_yale_faces(num_subjects, solver, solver_name)
+function final_result = check_yale_faces(num_subjects, solver, solver_name, solver_params)
+if nargin < 4
+    solver_params = struct;
+end
 
 
 % Create the directory for storing results
@@ -40,7 +43,7 @@ for r=1:R
     % Solve the sparse subspace clustering problem
     tstart = tic;
     try
-        clustering_result = solver(Y, trial.D, trial.K);
+        clustering_result = solver(Y, trial.D, trial.K, solver_params);
     catch ME
         % we will move on to next one
         fprintf('Problem in processing this example. %s: %s\n', ME.identifier, ME.message);
@@ -76,5 +79,5 @@ clear comparison_result;
 %  save rest of variables in file.
 filepath = sprintf('bin/yale_faces_%d_subjects_test_%s.mat', num_subjects, solver_name);
 save(filepath);
-
+final_result = merge_results(num_subjects, solver_name);
 end

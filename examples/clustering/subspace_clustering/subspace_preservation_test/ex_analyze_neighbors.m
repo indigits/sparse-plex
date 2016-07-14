@@ -9,11 +9,12 @@ M = 9;
 K = 5;
 % common dimension for each subspace
 D = 6;
+rng default;
 % dimensions of each subspace
 Ds = D * ones(1, K);
 bases = spx.data.synthetic.subspaces.random_subspaces(M, K, Ds);
 % Number of points on each subspace
-Sk = rho * D;
+Sk = rho * D
 cluster_sizes = Sk * ones(1, K);
 % total number of points
 S = sum(cluster_sizes);
@@ -29,20 +30,7 @@ end_indices = points_result.end_indices;
 
 angle_result = spx.cluster.subspace.nearest_same_subspace_neighbors_by_inner_product(X, cluster_sizes);
 
-
-fprintf('Within Neighbor Counts:\n %s\n', spx.stats.format_descriptive_statistics(angle_result.within_neighbor_counts));
-fprintf('Nearest Within Neighbor Indices:\n %s\n', spx.stats.format_descriptive_statistics(angle_result.nearst_within_neighbor_indices));
-nearst_within_neighbor_indices = angle_result.nearst_within_neighbor_indices;
-% club all those cases where nearest within neighbor is far away.
-nearst_within_neighbor_indices(nearst_within_neighbor_indices > 5) = -1;
-tabulate(nearst_within_neighbor_indices);
-fprintf('First In Out Angle Spreads:\n %s\n', spx.stats.format_descriptive_statistics(angle_result.first_in_out_angle_spreads));
-fioas = angle_result.first_in_out_angle_spreads;
-%fioas = round(fioas * 10) / 10;
-fioas = round(fioas/4)*4;
-fioas(fioas > 8) = 100;
-fioas(fioas < -8) = 100;
-tabulate(fioas);
+spx.cluster.subspace.print_nearest_neighbor_result(angle_result);
 
 
 mf  = spx.graphics.Figures;
@@ -70,3 +58,10 @@ hist(angle_result.first_in_out_angle_spreads);
 title('First In/Out angle spreads');
 subplot(338);
 subplot(339);
+
+mf.new_figure;
+hold on;
+for s=1:S
+    g = angle_result.SORTED_G(: , s);
+    plot(g);
+end

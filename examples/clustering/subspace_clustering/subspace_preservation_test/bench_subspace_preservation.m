@@ -1,5 +1,7 @@
-function bench_subspace_preservation(solver, solver_name)
-
+function final_result = bench_subspace_preservation(solver, solver_name, solver_params)
+if nargin < 3
+    solver_params = struct;
+end
 % Create the directory for storing data
 spx.fs.ensure_dir('bin');
 
@@ -10,7 +12,7 @@ setup.rhos = round(5.^[1:.2:3.2]);
 % The following numbers have been picked up from the code provided by Chong You.
 setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396 6132 11075 20000];
 %setup.num_points_per_cluster_list = [30 55 98 177 320 577];
-setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880];
+setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396];
 %setup.num_points_per_cluster_list = [30 55];
 setup.rhos = setup.num_points_per_cluster_list / 6;
 disp(setup.rhos);
@@ -53,15 +55,15 @@ for r=1:R
         end_indices = points_result.end_indices;
         tstart = tic;
         % Solve the sparse subspace clustering problem
-        clustering_result = solver(X, trial.D, trial.K);
+        clustering_result = solver(X, trial.D, trial.K, solver_params);
         trial.elapsed_time = toc (tstart);
         cluster_labels = clustering_result.labels;
-        % graph connectivity
-        trial.connectivity = clustering_result.connectivity;
         % estimated number of clusters
         trial.estimated_num_subspaces = clustering_result.num_clusters;
         % true labels
         true_labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
+        % graph connectivity
+        trial.connectivity = spx.cluster.spectral.simple.connectivity(clustering_result.W, true_labels);
         % Time to compare the clustering
         comparsion_result = spx.cluster.clustering_error(cluster_labels, true_labels, trial.K);
         trial.clustering_error_perc = comparsion_result.error_perc;
@@ -77,6 +79,9 @@ for r=1:R
         save(filepath, 'trial');
     end
 end
+
+final_result = merge_results(solver_name);
+final_result.setup = setup;
 
 
 end

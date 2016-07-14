@@ -46,7 +46,7 @@ function print_bench_results(result, solver_name)
         ylabel('Computation time (seconds)');
         grid on;
     else
-        spx.graphics.figure.full_screen;
+        spx.graphics.figure.full_screen(solver_name);
 
         subplot(231);
         semilogx (result.num_points_arr, result.clustering_error_perc_arr, '-s');

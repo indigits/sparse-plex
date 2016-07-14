@@ -1,5 +1,8 @@
-function check_digits(md, num_samples_per_digit, solver, solver_name)
+function final_result = check_digits(md, num_samples_per_digit, solver, solver_name, solver_params)
 
+if nargin < 5
+    solver_params = struct;
+end
 
 % Create the directory for storing results
 spx.fs.ensure_dir('bin');
@@ -42,14 +45,14 @@ for r=1:R
     [Y, true_labels] = md.selected_samples(sample_list);
     % disp(Y(1:10, 1)');
     % Perform PCA to reduce dimensionality
-    Y = spx.la.pca.low_rank_approx(Y, 500);
+    Y = spx.la.pca.low_rank_approx(Y, 100);
     % disp(Y(1:10, 1)');
     % Ambient space dimension and number of data points
     [trial.M, trial.S] = size(Y);
     % Solve the sparse subspace clustering problem
     tstart = tic;
     try
-        clustering_result = solver(Y, trial.D, trial.K);
+        clustering_result = solver(Y, trial.D, trial.K, solver_params);
         % disp(clustering_result.Z(:, 1));
     catch ME
         % we will move on to next one
@@ -85,5 +88,5 @@ clear comparison_result;
 %  save rest of variables in file.
 filepath = sprintf('bin/mnist_%d_points_test_%s.mat', num_samples_per_digit, solver_name);
 save(filepath, 'trials');
-merge_results(num_samples_per_digit, solver_name);
+final_result = merge_results(num_samples_per_digit, solver_name);
 end

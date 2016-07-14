@@ -7,5 +7,6 @@ function ex_ssc_mc_omp(md, num_samples_per_digit)
     end
     close all;
     clc;
-    check_digits(md, num_samples_per_digit, @ssc_mc_omp, 'ssc_mc_omp');
+    config = create_config([4 2 1 1 1 1 1 1 1 1], 8, '42.1-8');
+    check_digits(md, num_samples_per_digit, @ssc_mc_omp, 'ssc_mc_omp', config);
 end
