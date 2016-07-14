@@ -131,6 +131,8 @@ classdef SSC_MC_OMP < handle
             residual_norms = [];
             % the sorted index matrix for the inner products of data with candidate residuals
             sorted_index_matrix = [];
+            % the sorted inner products of data with candidate residuals
+            sorted_inner_products = [];
 
             % threshold for squared norm of residual 
             threshold = self.ResidualNormThreshold;
@@ -256,7 +258,8 @@ classdef SSC_MC_OMP < handle
                 [M, S] = size(data_matrix);
                 [M , C] = size(candidate_residuals);
                 c_blk_size = 2^nextpow2(round(10*1000*1000 / (M * S)));
-                sorted_index_matrix = zeros(bf, C);
+                sorted_index_matrix = zeros(S, C);
+                sorted_inner_products = zeros(S, C);
 
                 % current candidate start and end positions
                 num_points_list = [];
@@ -302,7 +305,8 @@ classdef SSC_MC_OMP < handle
                     end
                     % sort each column
                     [sorted_corr_mat , ind_mat] = sort(corr_mat, 'descend');
-                    sorted_index_matrix(:, c_start:c_end) = ind_mat(1:bf, :);
+                    sorted_index_matrix(:, c_start:c_end) = ind_mat;
+                    sorted_inner_products(:, c_start:c_end) = sorted_corr_mat;
                 end
             end
 
@@ -313,7 +317,7 @@ classdef SSC_MC_OMP < handle
                 [cand_starts cand_ends] = spx.cluster.start_end_indices(num_candidate_list);
                 % disp(sorted_corr_mat(1, :));
                 % we choose candidate supports as first bf rows of index matrix
-                candidate_supports = reshape(sorted_index_matrix, 1, num_total_candidates);
+                candidate_supports = reshape(sorted_index_matrix(1:bf, :), 1, num_total_candidates);
                 candidate_ids = repmat((0:1:bf-1), 1, ns);
                 % We compute all the residuals
                 compute_residuals();
@@ -379,6 +383,116 @@ classdef SSC_MC_OMP < handle
                 num_total_candidates = num_new_total_candidates;
             end
 
+            function initialize_candidates_adaptive()
+                compute_correlation_matrix();
+                num_candidate_list = zeros(1, ns);
+                for s=1:ns
+                    inner_products = sorted_inner_products(:, s);
+                    % if s <= 10
+                    %     disp(inner_products(1:20)' / inner_products(1));
+                    % end
+                    nc = sum(inner_products > bf * inner_products(1));
+                    nc = min(nc, 4);
+                    num_candidate_list(s) = nc;
+                end
+                num_total_candidates = sum(num_candidate_list);
+                [cand_starts cand_ends] = spx.cluster.start_end_indices(num_candidate_list);
+                candidate_supports = zeros(1, num_total_candidates);
+                candidate_ids = zeros(1, num_total_candidates);
+                for s=1:ns
+                    nc = num_candidate_list(s);
+                    c_start = cand_starts(s);
+                    c_end = cand_ends(s);
+                    candidate_supports(c_start:c_end) = sorted_index_matrix(1:nc);
+                    candidate_ids(c_start:c_end) = 0:(nc-1);
+                end
+                % We compute all the residuals
+                compute_residuals();
+                fprintf('branching factor: %0.4f\n', num_total_candidates / ns);
+            end
+
+
+            function update_candidates_adaptive()
+                % Adaptively selects new candidates for existing candidate. The branching factor is adaptive.
+                assert(size(candidate_supports, 2) == num_total_candidates);
+                % starting with current candidate list, 
+                % we create new candidate list.
+                % We correlated data with residual.
+                % to do change this to handle cases where there are too many points to handle
+                % In the sequel
+                % s is data point index
+                % c is old candidate index
+                % new_c is new candidate index
+                compute_correlation_matrix(); 
+                % current candidate start and end positions
+                [cand_starts cand_ends] = spx.cluster.start_end_indices(num_candidate_list);
+                % new number of candidates for each data point 
+                new_num_candidate_list = zeros(1, ns);
+                % for vectors whose processing is complete, we won't create new candidates
+                new_num_candidate_list(termination_vector) = num_candidate_list(termination_vector);
+                % for vectors whose processing is still on, the number of new 
+                % candidates will be identified in the following
+                new_num_cand_per_existing_cand_list = zeros(1, num_total_candidates);
+                for s=1:ns
+                    cand_start = cand_starts(s);
+                    cand_end = cand_ends(s);
+                    if termination_vector(s)
+                        continue;
+                    end
+                    nnc = 0;
+                    for c=cand_start:cand_end
+                        inner_products = sorted_inner_products(:, c);
+                        nc = sum(inner_products > bf * inner_products(1));
+                        nc = min(nc, 4);
+                        new_num_cand_per_existing_cand_list(c) = nc;
+                        nnc = nnc + nc;
+                    end
+                    new_num_candidate_list(s) = nnc;
+                end
+                num_new_total_candidates = sum(new_num_candidate_list);
+                fprintf('branching factor: %0.4f\n', num_new_total_candidates/ num_total_candidates);
+                % start and end indices for new candidates for each vector
+                [new_cand_starts new_cand_ends] = spx.cluster.start_end_indices(new_num_candidate_list);
+                % allocate space for new candidate supports
+                new_candidate_supports = zeros(iter, num_new_total_candidates);
+                new_candidate_ids = zeros(1, num_new_total_candidates);
+                % fill in new candidate supports
+                for s=1:ns
+                    cand_start = cand_starts(s);
+                    cand_end = cand_ends(s);
+                    new_c = new_cand_starts(s);
+                    nnc  = new_num_candidate_list(s);
+                    if termination_vector(s)
+                        % processing for this vector is completed
+                        assert (cand_start == cand_end);
+                        assert (num_candidate_list(s) == 1);
+                        % retain the only candidate
+                        new_candidate_supports(:, new_c) = [candidate_supports(:, cand_start); 0];
+                        new_candidate_ids(new_c) = candidate_ids(cand_start);
+                        continue;
+                    end
+                    for c=cand_start:cand_end
+                        indices = sorted_index_matrix(:, c);
+                        candidate_support = candidate_supports(:, c);
+                        candidate_id = candidate_ids(c);
+                        ncnc = new_num_cand_per_existing_cand_list(c);
+                        % we create new candidates based on branching factor
+                        for b=1:ncnc
+                            new_candidate_support = [candidate_support; indices(b)];
+                            new_candidate_supports(:, new_c) = new_candidate_support;
+                            new_candidate_ids(new_c) = candidate_id*10 + b-1;
+                            % move on to next new candidate
+                            new_c = new_c + 1;
+                        end
+                    end
+                end
+                % update candidate lists and supports
+                candidate_supports = new_candidate_supports;
+                candidate_ids = new_candidate_ids;
+                num_candidate_list = new_num_candidate_list;
+                num_total_candidates = num_new_total_candidates;
+            end
+
             function print_residuals()
                 fprintf('Residual norms: ');
                 fprintf('%0.2f ', residual_norms);
@@ -413,19 +527,27 @@ classdef SSC_MC_OMP < handle
             % first iteration
             iter = 1;
             bf = bfs(iter);
-            % initialize first iteration candidates
-            initialize_candidates();
+            if bf >= 1
+                % initialize first iteration candidates
+                initialize_candidates();
+            else
+                initialize_candidates_adaptive();
+            end
             % filter out unlikely candidates
             filter_candidates();
             % print_processing_status;
-
             for iter=2:nk
                 if ~self.Quiet 
                     fprintf('.');
                 end
                 bf = bfs(iter);
-                % update candidates
-                update_candidates();
+                if bf >= 1
+                    % update candidates
+                    update_candidates();
+                else
+                    % update candidates
+                    update_candidates_adaptive();
+                end
                 % print_processing_status('update candidates');
                 compute_residuals();
                 % print_processing_status('compute residual');
