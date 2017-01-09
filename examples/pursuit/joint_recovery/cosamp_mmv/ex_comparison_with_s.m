@@ -82,7 +82,7 @@ for ns=1:num_ss
         num_successes.ra_ormp = num_successes.ra_ormp + success;
 
         % Create the solver for CoSaMP MMV
-        solver = spx.pursuit.single.CoSaMP_MMV(Phi, K);
+        solver = spx.pursuit.joint.CoSaMP(Phi, K);
         result = solver.solve(Y);
         % Solution vectors
         X_Rec = result.Z;
@@ -94,7 +94,7 @@ for ns=1:num_ss
         num_successes.cosamp_mmv = num_successes.cosamp_mmv + success;
 
         % Create the solver for Rank Aware CoSaMP MMV
-        solver = spx.pursuit.single.CoSaMP_MMV(Phi, K);
+        solver = spx.pursuit.joint.CoSaMP(Phi, K);
         solver.RankAwareResidual = true;
         result = solver.solve(Y);
         % Solution vectors

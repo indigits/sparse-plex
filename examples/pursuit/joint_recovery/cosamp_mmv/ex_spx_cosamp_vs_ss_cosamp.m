@@ -69,7 +69,7 @@ for K=Ks
 
 
             % CoSaMP solver instance
-            solver = spx.pursuit.single.CoSaMP_MMV(Phi, K);
+            solver = spx.pursuit.joint.CoSaMP(Phi, K);
             % Solve the sparse recovery problem
             csmp_result = solver.solve(y);
             % Solution vector

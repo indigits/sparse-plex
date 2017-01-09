@@ -105,7 +105,7 @@ classdef CoSaMP < handle
                 % Compute the proxy
                 proxy_mat = dict.apply_ctranspose(residual_mat);
                 % identify the largest entries
-                largest_2k  = SPX_CoSaMP_MMV.largest_k_l2(proxy_mat, extra);
+                largest_2k  = spx.pursuit.joint.CoSaMP.largest_k_l2(proxy_mat, extra);
                 % We now compute our support
                 % build an array holding up to 3 K largest indices
                 support_3k = false(d, 1);
@@ -117,9 +117,9 @@ classdef CoSaMP < handle
                 subdict = dict.columns(support_3k); % MxT
                 % We compute signal estimate over these columns
                 % B_subdict =  linsolve(subdict, Y); % TxM * MxS
-                B_subdict = SPX_CoSaMP_MMV.least_squares_on_support(subdict, Y);
+                B_subdict = spx.pursuit.joint.CoSaMP.least_squares_on_support(subdict, Y);
                 % sort them in descending row norm order
-                pruned_largest_k =  SPX_CoSaMP_MMV.largest_k_l2(B_subdict, k);
+                pruned_largest_k =  spx.pursuit.joint.CoSaMP.largest_k_l2(B_subdict, k);
                 % keep only first k rows as new solution
                 solution_nz_mat = B_subdict(pruned_largest_k, :);
                 old_support = current_support;
