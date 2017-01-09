@@ -39,7 +39,7 @@ for ns=1:num_ss
             % Measurement vectors
             Y = Phi * X;
             % Create the solver for rank aware order recursive matching pursuit
-            solver = SPX_RankAwareORMP(Phi, K);
+            solver = spx.pursuit.joint.RankAwareORMP(Phi, K);
             result = solver.solve(Y);
             % Solution vectors
             X_Rec = result.Z;

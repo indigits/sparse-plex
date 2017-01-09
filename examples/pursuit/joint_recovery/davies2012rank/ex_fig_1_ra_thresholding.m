@@ -39,7 +39,7 @@ for ns=1:num_ss
             % Measurement vectors
             Y = Phi * X;
             % Create the solver for rank aware thresholding
-            solver = SPX_RankAwareThresholding(Phi, K);
+            solver = spx.pursuit.joint.RankAwareThresholding(Phi, K);
             result = solver.solve(Y);
             % Solution vectors
             X_Rec = result.Z;

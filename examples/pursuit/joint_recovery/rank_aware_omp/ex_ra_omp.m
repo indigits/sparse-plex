@@ -26,7 +26,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi.apply(X);
 % Rank Aware OMP MMV solver instance
-solver = SPX_RankAwareOMP(Phi, K);
+solver = spx.pursuit.joint.RankAwareOMP(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(Y);
 % Solution vector

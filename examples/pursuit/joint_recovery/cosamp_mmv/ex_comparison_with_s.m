@@ -58,7 +58,7 @@ for ns=1:num_ss
         num_successes.somp = num_successes.somp + success;
 
         % Create the solver for rank aware orthogonal matching pursuit
-        solver = SPX_RankAwareOMP(Phi, K);
+        solver = spx.pursuit.joint.RankAwareOMP(Phi, K);
         result = solver.solve(Y);
         % Solution vectors
         X_Rec = result.Z;
@@ -70,7 +70,7 @@ for ns=1:num_ss
         num_successes.ra_omp = num_successes.ra_omp + success;
 
         % Create the solver for rank aware order recursive matching pursuit
-        solver = SPX_RankAwareORMP(Phi, K);
+        solver = spx.pursuit.joint.RankAwareORMP(Phi, K);
         result = solver.solve(Y);
         % Solution vectors
         X_Rec = result.Z;

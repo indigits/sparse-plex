@@ -39,7 +39,7 @@ for ns=1:num_ss
             % Measurement vectors
             Y = Phi * X;
             % Create the solver for rank aware orthogonal matching pursuit
-            solver = SPX_RankAwareOMP(Phi, K);
+            solver = spx.pursuit.joint.RankAwareOMP(Phi, K);
             result = solver.solve(Y);
             % Solution vectors
             X_Rec = result.Z;

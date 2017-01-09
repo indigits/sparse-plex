@@ -29,7 +29,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi.apply(X);
 %  Rank Aware Thresholding solver instance
-solver = SPX_RankAwareThresholding(Phi, K);
+solver = spx.pursuit.joint.RankAwareThresholding(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(Y);
 % Solution vector
