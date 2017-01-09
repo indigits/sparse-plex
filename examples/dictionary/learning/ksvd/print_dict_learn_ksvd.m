@@ -11,7 +11,7 @@ total_errors = tracker.TotalErrors;
 iterations = tracker.Counter - 1;
 
 mf = spx.graphics.Figures();
-SPX_Display.dictionary_atoms_as_images(tracker.TrueDictionary, ...
+spx.graphics.display.dictionary_atoms_as_images(tracker.TrueDictionary, ...
     struct('title', 'Original Dictionary'));
 
 if export
@@ -55,7 +55,7 @@ end
 end
 
 
-SPX_Display.dictionary_atoms_as_images(tracker.CurrentDictionary, ...
+spx.graphics.display.dictionary_atoms_as_images(tracker.CurrentDictionary, ...
     struct('title', 'Learnt Dictionary'));
 
 if export

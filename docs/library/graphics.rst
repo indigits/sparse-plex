@@ -24,9 +24,9 @@ Create a full screen figure::
 Multiple figures::
 
     mf = spx.graphics.Figures();
-    mf.new_figure("fig 1");
-    mf.new_figure("fig 2");
-    mf.new_figure("fig 3");
+    mf.new_figure('fig 1');
+    mf.new_figure('fig 2');
+    mf.new_figure('fig 3');
 
 All these figures will be created with same 
 width and height. They will be placed 
@@ -41,7 +41,7 @@ Controlling size of multiple figures::
 
 Display a Gram matrix for a given dictionary ``Phi``::
 
-    SPX_Display.display_gram_matrix(Phi);
+    spx.graphics.display.display_gram_matrix(Phi);
 
 Canvas of a grid of images
 ---------------------------------
