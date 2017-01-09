@@ -3,6 +3,24 @@ Dirac DCT Tutorial
 
 .. highlight:: matlab
 
+This tutorial is based on ``examples\\ex_dirac_dct_two_ortho_basis.m``.
+
+In this tutorial we will:
+
+* Construct a DCT basis
+* Construct a Dirac-DCT dictionary.
+* Construct a signal which is a mixture of few
+  impulses and a few sinusoids.
+* Construct its representation in the DCT basis.
+* Recover its representation in Dirac-DCT dictionary
+  using following sparse recovery algorithms
+  
+  * Matching Pursuit
+  * Orthogonal Matching Pursuit
+  * Basis Pursuit
+
+* Measure the recovery error for different sparse
+  recovery algorithms.
 
 Signal space dimension::
 
@@ -73,7 +91,7 @@ Sparse representation in the Dirac DCT dictionary
 
 Obtaining the sparse representation using matching pursuit algorithm::
 
-    solver = SPX_MatchingPursuit(Phi, K);
+    solver = spx.pursuit.single.MatchingPursuit(Phi, K);
     result = solver.solve(x);
     mp_solution = result.z;
     mp_diff = alpha - mp_solution;
@@ -102,7 +120,7 @@ Orthogonal Matching pursuit recovery error: 0.0000.
 Obtaining a sparse approximation via basis pursuit::
 
 
-    solver = SPX_L1SparseRecovery(Phi, x);
+    solver = spx.pursuit.single.BasisPursuit(Phi, x);
     result = solver.solve_l1_noise();
     l1_solution = result;
     l1_diff = alpha - l1_solution;

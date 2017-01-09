@@ -99,7 +99,7 @@ export_fig bin\impulse_cosine_dirac_dct.pdf;
 end
 
 % Matching pursuit
-solver = SPX_MatchingPursuit(Phi, K);
+solver = spx.pursuit.single.MatchingPursuit(Phi, K);
 result = solver.solve(x);
 mf.new_figure('Matching pursuit solution');
 mp_solution = result.z;
@@ -155,7 +155,7 @@ fprintf('Orthogonal Matching pursuit recovery error: %0.4f\n', omp_recovery_erro
 
 
 % Basis pursuit
-solver = SPX_L1SparseRecovery(Phi, x);
+solver = spx.pursuit.single.BasisPursuit(Phi, x);
 result = solver.solve_l1_noise();
 mf.new_figure('l_1 minimization solution');
 l1_solution = result;

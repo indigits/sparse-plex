@@ -71,8 +71,14 @@ if true
     trial.cluster_sizes = cluster_sizes;
     % Solve the sparse subspace clustering problem
     tstart = tic;
+    params.BranchingFactor = [.98 .95 .95 .95 .95];
+    params.BranchingFactor = .98;
+    params.BranchingFactor = [.98 .95 1 1 1];
+    params.BranchingFactor = .998;
+    %params.BranchingFactor = 1;
+    params.MaxCandidatesToRetain = 4;
     try
-        clustering_result = solver(Y, trial.D, trial.K);
+        clustering_result = solver(Y, trial.D, trial.K, params);
     catch ME
         % we will move on to next one
         fprintf('Problem in processing this example. %s: %s\n', ME.identifier, ME.message);

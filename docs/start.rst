@@ -75,6 +75,10 @@ Checking the source code
 * Change directory to the root directory of ``sparse-plex``.
 * Go into ``library`` directory.
 * Browse the source code.
+  
+  * The source code for ``spx`` library is maintained in ``+spx`` directory.
+  * Unit-tests for the library are maintained in ``tests`` directory.
+
 
 
 
@@ -85,7 +89,8 @@ You will require MATLAB XUnit test framework to run the unit tests
 included with the library.
 
 * Change directory to the root directory of ``sparse-plex``.
-* Execute the ``run_all_unit_tests.m`` script.
+* Move to the directory ``library\\tests``.
+* Execute the ``runalltests.m`` script.
 * Verify that all unit tests pass.
 
 Configuring test data directories
