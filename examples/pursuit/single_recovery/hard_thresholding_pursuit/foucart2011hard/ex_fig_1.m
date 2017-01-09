@@ -83,8 +83,8 @@ for K=Ks
 
 
             fprintf('K=%d, Trial: %d, NHTP: %s, CSMP: %s\n', ...
-                K, nt, spx.commons.core.true_false_short(nhtp_stats.success), ...
-                spx.commons.core.true_false_short(csmp_stats.success));
+                K, nt, spx.io.true_false_short(nhtp_stats.success), ...
+                spx.io.true_false_short(csmp_stats.success));
         end
     end
     nhtp_success_rate = nhtp_num_successes / num_trials;
