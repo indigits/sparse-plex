@@ -26,7 +26,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi.apply(X);
 %  MMV Thresholding solver instance
-solver = SPX_Thresholding_MMV(Phi, K);
+solver = spx.pursuit.joint.Thresholding(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(Y);
 % Solution vector

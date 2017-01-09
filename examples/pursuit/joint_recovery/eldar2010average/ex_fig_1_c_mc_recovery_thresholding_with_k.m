@@ -34,7 +34,7 @@ for ns=1:num_ss
             Y = Phi * X;
 
             % Thresholding MMV solver instance
-            thresholding_solver = SPX_Thresholding_MMV(Phi, K, 2);
+            thresholding_solver = spx.pursuit.joint.Thresholding(Phi, K, 2);
             % Solve the sparse recovery problem
             result = thresholding_solver.solve(Y);
             % Solution vectors
