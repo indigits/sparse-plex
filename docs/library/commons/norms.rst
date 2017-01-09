@@ -12,7 +12,7 @@ as a signal.
 
 Euclidean distance between each signal pair can be computed by::
 
-    SPX_Distance.pairwise_distances(X)
+    spx.commons.distance.pairwise_distances(X)
 
 If ``X`` contains N signals, then the result 
 is an ``N x N`` matrix whose (i, j)-th entry
@@ -29,7 +29,7 @@ distance functions.
 For example, for measuring city-block
 distance between each pair of signals, use::
 
-    SPX_Distance.pairwise_distances(X, 'cityblock')
+    spx.commons.distance.pairwise_distances(X, 'cityblock')
 
 
 
@@ -38,13 +38,13 @@ Following dedicated functions are faster.
 Squared :math:`\ell_2` distances between all pairs
 of columns of X::
 
-    SPX_Distance.sqrd_l2_distances_cw(X)
+    spx.commons.distance.sqrd_l2_distances_cw(X)
 
 
 Squared :math:`\ell_2` distances between all pairs
 of rows of X::
 
-    SPX_Distance.sqrd_l2_distances_rw(X)
+    spx.commons.distance.sqrd_l2_distances_rw(X)
 
 
 Norm utilities

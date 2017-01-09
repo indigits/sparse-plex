@@ -14,13 +14,13 @@ classdef distance
         function result = sqrd_l2_distances_cw(X)
             % The vectors are stored column wise.
             % Number of vectors = number of columns
-            result = SPX_Distance.pairwise_x_y(X);
+            result = spx.commons.distance.pairwise_x_y(X);
         end
 
         function result = sqrd_l2_distances_rw(X)
             % The vectors are stored row wise.
             % Number of vectors = number of rows
-            result = SPX_Distance.pairwise_x_y(X');
+            result = spx.commons.distance.pairwise_x_y(X');
         end
 
 

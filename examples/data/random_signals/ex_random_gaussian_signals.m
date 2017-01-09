@@ -30,7 +30,7 @@ selectedSignals  = signals(:, selection);
 %We verify the norm of each of the selected signals
 signalNorms = spx.commons.norm.norms_l2_cw(selectedSignals)
 % We measure distance between these signals
-distance = SPX_Distance.pairwise_distances(selectedSignals);
+distance = spx.commons.distance.pairwise_distances(selectedSignals);
 distance = sqrt(abs(distance))
 
 % We verify the minimum and maximum distances betweeen these

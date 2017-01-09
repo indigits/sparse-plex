@@ -26,7 +26,7 @@ for c=1:num_clusters
 end
 fprintf('Computing distance matrix\n');
 % prepare the distance matrix
-sqrt_dist_mat = SPX_Distance.sqrd_l2_distances_cw(points);
+sqrt_dist_mat = spx.commons.distance.sqrd_l2_distances_cw(points);
 fprintf('Computing similarity matrix\n');
 % prepare the Gaussian similarity matrix
 % Eigen values have a large impact based on the choice of sigma
