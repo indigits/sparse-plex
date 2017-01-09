@@ -26,7 +26,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi.apply(X);
 % OMP MMV solver instance
-solver = SPX_OMP_MMV(Phi, K);
+solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(Y);
 % Solution vector

@@ -226,7 +226,7 @@ Dictionary Properties
 ::
 
 
-    dp = SPX_DictProps(Dict)
+    dp = spx.dict.Properties(Dict)
 
     dp.gram_matrix()
     dp.abs_gram_matrix()

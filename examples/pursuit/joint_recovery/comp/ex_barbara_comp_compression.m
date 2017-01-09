@@ -5,7 +5,7 @@ clear all;
 
 show_figures = true;
 
-problem = SPX_RecoveryProblems.problem_barbara_blocks();
+problem = spx.data.synthetic.recovery_problems.problem_barbara_blocks();
 Phi = spx.dict.simple.spie_2011('orth');
 blk_size = problem.blkSize;
 signals = problem.signals;
@@ -21,7 +21,7 @@ num_clusters = zeros(1, nk);
 processing_times = zeros(1, nk);
 for K=Ks
     tstart = tic;
-    solver = SPX_ClusterOMP(Phi, K);
+    solver = spx.pursuit.joint.ClusterOMP(Phi, K);
     result = solver.solve(signals);
     elapsed_time = toc(tstart);
     results{K} = result;

@@ -22,7 +22,7 @@ methods(Access=protected)
         d = self.D;
         X1 = self.X;
         % Lets measure the coherence of current dictionary
-        mu = SPX_DictProps(dict).coherence();
+        mu = spx.dict.Properties(dict).coherence();
         % Let us iterate atom by atom
         rejected = 0;
         accepted = 0;

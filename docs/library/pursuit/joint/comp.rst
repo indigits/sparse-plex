@@ -11,5 +11,5 @@ Cluster orthogonal matching pursuit
 
 ::
 
-    solver = SPX_ClusterOMP(Dict, K)
+    solver = spx.pursuit.joint.ClusterOMP(Dict, K)
     result = solver.solve(Y)

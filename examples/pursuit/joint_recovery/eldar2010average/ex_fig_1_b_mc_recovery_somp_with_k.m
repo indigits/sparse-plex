@@ -34,7 +34,7 @@ for ns=1:num_ss
             Y = Phi * X;
 
             % OMP MMV solver instance (using P = 2 for P-SOMP)
-            omp_solver = SPX_OMP_MMV(Phi, K, 2);
+            omp_solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Phi, K, 2);
             % Solve the sparse recovery problem
             result = omp_solver.solve(Y);
             % Solution vectors

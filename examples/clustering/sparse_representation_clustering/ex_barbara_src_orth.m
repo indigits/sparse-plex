@@ -5,7 +5,7 @@
 clc;
 close all;
 clear all;
-problem = SPX_RecoveryProblems.problem_barbara_blocks();
+problem = spx.data.synthetic.recovery_problems.problem_barbara_blocks();
 Phi = spx.dict.simple.spie_2011('orth');
 K = 12;
 % the 8x8 blocks to be compressed.

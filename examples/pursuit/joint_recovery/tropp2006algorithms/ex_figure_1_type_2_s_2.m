@@ -30,7 +30,7 @@ for nk=1:num_ks
         % Measurement vectors
         Y = Dict.apply(X);
         % OMP MMV solver instance
-        solver = SPX_OMP_MMV(Dict, K);
+        solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Dict, K);
         % Solve the sparse recovery problem
         result = solver.solve(Y);
         % Solution vector

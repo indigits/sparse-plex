@@ -61,7 +61,7 @@ methods
         S = size(new_residuals, 2);
         self.TotalErrors(self.Counter) = sqrt(sum(sum(new_residuals.^2))/numel(new_residuals));
         self.NumNonZeroEntries(self.Counter) = length(find(new_representations)) / S;
-        self.Coherences(self.Counter) = SPX_DictProps(new_dict).coherence();
+        self.Coherences(self.Counter) = spx.dict.Properties(new_dict).coherence();
         self.print_progress();
     end
 end

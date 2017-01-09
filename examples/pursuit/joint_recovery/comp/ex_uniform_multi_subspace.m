@@ -27,7 +27,7 @@ SS = 200;
 % Sparsity level of each signal (subspace dimension)
 K = 4;
 % Create signal generator
-sg = SPX_MultiSubspaceSignalGenerator(N, K);
+sg = spx.data.synthetic.MultiSubspaceSignalGenerator(N, K);
 % Create disjoint supports
 sg.createDisjointSupports(P);
 sg.setNumSignalsPerSubspace(SS);
@@ -39,7 +39,7 @@ X = sg.X;
 qs = sg.Supports;
 % Prepare signals
 Y = Phi * X;
-solver = SPX_ClusterOMP(Phi, K);
+solver = spx.pursuit.joint.ClusterOMP(Phi, K);
 result = solver.solve(Y);
 cs = spx.commons.SparseSignalsComparison(X, result.Z, K);
 snrs = cs.signal_to_noise_ratios();

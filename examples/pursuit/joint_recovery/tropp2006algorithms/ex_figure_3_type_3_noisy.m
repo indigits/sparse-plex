@@ -52,7 +52,7 @@ for nk=1:num_ks
                 % Created corrupted signals
                 Y = Y0 + noises;
                 % OMP MMV solver instance
-                solver = SPX_OMP_MMV(Dict, K);
+                solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Dict, K);
                 % Solve the sparse recovery problem
                 result = solver.solve(Y);
                 % Solution vector

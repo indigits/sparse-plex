@@ -25,9 +25,9 @@ General approach::
 
 The problems::
 
-    problem = SPX_RecoveryProblems.problem_small_1()    
-    problem = SPX_RecoveryProblems.problem_large_1()    
-    problem = SPX_RecoveryProblems.problem_barbara_blocks()    
+    problem = spx.data.synthetic.recovery_problems.problem_small_1()    
+    problem = spx.data.synthetic.recovery_problems.problem_large_1()    
+    problem = spx.data.synthetic.recovery_problems.problem_barbara_blocks()    
 
 
 Sparse signal generation
@@ -101,7 +101,7 @@ Signals with disjoint supports::
     % Sparsity level of each signal (subspace dimension)
     K = 4;
     % Create signal generator
-    sg = SPX_MultiSubspaceSignalGenerator(N, K);
+    sg = spx.data.synthetic.MultiSubspaceSignalGenerator(N, K);
     % Create disjoint supports
     sg.createDisjointSupports(P);
     sg.setNumSignalsPerSubspace(SS);

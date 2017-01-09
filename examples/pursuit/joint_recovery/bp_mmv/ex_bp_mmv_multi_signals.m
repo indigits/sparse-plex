@@ -26,12 +26,12 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi * X;
 
-solver = SPX_BP_MMV(Phi);
+solver = spx.pursuit.joint.BasisPursuit(Phi);
 result = solver.solve_linf_l1(Y);
 % Solution vectors
 Z = result.Z;
 
-solver = SPX_BP_MMV(Phi);
+solver = spx.pursuit.joint.BasisPursuit(Phi);
 result = solver.solve_l1_l1(Y);
 % Solution vectors
 Z = result.Z;

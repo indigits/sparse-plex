@@ -26,7 +26,7 @@ classdef SparseRecoveryProblemDescription < handle
             Representations, Signals, Measurements)
             if isstruct(Dict)
                 % This looks like a problem defined in 
-                % SPX_RecoveryProblems
+                % spx.data.synthetic.recovery_problems
                 problem = Dict;
                 Dict = [];
                 if isfield(problem, 'dictionary')

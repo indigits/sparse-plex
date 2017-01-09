@@ -1,4 +1,4 @@
-classdef SPX_DictProps < handle
+classdef Properties < handle
 % Defines various properties of a dictionary
 % See
 % - 2011_learned_dictionaries_for_sparse_image_representation_properties_and_results.pdf
@@ -19,7 +19,7 @@ classdef SPX_DictProps < handle
     end
 
     methods
-        function self = SPX_DictProps(Dict)
+        function self = Properties(Dict)
             if isa(Dict, 'spx.dict.Operator')
                 self.Dict = double(Dict);
             elseif ismatrix(Dict)

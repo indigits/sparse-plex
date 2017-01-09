@@ -3,7 +3,7 @@ rng('default');
 N = 64;
 D = 121;
 dict = spx.dict.simple.gaussian_dict(N, D);
-props = SPX_DictProps(dict);
+props = spx.dict.Properties(dict);
 G = props.gram_matrix();
 F = props.frame_operator();
 S = props.singular_values();

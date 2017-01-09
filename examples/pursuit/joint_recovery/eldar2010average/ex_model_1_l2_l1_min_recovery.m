@@ -24,7 +24,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 Y = Phi * X;
 
-solver = SPX_BP_MMV(Phi);
+solver = spx.pursuit.joint.BasisPursuit(Phi);
 % Solve using L2-L1 norm minimization
 result = solver.solve_l2_l1(Y);
 % Solution vectors

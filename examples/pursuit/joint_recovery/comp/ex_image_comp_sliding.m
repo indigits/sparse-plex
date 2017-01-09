@@ -1,7 +1,7 @@
 % Make sure that all the mentioned images below are
 % available in the standard_test_images_dir 
 % as configured in spx_local.ini file.
-% See SPX_RecoveryProblems.problem_test_image_blocks
+% See spx.data.synthetic.recovery_problems.problem_test_image_blocks
 % for details on how these images are loaded.
 
 clc;
@@ -18,7 +18,7 @@ image_name = 'cameraman';
 % ahoc, data, orth, rand, sine, rlsdla
 dict_name = 'rand';
 
-problem = SPX_RecoveryProblems.problem_test_image_blocks(image_name, block_type);
+problem = spx.data.synthetic.recovery_problems.problem_test_image_blocks(image_name, block_type);
 
 Phi = spx.dict.simple.spie_2011(dict_name);
 blk_size = problem.blkSize;
@@ -29,7 +29,7 @@ signal_means = mean(signals);
 signals = bsxfun(@minus, signals, signal_means);
 tstart = tic;
 K = 8;
-solver = SPX_ClusterOMP(Phi, K);
+solver = spx.pursuit.joint.ClusterOMP(Phi, K);
 result = solver.solve(signals);
 elapsed_time = toc(tstart);
 representations = result.Z;

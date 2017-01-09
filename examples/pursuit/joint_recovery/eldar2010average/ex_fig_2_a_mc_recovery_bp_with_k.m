@@ -35,7 +35,7 @@ for ns=1:num_ss
             Y = Phi * X;
 
             % BP MMV solver instance 
-            bp_solver = SPX_BP_MMV(Phi);
+            bp_solver = spx.pursuit.joint.BasisPursuit(Phi);
             % Solve the sparse recovery problem
             result = bp_solver.solve_l2_l1_complex(Y);
             % Solution vectors

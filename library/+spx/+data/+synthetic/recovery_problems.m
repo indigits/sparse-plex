@@ -37,7 +37,7 @@ classdef recovery_problems
             env = spx_get_env();
             images_dir = env.local_settings.standard_test_images_dir;
             image_path = fullfile(images_dir, 'barbara.png');
-            image = SPX_RecoveryProblems.read_image(image_path);
+            image = spx.data.synthetic.recovery_problems.read_image(image_path);
             blkSize = 8;
             patches = im2col(image, [blkSize, blkSize], 'distinct');
             problem.signals = patches;
@@ -87,7 +87,7 @@ classdef recovery_problems
                     error('Unsupported test image');
             end
             filepath = fullfile(rootdir, fname);
-            image = SPX_RecoveryProblems.read_image(filepath);
+            image = spx.data.synthetic.recovery_problems.read_image(filepath);
             blkSize = 8;
             patches = im2col(image, [blkSize, blkSize], block_type);
             problem.signals = patches;

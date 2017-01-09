@@ -13,7 +13,7 @@ S = 5;
 
 % Sensing matrix
 Phi = spx.dict.simple.gaussian_dict(M, N);
-phi_props = SPX_DictProps(Phi);
+phi_props = spx.dict.Properties(Phi);
 mu = phi_props.coherence();
 upper_limit  = ceil((1 + 1/mu) / 2) + 15;
 % upper_limit = 4;
@@ -40,7 +40,7 @@ for nk=1:num_ks
         % Measurement vectors
         Y = Phi * X;
 
-        bp_solver = SPX_BP_MMV(Phi);
+        bp_solver = spx.pursuit.joint.BasisPursuit(Phi);
         result = bp_solver.solve_l1_l1(Y);
         % Solution vectors
         X_BP = result.Z;
@@ -49,7 +49,7 @@ for nk=1:num_ks
         num_bp_successes = num_bp_successes + bp_success;
 
         % OMP MMV solver instance
-        omp_solver = SPX_OMP_MMV(Phi, K);
+        omp_solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Phi, K);
         % Solve the sparse recovery problem
         result = omp_solver.solve(Y);
         % Solution vectors

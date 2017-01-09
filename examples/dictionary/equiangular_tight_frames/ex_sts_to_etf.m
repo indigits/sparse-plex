@@ -2,7 +2,7 @@ close all; clear all; clc;
 M = SPX_SteinerSystem.ss_2(4);
 result = SPX_EquiangularTightFrame.ss_to_etf(M);
 frame = result.F;
-props = SPX_DictProps(frame);
+props = spx.dict.Properties(frame);
 fprintf('Size of F: ');
 fprintf('%d ', size(frame));
 fprintf('\n');

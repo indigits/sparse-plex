@@ -33,7 +33,7 @@ for ns=1:num_ss
             % Measurement vectors
             Y = Phi * X;
 
-            bp_solver = SPX_BP_MMV(Phi);
+            bp_solver = spx.pursuit.joint.BasisPursuit(Phi);
             result = bp_solver.solve_l2_l1(Y);
             % Solution vectors
             X_BP = result.Z;

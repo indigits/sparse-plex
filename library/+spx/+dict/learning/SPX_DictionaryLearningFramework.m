@@ -143,7 +143,7 @@ methods(Access=private)
         dict = self.Dict;
         alpha = self.Alpha;
         % compute gram matrix
-        [muBeforeCleanup, ~, ~, gram] =  SPX_DictProps(dict).coherence_with_index();
+        [muBeforeCleanup, ~, ~, gram] =  spx.dict.Properties(dict).coherence_with_index();
         % Number of atoms
         d = self.D;
         % If inner product crosses this threshold then the atoms are
@@ -213,7 +213,7 @@ methods(Access=private)
                     % replace atom
                     dict(:, j) = x;
                     % update gram matrix
-                    [~, ~, ~, gram] =  SPX_DictProps(dict).coherence_with_index();
+                    [~, ~, ~, gram] =  spx.dict.Properties(dict).coherence_with_index();
                     updates = updates + 1;
                     % We won't use this signal as replacement later
                     errorEnergy(s) = 0;
@@ -228,7 +228,7 @@ methods(Access=private)
             updates, closeAtoms, unusedAtoms);
         end
         % Lets measure the coherence of dictionary
-        [muAfterCleanup, i, j] = SPX_DictProps(dict).coherence_with_index();
+        [muAfterCleanup, i, j] = spx.dict.Properties(dict).coherence_with_index();
         self.UnusedAtoms(c) = unusedAtoms;
         self.CloseAtoms(c) = closeAtoms;
         self.ReplacedAToms(c) = unusedAtoms + closeAtoms; 

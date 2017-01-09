@@ -44,7 +44,7 @@ for ns=1:num_ss
         
 
         % Create the solver for simultaneous orthogonal matching pursuit
-        solver = SPX_OMP_MMV(Phi, K, 2);
+        solver = spx.pursuit.joint.OrthogonalMatchingPursuit(Phi, K, 2);
         result = solver.solve(Y);
         % Solution vectors
         X_Rec = result.Z;
