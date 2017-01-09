@@ -6,7 +6,7 @@ Matching pursuit
 
 Constructing the solver with dictionary and expected sparsity level::
 
-    solver = SPX_MatchingPursuit(Dict, K)
+    solver = spx.pursuit.single.MatchingPursuit(Dict, K)
 
 Using the solver to obtain the sparse representation of one vector::
 

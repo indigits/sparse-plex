@@ -3,6 +3,26 @@ Basic  CS Tutorial
 
 .. highlight:: matlab
 
+This tutorial is based on ``examples\\ex_simple_compressed_sensing_demo.m``.
+
+In this tutorial we will:
+
+* Create sparse signals (with Gaussian and bi-uniform distributed non-zero samples).
+* Look at how to identify support of a signal.
+* Construct a Gaussian sensing matrix.
+* Visualize the sensing matrix.
+* Compute random measurements on the sparse signal with the sensing matrix.
+* Add measurement noise to the measurements.
+* Recover the sparse vector
+  using following sparse recovery algorithms
+  
+  * Matching Pursuit
+  * Orthogonal Matching Pursuit
+  * Basis Pursuit
+
+* Measure the recovery error for different sparse
+  recovery algorithms.
+
 Basic setup::
 
     % Signal space 
@@ -104,7 +124,7 @@ Measurement vector with noise::
 
 Sparse recovery using matching pursuit::
 
-    solver = SPX_MatchingPursuit(Phi, K);
+    solver = spx.pursuit.single.MatchingPursuit(Phi, K);
     result = solver.solve(y);
     mp_solution = result.z;
 
@@ -132,7 +152,7 @@ Orthogonal Matching pursuit recovery error: 0.0301.
 
 Sparse recovery using l_1 minimization::
 
-    solver = SPX_L1SparseRecovery(Phi, y);
+    solver = spx.pursuit.single.BasisPursuit(Phi, y);
     result = solver.solve_l1_noise();
     l1_solution = result;
     l1_diff = x - l1_solution;

@@ -34,7 +34,7 @@ end
 
 function test_l1_recovery_lasso
     [A, x, b] = problem_1();
-    solver = SPX_L1SparseRecovery(A, b);
+    solver = spx.pursuit.single.BasisPursuit(A, b);
     % We require lambda to be 2.5 or more. Otherwise, convergence is bad. 
     % Observations: 
     % for 2.5, we require 18 iterations to converge.
@@ -48,7 +48,7 @@ end
 
 function test_l1_recovery_exact
     [A, x, b] = problem_1();
-    solver = SPX_L1SparseRecovery(A, b);
+    solver = spx.pursuit.single.BasisPursuit(A, b);
     z = solver.solve_l1_exact();
     e = z - x;
     fprintf('\nExact: x: %f, z: %f, e: %f, ratio: %f\n', norm(x), norm(z), norm(e), norm(e)/norm(x));
@@ -57,7 +57,7 @@ end
 
 function test_l1_recovery_noise
     [A, x, b] = problem_1();
-    solver = SPX_L1SparseRecovery(A, b);
+    solver = spx.pursuit.single.BasisPursuit(A, b);
     z = solver.solve_l1_noise();
     e = z - x;
     fprintf('\n Noisy: x: %f, z: %f, e: %f, ratio: %f\n', norm(x), norm(z), norm(e), norm(e)/norm(x));
@@ -66,7 +66,7 @@ end
 
 function test_l1_recovery_lasso_multi
     [A, X, B] = problem_2();
-    solver = SPX_L1SparseRecovery(A, B);
+    solver = spx.pursuit.single.BasisPursuit(A, B);
     % We require lambda to be 2.5 or more. Otherwise, convergence is bad. 
     % Observations: 
     % for 2.5, we require 18 iterations to converge.
@@ -87,7 +87,7 @@ end
 
 function test_l1_recovery_exact_multi
     [A, X, B] = problem_2();
-    solver = SPX_L1SparseRecovery(A, B);
+    solver = spx.pursuit.single.BasisPursuit(A, B);
     Z = solver.solve_l1_exact();
     E = Z - X;
     s  = size(X, 2);
@@ -102,7 +102,7 @@ end
 
 function test_l1_recovery_noise_multi
     [A, X, B] = problem_2();
-    solver = SPX_L1SparseRecovery(A, B);
+    solver = spx.pursuit.single.BasisPursuit(A, B);
     Z = solver.solve_l1_noise();
     E = Z - X;
     s  = size(X, 2);

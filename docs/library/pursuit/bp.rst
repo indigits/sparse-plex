@@ -19,7 +19,7 @@ the problem.
 Constructing the solver with dictionary and set of
 signals to be solved arranged in a signal matrix::
 
-    solver = SPX_L1SparseRecovery(Dict, Y)
+    solver = spx.pursuit.single.BasisPursuit(Dict, Y)
 
 
 Solving using LASSO method::

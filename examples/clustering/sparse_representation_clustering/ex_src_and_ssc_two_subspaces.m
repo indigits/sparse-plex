@@ -78,7 +78,7 @@ if perform_sparse_representation_clustering
         solutions = omp_solver.solve_all_linsolve(X);
         representations = solutions.Z;
     elseif strcmp(src_recovery_algo ,'l1')
-        l1_solver = SPX_L1SparseRecovery(Dict, X);
+        l1_solver = spx.pursuit.single.BasisPursuit(Dict, X);
         representations = l1_solver.solve_l1_noise();
         % We will threshold out unnecessary stuff
         % representations = spx.commons.SparseSignalsComparison.sparse_approximation(representations, K);
