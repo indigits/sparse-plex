@@ -1,4 +1,4 @@
-classdef SPX_CoSaMP_MMV < handle
+classdef CoSaMP < handle
     % Implements CoSaMP-MMV algorithm for sparse recovery
 
     properties
@@ -32,7 +32,7 @@ classdef SPX_CoSaMP_MMV < handle
     end
     
     methods
-        function self  = SPX_CoSaMP_MMV(Dict, K, P, options)
+        function self  = CoSaMP(Dict, K, P, options)
             if nargin < 3
                 % By default we apply l_1 norm on rows
                 P = 1;

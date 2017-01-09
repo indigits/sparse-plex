@@ -1,4 +1,4 @@
-classdef SPX_RankAwareOMP < handle
+classdef RankAwareOMP < handle
     % Implements Rank Aware OMP algorithm for sparse approximation in MMV case
     
     properties
@@ -34,7 +34,7 @@ classdef SPX_RankAwareOMP < handle
     end
     
     methods
-        function self  = SPX_RankAwareOMP(Dict, K)
+        function self  = RankAwareOMP(Dict, K)
             % We assume that all the columns in dictionary are normalized.
             if isa(Dict, 'spx.dict.Operator')
                 self.Dict = Dict;

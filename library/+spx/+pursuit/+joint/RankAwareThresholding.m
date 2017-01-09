@@ -1,5 +1,5 @@
-classdef SPX_Thresholding_MMV < handle
-    % Implements Thresholding-MMV algorithm for sparse approximation
+classdef RankAwareThresholding < handle
+    % Implements Rank aware thresholding algorithm for sparse approximation
     
     properties
         % Indicates if log messages should be printed at each iteration
@@ -15,22 +15,12 @@ classdef SPX_Thresholding_MMV < handle
         D
         % Sparsity level of representations (may be negative)
         K
-        % The norm to be chosen for rows
-        P
         % Result of a solver
         result
     end
     
     methods
-        function self  = SPX_Thresholding_MMV(Dict, K, P)
-            if nargin < 3
-                % By default we apply l_1 norm on rows
-                P = 1;
-            end
-            if P ~= 1 &&  P ~= 2
-                error('Only l_1 and l_2 norms are supported.');
-            end
-            self.P = P;
+        function self  = RankAwareThresholding(Dict, K)
             % We assume that all the columns in dictionary are normalized.
             if isa(Dict, 'spx.dict.Operator')
                 self.Dict = Dict;
@@ -53,30 +43,29 @@ classdef SPX_Thresholding_MMV < handle
             n = self.N;
             % The number of signals being approximated.
             s = size(Y, 2);
-            % Initial residual
-            R = Y;
             dict = self.Dict;
             % Active indices 
             omega = [];
             % Estimate
             Z = zeros(d, s);
-            P = self.P;
-            % Compute inner products (DxN  * NxS = DxS )
-            innerProducts = apply_ctranspose(dict, R);
-            % Compute absolute values of inner products
-            innerProducts = abs(innerProducts);
-            if P == 1
-                % Compute sum of inner products over each row
-                innerProducts = sum(innerProducts, 2);
-            elseif P == 2
-                % Compute l2 norm inner products over each row
-                innerProducts = spx.commons.norm.norms_l2_rw(innerProducts);
-            else
-                error('Impossible');
+            % Orthonormalize Y
+            U = orth(Y); % Y is n x s. U is n x r.
+            % Verify its rank
+            k = self.K;
+            % Prepare the projection operator
+            P = eye(n) - U*U'; % P is n x n
+            % Compute the projection of each atom on 
+            % orthogonal complement of R(U)
+            % compute the norms of projections
+            projection_norms = zeros(1, d);
+            for i=1:d
+                projection_norms(i) = norm(P * (dict.column(i)) );
             end
-            [sortedInnerProducts,Indices] = sort(innerProducts,1,'descend');
+            % sort the norms
+            [sorted_norms, indices] = sort(projection_norms);
+            % disp(sorted_norms);
             % Pick first K indices as the solution support.
-            omega = Indices(1:self.K);
+            omega = indices(1:self.K);
             % Solve least squares problem
             subdict = columns(dict, omega);
             tmp = linsolve(subdict, Y);

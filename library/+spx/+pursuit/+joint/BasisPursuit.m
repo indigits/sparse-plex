@@ -1,4 +1,4 @@
-classdef SPX_BP_MMV < handle
+classdef BasisPursuit < handle
     % Implements BP-MMV algorithm for sparse approximation
 
     properties
@@ -16,7 +16,7 @@ classdef SPX_BP_MMV < handle
     end
 
     methods
-        function self  = SPX_BP_MMV(Dict)
+        function self  = BasisPursuit(Dict)
             % We assume that all the columns in dictionary are normalized.
             if isa(Dict, 'spx.dict.Operator')
                 self.Dict = Dict;

@@ -1,4 +1,4 @@
-classdef SPX_ClusterOMP < handle
+classdef ClusterOMP < handle
 
     properties
         % Maximum number of iterations for approximation
@@ -17,7 +17,7 @@ classdef SPX_ClusterOMP < handle
     end
 
     methods
-        function self  = SPX_ClusterOMP(Dict, K)
+        function self  = ClusterOMP(Dict, K)
             % We assume that all the columns in dictionary are normalized.
             if isa(Dict, 'spx.dict.Operator')
                 self.Dict = Dict;
