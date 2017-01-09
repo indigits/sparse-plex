@@ -16,7 +16,7 @@ pta = spx.pursuit.PhaseTransitionAnalysis(N);
 % pta.NumTrials = 100;
 dict_model = @(M, N) spx.dict.simple.gaussian_dict(M, N);
 data_model = @(N, K) spx.data.synthetic.SparseSignalGenerator(N, K).gaussian;
-recovery_solver = @(Phi, K, y) SPX_OrthogonalLeastSquares(Phi, K).solve(y).z;
+recovery_solver = @(Phi, K, y) spx.pursuit.single.OrthogonalLeastSquares(Phi, K).solve(y).z;
 pta.run(dict_model, data_model, recovery_solver);
 pta.save_results(target_file_path);
 

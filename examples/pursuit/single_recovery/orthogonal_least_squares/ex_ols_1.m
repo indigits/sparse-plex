@@ -24,7 +24,7 @@ Phi = spx.dict.simple.gaussian_dict(M, N);
 % Measurement vectors
 y = Phi.apply(x);
 % OLS MMV solver instance
-solver = SPX_OrthogonalLeastSquares(Phi, K);
+solver = spx.pursuit.single.OrthogonalLeastSquares(Phi, K);
 % Solve the sparse recovery problem
 result = solver.solve(y);
 % Solution vector
