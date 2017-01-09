@@ -37,7 +37,7 @@ Latex
 
 Printing a vector in a format suitable for Latex::
 
-    >> SPX_Latex.printVector([1, 2, 3, 4])
+    >> spx.io.latex.printVector([1, 2, 3, 4])
     \begin{pmatrix}
     1 & 2 & 3 & 4
     \end{pmatrix}
@@ -45,7 +45,7 @@ Printing a vector in a format suitable for Latex::
 
 Printing a matrix in a format suitable for Latex::
 
-    >> SPX_Latex.printMatrix(randn(3, 4))
+    >> spx.io.latex.printMatrix(randn(3, 4))
     \begin{bmatrix}
     -0.340285 & 1.13915 & 0.65748 & 0.0187744\\
     -0.925848 & 0.427361 & 0.584246 & -0.425961\\
@@ -55,7 +55,7 @@ Printing a matrix in a format suitable for Latex::
 
 Printing a vector as a set in Latex::
 
-    >> SPX_Latex.printSet([1, 2, 3, 4])
+    >> spx.io.latex.printSet([1, 2, 3, 4])
     \{ 1 , 2 , 3 , 4 \} 
 
 
@@ -71,7 +71,7 @@ Rust source code.
 Printing a matrix for consumption in SciRust 
 source code::
 
-    >> SPX_SciRust.printMatrix(magic(3))
+    >> spx.io.scirust.printMatrix(magic(3))
     matrix_rw_f64(3, 3, [
             8.0, 1.0, 6.0,
             3.0, 5.0, 7.0,

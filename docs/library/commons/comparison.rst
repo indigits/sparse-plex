@@ -144,13 +144,13 @@ Signal space comparison
 ---------------------------------------------------
 
 For comparing signals which are not sparse,
-we have another helper utility class ``spx.commons.signalsComparison``. 
+we have another helper utility class ``spx.commons.SignalsComparison``. 
 
 Assuming X is a signal matrix (with each column treated
 as a signal), and Y is its noisy version, 
 we created the signal comparison instance as::
 
-    cs = spx.commons.signalsComparison(X, Y);
+    cs = spx.commons.SignalsComparison(X, Y);
 
 Most functions are similar to what we had for
 ``spx.commons.SparseSignalsComparison``::

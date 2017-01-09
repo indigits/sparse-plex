@@ -1,4 +1,4 @@
-classdef SPX_SciRust < handle
+classdef scirust < handle
 
     methods(Static)
     
