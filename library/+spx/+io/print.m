@@ -26,7 +26,7 @@ methods (Static)
         %PRINTSORTEDSPARSEVECTOR Sorts non-zero values in x and prints them.
         % We identify non-zero values of x. We sort them. We print them in 
         % the descending magnitude order along with their indices
-        values = SPX_Support.sortedNonZeroElements(x);
+        values = spx.commons.sparse.sorted_non_zero_elements(x);
         fprintf('Index:\tValue\n');
         fprintf('%4d:\t%f\n', values);
     end
