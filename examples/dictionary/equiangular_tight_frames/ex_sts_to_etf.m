@@ -1,5 +1,5 @@
 close all; clear all; clc;
-M = SPX_SteinerSystem.ss_2(4);
+M = spx.discrete.steiner_system.ss_2(4);
 result = spx.dict.etf.ss_to_etf(M);
 frame = result.F;
 props = spx.dict.Properties(frame);

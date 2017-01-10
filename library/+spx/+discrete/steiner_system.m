@@ -1,4 +1,4 @@
-classdef SPX_SteinerSystem < handle
+classdef steiner_system < handle
 % Functions to create Steiner systems
 
     methods(Static)
@@ -31,7 +31,7 @@ classdef SPX_SteinerSystem < handle
             if mod(v, 6) ~= 3
                 error('Only v = 6n + 3 supported at the moment');
             end
-            M = SPX_SteinerSystem.ss_3_bose(v);
+            M = spx.discrete.steiner_system.ss_3_bose(v);
         end
 
         function M = ss_3_bose(v)
@@ -42,7 +42,7 @@ classdef SPX_SteinerSystem < handle
             % The incidence matrix
             M = zeros(v, b);
             % Construct the commutative idempotent Latin square
-            addition_table = SPX_SteinerSystem.commutative_idempotent_latin_square(v2);
+            addition_table = spx.discrete.steiner_system.commutative_idempotent_latin_square(v2);
             % The column number in M
             c = 0;
             % Insert type 1 triplets
@@ -101,7 +101,7 @@ classdef SPX_SteinerSystem < handle
                 error('Commutative idempotent Latin square is supported only for odd numbers');
             end
             % Compute the z_n addition table first
-            table = SPX_SteinerSystem.z_n_addition_table(n);
+            table = spx.discrete.steiner_system.z_n_addition_table(n);
             % Prepare a mapping of numbers
             d = diag(table);
             mapping = zeros(n, 1);

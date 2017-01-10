@@ -6,8 +6,8 @@
 % - We verify that principal angle between each pair of subspaces is same.
 % Construct an ETF
 close all; clear all; clc;
-% M = SPX_SteinerSystem.ss_2(4);
-M = SPX_SteinerSystem.ss_3(15);
+% M = spx.discrete.steiner_system.ss_2(4);
+M = spx.discrete.steiner_system.ss_3(15);
 result = spx.dict.etf.ss_to_etf(M);
 F = result.F;
 fprintf('is etf : %d\n', spx.dict.etf.is_etf(F));
