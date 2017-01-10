@@ -51,7 +51,7 @@ fprintf('Detection performance:\n');
 disp(results.detectionResults);
 %% Display of results
 
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 subplot(211);
 imshow(mat2gray(phi));
 title(sprintf('Rademacher sensing matrix (%dx%d)', M, N));
@@ -61,7 +61,7 @@ title('Signal');
 
 % We show case some sample bits
 ShowBits = 20;
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 subplot(611);
 stem(results.transmittedBits(1:ShowBits));
 title('Transmitted bits');

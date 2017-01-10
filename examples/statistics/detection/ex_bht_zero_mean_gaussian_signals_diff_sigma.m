@@ -39,7 +39,7 @@ detectionResults = SPX_BinaryHypothesisTest.performance(...
 
 % We show case some sample bits
 ShowBits = 20;
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 subplot(411);
 stem(transmittedBits(1:ShowBits), '.');
 title('Transmitted bits');

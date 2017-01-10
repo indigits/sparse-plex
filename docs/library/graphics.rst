@@ -18,7 +18,7 @@ In this section we cover:
 
 Create a full screen figure::
 
-    spx.graphics.Figures.full_screen_figure;
+    spx.graphics.figure.full_screen;
 
 
 Multiple figures::

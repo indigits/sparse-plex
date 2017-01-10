@@ -28,7 +28,7 @@ solver = SPX_ShortTermFourierTransform(B, O, L, 'hamming');
 % We preserve only one half of the frequencies
 spectrum = abs(spectrum);
 spectrum = spectrum(1:L/2, :);
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 imagesc(timePoints/gen.SamplingFrequency, ...
     freq(1:L/2) * gen.SamplingFrequency, spectrum);
 title('STFT');

@@ -10,7 +10,7 @@ x = SPX_SimpleSignals.picket_fence(N);
 
 fx = fft(x);
 
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 subplot(211);
 stem(x, '.');
 title('Time domain');

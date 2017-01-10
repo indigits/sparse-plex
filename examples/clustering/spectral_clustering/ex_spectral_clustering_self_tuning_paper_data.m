@@ -36,7 +36,7 @@ for nd=1:num_data_sets
     spectral_clustering_results{nd} = cluster_labels;
 end
 
-spx.graphics.Figures.full_screen_figure;
+spx.graphics.figure.full_screen;
 
 plots_per_set = 2;
 colors = [1,0,0;0,1,0;0,0,1;1,1,0;1,0,1;0,1,1;0,0,0];
