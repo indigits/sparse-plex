@@ -1,4 +1,4 @@
-classdef SPX_Arrangements < handle
+classdef arrangements
 
 methods(Static)
 

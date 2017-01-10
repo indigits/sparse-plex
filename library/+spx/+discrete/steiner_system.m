@@ -1,4 +1,4 @@
-classdef steiner_system < handle
+classdef steiner_system
 % Functions to create Steiner systems
 
     methods(Static)
