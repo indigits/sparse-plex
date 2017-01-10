@@ -1,4 +1,4 @@
-classdef SPX_Set < handle
+classdef set
 
 methods(Static)
     function subset = random_subset_1(set_size, subset_size)
