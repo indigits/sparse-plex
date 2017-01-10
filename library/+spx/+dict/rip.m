@@ -1,37 +1,37 @@
-classdef SPX_RIP < handle
+classdef rip
 
-    methods(Static)
-        function [ delta] = estimate_delta( Phi, KMax )
-        %ESTIMATERIPDELTA Estimates delta for the sensing matrix Phi
-        [M, N] = size(Phi);
-        if nargin == 1
-            KMax  = N;
-        end
-        % the value of K for this test
-        K =  0;
-        delta = zeros(KMax, 2);
-        tic;
-        while K < KMax
-            K = K + 1;
-            [estimatedMaxDelta, estimatedMinDelta, trials] = estimateRIPKDelta(Phi, N, K);
-            elapsedTime = toc;
-            % Store the estimated value of delta for current value of K
-            delta(K, 1) = estimatedMaxDelta;
-            % Store the number of trials conducted for this value of K
-            delta(K, 2) = trials;
-            % Display results for current value of K
-            fprintf('K:%d, estimated max delta: %f, min delta:%f, trials: %d, elapsed time: %0.2f seconds.\n', ...
-                K, estimatedMaxDelta, estimatedMinDelta, trials, elapsedTime);
-            if  estimatedMaxDelta >= 0.4142
-                % We don't need to consider RIP property for higher values of K
-                break;
-            end
-        end
-        % Finally we keep only K rows from delta
-        delta = delta(1:K,:);
-        end
-
+methods(Static)
+    function [ delta] = estimate_delta( Phi, KMax )
+    %ESTIMATERIPDELTA Estimates delta for the sensing matrix Phi
+    [M, N] = size(Phi);
+    if nargin == 1
+        KMax  = N;
     end
+    % the value of K for this test
+    K =  0;
+    delta = zeros(KMax, 2);
+    tic;
+    while K < KMax
+        K = K + 1;
+        [estimatedMaxDelta, estimatedMinDelta, trials] = estimateRIPKDelta(Phi, N, K);
+        elapsedTime = toc;
+        % Store the estimated value of delta for current value of K
+        delta(K, 1) = estimatedMaxDelta;
+        % Store the number of trials conducted for this value of K
+        delta(K, 2) = trials;
+        % Display results for current value of K
+        fprintf('K:%d, estimated max delta: %f, min delta:%f, trials: %d, elapsed time: %0.2f seconds.\n', ...
+            K, estimatedMaxDelta, estimatedMinDelta, trials, elapsedTime);
+        if  estimatedMaxDelta >= 0.4142
+            % We don't need to consider RIP property for higher values of K
+            break;
+        end
+    end
+    % Finally we keep only K rows from delta
+    delta = delta(1:K,:);
+    end
+
+end
 
 end
 
