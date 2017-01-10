@@ -201,7 +201,7 @@ Composite Operators
 A composite operator can be created by combining
 two or more operators::
 
-    co = SPX_CompositeOperator(f, g)
+    co = spx.dict.CompositeOperator(f, g)
 
 
 
@@ -214,10 +214,10 @@ Unitary/Orthogonal matrices
 ::
 
 
-    SPX_Unitary.uniform_normal_qr(n)
-    SPX_Unitary.analyze_rr(O)
-    SPX_Unitary.synthesize_rr(rotations, reflections)
-    SPX_Unitary.givens_rot(a, b)
+    spx.dict.unitary.uniform_normal_qr(n)
+    spx.dict.unitary.analyze_rr(O)
+    spx.dict.unitary.synthesize_rr(rotations, reflections)
+    spx.dict.unitary.givens_rot(a, b)
 
 
 Dictionary Properties
@@ -240,15 +240,15 @@ Dictionary Properties
 
 Coherence of a dictionary::
 
-    mu = coherence(dict)
+    mu = spx.dict.coherence(dict)
 
 Babel function of a dictionary::
 
-    mu = babel(dict)
+    mu = spx.dict.babel(dict)
 
 Spark of a dictionary (for small sizes)::
 
-    [ K, columns ] = spark( Phi )
+    [ K, columns ] = spx.dict.spark( Phi )
 
 
 Equiangular Tight Frames
@@ -257,9 +257,9 @@ Equiangular Tight Frames
 ::
 
 
-    SPX_EquiangularTightFrame.ss_to_etf(M)
-    SPX_EquiangularTightFrame.is_etf(F)
-    SPX_EquiangularTightFrame.ss_etf_structure(k, v)
+    spx.dict.etf.ss_to_etf(M)
+    spx.dict.etf.is_etf(F)
+    spx.dict.etf.ss_etf_structure(k, v)
 
 
 Grassmannian Frames

@@ -8,9 +8,9 @@
 close all; clear all; clc;
 % M = SPX_SteinerSystem.ss_2(4);
 M = SPX_SteinerSystem.ss_3(15);
-result = SPX_EquiangularTightFrame.ss_to_etf(M);
+result = spx.dict.etf.ss_to_etf(M);
 F = result.F;
-fprintf('is etf : %d\n', SPX_EquiangularTightFrame.is_etf(F));
+fprintf('is etf : %d\n', spx.dict.etf.is_etf(F));
 h_size = result.h_size;
 fprintf('Size of F: ');
 [m, n] = size(F);

@@ -116,7 +116,7 @@ Some third party open source libraries
 
 Put a title over all subplots::
 
-    suptitle(title);
+    spx.graphics.suptitle(title);
 
 This function is by *Drea Thomas*.
 
@@ -125,9 +125,9 @@ This function is by *Drea Thomas*.
 
 RGB code for given colorname::
 
-     c = rgb('DarkRed')
-     c = rgb('Green') 
-     plot(x,y,'color',rgb('orange'))
+     c = spx.graphics.rgb('DarkRed')
+     c = spx.graphics.rgb('Green') 
+     plot(x,y,'color',spx.graphics.rgb('orange'))
      
 This function is by Kristján Jónasson and is
 in public domain.

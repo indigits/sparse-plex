@@ -1,4 +1,4 @@
-classdef SPX_EquiangularTightFrame < handle
+classdef etf < handle
 % Methods to construct equiangular tight frame
 
     methods(Static)

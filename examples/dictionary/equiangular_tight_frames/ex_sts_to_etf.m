@@ -1,6 +1,6 @@
 close all; clear all; clc;
 M = SPX_SteinerSystem.ss_2(4);
-result = SPX_EquiangularTightFrame.ss_to_etf(M);
+result = spx.dict.etf.ss_to_etf(M);
 frame = result.F;
 props = spx.dict.Properties(frame);
 fprintf('Size of F: ');
@@ -13,5 +13,5 @@ disp(abs(G));
 % Rows are orthogonal 
 fprintf('Frame operator (diagonal)\n');
 disp(frame * frame');
-SPX_EquiangularTightFrame.is_etf(frame)
+spx.dict.etf.is_etf(frame)
 
