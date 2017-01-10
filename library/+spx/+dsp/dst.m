@@ -1,4 +1,4 @@
-classdef SPX_DST
+classdef dst
 % Functions related to discrete sine transform
 %
 % Remarks:
