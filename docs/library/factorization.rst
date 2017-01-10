@@ -20,18 +20,18 @@ Various versions of QR Factorization
 
 Gram Schmidt::
 
-    [Q, R] =  SPX_QR.gram_schmidt(A)
+    [Q, R] =  spx.la.qr.gram_schmidt(A)
 
 
 Householder UR::
 
-    [U, R] = SPX_QR.householder_ur(A)
+    [U, R] = spx.la.qr.householder_ur(A)
 
 
 Householder QR::
 
-    [Q, R] =  SPX_QR.householder_qr(A)
+    [Q, R] =  spx.la.qr.householder_qr(A)
 
 Householder matrix for a given vector::
 
-    [H, v] = SPX_QR.householder_matrix(x)
+    [H, v] = spx.la.qr.householder_matrix(x)

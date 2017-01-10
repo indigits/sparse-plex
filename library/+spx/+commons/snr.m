@@ -27,13 +27,13 @@ classdef snr
         end
         
         function result = recSNRsdB(signals, reconstructions)
-            ratios = SPX_SNR.recSNRs(signals, reconstructions);
+            ratios = spx.commons.snr.recSNRs(signals, reconstructions);
             result= 10 * log10(ratios);
         end
         
         function result = recSNRs(signals, reconstructions)
-            sigEngergies =  SPX_SNR.energies(signals);
-            noiseEnergies =  SPX_SNR.energies(signals - reconstructions);
+            sigEngergies =  spx.commons.snr.energies(signals);
+            noiseEnergies =  spx.commons.snr.energies(signals - reconstructions);
             result = sigEngergies ./ noiseEnergies;
         end
         
@@ -44,7 +44,7 @@ classdef snr
         end
         
         function result = energiesDB(signals)
-            energies = SPX_SNR.energies(signals);
+            energies = spx.commons.snr.energies(signals);
             result = 10* log10(energies);
         end
     end

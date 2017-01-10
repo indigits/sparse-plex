@@ -1,4 +1,4 @@
-classdef SPX_QR < handle
+classdef qr 
 % Algorithms related to QR factorization
 % These are mostly for reference
 
@@ -96,7 +96,7 @@ classdef SPX_QR < handle
             % i.e. H x = e
             % example usage:
             % x = rand(3, 1);
-            % H = SPX_QR.householder_matrix(x)
+            % H = spx.la.qr.householder_matrix(x)
             % z = H * x
             % verify that z(1) == norm(x) and 
             % other entries in z are zero.

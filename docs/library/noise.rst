@@ -42,39 +42,39 @@ Noise measurement
 
 SNR in dB::
 
-    result = SPX_SNR.SNR(signals, noises)
+    result = spx.commons.snr.SNR(signals, noises)
 
 SNR in dB from signal and reconstruction::
 
     reconstructions = signals_with_noise;
-    result = SPX_SNR.recSNRdB(signals, reconstructions)
+    result = spx.commons.snr.recSNRdB(signals, reconstructions)
 
 Signal energy in DB ::
 
-    result = SPX_SNR.energyDB(signals)
+    result = spx.commons.snr.energyDB(signals)
 
 
 Reconstruction SNR as energy ratio::
 
-    result = SPX_SNR.recSNR(signal, reconstruction)
+    result = spx.commons.snr.recSNR(signal, reconstruction)
 
 Error energy normalized by signal energy::
 
-    result = SPX_SNR.normalizedErrorEnergy(signal, reconstruction)
+    result = spx.commons.snr.normalizedErrorEnergy(signal, reconstruction)
 
 Reconstruction SNRs over multiple signals in dB::
 
-    result = SPX_SNR.recSNRsdB(signals, reconstructions)
+    result = spx.commons.snr.recSNRsdB(signals, reconstructions)
 
 Reconstruction SNRs over multiple signals as energy ratios::
 
-    result = SPX_SNR.recSNRs(signals, reconstructions)
+    result = spx.commons.snr.recSNRs(signals, reconstructions)
 
 Signal energies::
 
-    result = SPX_SNR.energies(signals)
+    result = spx.commons.snr.energies(signals)
 
 Signal energies in dB::
 
-    result = SPX_SNR.energiesDB(signals)
+    result = spx.commons.snr.energiesDB(signals)
 
