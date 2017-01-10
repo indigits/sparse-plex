@@ -1,4 +1,4 @@
-classdef Unitary
+classdef unitary
     % Ways to create unitary matrices
     properties
     end
@@ -29,7 +29,7 @@ classdef Unitary
             for i=1:n
                 for j=i+1:n
                     % identify the (i, j)-th rotation
-                    [c, s] = SPX_Unitary.givens_rot(O(i, i), O(j, i));
+                    [c, s] = spx.dict.unitary.givens_rot(O(i, i), O(j, i));
                     G = [c -s
                         s c];
                     % x = [O(i, i); O(j, i)];
