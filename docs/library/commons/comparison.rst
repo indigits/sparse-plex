@@ -74,7 +74,7 @@ SNR for each signal::
     cs.signal_to_noise_ratios()
 
 In case the signals X and Y were not 
-truly sparse, then ``spx.commons.signalsComparison``
+truly sparse, then ``spx.commons.SignalsComparison``
 has the ability to sparsify them 
 by choosing the ``K`` largest (magnitude)
 entries for each signal in reference signal

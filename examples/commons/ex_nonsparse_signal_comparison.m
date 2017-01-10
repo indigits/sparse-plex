@@ -19,7 +19,7 @@ SNR = 15;
 Noise = spx.data.noise.Basic.createNoise(X, SNR);
 Y = X + Noise;
 
-cs = spx.commons.signalsComparison(X, Y);
+cs = spx.commons.SignalsComparison(X, Y);
 cs.difference_norms()
 cs.reference_norms()
 cs.estimate_norms()
