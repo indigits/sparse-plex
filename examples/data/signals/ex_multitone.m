@@ -1,7 +1,7 @@
 
 % Initialization
 clear all; close all; clc; 
-gen = SPX_MultiToneSignalGenerator();
+gen = spx.data.synthetic.MultiToneSignalGenerator();
 gen.TotalDuration = 0.35;
 % Sampling frequency
 gen.SamplingFrequency = 1000;

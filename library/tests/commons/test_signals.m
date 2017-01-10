@@ -4,7 +4,7 @@ function tests = test_signals
 end
 
 function test_picket_fence(testCase)
-    import spx.data.signals.simple.picket_fence;
+    import spx.data.synthetic.picket_fence;
     import spx.commons.sparse.support;
     s = picket_fence(16);
     expected_s = [ 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 ];

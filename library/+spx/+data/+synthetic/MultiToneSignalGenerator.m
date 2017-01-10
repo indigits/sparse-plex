@@ -1,7 +1,7 @@
 % This script generates a signal in which different
 % frequencies are present at different points of time.
 % Multiple frequencies may be present simultaneously.
-classdef SPX_MultiToneSignalGenerator < handle
+classdef MultiToneSignalGenerator < handle
 properties
     % Signal duration
     TotalDuration = 1000
@@ -18,7 +18,7 @@ properties
 end
 
 methods
-    function self = SPX_MultiToneSignalGenerator()
+    function self = MultiToneSignalGenerator()
     end
 
     function [x, t] = run(self)

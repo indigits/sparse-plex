@@ -34,7 +34,7 @@ for r=1:R
     X0 = points_result.X;
     start_indices = points_result.start_indices;
     end_indices = points_result.end_indices;
-    Noise = sigma * spx.data.signals.simple.uniform(M, S);
+    Noise = sigma * spx.data.synthetic.uniform(M, S);
     % Add noise to signal
     X = X0 + Noise;
     % Normalize noisy signals.
