@@ -102,9 +102,9 @@ methods(Static)
         n = length(x);
         p = length(f);
         % pad x with its periodic repetitions at the end
-        x_padded =  SPX_Vec.repeat_vector_at_end(x, p);
+        x_padded =  spx.commons.vector.repeat_vector_at_end(x, p);
         % Reverse the filter
-        f_reversed = SPX_Vec.reverse(f);
+        f_reversed = spx.commons.vector.reverse(f);
         % Perform the filtering
         y_padded = filter(f_reversed, 1, x_padded);
         % Remove the padding (remove first p-1 samples ) and keep n samples
@@ -117,7 +117,7 @@ methods(Static)
         n = length(x);
         p = length(f);
         % pad x with its periodic repetitions at the beginning
-        x_padded =  SPX_Vec.repeat_vector_at_start(x, p);
+        x_padded =  spx.commons.vector.repeat_vector_at_start(x, p);
         % Perform the filtering
         y_padded = filter(f, 1, x_padded);
         % Remove the padding (remove first p samples ) and keep n samples
@@ -166,7 +166,7 @@ methods(Static)
         % Construct  the high pass mirror filter 
         g = SPX_Wavelet.mirror_filter(h);
         % circular left shift the contents of x by 1.
-        x  = SPX_Vec.shift_lc(x);
+        x  = spx.commons.vector.shift_lc(x);
         % Perform filtering
         y = SPX_Wavelet.iconv(g, x);
         % Perform downsampling
@@ -191,7 +191,7 @@ methods(Static)
         % Upsample by a factor of 2 and introduce zeros
         x = SPX_Wavelet.up_sample(x);
         % circular right shift the contents of x by 1.
-        x  = SPX_Vec.shift_rc(x);
+        x  = spx.commons.vector.shift_rc(x);
         % Perform low pass filtering
         y = SPX_Wavelet.aconv(g, x);
     end

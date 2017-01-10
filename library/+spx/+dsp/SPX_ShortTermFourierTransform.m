@@ -33,7 +33,7 @@ methods
         blockLength = self.BlockLength;
         overlappedSamples = self.OverlappedSamplesCount;
         N = length(signal);
-        NBlocks = SPX_SP.overlapped_blocks_count(N, blockLength...
+        NBlocks = spx.dsp.overlapped_blocks_count(N, blockLength...
             , overlappedSamples);
         w = self.Window;
         shift = blockLength - overlappedSamples;

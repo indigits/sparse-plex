@@ -26,7 +26,7 @@ General
  Constructing unit (column) vector in a given co-ordinate::
     
     >> N = 8; i = 2;    
-    >> SPX_Vec.unit_vector(N, i)'
+    >> spx.commons.vector.unit_vector(N, i)'
     0     1     0     0     0     0     0     0
 
 

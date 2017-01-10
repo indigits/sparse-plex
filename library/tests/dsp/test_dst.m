@@ -14,7 +14,7 @@ end
 function test_dst_2
     n = 256;
     for i=randperm(n, 40)
-        x = SPX_Vec.unit_vector(n, i);
+        x = spx.commons.vector.unit_vector(n, i);
         alpha = SPX_DST.forward_2(x);
         assertElementsAlmostEqual(norm(x), norm(alpha));
         y = SPX_DST.inverse_2(alpha);

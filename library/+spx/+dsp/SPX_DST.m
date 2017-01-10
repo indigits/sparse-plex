@@ -13,38 +13,38 @@ methods(Static)
 
     function alpha = forward_1(x)
         % Forward transform for DST type 1.
-        options.length_constraint = @SPX_SP.dyadic_minus_one_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @dst_1_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_minus_one_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @dst_1_impl, options);
     end
 
     function x = inverse_1(alpha)
         % Inverse transform for DST type 1.
-        options.length_constraint = @SPX_SP.dyadic_minus_one_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @dst_1_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_minus_one_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @dst_1_impl, options);
     end
 
     function alpha = forward_2(x)
         % Forward transform for DST type 2.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @dst_2_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @dst_2_impl, options);
     end
 
     function x = inverse_2(alpha)
         % Inverse transform for DST type 2.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @dst_3_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @dst_3_impl, options);
     end
 
     function alpha = forward_3(x)
         % Forward transform for DST type 3.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @dst_3_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @dst_3_impl, options);
     end
 
     function x = inverse_3(alpha)
         % Inverse transform for DST type 3.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @dst_2_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @dst_2_impl, options);
     end
 
 end

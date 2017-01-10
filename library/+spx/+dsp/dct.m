@@ -1,4 +1,4 @@
-classdef SPX_DCT
+classdef dct
 % Functions related to discrete cosine transform
 % 
 %
@@ -10,38 +10,38 @@ methods(Static)
 
     function alpha = forward_2(x)
         % Forward transform for DCT type 2.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @dct_2_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @dct_2_impl, options);
     end
 
     function x = inverse_2(alpha)
         % Inverse transform for DCT type 2.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @dct_3_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @dct_3_impl, options);
     end
 
     function alpha = forward_3(x)
         % Forward transform for DCT type 3.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @dct_3_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @dct_3_impl, options);
     end
 
     function x = inverse_3(alpha)
         % Inverse transform for DCT type 3.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @dct_2_impl, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @dct_2_impl, options);
     end
 
     function alpha = forward_quasi(x)
         % Forward transform for Quasi DCT.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        alpha = SPX_SP.apply_transform(x, @forward_quasi_dct, options);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        alpha = spx.dsp.apply_transform(x, @forward_quasi_dct, options);
     end
 
     function x = inverse_quasi(alpha)
         % Inverse transform for Quasi DCT.
-        options.length_constraint = @SPX_SP.dyadic_length_constraint;
-        x = SPX_SP.apply_transform(alpha, @inverse_quasi_dct);
+        options.length_constraint = @spx.dsp.dyadic_length_constraint;
+        x = spx.dsp.apply_transform(alpha, @inverse_quasi_dct);
     end
 
     function result = basis_mtx_2(n)
@@ -49,7 +49,7 @@ methods(Static)
         if ~spx.discrete.number.is_power_of_2(n)
             error('n must be of dyadic length.');
         end
-        result = SPX_DCT.forward_2(eye(n));
+        result = spx.dsp.dct.forward_2(eye(n));
     end
 
     function [ B, A, D] = basis_strang(N, dctType)

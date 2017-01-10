@@ -122,8 +122,8 @@ methods(Static)
             % Perform boundary correction
             % TODO complete this
             x_refined(1:(D-1))  = left_pred * x(1:(D+1))';
-            xr = SPX_Vec.reverse(x(n-D:n));
-            x_refined(n2 - D + 2:n2)  =  SPX_Vec.reverse(right_pred * xr');
+            xr = spx.commons.vector.reverse(x(n-D:n));
+            x_refined(n2 - D + 2:n2)  =  spx.commons.vector.reverse(right_pred * xr');
         end
 
         % Ensure that the refinement has the same shape as the coarse vector
