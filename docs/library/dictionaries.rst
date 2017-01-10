@@ -267,11 +267,11 @@ Grassmannian Frames
 
 ::
 
-    SPX_Grassmannian.minimum_coherence(m, n)
-    SPX_Grassmannian.n_upper_bound(m)
-    SPX_Grassmannian.min_coherence_max_n(ms)
-    SPX_Grassmannian.max_n_for_coherence(m, mu)
-    SPX_Grassmannian.alternate_projections(dict, options)
+    spx.dict.grassmannian.minimum_coherence(m, n)
+    spx.dict.grassmannian.n_upper_bound(m)
+    spx.dict.grassmannian.min_coherence_max_n(ms)
+    spx.dict.grassmannian.max_n_for_coherence(m, mu)
+    spx.dict.grassmannian.alternate_projections(dict, options)
 
 
 

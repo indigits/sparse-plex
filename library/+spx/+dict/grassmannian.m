@@ -1,4 +1,4 @@
-classdef SPX_Grassmannian < handle
+classdef grassmannian < handle
     % Ways to generate Grassmannian frames.
     properties
     end
@@ -35,9 +35,9 @@ classdef SPX_Grassmannian < handle
             coherences = zeros(1, mm);
             for i=1:mm
                 m = ms(i);
-                n = SPX_Grassmannian.n_upper_bound(m);
+                n = spx.dict.grassmannian.n_upper_bound(m);
                 ns(i) = n;
-                coherences(i) = SPX_Grassmannian.minimum_coherence(m, n);
+                coherences(i) = spx.dict.grassmannian.minimum_coherence(m, n);
             end
         end
 
@@ -57,7 +57,7 @@ classdef SPX_Grassmannian < handle
             % alternate projections
             [n, d] = size(dict);
             % We assume that the dictionary contains unit norm atoms
-            target_mu  = SPX_Grassmannian.minimum_coherence(n, d);
+            target_mu  = spx.dict.grassmannian.minimum_coherence(n, d);
             % Compute the Gram matrix
             gram_matrix = dict' * dict;
             iterations = 1000;

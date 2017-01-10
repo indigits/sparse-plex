@@ -9,7 +9,7 @@ dict = spx.dict.simple.gaussian_dict(N, D);
 % dict = spx.dict.simple.overcomplete2DDCT(N, D);
 initial_dictionary = dict.A;
 options.iterations = 1000;
-result = SPX_Grassmannian.alternate_projections(initial_dictionary, options);
+result = spx.dict.grassmannian.alternate_projections(initial_dictionary, options);
 final_dictionary = result.dictionary;
 fprintf('Signal space dimension: %d\n', N);
 fprintf('Number of atoms: %d\n', D);
