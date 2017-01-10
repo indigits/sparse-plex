@@ -1,12 +1,12 @@
-classdef SPX_MOD_OMP < SPX_DictionaryLearningFramework
+classdef MOD_OMP < spx.dictlearn.DictionaryLearningFramework
 
 methods
 
-    function self = SPX_MOD_OMP(D, N)
+    function self = MOD_OMP(D, N)
         % Constructor
 
         % Call super class constructor
-        self@SPX_DictionaryLearningFramework(D, N);
+        self@spx.dictlearn.DictionaryLearningFramework(D, N);
     end
 
 end

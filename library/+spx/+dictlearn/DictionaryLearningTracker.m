@@ -1,4 +1,4 @@
-classdef SPX_DictionaryLearningTracker < handle
+classdef DictionaryLearningTracker < handle
 % Tracks the progress of dictionary learning process
 
 properties
@@ -38,7 +38,7 @@ properties (SetAccess=private)
 end
 
 methods
-    function self = SPX_DictionaryLearningTracker()
+    function self = DictionaryLearningTracker()
         if self.CaptureDictionaries
             self.Dictionaries = cell(self.MaxIterations, 1);
         end
@@ -73,7 +73,7 @@ methods(Access=private)
         true_dict  = self.TrueDictionary;
         cur_dict = self.CurrentDictionary;
         if ~isempty(true_dict)
-            ratio = SPX_DictionaryComparison.matching_atoms_ratio(true_dict, cur_dict);
+            ratio = spx.dict.comparison.matching_atoms_ratio(true_dict, cur_dict);
             self.MatchedAtomRatios(c) = ratio;
         end
         if self.CaptureDictionaries

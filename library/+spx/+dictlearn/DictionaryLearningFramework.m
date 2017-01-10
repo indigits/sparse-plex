@@ -1,4 +1,4 @@
-classdef SPX_DictionaryLearningFramework < handle
+classdef DictionaryLearningFramework < handle
 % Core framework for dictionary learning
 % Should be subclassed to implement specific learning algorithms.
 
@@ -63,7 +63,7 @@ end
 
 
 methods
-    function self = SPX_DictionaryLearningFramework(D, N)
+    function self = DictionaryLearningFramework(D, N)
         self.D = D;
         self.N = N;
     end

@@ -6,16 +6,16 @@ clear all; close all; clc;
 % Problem setup parameters
 rng('default');
 % rng(54321);
-problem = SPX_DictionaryLearningProblems.problem_random_dict();
+problem = spx.data.synthetic.dict_learn_problems.problem_random_dict();
 
 % Create the learning algorithm
-trainer = SPX_MOD_OMP(problem.D, problem.N);
+trainer = spx.dictlearn.MOD_OMP(problem.D, problem.N);
 % Provide a random dictionary as initial dictionary
 trainer.InitialDictionary = randn(problem.N, problem.D);
 % We fix the sparsity level of representations
 trainer.K = problem.K;
 % Tracker for tracking dictionary update progress
-tracker = SPX_DictionaryLearningTracker();
+tracker = spx.dictlearn.DictionaryLearningTracker();
 % Provide true dictionary for reference
 tracker.TrueDictionary = problem.true_dictionary;
 % Attach tracker with trainer

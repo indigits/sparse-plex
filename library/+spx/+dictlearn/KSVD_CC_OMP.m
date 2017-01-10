@@ -1,12 +1,12 @@
-classdef SPX_KSVD_CC_OMP < SPX_DictionaryLearningFramework
+classdef KSVD_CC_OMP < spx.dictlearn.DictionaryLearningFramework
 
 methods
 
-    function self = SPX_KSVD_CC_OMP(D, N)
+    function self = KSVD_CC_OMP(D, N)
         % Constructor
 
         % Call super class constructor
-        self@SPX_DictionaryLearningFramework(D, N);
+        self@spx.dictlearn.DictionaryLearningFramework(D, N);
     end
 
 end
