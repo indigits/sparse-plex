@@ -20,10 +20,10 @@ for i=1:ne
     % The dataset
     X = example.X;
     % average norm
-    norms1 = spx.commons.norm.norms_l2_cw(X);
+    norms1 = spx.norm.norms_l2_cw(X);
     fprintf('\n');
     %X = spx.la.affine.homogenize(X, 1);
-    norms2 = spx.commons.norm.norms_l2_cw(X);
+    norms2 = spx.norm.norms_l2_cw(X);
     m1 = mean(norms1);
     m2 = mean(norms2);
     d = (m2 - m1) * 100 / m1 ;

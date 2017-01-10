@@ -19,7 +19,7 @@ methods(Static)
         % Generate Gaussian vectors
         X = randn(N, S);
         % Make them unit length
-        X = spx.commons.norm.normalize_l2(X);
+        X = spx.norm.normalize_l2(X);
     end
 
 end

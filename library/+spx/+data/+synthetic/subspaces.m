@@ -51,11 +51,11 @@ methods(Static)
             D = size(basis, 2);
             coefficients = randn(D, num_points);
             % normalize columns
-            coefficients = spx.commons.norm.normalize_l2(coefficients);
+            coefficients = spx.norm.normalize_l2(coefficients);
             X(:, start_index:end_index) = basis * coefficients;
         end
         % Make sure that all points are normalized
-        X = spx.commons.norm.normalize_l2(X);
+        X = spx.norm.normalize_l2(X);
         result.X = X;
         result.start_indices = start_indices;
         result.end_indices = end_indices;

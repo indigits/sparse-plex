@@ -33,7 +33,7 @@ end
 [Y, true_labels] = md.selected_samples(sample_list);
 % Perform PCA to reduce dimensionality
 Y = spx.la.pca.low_rank_approx(Y, 100);
-Yn = spx.commons.norm.normalize_l2(Y);
+Yn = spx.norm.normalize_l2(Y);
 if true 
     fprintf('\n\n\n Point Statistics:\n\n');
     [M, S]  = size(Yn);

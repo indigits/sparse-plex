@@ -82,7 +82,7 @@ classdef SSC_OMP < handle
         function recover_coefficients(self)
             % Computes sparse representations of the data vectors
             data_matrix = self.Data;
-            data_matrix = spx.commons.norm.normalize_l2(data_matrix);
+            data_matrix = spx.norm.normalize_l2(data_matrix);
             % Number of data vectors
             ns = self.S;
             % sparsity level
@@ -193,7 +193,7 @@ classdef SSC_OMP < handle
         function build_adjacency(self)
             C = abs(self.Representation);
             % Normalize the matrix by column wise maximums
-            C = spx.commons.norm.normalize_linf(C);
+            C = spx.norm.normalize_linf(C);
             % disp(C(:, 1));
             % Make it symmetric
             C = C + C';

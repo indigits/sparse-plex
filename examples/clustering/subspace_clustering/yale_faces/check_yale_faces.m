@@ -32,7 +32,7 @@ for r=1:R
     % [Y, cluster_sizes, true_labels] = yf.experiment_data(num_subjects, r);
     [Y, cluster_sizes, true_labels] = yf.data_for_subjects(subject_list);
     % Normalize the columns
-    Y = spx.commons.norm.normalize_l2(Y);
+    Y = spx.norm.normalize_l2(Y);
     % Ambient space dimension and number of data points
     [trial.M, trial.S] = size(Y);
     % Number of subspaces

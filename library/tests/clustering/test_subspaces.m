@@ -71,6 +71,6 @@ function test_nearest_same_subspace_neighbors_by_inner_product(testCase)
     XB = B * randn(N/2, Sk);
     X = [XA XB];
     % normalize columns
-    X = spx.commons.norm.normalize_l2(X);
+    X = spx.norm.normalize_l2(X);
     result = spx.cluster.subspace.nearest_same_subspace_neighbors_by_inner_product(X, [Sk Sk])
 end

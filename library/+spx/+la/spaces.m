@@ -387,11 +387,11 @@ classdef spaces
             fprintf('Angle between B and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(B, C));
             fprintf('Angle between A and C: %.4f deg\n', spx.la.spaces.smallest_angle_deg(A, C));
             fprintf('Column wise norms: \n');
-            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(A));
+            fprintf(' %.2f', spx.norm.norms_l2_cw(A));
             fprintf('\n');
-            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(B));
+            fprintf(' %.2f', spx.norm.norms_l2_cw(B));
             fprintf('\n');
-            fprintf(' %.2f', spx.commons.norm.norms_l2_cw(C));
+            fprintf(' %.2f', spx.norm.norms_l2_cw(C));
             fprintf('\n');
         end
 

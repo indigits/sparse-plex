@@ -27,7 +27,7 @@ function test_real_spherical_rows(testCase)
     omega = gen.Omega;
     nz_part = result(omega, :);    
     % verify that all rows have unit norm
-    norms = spx.commons.norm.norms_l2_rw(nz_part);
+    norms = spx.norm.norms_l2_rw(nz_part);
     verifyEqual(testCase, norms, ones(K, 1), 'AbsTol', 1e-6);
 end
 
@@ -41,6 +41,6 @@ function test_cmplx_spherical_rows(testCase)
     omega = gen.Omega;
     nz_part = result(omega, :);    
     % verify that all rows have unit norm
-    norms = spx.commons.norm.norms_l2_rw(nz_part);
+    norms = spx.norm.norms_l2_rw(nz_part);
     verifyEqual(testCase, norms, ones(K, 1), 'AbsTol', 1e-6);
 end

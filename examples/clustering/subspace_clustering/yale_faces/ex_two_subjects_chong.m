@@ -18,7 +18,7 @@ s1 = subject_list(1);
 s2 = subject_list(2);
 
 [Y, cluster_sizes, true_labels] = yf.data_for_subjects(subject_list);
-Y = spx.commons.norm.normalize_l2(Y);
+Y = spx.norm.normalize_l2(Y);
 faces_normalized = Y;
 
 if false 

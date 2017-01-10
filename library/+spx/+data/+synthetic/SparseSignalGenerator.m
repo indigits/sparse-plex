@@ -85,7 +85,7 @@ classdef SparseSignalGenerator < handle
             % Generate Gaussian entries
             samples = randn(self.K,self.S);
             % Normalize the rows
-            samples = spx.commons.norm.normalize_l2_rw(samples);
+            samples = spx.norm.normalize_l2_rw(samples);
             self.X(self.Omega, :) = samples;
             result = self.X;
         end
@@ -97,7 +97,7 @@ classdef SparseSignalGenerator < handle
             imag_part = randn(self.K,self.S);
             samples = real_part + i * imag_part;
             % Normalize the rows
-            samples = spx.commons.norm.normalize_l2_rw(samples);
+            samples = spx.norm.normalize_l2_rw(samples);
             self.X(self.Omega, :) = samples;
             result = self.X;
         end

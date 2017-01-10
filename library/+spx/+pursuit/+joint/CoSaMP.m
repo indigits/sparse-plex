@@ -197,14 +197,14 @@ classdef CoSaMP < handle
         end
 
         function largest_indices = largest_k_l1(data_matrix, K)
-            sums = spx.commons.norm.norms_l1_rw(data_matrix);
+            sums = spx.norm.norms_l1_rw(data_matrix);
             [~, indices] = sort(sums, 'descend');
             % We identify the support for largest K entries
             largest_indices  = indices(1:K);
         end
 
         function largest_indices = largest_k_l2(data_matrix, K)
-            sums = spx.commons.norm.norms_l2_rw(data_matrix);
+            sums = spx.norm.norms_l2_rw(data_matrix);
             [~, indices] = sort(sums, 'descend');
             % We identify the support for largest K entries
             largest_indices  = indices(1:K);

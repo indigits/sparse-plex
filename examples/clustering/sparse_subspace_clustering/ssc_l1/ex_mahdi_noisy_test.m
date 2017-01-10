@@ -40,7 +40,7 @@ for r=1:R
     % Add noise to signal
     X = X0 + Noise;
     % Normalize noisy signals.
-    X = spx.commons.norm.normalize_l2(X); 
+    X = spx.norm.normalize_l2(X); 
     % Solve the sparse subspace clustering problem
     clustering_result = spx.cluster.subspace.ssc_l1_mahdi(X);
     cluster_labels = clustering_result.labels;

@@ -25,7 +25,7 @@ methods(Access=protected)
         % Fill those columns with random atoms
         dict(:, zerosIdx) = randn(self.N, length(zerosIdx));
         % normalize atoms
-        dict = spx.commons.norm.normalize_l2(dict);
+        dict = spx.norm.normalize_l2(dict);
         % Store for next iterations.
         self.Dict = dict;
                  

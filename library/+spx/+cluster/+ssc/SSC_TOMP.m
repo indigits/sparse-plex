@@ -81,7 +81,7 @@ classdef SSC_TOMP < handle
         function recover_coefficients(self)
             % Computes sparse representations of the data vectors
             data = self.Data;
-            self.NormalizedData = spx.commons.norm.normalize_l2(data);
+            self.NormalizedData = spx.norm.normalize_l2(data);
             % Number of data vectors
             ns = self.S;
             % iterate over signals
@@ -257,7 +257,7 @@ classdef SSC_TOMP < handle
             % Make it symmetric
             C = C + C';
             % Normalize the matrix by column wise maximums
-            C = spx.commons.norm.normalize_linf(C);
+            C = spx.norm.normalize_linf(C);
             % Keep it
             self.Adjacency = C;
         end

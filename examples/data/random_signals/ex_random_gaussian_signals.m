@@ -17,7 +17,7 @@ R = 100;
 signals = randn(N, R);
 % Each sample signal is a column in the signals matrix
 % We normalize sample signals
-signals = spx.commons.norm.normalize_l2(signals);
+signals = spx.norm.normalize_l2(signals);
 % We save sample signals in a file
 save('bin/sample_signals.mat', 'signals');
 
@@ -28,7 +28,7 @@ tmp = randperm(R);
 selection = tmp(1:4);
 selectedSignals  = signals(:, selection);
 %We verify the norm of each of the selected signals
-signalNorms = spx.commons.norm.norms_l2_cw(selectedSignals)
+signalNorms = spx.norm.norms_l2_cw(selectedSignals)
 % We measure distance between these signals
 distance = spx.commons.distance.pairwise_distances(selectedSignals);
 distance = sqrt(abs(distance))

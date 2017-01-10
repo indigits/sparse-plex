@@ -74,7 +74,7 @@ column_norms = sqrt(sum(Phi .* conj(Phi)));
 
 % Let us plot the histogram of norms of each column vector in Phi.
 mf.new_figure('Norm histogram');
-hist(spx.commons.norm.norms_l2_cw(Phi), 20);
+hist(spx.norm.norms_l2_cw(Phi), 20);
 xlabel('Norm');
 ylabel('Count');
 if png_export
@@ -91,7 +91,7 @@ for i=1:N
     Phi(:, i) = Phi(:, i) / v;
 end
 % Normalized dictionary
-Phi = spx.commons.norm.normalize_l2(Phi);
+Phi = spx.norm.normalize_l2(Phi);
 
 % Visualizing the sensing matrix
 mf.new_figure('Sensing matrix');

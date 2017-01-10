@@ -18,7 +18,7 @@ methods(Static)
         % Let us create a random dictionary
         problem.true_dictionary = randn(problem.N, problem.D);
         % Let us normalize its columns
-        problem.true_dictionary = spx.commons.norm.normalize_l2(problem.true_dictionary);
+        problem.true_dictionary = spx.norm.normalize_l2(problem.true_dictionary);
         Alpha = zeros(problem.D, problem.S);
         for i=1:problem.S
             sg = spx.data.synthetic.SparseSignalGenerator(problem.D, problem.K, 1);

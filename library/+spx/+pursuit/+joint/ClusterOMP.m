@@ -248,7 +248,7 @@ classdef ClusterOMP < handle
                     % Update residuals for this cluster
                     R(:, cluster_signal_indices) = cluster_signals - subdict * tmp;
                 end
-                res_norms = spx.commons.norm.norms_l2_cw(R);
+                res_norms = spx.norm.norms_l2_cw(R);
                 stats.avg_cluster_sizes(k) =  mean(cluster_sizes);
                 non_singleton_sizes = cluster_sizes(num_singletons+1:end);
                 if ~isempty(non_singleton_sizes)

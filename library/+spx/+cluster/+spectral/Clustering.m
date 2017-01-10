@@ -194,7 +194,7 @@ classdef Clustering < handle
         end
 
         function cluster_kmeans(self, eigen_vectors, k)
-            eigen_vectors = spx.commons.norm.normalize_l2_rw(eigen_vectors);
+            eigen_vectors = spx.norm.normalize_l2_rw(eigen_vectors);
             n = self.N;
             % eigen vectors matrix is of size [n, k]
             % k seeds are needed

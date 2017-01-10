@@ -44,17 +44,17 @@ classdef SparseSignalsComparison < handle
 
         function result = difference_norms(self)
             % Returns the norms of difference vectors
-            result = spx.commons.norm.norms_l2_cw(self.Differences);
+            result = spx.norm.norms_l2_cw(self.Differences);
         end
 
         function result = reference_norms(self)
             % Returns the norms of reference vectors
-            result = spx.commons.norm.norms_l2_cw(self.References);
+            result = spx.norm.norms_l2_cw(self.References);
         end
 
         function result = estimate_norms(self)
             % Returns the norms of estimate vectors
-            result = spx.commons.norm.norms_l2_cw(self.Estimates);
+            result = spx.norm.norms_l2_cw(self.Estimates);
         end
 
         function result = error_to_signal_norms(self)

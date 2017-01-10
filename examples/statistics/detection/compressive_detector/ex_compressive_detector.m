@@ -9,7 +9,7 @@ N = 1000;
 signal = randn(N, 1);
 % Each sample signal is a column in the signals matrix
 % We normalize sample signal
-signal = spx.commons.norm.normalize_l2(signal);
+signal = spx.norm.normalize_l2(signal);
 M = 200;
 phi = spx.dict.simple.rademacher_mtx(M, N);
 

@@ -113,7 +113,7 @@ methods(Static)
         % Choose the last num_clusters eigen vectors
         Kernel = V(:,num_nodes-num_clusters+1:num_nodes);
         % We need to normalize the rows of kernel
-        Kernel = spx.commons.norm.normalize_l2_rw(Kernel);
+        Kernel = spx.norm.normalize_l2_rw(Kernel);
         % Result of clustering the rows of eigen vectors
         %fprintf('Number of clusters: %d\n', num_clusters);
         if num_clusters >  max_clusters 
@@ -158,7 +158,7 @@ methods(Static)
         W2 = bsxfun(@rdivide, W, degree_vec + eps);
         [Kernel, ~] = eigs(W2, num_clusters, 'LR');
         % We need to normalize the rows of kernel
-        Kernel = spx.commons.norm.normalize_l2_rw(Kernel);
+        Kernel = spx.norm.normalize_l2_rw(Kernel);
         labels = kmeans(Kernel, num_clusters, ...
             'start','sample', ...
             'maxiter',max_iterations,...
@@ -196,7 +196,7 @@ methods(Static)
             else
                 OPTS.tol = 1e-3;
                 % normalize the columns of C_in
-                C_in = spx.commons.norm.normalize_l1(C_in);
+                C_in = spx.norm.normalize_l1(C_in);
                 % compute the eigen values
                 [~, eig_in] = eigs( C_in', 2, 'LR', OPTS );
                 % pick the second eigen value and compute connectivity

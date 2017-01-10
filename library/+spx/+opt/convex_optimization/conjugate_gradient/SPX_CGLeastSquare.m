@@ -92,7 +92,7 @@ classdef SPX_CGLeastSquare < handle
             rr = atbb  - aa.apply_ctranspose(aa.apply(xx)); % N x S
             self.CGResiduals  = rr;
             % Norm squared of initial residual vectors
-            deltas = spx.commons.norm.inner_product_cw(rr, rr);
+            deltas = spx.norm.inner_product_cw(rr, rr);
             % The factor with which the norm needs to be reduced
             epsilon = self.NormThreshold;
             % Target limits on norm squared of residuals
@@ -156,7 +156,7 @@ classdef SPX_CGLeastSquare < handle
             self.X = result;
             % Compute the corresponding LS residuals
             self.LSResiduals = self.B - aa.apply(self.X);
-            self.LSResidualNorms = spx.commons.norm.norms_l2_cw(self.LSResiduals);
+            self.LSResidualNorms = spx.norm.norms_l2_cw(self.LSResiduals);
         end
 
         function result = hasConverged(self)

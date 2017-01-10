@@ -55,47 +55,47 @@ normalizing signals in a signal matrix.
 
 Compute :math:`\ell_1` norm of each column vector::
 
-    spx.commons.norm.norms_l1_cw(X)
+    spx.norm.norms_l1_cw(X)
 
 
 Compute :math:`\ell_2` norm of each column vector::
 
-    spx.commons.norm.norms_l2_cw(X)
+    spx.norm.norms_l2_cw(X)
     
 
 Compute :math:`\ell_{\infty}` norm of each column vector::
 
-    spx.commons.norm.norms_linf_cw(X)
+    spx.norm.norms_linf_cw(X)
     
 
 Normalize each column vector w.r.t. :math:`\ell_1` norm::
 
-    spx.commons.norm.normalize_l1(X)
+    spx.norm.normalize_l1(X)
     
 Normalize each column vector w.r.t. :math:`\ell_2` norm::
 
-    spx.commons.norm.normalize_l2(X)
+    spx.norm.normalize_l2(X)
     
 Normalize each row vector w.r.t. :math:`\ell_2` norm::
 
-    spx.commons.norm.normalize_l2_rw(X)
+    spx.norm.normalize_l2_rw(X)
     
 Normalize each column vector w.r.t. :math:`\ell_{\infty}` norm::
 
-    spx.commons.norm.normalize_linf(X)
+    spx.norm.normalize_linf(X)
     
 
 Scale each column vector by a separate factor::
 
-    spx.commons.norm.scale_columns(X, factors)
+    spx.norm.scale_columns(X, factors)
     
 Scale each row vector by a separate factor::
     
-    spx.commons.norm.scale_rows(X, factors)
+    spx.norm.scale_rows(X, factors)
     
 Compute  the inner product of each column vector in A
 with each column vector in B::
 
-    spx.commons.norm.inner_product_cw(A, B)
+    spx.norm.inner_product_cw(A, B)
 
 

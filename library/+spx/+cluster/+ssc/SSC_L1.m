@@ -135,7 +135,7 @@ classdef SSC_L1 < handle
         function build_adjacency(self)
             C = abs(self.Representation);
             % Normalize the matrix by column wise maximums
-            C = spx.commons.norm.normalize_linf(C);
+            C = spx.norm.normalize_linf(C);
             % Make it symmetric
             C = C + C';
             % Keep it

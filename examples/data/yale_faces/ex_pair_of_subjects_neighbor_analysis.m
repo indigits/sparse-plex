@@ -2,7 +2,7 @@ close all; clear all; clc;
 yf = spx.data.image.EhsanYaleFaces();
 [faces, sizes, labels] = yf.all_faces();
 % normalize the faces
-faces_normalized = spx.commons.norm.normalize_l2(faces);
+faces_normalized = spx.norm.normalize_l2(faces);
 [M, S]  = size(faces_normalized);
 
 % only between 2 subjects

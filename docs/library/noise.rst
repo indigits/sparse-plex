@@ -31,7 +31,7 @@ Creating noise at a specific SNR::
     % add signal to noise
     signals_with_noise = signals + noises;
     % Verify SNR level
-    20 * log10 (spx.commons.norm.norms_l2_cw(signals) ./ spx.commons.norm.norms_l2_cw(noises))
+    20 * log10 (spx.norm.norms_l2_cw(signals) ./ spx.norm.norms_l2_cw(noises))
 
 
 

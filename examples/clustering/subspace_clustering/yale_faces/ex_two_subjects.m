@@ -18,7 +18,7 @@ s1 = subject_set(1);
 s2 = subject_set(2);
 
 [Y, true_labels] = yf.experiment_data(num_subjects, r);
-Y = spx.commons.norm.normalize_l2(Y);
+Y = spx.norm.normalize_l2(Y);
 faces_normalized = Y;
 
 if false 

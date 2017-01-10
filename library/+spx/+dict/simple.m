@@ -54,7 +54,7 @@ classdef simple < handle
             result = randn(N, D);
             if normalized_columns
                 % Normalized each column
-                result = spx.commons.norm.normalize_l2(result); 
+                result = spx.norm.normalize_l2(result); 
             else
                 % Make sure that variance of individual entries is 1/N
                 result = result ./ sqrt(N);

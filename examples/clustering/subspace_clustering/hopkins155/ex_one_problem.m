@@ -17,7 +17,7 @@ solver = @ssc_mc_omp;
 Y = example.X;
 % homogenize
 Y = spx.la.affine.homogenize(Y);
-Y = spx.commons.norm.normalize_l2(Y);
+Y = spx.norm.normalize_l2(Y);
 Y = Y;
 
 if true 

@@ -41,7 +41,7 @@ classdef etf < handle
             end
             % Normalize the columns
             if normalize
-                F = spx.commons.norm.normalize_l2(F);
+                F = spx.norm.normalize_l2(F);
             end
             [m, n] = size(F);
             % The frame
@@ -69,7 +69,7 @@ classdef etf < handle
         function result = is_etf(F)
             % Verifies that F is an equiangular tight frame
             [m, n] = size(F);
-            norms = spx.commons.norm.norms_l2_cw(F);
+            norms = spx.norm.norms_l2_cw(F);
             if ~isalmost(norms, ones(1, n), 1e-5)
                 result = false;
                 return;
