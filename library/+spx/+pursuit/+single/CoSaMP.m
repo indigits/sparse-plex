@@ -1,5 +1,5 @@
 classdef CoSaMP < handle
-    %CoSaMP Implements OMP algorithm for sparse approximation
+    %CoSaMP Implements CoSaMP algorithm for sparse approximation
 
     properties
         % These properties can be configured before running cosamp
