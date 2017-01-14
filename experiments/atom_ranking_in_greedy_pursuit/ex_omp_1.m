@@ -22,7 +22,7 @@ Phi = spx.dict.simple.gaussian_mtx(M, N);
 % Measurement vectors
 y = Phi * x;
 % Solve the sparse recovery problem using OMP
-result = atom_ranked_omp(Phi, y, K);
+result = ar_omp(Phi, K, y);
 % Solution vector
 z = result.z;
 

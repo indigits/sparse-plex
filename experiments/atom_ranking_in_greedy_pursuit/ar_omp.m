@@ -1,4 +1,4 @@
-function result = atom_ranked_omp(Phi, y, K, atoms_to_match, matching_mode)
+function result = ar_omp(Phi, K, y, matching_mode, options)
 % dimensions
 [n, d] = size(Phi);
 % active indices
@@ -12,11 +12,20 @@ z = zeros(d, 1);
 atom_index_sum = 0;
 selected_atoms = 1:d;
 if nargin == 3
-    atoms_to_match = n;
+    matching_mode = 4;
 end
 if nargin < 5
-    matching_mode = 3;
+    options = struct;
 end
+if ~isfield(options, 'atoms_to_match')
+    options.atoms_to_match = n;
+end
+if ~isfield(options, 'norm_factor')
+    options.norm_factor = 2;
+end
+atoms_to_match = options.atoms_to_match;
+norm_factor = options.norm_factor;
+DEBUG = true;
 
 % array to hold inner products in the original atom order.
 abs_inner_products = zeros(1, d);
@@ -28,14 +37,18 @@ for iter=1:K
     inner_products = abs(inner_products) / r_norm;
     % Find the highest inner product
     [~, max_index] = max(inner_products);
-    % maximum index
-    %fprintf('chosen atom index: %d\n', max_index);
+    if DEBUG
+        % maximum index
+        fprintf('num selected atoms: %d, chosen atom index: %d\n', numel(selected_atoms), max_index);
+    end
     % we need to get the original index at this point.
     original_index = selected_atoms(max_index);
-    % store the updated inner products for the selected indices here.
-    abs_inner_products(selected_atoms) = inner_products;
     % Add this index to support
     omega = [omega, original_index];
+    % store the updated inner products for the selected indices here.
+    abs_inner_products(selected_atoms) = inner_products;
+    % mark the inner product for the new atom added to support as 0.
+    abs_inner_products(original_index) = 0;
     % track the atom index position
     atom_index_sum = atom_index_sum + max_index;
     % Solve least squares problem
@@ -65,17 +78,28 @@ result.iterations = iter;
 result.atom_index_average = atom_index_sum / iter;
 
 function update_atom_order()
+    [sorted_inner_products, selected_atoms] = sort(abs_inner_products, 'descend');
     switch matching_mode
         case 1
             % select all atoms in original order
             selected_atoms = 1:d;
         case 2
             % select all atoms in rank order
-            [~, selected_atoms] = sort(abs_inner_products, 'descend');
+            % there is nothing more to do.
         case 3
             % select a percentage of atoms in rank order
-            [~, selected_atoms] = sort(abs_inner_products, 'descend');
            selected_atoms  = selected_atoms(1:atoms_to_match);
+        case 4
+            % adaptive atoms
+            %fprintf('%0.2f ', sorted_inner_products);
+            %fprintf('\n');
+            start = sorted_inner_products(1);
+            index = find(sorted_inner_products < start/ norm_factor, 1);
+            if isempty(index)
+                index = atoms_to_match;
+            end
+            selected_atoms = selected_atoms(1:index);
+
         otherwise
             error('Not supported.');
     end
