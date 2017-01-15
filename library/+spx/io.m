@@ -26,6 +26,12 @@ function result = true_false_short(flag)
     end
 end
 
+function result = tf_pair(a, b)
+    a = spx.io.true_false_short(a);
+    b = spx.io.true_false_short(b);
+    result = [a b];
+end
+
 function result = success_failure(flag)
     if flag == 0
         result = 'Failure';
@@ -41,6 +47,8 @@ function result = success_failure_short(flag)
         result = 'S';
     end
 end
+
+
 
 function result = bytes2str(bytes)
     % Identify the scale of number of bytes
