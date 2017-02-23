@@ -25,6 +25,19 @@ methods
         self.Configuration = spx.commons.PhaseTransitionConfiguration(N_);
     end
 
+    function result = num_total_trials(self)
+        result = self.Configuration.num_configurations() * self.NumTrials;
+    end
+
+    function result = num_expected_days(self, avg_trial_time)
+        if nargin < 2 
+            % Assume one second of trial time
+            avg_trial_time = 1;
+        end
+        num_seconds_in_day = 24 * 60 * 60;
+        result = self.num_total_trials() / num_seconds_in_day;
+    end
+
     function result = run(self, dict_model, data_model, recovery_solver)
         cfg = self.Configuration;
         num_etas = cfg.NumEtas;

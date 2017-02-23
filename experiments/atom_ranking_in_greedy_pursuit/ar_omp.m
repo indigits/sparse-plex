@@ -10,6 +10,7 @@ r_norm = norm(r);
 % result
 z = zeros(d, 1);
 atom_index_sum = 0;
+matched_atoms = 0;
 selected_atoms = 1:d;
 if nargin == 3
     matching_mode = 4;
@@ -23,9 +24,16 @@ end
 if ~isfield(options, 'norm_factor')
     options.norm_factor = 2;
 end
+if ~isfield(options, 'reset_interval')
+    options.reset_interval = 5;
+end
+if ~isfield(options, 'VERBOSE')
+    options.VERBOSE = false;
+end
 atoms_to_match = options.atoms_to_match;
 norm_factor = options.norm_factor;
-DEBUG = true;
+DEBUG = options.VERBOSE;
+reset_interval = options.reset_interval;
 
 % array to hold inner products in the original atom order.
 abs_inner_products = zeros(1, d);
@@ -33,13 +41,15 @@ for iter=1:K
     % Compute inner products with atoms arranged in the order 
     % based on their ranking [for selected atoms]
     inner_products = abs(Phi(:, selected_atoms)' * r);
+    matched_atoms = matched_atoms + numel(selected_atoms);
     %inner_products(omega) = 0;
-    inner_products = abs(inner_products) / r_norm;
+    inner_products = abs(inner_products);
     % Find the highest inner product
     [~, max_index] = max(inner_products);
     if DEBUG
         % maximum index
-        fprintf('num selected atoms: %d, chosen atom index: %d\n', numel(selected_atoms), max_index);
+        fprintf('r_norm: %0.5f, num selected atoms: %d, chosen atom index: %d\n', ...
+            r_norm, numel(selected_atoms), max_index);
     end
     % we need to get the original index at this point.
     original_index = selected_atoms(max_index);
@@ -76,6 +86,9 @@ result.support = omega;
 result.iterations = iter;
 % Average atom index
 result.atom_index_average = atom_index_sum / iter;
+% total number of atoms matched
+result.total_matched_atoms_count = matched_atoms;
+result.avg_matched_atoms_count = matched_atoms / iter;
 
 function update_atom_order()
     [sorted_inner_products, selected_atoms] = sort(abs_inner_products, 'descend');
@@ -91,14 +104,20 @@ function update_atom_order()
            selected_atoms  = selected_atoms(1:atoms_to_match);
         case 4
             % adaptive atoms
-            %fprintf('%0.2f ', sorted_inner_products);
-            %fprintf('\n');
-            start = sorted_inner_products(1);
-            index = find(sorted_inner_products < start/ norm_factor, 1);
-            if isempty(index)
-                index = atoms_to_match;
+            if 0
+                fprintf('%0.2f ', sorted_inner_products);
+                fprintf('\n');
             end
-            selected_atoms = selected_atoms(1:index);
+            if mod(iter, reset_interval) == 0
+            else
+                % in odd iterations we restrict to a subset of atoms.
+                start = sorted_inner_products(1);
+                index = find(sorted_inner_products < start/ norm_factor, 1);
+                if isempty(index)
+                    index = atoms_to_match;
+                end
+                selected_atoms = selected_atoms(1:index);
+            end
 
         otherwise
             error('Not supported.');

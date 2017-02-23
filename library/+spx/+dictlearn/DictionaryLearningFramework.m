@@ -18,6 +18,9 @@ properties
     SpecialAtoms = []
     % Dictionary Update Tracker
     Tracker
+    % OMP parameters
+    StopOnResidualNorm = false
+    StopOnResNormStable = false
 
 end
 
@@ -119,8 +122,8 @@ methods(Access=protected)
     function update_representations(self)
         % We now create sparse representations
         omp = spx.pursuit.single.OrthogonalMatchingPursuit(self.Dict, self.K);
-        omp.StopOnResidualNorm = false;
-        omp.StopOnResNormStable = false;
+        omp.StopOnResidualNorm = self.StopOnResidualNorm;
+        omp.StopOnResNormStable = self.StopOnResNormStable;
         % Solve all sparse approximation problems
         result = omp.solve_all_linsolve(self.X);
         % Get the sparse representations
