@@ -79,7 +79,7 @@ classdef GOMP < handle
             if self.StopOnResNormStable
                 old_residual_norm = norm(r);
             end
-            max_iter = self.MaxIters
+            max_iter = self.MaxIters;
             for iter=1:max_iter
                 % Compute inner products
                 inner_products = apply_ctranspose(dict, r);
