@@ -48,3 +48,44 @@ void mult_mat_t_vec(double alpha,
         &beta, y, &incy);
 }
 
+void mult_mat_mat(double alpha, 
+    const double A[], 
+    const double B[], 
+    double X[], 
+    size_t m, size_t n, size_t k){
+    char atrans = 'N';
+    char btrans = 'N';
+    double beta = 0;
+    mwSignedIndex  mm = m;
+    mwSignedIndex  nn = n;
+    mwSignedIndex  kk = k;
+    dgemm(&atrans, &btrans, 
+        &mm, &nn, &kk, 
+        &alpha, 
+        A, &mm, 
+        B, &kk, 
+        &beta, 
+        X, &mm);
+}
+
+void mult_mat_t_mat(double alpha, 
+    const double A[], 
+    const double B[], 
+    double X[], 
+    size_t m, size_t n, size_t k){
+    char atrans = 'T';
+    char btrans = 'N';
+    double beta = 0;
+    mwSignedIndex  mm = m;
+    mwSignedIndex  nn = n;
+    mwSignedIndex  kk = k;
+    dgemm(&atrans, &btrans, 
+        &mm, &nn, &kk, 
+        &alpha, 
+        A, &kk, 
+        B, &kk, 
+        &beta, 
+        X, &mm);
+}
+
+

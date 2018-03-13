@@ -23,3 +23,9 @@ mex('mex_mult_mat_vec.c', sources{:},compile_params{:});
 
 disp('Compiling mex_mult_mat_t_vec...');
 mex('mex_mult_mat_t_vec.c', sources{:},compile_params{:});
+
+disp('Compiling mex_mult_mat_mat...');
+mex('mex_mult_mat_mat.c', sources{:},compile_params{:});
+
+disp('Compiling mex_mult_mat_t_mat...');
+mex('mex_mult_mat_t_mat.c', sources{:},compile_params{:});
