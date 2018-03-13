@@ -9,3 +9,4 @@ library/listing.txt
 scratch.txt
 *.swp
 *.mexw64
+*.html
