@@ -8,3 +8,4 @@ examples/pursuit/single_recovery/diary
 library/listing.txt
 scratch.txt
 *.swp
+*.mexw64
