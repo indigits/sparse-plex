@@ -26,16 +26,15 @@ for iter=1:K
     z(omega) = tmp;
     % Let us update the residual.
     r = y - subdict * tmp;
-    % Solution vector
-    result.z = z;
-    % Residual obtained
-    result.r = r;
-    % Solution support
-    result.support = omega;
-    % Number of iterations
-    result.iterations = iter;
-    % Average atom index
-    result.atom_index_average = atom_index_sum / iter;
 end
-
+% Solution vector
+result.z = z;
+% Residual obtained
+result.r = r;
+% Solution support
+result.support = omega;
+% Number of iterations
+result.iterations = iter;
+% Average atom index
+result.atom_index_average = atom_index_sum / iter;
 end
