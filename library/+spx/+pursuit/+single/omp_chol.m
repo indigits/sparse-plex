@@ -15,7 +15,7 @@ function result  = omp_chol(Dict, x, K, epsilon)
             opts = struct();
             opts.LT= true;
             w = linsolve(L, b, opts);
-            L = [L ones(k -1, 1); w' sqrt(1 - w' * w)];
+            L = [L zeros(k -1, 1); w' sqrt(1 - w' * w)];
         end
         Gamma = [Gamma max_ind];
         % now solve for the coefficients using LL' z = p(:,Gamma)
