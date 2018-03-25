@@ -1,3 +1,5 @@
+function make()
+
 compstr = computer;
 is64bit = strcmp(compstr(end-1:end),'64');
 
@@ -13,34 +15,56 @@ compile_params{end+1} = '-lmwlapack';
 
 
 % Compile files %
+blas_sources  = {'argcheck.c', 'spxblas.c'};
 common_sources = {'argcheck.c', 'spxblas.c', 'spxalg.c'};
 omp_sources = [common_sources, 'omp.c', 'omp_util.c'];
 batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
 batch_omp_spr_sources = [common_sources, 'batch_omp_spr.c', 'omp_util.c'];
 
-% disp('Compiling ompmex...');
-% mex('mex_omp.c', sources{:},compile_params{:});
+make_program('mex_mult_mat_vec.c', blas_sources,compile_params);
+make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params);
+make_program('mex_mult_mat_mat.c', blas_sources, compile_params);
+make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params);
+make_program('mex_test_blas.c', blas_sources,compile_params);
 
-% disp('Compiling mex_mult_mat_vec...');
-% mex('mex_mult_mat_vec.c', sources{:},compile_params{:});
+make_program('mex_omp_chol.c', omp_sources,compile_params);
+make_program('mex_batch_omp.c', batch_omp_sources,compile_params);
+make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params);
+end
 
-% disp('Compiling mex_mult_mat_t_vec...');
-% mex('mex_mult_mat_t_vec.c', sources{:},compile_params{:});
-
-% disp('Compiling mex_mult_mat_mat...');
-% mex('mex_mult_mat_mat.c', sources{:},compile_params{:});
-
-% disp('Compiling mex_mult_mat_t_mat...');
-% mex('mex_mult_mat_t_mat.c', sources{:},compile_params{:});
-
-% disp('Compiling mex_test_blas...');
-% mex('mex_test_blas.c', sources{:},compile_params{:});
-
-% disp('Compiling mex_omp_chol...');
-% mex('mex_omp_chol.c', omp_sources{:},compile_params{:});
-
-% disp('Compiling mex_batch_omp...');
-% mex('mex_batch_omp.c', batch_omp_sources{:},compile_params{:});
-
-disp('Compiling mex_batch_omp_spr...');
-mex('mex_batch_omp_spr.c', batch_omp_spr_sources{:},compile_params{:});
+function make_program(mex_src_file, other_source_files, compile_params)
+    mex_target_file = strrep(mex_src_file, '.c' , '.mexw64');
+    build_mex = false;
+    if 0 == exist(mex_target_file)
+        build_mex = true;
+    else
+        d = dir(mex_target_file);
+        target_mod_time = d.datenum;
+        if 0 == exist(mex_src_file)
+            error('File: %s does not exist\n', mex_src_file);
+        end
+        d  = dir(mex_src_file);
+        src_mod_time = d.datenum;
+        if src_mod_time > target_mod_time
+            build_mex = true;
+        end
+        n = numel(other_source_files);
+        for i=1:n
+            src_file = other_source_files{i};
+            if 0 == exist(src_file)
+                error('File: %s does not exist.\n', src_file);
+            end
+            d = dir(src_file);
+            src_mod_time = d.datenum;
+            if (src_mod_time > target_mod_time)
+                build_mex = true;
+            end
+        end
+    end
+    if build_mex
+        fprintf('Compiling: %s\n', mex_src_file);
+        mex(mex_src_file, other_source_files{:}, compile_params{:});
+    else
+        fprintf('File: %s is already up to date.\n', mex_target_file);
+    end
+end
