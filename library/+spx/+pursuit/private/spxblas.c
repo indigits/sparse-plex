@@ -162,7 +162,7 @@ void mult_mat_vec_sp(double alpha,
     const  double pr[], 
     const mwIndex ir[], const mwIndex jc[],
     double y[], mwSize m, mwSize n){
-    mwIndex i, j, j_n, k, kend;
+    mwIndex i, j, j_col_offset, k, kend;
     /**
     Initialize result to 0
     */
@@ -170,6 +170,7 @@ void mult_mat_vec_sp(double alpha,
         y[i] = 0;
     }
 
+    // number of non-zero entries in x (vector).
     kend = jc[1];
     if (kend==0) {   /* x is empty */
         return;
@@ -177,11 +178,12 @@ void mult_mat_vec_sp(double alpha,
 
     for (k=0; k<kend; ++k) {
         j = ir[k];
-        j_n = j*n;
+        // offset of j-th column in A
+        j_col_offset = j*m;
         /**
         y += x[k] * A[j]
         */
-        sum_vec_vec(alpha * pr[k], A + j_n, y, m);
+        sum_vec_vec(alpha * pr[k], A + j_col_offset, y, m);
     }
 }
 
@@ -355,6 +357,19 @@ void print_matrix(const double A[], int n, int m, char* matrix_name)
   mexPrintf("\n");
 }
 
+void print_vector(const double v_x[], int n, char* vec_name){
+    int i;
+    mexPrintf("\n%s = \n\n", vec_name);
+    if (n==0) {
+        mexPrintf("   Empty vector");
+        return;
+    }
+    for (i=0; i<n; ++i) {
+        mexPrintf("   %lf", v_x[i]);
+    }
+    mexPrintf("\n");
+}
+
 /* print contents of sparse vector */
 
 void print_sparse_vector(const mxArray *A, char* vector_name)
@@ -366,7 +381,7 @@ void print_sparse_vector(const mxArray *A, char* vector_name)
   int i;
 
   mexPrintf("\n%s = \n\n", vector_name);
-
+  // aJc[1] is the number of non-zero entries in sparse vector
   for (i=0; i<aJc[1]; ++i){
     printf("   (%d,1) = %lf\n", aIr[i]+1,aPr[i]);
   }

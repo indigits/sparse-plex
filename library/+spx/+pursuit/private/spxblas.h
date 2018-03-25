@@ -269,6 +269,11 @@ Prints the contents of a matrix
 */
 void print_matrix(const double A[], int m, int n, char* matrix_name);
 
+/**
+Prints the contents of a vector
+*/
+void print_vector(const double v_x[], int n, char* vec_name);
+
 
 /**
 Prints the contents of a sparse vector
