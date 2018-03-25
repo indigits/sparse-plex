@@ -18,7 +18,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     double* m_dict;
     double* v_x;
     int K;
-    double eps;
+    double eps = 0;
 
     size_t M, N;
 
@@ -28,11 +28,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     check_is_double_matrix(D_IN, "mex_omp_chol", "D");
     check_is_double_vector(X_IN,  "mex_omp_chol", "x");
     check_is_double_scalar(K_IN,  "mex_omp_chol", "K");
-    if (nrhs > 3){
-        check_is_double_scalar(EPS_IN,  "mex_omp_chol", "eps");
-    }
     // Read the value of K
     K = mxGetScalar(K_IN);
+    if (nrhs > 3){
+        check_is_double_scalar(EPS_IN,  "mex_omp_chol", "eps");
+        eps  = mxGetScalar(EPS_IN);
+    }
 
     m_dict = mxGetPr(D_IN);
     v_x = mxGetPr(X_IN);
@@ -44,6 +45,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         mexErrMsgTxt("Dimensions mismatch");
     }
     // Create Sparse Representation Vector
-    A_OUT = omp_chol(m_dict, v_x, M, N, K);
+    A_OUT = omp_chol(m_dict, v_x, M, N, K, eps);
 }
 
