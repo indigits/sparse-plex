@@ -89,7 +89,7 @@ classdef SSC_BATCH_OMP < handle
             ns = self.S;
             % sparsity level
             nk = self.K;
-            C = spx.pursuit.fast_batch_omp_spr(data_matrix, nk, self.ResidualNormThreshold);
+            C = spx.fast.batch_omp_spr(data_matrix, nk, self.ResidualNormThreshold);
             self.Representation = C;
             if ~self.Quiet 
                 fprintf('\n');

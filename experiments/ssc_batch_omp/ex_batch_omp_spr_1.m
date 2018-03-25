@@ -11,7 +11,7 @@ Y(3, 5:8) = [3 3 6 6];
 Y(4, 5:8) = [4 5 6 7];
 Y
 Y = spx.norm.normalize_l2(Y)
-C = spx.pursuit.fast_batch_omp_spr(Y, K, 0)
+C = spx.fast.batch_omp_spr(Y, K, 0)
 
 Y * C
 abs(Y - Y * C)

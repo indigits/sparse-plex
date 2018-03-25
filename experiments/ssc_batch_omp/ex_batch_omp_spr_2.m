@@ -29,7 +29,7 @@ true_labels = [1*ones(s1,1) ; 2*ones(s2,1)];
 % the largest dimension amongst all subspaces
 K = max(d1, d2);
 X = spx.norm.normalize_l2(X);
-C = spx.pursuit.fast_batch_omp_spr(X, K, 0);
+C = spx.fast.batch_omp_spr(X, K, 0);
 
 solver = spx.pursuit.single.OrthogonalMatchingPursuit(X, K);
 C2 = zeros(S, S);
