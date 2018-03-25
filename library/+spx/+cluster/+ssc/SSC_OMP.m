@@ -70,6 +70,7 @@ classdef SSC_OMP < handle
             % clusterer.NumClusters = self.NumSubspaces;
             % cluster_labels = clusterer.cluster_random_walk();            
             self.Labels = cluster_labels;
+            result.Labels = self.Labels;
             result.Z = self.Representation;
             result.W = self.Adjacency;
             result.representation_time = representation_time;
@@ -108,7 +109,7 @@ classdef SSC_OMP < handle
                 end
                 % We correlated data with residual.
                 % to do change this to handle cases where there are too many points to handle
-                correlation_matrix = abs(self.Data' * residual_matrix); % S x M  times M x S = S x S
+                correlation_matrix = abs(data_matrix' * residual_matrix); % S x M  times M x S = S x S
                 % set all the diagonal entries (inner product with self) to zero.
                 correlation_matrix(1:ns+1:end) = 0;
                 % the inner product of a residual with each atom is stored along a column
@@ -154,9 +155,9 @@ classdef SSC_OMP < handle
                 % number of iterations for this vector
                 k = termination_vector(s);
                 support_set  = support_sets(s, 1:k);
-                x = self.Data(:, s);
+                x = data_matrix(:, s);
                 % pick atoms from the unnormalized data matrix
-                submatrix = self.Data(:, support_set);
+                submatrix = data_matrix(:, support_set);
                 % solve the least squares problem
                 coeff = submatrix \ x;
                 % if (s == 1)
