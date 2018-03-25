@@ -19,7 +19,7 @@ function test_batch_omp_1(testCase)
     [A, x, b, k] = problem_2();
     A  = double(A);
     G = A' * A;
-    result = spx.pursuit.fast_batch_omp(A, b, G, [], k, 0);
+    result = spx.fast.batch_omp(A, b, G, [], k, 0);
     cmpare = spx.commons.SparseSignalsComparison(x, result, k);
     cmpare.summarize();
     verifyTrue(testCase, cmpare.all_have_matching_supports(1.0));
@@ -30,7 +30,7 @@ function test_batch_omp_dtx(testCase)
     A  = double(A);
     G = A' * A;
     DtX = A' * b;
-    result = spx.pursuit.fast_batch_omp([], [], G, DtX, k, 0);
+    result = spx.fast.batch_omp([], [], G, DtX, k, 0);
     cmpare = spx.commons.SparseSignalsComparison(x, result, k);
     cmpare.summarize();
     verifyTrue(testCase, cmpare.all_have_matching_supports(1.0));

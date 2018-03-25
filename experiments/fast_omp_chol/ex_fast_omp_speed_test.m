@@ -31,7 +31,7 @@ D = D*diag(1./sqrt(sum(D.*D)));    % normalize the dictionary
 % select signal number according to computer speed %
 
 x = randn(n,20);
-result = spx.pursuit.fast_omp_chol(D, x, T, 1e-12);
+result = spx.fast.omp(D, x, T, 1e-12);
 tic; omp(D,x,[],T,'messages',-1); t=toc;
 signum = ceil(20/(t/20));     % approximately 20 seconds of OMP-Cholesky
 
@@ -44,32 +44,31 @@ G = D' * D;
 DtX = D'*X;
 % run OMP  %
 
-printf('\nRunning OMP-Cholesky...');
+fprintf('\nRunning OMP-Cholesky...');
 tic; omp(D,X,[],T,'messages',4); t1=toc;
 
-printf('\nRunning Batch-OMP...');
+fprintf('\nRunning Batch-OMP...');
 tic; omp(D,X,G,T,'messages',1); t2=toc;
 
-printf('\nRunning Batch-OMP with D''*X specified...');
+fprintf('\nRunning Batch-OMP with D''*X specified...');
 tic; omp(DtX,G,T,'messages',1); t3=toc;
 
-printf('\nRunning SPX-OMP-Cholesky...');
-tic; spx.pursuit.fast_omp_chol(D, X, T, 1e-12); t4=toc;
+fprintf('\nRunning SPX-OMP-Cholesky...');
+tic; spx.fast.omp(D, X, T, 1e-12); t4=toc;
 
-printf('\nRunning SPX-Batch-OMP...');
-tic; spx.pursuit.fast_batch_omp(D, X, G, [], T, 0); t5=toc;
+fprintf('\nRunning SPX-Batch-OMP...');
+tic; spx.fast.batch_omp(D, X, G, [], T, 0); t5=toc;
 
-printf('\nRunning SPX-Batch-OMP with DtX...');
-tic; spx.pursuit.fast_batch_omp([], [], G, DtX, T, 0); t6=toc;
+fprintf('\nRunning SPX-Batch-OMP with DtX...');
+tic; spx.fast.batch_omp([], [], G, DtX, T, 0); t6=toc;
 
 % display summary  %
-import spx.io.printf
-printf('\n\nSpeed summary for %d signals, dictionary size %d x %d:\n', signum, n, L);
-printf('Call syntax        Algorithm               Total time');
-printf('--------------------------------------------------------');
-printf('OMP(D,X,[],T)                    OMP-Cholesky            %5.2f seconds', t1);
-printf('OMP(D,X,G,T)                     Batch-OMP               %5.2f seconds', t2);
-printf('OMP(DtX,G,T)                     Batch-OMP with D''*X    %5.2f seconds\n', t3);
-printf('SPX-OMP(D, X, T)                 SPX-OMP-Cholesky        %5.2f seconds\n', t4);
-printf('SPX-OMP(D, X, G, [], T)          SPX-Batch-OMP           %5.2f seconds\n', t5);
-printf('SPX-OMP([], [], G, Dtx, T)       SPX-Batch-OMP           %5.2f seconds\n', t6);
+fprintf('\n\nSpeed summary for %d signals, dictionary size %d x %d:\n', signum, n, L);
+fprintf('Call syntax        Algorithm               Total time\n');
+fprintf('--------------------------------------------------------');
+fprintf('OMP(D,X,[],T)                    OMP-Cholesky            %5.2f seconds\n', t1);
+fprintf('OMP(D,X,G,T)                     Batch-OMP               %5.2f seconds\n', t2);
+fprintf('OMP(DtX,G,T)                     Batch-OMP with D''*X    %5.2f seconds\n', t3);
+fprintf('SPX-OMP(D, X, T)                 SPX-OMP-Cholesky        %5.2f seconds\n', t4);
+fprintf('SPX-Batch-OMP(D, X, G, [], T)    SPX-Batch-OMP           %5.2f seconds\n', t5);
+fprintf('SPX-Batch-OMP([], [], G, Dtx, T) SPX-Batch-OMP           %5.2f seconds\n', t6);

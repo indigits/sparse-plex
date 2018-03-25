@@ -33,7 +33,7 @@ end
 function test_omp_chol_1(testCase)
     [A, x, b, k] = problem_1();
     A  = double(A);
-    result = spx.pursuit.fast_omp_chol(A, b, k, 1e-12);
+    result = spx.fast.omp(A, b, k, 1e-12);
     cmpare = spx.commons.SparseSignalsComparison(x, result, k);
     cmpare.summarize();
     verifyTrue(testCase, cmpare.all_have_matching_supports(1.0));
@@ -43,7 +43,7 @@ end
 function test_omp_chol_2(testCase)
     [A, x, b, k] = problem_2();
     A  = double(A);
-    result = spx.pursuit.fast_omp_chol(A, b, k, 1e-12);
+    result = spx.fast.omp(A, b, k, 1e-12);
     cmpare = spx.commons.SparseSignalsComparison(x, result, k);
     cmpare.summarize();
     verifyTrue(testCase, cmpare.all_have_matching_supports(1.0));

@@ -12,7 +12,7 @@ signum = ceil(20/(t/20));     % approximately 20 seconds of OMP-Cholesky
 
 X = randn(n,signum);
 Gamma1 = omp(D,X,[],T,'messages',4);
-Gamma2 =  spx.pursuit.fast_omp_chol(D, X, T, 1e-12);
-cmpare = spx.commons.SparseSignalsComparison(Gamma1, Gamma2, K);
+Gamma2 =  spx.fast.omp(D, X, T, 1e-12);
+cmpare = spx.commons.SparseSignalsComparison(Gamma1, Gamma2, T);
 cmpare.summarize();
 

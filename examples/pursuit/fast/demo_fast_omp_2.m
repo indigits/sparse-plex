@@ -7,6 +7,6 @@ gen = spx.data.synthetic.SparseSignalGenerator(n, k);
 x =  gen.biGaussian();
 b = A*x;
 A  = double(A);
-result = spx.pursuit.fast_omp_chol(A, b, k, 1e-12);
+result = spx.fast.omp(A, b, k, 1e-12);
 cmpare = spx.commons.SparseSignalsComparison(x, result, k);
 cmpare.summarize();
