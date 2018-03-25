@@ -259,7 +259,7 @@ classdef OrthogonalMatchingPursuit < handle
             % Estimate
             Z = zeros(d, s);
             if self.StopOnResNormStable
-                oldResNorm = columnWiseNorm(R);
+                oldResNorm = spx.norm.norms_l2_cw(R);
             end
             maxIter = self.MaxIters;
             for iter=1:maxIter
@@ -283,7 +283,7 @@ classdef OrthogonalMatchingPursuit < handle
                 % Let us update the residual.
                 R = Y - dict * Z;
                 if self.StopOnResidualNorm || self.StopOnResNormStable
-                    resNorm = columnWiseNorm(R);
+                    resNorm = spx.norm.norms_l2_cw(R);
                     if resNorm < self.MaxResNorm
                         break;
                     end
