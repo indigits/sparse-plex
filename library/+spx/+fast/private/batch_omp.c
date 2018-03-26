@@ -247,6 +247,7 @@ mxArray* batch_omp_gram(const BatchOMPInput* in){
     mxFree(v_beta);
     mxFree(v_t1);
     mxFree(v_t2);
+    mxFree(m_subgram);
     mxFree(v_proxy);
     mxFree(v_h);
     // Return the result
