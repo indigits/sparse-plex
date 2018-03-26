@@ -16,7 +16,7 @@ for c=5:nc
         continue;
     end
     solver_name = sprintf('ssc_mc_omp_%s', config.name);
-    result = bench_subspace_preservation(@ssc_mc_omp, solver_name, config);
+    result = spx.cluster.ssc.util.bench_subspace_preservation(@ssc_mc_omp, solver_name, config);
     result.config = config;
     filepath = sprintf('bin/solver_%s.mat', solver_name);
     save(filepath, 'result');
