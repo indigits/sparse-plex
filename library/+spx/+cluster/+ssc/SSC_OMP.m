@@ -2,6 +2,7 @@ classdef SSC_OMP < handle
     % Implements sparse subspace clustering algorithm using OMP algorithm
     properties
         Quiet = false
+        RepresentationMethod
     end
 
 
@@ -31,7 +32,8 @@ classdef SSC_OMP < handle
     end
 
     methods
-        function self = SSC_OMP(X, K, NumSubspaces, ResidualNormThreshold)
+        function self = SSC_OMP(X, K, NumSubspaces, ...
+            ResidualNormThreshold, RepresentationMethod)
             % Constructor
             self.Data = X;
             self.K = K;
@@ -43,6 +45,10 @@ classdef SSC_OMP < handle
                 ResidualNormThreshold = 1e-3;
             end
             self.ResidualNormThreshold = ResidualNormThreshold;
+            if nargin < 5
+                RepresentationMethod = spx.cluster.ssc.OMP_REPR_METHOD.FLIPPED_OMP_MATLAB;
+            end
+            self.RepresentationMethod = RepresentationMethod;
             [n, s] = size(X);
             self.N = n;
             self.S = s;
@@ -88,107 +94,39 @@ classdef SSC_OMP < handle
             ns = self.S;
             % sparsity level
             nk = self.K;
-            % support set for each vector [one row for each vector]
-            support_sets = ones(ns, nk);
+            quiet = self.Quiet;
+            rnorm_thr = self.ResidualNormThreshold;
 
-            % termination vector
-            % contains the number of iterations in each a particular vector was solved.
-            % initially it is set to K
-            % the moment residual norm reduces below the threshold
-            % we mark it as finished and store the number of iterations
-            % in this vector
-            termination_vector = nk * ones(ns, 1);
-
-            % the normalized data is the starting point of vector
-            residual_matrix  = data_matrix;
-            % threshold for squared norm of residual 
-            threshold = self.ResidualNormThreshold^2;
-            for iter=1:nk
-                if ~self.Quiet 
-                    fprintf('.');
-                end
-                % We correlated data with residual.
-                % to do change this to handle cases where there are too many points to handle
-                correlation_matrix = abs(data_matrix' * residual_matrix); % S x M  times M x S = S x S
-                % set all the diagonal entries (inner product with self) to zero.
-                correlation_matrix(1:ns+1:end) = 0;
-                % the inner product of a residual with each atom is stored along a column
-                % we need to take maximum of each column to identity the best matching atom
-                [~, best_match_indices] = max(correlation_matrix, [], 1);
-                % we fill in the support set
-                support_sets(:, iter) = best_match_indices;
-                if (iter ~= nk)
-                    % we need to compute residuals except for the last iteration.
-                    % iterate for each data point
-                    for s=1:ns
-                        if termination_vector(s) == nk
-                            % this vector requires more iterations.
-                            % pick the vector
-                            x = data_matrix(:, s);
-                            % pick support for this vector
-                            support_set = support_sets(s, 1:iter);
-                            % pick atoms
-                            submatrix = data_matrix(:, support_set);
-                            % solve the least squares problem
-                            r = x - submatrix * (submatrix \ x);
-                            % put the new residual into residual matrix
-                            residual_matrix(:, s) = r;
-                            if sum(r.^2) < threshold
-                                % The processing of this vector is complete
-                                termination_vector(s) = iter;
-                            end
-                        end
-                    end
-                    % now check if processing for all vectors have been terminated
-                    continuing = termination_vector == nk;
-                    if sum(continuing) == 0
-                        % all vectors have been terminated
-                        break;
-                    end
-                end
+            if self.RepresentationMethod.isClassicOMP_C()
+                % Classic OMP C version
+                C = spx.fast.omp_spr(data_matrix, nk, rnorm_thr);
+                self.Representation = C;
+            elseif self.RepresentationMethod.isBatchOMP_C()
+                % Batch OMP C version
+                C = spx.fast.batch_omp_spr(data_matrix, nk, rnorm_thr);
+                self.Representation = C;
+            elseif self.RepresentationMethod.isFlippedOMP_MATLAB()
+                % flipped OMP MATLAB version
+                [representations, iterations] = spx.cluster.ssc.flipped_omp(...
+                    data_matrix, nk, rnorm_thr, quiet);
+                self.Representation = representations;
+                self.Iterations = iterations;
+            elseif self.RepresentationMethod.isBatchFlippedOMP_MATLAB()
+                C = spx.cluster.ssc.batch_flipped_omp(data_matrix, nk, rnorm_thr, quiet);
+                self.Representation = C;
+            elseif self.RepresentationMethod.isBatchFlippedOMP_C()
+                C = spx.fast.batch_flipped_omp_spr(data_matrix, nk, rnorm_thr);
+                self.Representation = C;
+            else
+                error('Invalid representation method.');
             end
-            % final computation of coefficients
-            % the values of coefficients corresponding to support sets
-            coefficients_matrix = zeros(ns, nk);
-            % Creation of sparse representation matrix
-            for s=1:ns
-                % number of iterations for this vector
-                k = termination_vector(s);
-                support_set  = support_sets(s, 1:k);
-                x = data_matrix(:, s);
-                % pick atoms from the unnormalized data matrix
-                submatrix = data_matrix(:, support_set);
-                % solve the least squares problem
-                coeff = submatrix \ x;
-                % if (s == 1)
-                %     disp(submatrix(1:10, :));
-                %     disp(x(1:10));
-                %     disp(coeff);
-                % end
-                % put the coefficients back into coefficients matrix
-                coefficients_matrix(s, 1:k) = coeff';
-            end
-
-            % each column varies from 1 to ns
-            % each row is just a repetition
-            column_indices  = repmat((1:ns)', 1, nk);
-
-            % the support set, column_indices and coefficients_matrix are combined to form
-            % the representation matrix at the end of function as follows
-            % the support set contains row number
-            % the column_indices contains the column number
-            % the values contains the value of the non-zero entry
-            % ns, ns is the size of the sparse matrix.
-            self.Representation = sparse( support_sets(:), column_indices(:), coefficients_matrix(:), ns, ns);
-            self.Iterations = termination_vector;
-            if ~self.Quiet 
+            if ~quiet 
                 fprintf('\n');
             end
         end
 
         function detect_outliers(self)
             % Identifies outliers in the representations
-
         end
 
         function build_adjacency(self)
