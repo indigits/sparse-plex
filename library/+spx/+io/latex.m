@@ -87,7 +87,11 @@ methods(Static)
                 if isinteger(value)    
                     fprintf('%d  %s ', value, term);
                 elseif isfloat(value)
-                    fprintf('%.2f  %s ', value, term);
+                    if round(value) == value
+                        fprintf('%d  %s ', value, term);
+                    else
+                        fprintf('%.2f  %s ', value, term);
+                    end
                 else
                     fprintf('%s  %s ', value, term);
                 end
@@ -97,6 +101,10 @@ methods(Static)
         fprintf('\\hline\n');
         fprintf('\\end{tabular}\n');
         fprintf('\\end{table}\n');
+    end
+
+    function printDataTable(tbl)
+        spx.io.latex.printTabular(tbl, tbl.Properties.VariableNames)
     end
 end
 
