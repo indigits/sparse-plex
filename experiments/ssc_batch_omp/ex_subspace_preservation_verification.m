@@ -2,14 +2,14 @@ clearvars;
 clc;
 close all;
 setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396];
-setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041];
+%setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041];
 setup.rhos = setup.num_points_per_cluster_list / 6;
 %disp(setup.rhos);
 % Number of experiments
 R= numel(setup.rhos);
 setup.num_trials = 2;
 % ambient space dimension
-M = 10;
+M = 9;
 for r=1:R
     rng(r);
     for tt=1:setup.num_trials

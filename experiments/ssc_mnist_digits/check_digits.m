@@ -46,6 +46,7 @@ for r=1:R
     % disp(Y(1:10, 1)');
     % Perform PCA to reduce dimensionality
     Y = spx.la.pca.low_rank_approx(Y, 100);
+    %spx.norm.norms_l2_cw(Y)
     % disp(Y(1:10, 1)');
     % Ambient space dimension and number of data points
     [trial.M, trial.S] = size(Y);
