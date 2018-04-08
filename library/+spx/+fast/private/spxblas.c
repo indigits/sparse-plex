@@ -30,6 +30,19 @@ mwIndex abs_max_index(const double x[], mwSize n){
     return idamax(&nn, x, &incx) - 1;
 }
 
+mwIndex abs_max_index_2(const double x[], mwSize n){
+    mwIndex maxid=0, k;
+    double val, maxval = SQR(*x);
+
+    for (k=1; k<n; ++k) {
+        val = SQR(x[k]);
+        if (val > maxval) {
+            maxval = val;
+            maxid = k;
+        }
+    }
+    return maxid;    
+}
 
 mwIndex max_index(const double x[], mwSize n){
     mwIndex maxid=0, k;
@@ -98,6 +111,14 @@ void mat_transpose(const double X[], double Y[], mwSize n, mwSize m)
 * Vector vector operations
 *
 *********************************************/
+
+void v_subtract(const double x[], 
+    const double y[], double z[], mwSize n){
+    for (int i=0; i < n; ++i){
+        z[i] = x[i] - y[i];
+    }
+}
+
 
 void sum_vec_vec(double alpha, const double x[], double y[], mwSize n){
     mwSignedIndex  nn = n;
@@ -187,6 +208,27 @@ void mult_mat_vec_sp(double alpha,
     }
 }
 
+void mult_submat_vec(double alpha, 
+    const double A[], 
+    const mwSize indices[], 
+    const double x[],
+    double y[], mwSize m, mwSize k){
+    mwIndex i, j, c;
+    /**
+    Initialize result to 0
+    */
+    for (i=0; i<m; ++i) {
+        y[i] = 0;
+    }    
+    for (j=0; j<k; ++j) {
+        /**
+        y += alpha* x(j) *A(:,  index[j])
+        */
+        c = indices[j];
+        sum_vec_vec(alpha * x[j], A + c*m, y, m);
+    }
+}
+
 
 void lt_back_substitution(const double L[], 
     const double b[], 
@@ -213,6 +255,27 @@ void lt_back_substitution(const double L[],
     */
     x[i] = rhs/L[i*m+i];
   }
+}
+
+void lt_back_substitution_col(const double L[], 
+    double b[], 
+    double x[], 
+    mwSize m, mwSize k)
+{
+    mwIndex i, j;
+    double rhs;
+    mwSignedIndex  nn;
+    mwSignedIndex  incx = 1; 
+    double alpha;
+    /** Iterate over columns */
+    for(i=0; i < k; ++i){
+        x[i] = b[i] / L[i*m+i];
+        nn = k - i - 1;
+        if (nn > 0){
+            alpha = -x[i];
+            daxpy(&nn, &alpha, &(L[i*m+i +1]), &incx, &(b[i + 1]), &incx);   
+        }
+    }
 }
 
 
@@ -261,7 +324,6 @@ void spd_chol_lt_solve(const double L[],
     const double b[], 
     double x[], 
     mwSize m, mwSize k){
-
     double *tmp;
     tmp = mxMalloc(k*sizeof(double));
     /**
@@ -275,6 +337,42 @@ void spd_chol_lt_solve(const double L[],
     mxFree(tmp);
 }
 
+void spd_chol_lt_solve2(const double L[], 
+    double b[], 
+    double x[], 
+    double tmp[],
+    mwSize m, mwSize k){
+    /**
+    Solve the problem L t = b
+    */
+    lt_back_substitution(L, b, tmp, m, k);
+    /**
+    Solve the problem L' x = t
+    */
+    lt_t_back_substitution(L, tmp, x, m, k);
+}
+
+void spd_lt_trtrs(const double L[],
+    double b[],
+    mwSize m, mwSize k){
+    char uplo = 'L';
+    char trans = 'N';
+    char diag  = 'N';
+    mwSignedIndex  n = k;
+    mwSignedIndex nrhs = 1;
+    mwSignedIndex lda = m;
+    mwSignedIndex ldb = k;
+    mwSignedIndex info = 0;
+    /**
+    Solve the problem L t = b
+    */
+    dtrtrs(&uplo, &trans, &diag, &n, &nrhs, L, &lda, b, &ldb, &info);
+    /**
+    Solve the problem L' x = t
+    */
+    trans = 'T';
+    dtrtrs(&uplo, &trans, &diag, &n, &nrhs, L, &lda, b, &ldb, &info);
+}
 
 
 

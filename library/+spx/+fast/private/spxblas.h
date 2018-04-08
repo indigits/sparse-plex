@@ -38,6 +38,11 @@ Returns the index of the maximum absolute value in the array
 */
 mwIndex abs_max_index(const double x[], mwSize n);
 
+/**
+Returns the index of the maximum absolute value in the array
+This version doesn't use BLAS.
+*/
+mwIndex abs_max_index_2(const double x[], mwSize n);
 
 
 /**
@@ -72,6 +77,9 @@ void mat_transpose(const double X[], double Y[], mwSize m, mwSize n);
 * Vector vector operations
 *
 *********************************************/
+
+void v_subtract(const double x[], 
+    const double y[], double z[], mwSize n);
 
 /**
 Computes 
@@ -120,6 +128,16 @@ void mult_mat_vec_sp(double alpha,
     const double pr[], const mwIndex ir[], const mwIndex jc[],
     double y[], mwSize m, mwSize n);
 
+/***
+Compute y = alpha * A(:, indices) * x
+k is the number of column indices and length of x.
+m is the number of rows in A.
+*/
+void mult_submat_vec(double alpha, 
+    const double A[], 
+    const mwSize indices[], 
+    const double x[],
+    double y[], mwSize m, mwSize k);
 
 
 
@@ -143,6 +161,15 @@ for solving the problem.
 */
 void lt_back_substitution(const double L[], 
     const double b[], 
+    double x[], 
+    mwSize m, mwSize k);
+
+/**
+Solves the Lx = b problem column wise.
+Requires b to be modifiable.
+*/
+void lt_back_substitution_col(const double L[], 
+    double b[], 
     double x[], 
     mwSize m, mwSize k);
 
@@ -216,6 +243,23 @@ void spd_chol_lt_solve(const double L[],
     double x[], 
     mwSize m, mwSize k);
 
+
+/**
+This version avoids internal memory allocation
+and uses column operations.
+*/
+void spd_chol_lt_solve2(const double L[], 
+    double b[], 
+    double x[], 
+    double tmp[],
+    mwSize m, mwSize k);
+
+/**
+This version uses LAPACK function trtrs.
+*/
+void spd_lt_trtrs(const double L[],
+    double b[],
+    mwSize m, mwSize k);
 
 /********************************************
 * Matrix matrix operations

@@ -1,7 +1,7 @@
 /*************************************************
 *
-*  Bath OMP for Subspace Preserving Representations
-*  Implementation
+*  OMP Based Computation of Subspace Preserving 
+*  Representations
 *
 *************************************************/
 
@@ -10,11 +10,10 @@
 #include "omp.h"
 #include "spxblas.h"
 #include "spxalg.h"
-#include "omp_profile.h"
 
-#define SPR_DEBUG 0
+#define SPR_DEBUG 1
 
-mxArray* batch_omp_spr(double *m_dataset, // Dataset
+mxArray* omp_spr(double *m_dataset, // Dataset
     mwSize M, // Data dimension
     mwSize S, // Number of signals
     mwSize K, // Sparsity level
@@ -25,8 +24,6 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
     /**
     Following variables are common for all signals being processed.
     */
-    // Gram matrix
-    double *m_gram = 0;
     // Square on the bound on the norm of residual
     double res_norm_bnd_sqr = SQR(res_norm_bnd);
 
@@ -48,12 +45,14 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
     double* wv_x;
     // List of indices of selected atoms
     mwIndex *selected_atoms = 0; 
+    // Simple binary mask of selected atoms
+    int* selected_atoms_mask = 0;   
     // Storage for the Cholesky decomposition of D_I' D_I
     double *m_lt = 0;
     // number or rows in lt
     mwSize lrows = 0;
-    // The submatrix of gram matrix for selected atoms
-    double* m_subgram = 0;
+    // The submatrix of dictionary for selected atoms
+    double* m_subdict = 0;
     // The proxy D' x
     double* v_proxy = 0;
     // The inner product of residual with atoms
@@ -64,18 +63,16 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
     double* v_w = 0;
     // Result of orthogonal projection LL' z = p_I
     double* v_z = 0;
-    // G(I) alpha
-    double* v_beta = 0;
+    // Residual 
+    double* v_r = 0;
     // Some temporary vectors
     double *v_t1 = 0, *v_t2 = 0;
-    // Pointer to corresponding column in G 
-    const double* wv_new_gram_col;
+    // Pointer to corresponding column in data set 
+    const double* wv_new_atom;
     // residual norm squared
     double res_norm_sqr;
     // Storage for current sparse representation vector
     double* wv_alpha;
-    // trackers for alpha' * G * alpha
-    double delta, prev_delta;
     // index of new atom
     mwIndex new_atom_index;
 
@@ -87,9 +84,6 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
     // Maximum number of columns to be used in representations
     mwSize max_cols;
 
-    // structure for tracking time spent.
-    omp_profile profile;
-
     if (K < 0 || K > M) {
         // K cannot be greater than M.
         K = M;
@@ -100,27 +94,31 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
         max_cols = K;
     }
     // maximum number of rows in L
-    lrows = K;
+    lrows = M;
     // Memory allocations
-    // Gram matrix
-    m_gram = (double*)mxMalloc(S*S*sizeof(double));
     // Number of selected atoms cannot exceed M
     selected_atoms = (mwIndex*) mxMalloc(M*sizeof(mwIndex));
+    // Total number of atoms is S
+    selected_atoms_mask = (int*) mxMalloc(S*sizeof(int));
     // Number of rows in L cannot exceed M. Number of columns 
     // cannot exceed max_cols.
     m_lt = (double*) mxMalloc(lrows*max_cols*sizeof (double));
-    // Number of entries in new line for L cannot exceed S.
+    // Number of entries in new line for L cannot exceed lrows.
     v_b = (double*)mxMalloc(S*sizeof(double));
     v_w = (double*)mxMalloc(S*sizeof(double));
+    // the non-zero coefficients array [cannot be longer than M]
     v_z = (double*)mxMalloc(M*sizeof(double));
     // Giving enough space for temporary vectors
-    v_beta = (double*)mxMalloc(S*sizeof(double));
     v_t1 = (double*)mxMalloc(S*sizeof(double));
     v_t2 = (double*)mxMalloc(S*sizeof(double));
     // Keeping max_cols space for submatrix of gram matrix. 
-    m_subgram = (double*)mxMalloc(max_cols*S*sizeof(double));
+    m_subdict = (double*)mxMalloc(max_cols*M*sizeof(double));
+    // Proxy vector is in R^S
+    v_proxy = (double*)mxMalloc(S*sizeof(double));
     // h is in R^S.
     v_h = (double*)mxMalloc(S*sizeof(double));
+    // residual r \in R^M.
+    v_r = (double*)mxMalloc(M*sizeof(double));
 
     // Allocate memory for output coefficients sparse matrix
     if (sparse_output == 0){
@@ -137,26 +135,23 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
         jc_alpha[0] = 0;
     }
 
-    omp_profile_init(&profile);
-    // Initialize gram matrix
-    mult_mat_t_mat(1, m_dataset, m_dataset, m_gram, S, S, M);
-    omp_profile_toctic(&profile, TIME_DtD);
-    // set the diagonal elements of gram matrix to zero
-    // for (s=0; s < S; ++s){
-    //     m_gram[s*S + s] = 0;
-    // }
-
     // Loop over signals
     for (s=0; s < S; ++s){
+        // Current data point
+        wv_x = m_dataset + M*s;
         // By default, there is no need to track the residual norm
+        // since data points are unit norm, hence residual norm
+        // is initialized to 1.
         res_norm_sqr = 1;
         // Initialization
-        // Refer to G(:, s) as proxy vector
-        v_proxy = m_gram + S*s;
+        //Compute proxy p  = D' * x
+        mult_mat_t_vec(1, m_dataset, wv_x, v_proxy, M, S);
         // h = p = D' * r
         copy_vec_vec(v_proxy, v_h, S);
-        // initialize previous value of delta as 0.
-        prev_delta = 0;
+        // Initialize the mask of selected atoms.
+        for (i=0; i<S; ++i){
+            selected_atoms_mask[i] = 0;
+        }
         // Number of atoms selected so far.
         k = 0;
         // Iterate for each atom
@@ -164,9 +159,15 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
             // ignore s-th atom from consideration
             v_h[s] = 0;
             // Pick the index of (k+1)-th atom
-            omp_profile_tic(&profile);
             new_atom_index = abs_max_index(v_h, S);
-            omp_profile_toctic(&profile, TIME_MaxAbs);
+            // If this atom is already selected, we will break
+            if (selected_atoms_mask[new_atom_index]){
+                // This is unlikely due to orthogonal structure of OMP
+    #if SPR_DEBUG
+                mexPrintf("This atom is already selected\n.");
+    #endif
+                break;
+            }
             // Check for small values
             d2 = v_h[new_atom_index];
             if (SQR(d2) < 1e-14){
@@ -178,22 +179,18 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
             }
             // Store the index of new atom
             selected_atoms[k] = new_atom_index;
-            // Copy the column for the new atom in gram matrix to 
-            // the sub-gram matrix
-            wv_new_gram_col = m_gram + new_atom_index*S;
-            copy_vec_vec(wv_new_gram_col, m_subgram+k*S, S);
-            omp_profile_toctic(&profile, TIME_GramSubMatrixUpdate);
-
+            selected_atoms_mask[new_atom_index] = 1;
+            // Copy  the new atom in subdictionary
+            wv_new_atom = m_dataset + new_atom_index*M;
+            copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
             // Cholesky update
             if (k == 0){
                 // Simply initialize the L matrix
                 *m_lt = 1;
             }else{
                 // Incremental Cholesky decomposition
-                // Extract G(I, k) i.e. from the k-th column of G(I)
-                // extract entries indexed by I.
-                // note that k entries means current entry is skipped.
-                vec_extract(wv_new_gram_col, selected_atoms, v_b, k);
+                // note that k atoms means current atom is skipped.
+                mult_mat_t_vec(1, m_subdict, wv_new_atom, v_b, M, k);
                 // L' w = b
                 lt_back_substitution(m_lt, v_b, v_w, lrows, k);
                 // Copy w to the new row of L (k-th row)
@@ -208,7 +205,6 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
                 }
                 m_lt[k*lrows + k] = sqrt(d1);    
             }
-            omp_profile_toctic(&profile, TIME_LCholUpdate);
             // It is time to increase the count of selected atoms
             ++k;
             // We will now solve the equation L L' alpha_I = p_I
@@ -217,36 +213,26 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
             spd_chol_lt_solve2(m_lt, v_t1, v_z, v_t2, lrows, k);
             // spd_lt_trtrs(m_lt, v_t1, lrows, k);
             // copy_vec_vec(v_t1, v_z, k);
-            omp_profile_toctic(&profile, TIME_LLtSolve);
 
-            // Update h = Y' r
-            // Compute beta  = G(I) c
-            mult_mat_vec(1, m_subgram, v_z, v_beta, S, k);
-            omp_profile_toctic(&profile, TIME_Beta);
-    #if SPR_DEBUG
-            print_vector(v_h, S, "h");
-            print_vector(v_beta, S, "beta");
-    #endif
-            // h = h_0 - beta
-            copy_vec_vec(v_proxy, v_h, S);
-            sum_vec_vec(-1, v_beta, v_h, S);
-            omp_profile_toctic(&profile, TIME_HUpdate);
-    #if SPR_DEBUG
-            print_vector(v_h, S, "h");
-    #endif
+            // Compute residual
+            // r  = x - D_I c
+            mult_mat_vec(-1, m_subdict, v_z, v_r, M, k);
+            sum_vec_vec(1, wv_x, v_r, M);
+            // Update h = D' r
+            mult_mat_t_vec(1, m_dataset, v_r, v_h, M, S);
             // Update residual norm squared
             if (res_norm_bnd_sqr > 0){
-                // Extract beta (I)
-                vec_extract(v_beta, selected_atoms, v_t2, k);
-                delta = inner_product(v_t2, v_z, k);
-                res_norm_sqr = res_norm_sqr - delta + prev_delta;
-                prev_delta = delta;
+                // Update residual norm squared
+                res_norm_sqr = inner_product(v_r, v_r, M);
             }
             else{
                 // We don't need to track the norm of residual
                 res_norm_sqr = 1;
             }
         }
+    #if SPR_DEBUG
+        //mexPrintf("%d: %d, \n.", s, k);
+    #endif
 
         if(sparse_output == 0){
             // Write the output vector
@@ -272,19 +258,18 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
         }
     }
 
-    omp_profile_print(&profile);
-    // Memory cleanup
-    mxFree(m_gram);
     mxFree(selected_atoms);
+    mxFree(selected_atoms_mask);
     mxFree(m_lt);
     mxFree(v_b);
     mxFree(v_w);
     mxFree(v_z);
-    mxFree(v_beta);
     mxFree(v_t1);
     mxFree(v_t2);
-    mxFree(m_subgram);
+    mxFree(m_subdict);
+    mxFree(v_proxy);
     mxFree(v_h);
+    mxFree(v_r);
     // Return the result
     return p_alpha;
 

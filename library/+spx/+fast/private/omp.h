@@ -56,6 +56,20 @@ with G = D' D available.
 mxArray* batch_omp_gram(const BatchOMPInput* in);
 
 
+/**
+Computes the subspace preserving
+representations of a dataset
+using standard OMP with Cholesky acceleration.
+*/
+mxArray* omp_spr(double *m_dataset, // Dataset
+    mwSize M, // Data dimension
+    mwSize S, // Number of signals
+    mwSize K, // Sparsity level
+    double res_norm_bnd, // Residual norm bound
+    int sparse_output // Whether output is sparse matrix
+    );
+
+
 
 /**
 Computes the subspace preserving
@@ -69,6 +83,18 @@ mxArray* batch_omp_spr(double *m_dataset, // Dataset
     int sparse_output // Whether output is sparse matrix
     );
 
+
+/**
+Computes the subspace preserving
+representations of a dataset.
+*/
+mxArray* batch_flipped_omp_spr(double *m_dataset, // Dataset
+    mwSize M, // Data dimension
+    mwSize S, // Number of signals
+    mwSize K, // Sparsity level
+    double res_norm_bnd, // Residual norm bound
+    int sparse_output // Whether output is sparse matrix
+    );
 
 void fill_vec_sparse_vals(const double values[],
     const mwIndex indices[], double output[], 
