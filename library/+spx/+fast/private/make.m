@@ -18,6 +18,7 @@ compile_params{end+1} = '-lmwlapack';
 blas_sources  = {'argcheck.c', 'spxblas.c'};
 common_sources = {'argcheck.c', 'spxblas.c', 'spxalg.c'};
 omp_sources = [common_sources, 'omp.c', 'omp_util.c'];
+omp_ar_sources = [common_sources, 'omp_ar.c', 'omp_util.c'];
 batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
 batch_omp_spr_sources = [common_sources, 'batch_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
 omp_spr_sources = [common_sources, 'omp_spr.c', 'omp_util.c'];
@@ -30,6 +31,7 @@ make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params);
 make_program('mex_test_blas.c', blas_sources,compile_params);
 
 make_program('mex_omp_chol.c', omp_sources,compile_params);
+make_program('mex_omp_ar.c', omp_ar_sources,compile_params);
 make_program('mex_batch_omp.c', batch_omp_sources,compile_params);
 make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params);
 make_program('mex_omp_spr.c', omp_spr_sources,compile_params);

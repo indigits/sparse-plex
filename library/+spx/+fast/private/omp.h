@@ -43,6 +43,24 @@ mxArray* omp_chol(const double m_dict[],
     mwSize K, double res_norm_bnd);
 
 /**
+Computes the sparse representation of a vector x 
+in the dictionary D using the Orthogonal Matching
+Pursuit with Atom Ranking extension
+implemented with Cholesky update.
+
+Solves:  D alpha = x
+*/
+mxArray* omp_ar(const double m_dict[], 
+    const double v_x[],
+    mwSize M, 
+    mwSize N,
+    mwSize K, // Sparsity level
+    double res_norm_bnd, // Residual norm bound
+    int sparse_output // Whether output is sparse matrix
+);
+
+
+/**
 Computes the sparse representation of a set of vectors X
 in the dictionary D using the OMP implemented with
 Cholesky update and using the Gram matrix of the
