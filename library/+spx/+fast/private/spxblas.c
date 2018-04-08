@@ -119,6 +119,13 @@ void v_subtract(const double x[],
     }
 }
 
+void v_square(const double x[], 
+    double y[], mwSize n){
+    for (int i=0; i < n; ++i){
+        y[i] = SQR(x[i]);
+    }
+}
+
 
 void sum_vec_vec(double alpha, const double x[], double y[], mwSize n){
     mwSignedIndex  nn = n;
@@ -137,7 +144,7 @@ double inner_product(const double a[],
     const double b[], mwSize n){
     mwSignedIndex  nn = n;
     mwSignedIndex  inc = 1; 
-    ddot(&nn, a, &inc, b, &inc);
+    return ddot(&nn, a, &inc, b, &inc);
 }
 
 
@@ -229,6 +236,22 @@ void mult_submat_vec(double alpha,
     }
 }
 
+void mult_submat_t_vec(double alpha, 
+    const double A[], 
+    const mwSize indices[], 
+    const double x[],
+    double y[], mwSize m, mwSize k){
+
+    mwSignedIndex  mm = m;
+    mwSignedIndex  inc = 1; 
+    mwSize index;
+    const double *v_col;
+    for (int i=0; i<k; ++i){
+        index = indices[i];
+        v_col = A + m*index;
+        y[i] = ddot(&mm, v_col, &inc, x, &inc);
+    }
+}
 
 void lt_back_substitution(const double L[], 
     const double b[], 

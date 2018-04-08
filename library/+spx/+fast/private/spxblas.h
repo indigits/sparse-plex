@@ -81,6 +81,13 @@ void mat_transpose(const double X[], double Y[], mwSize m, mwSize n);
 void v_subtract(const double x[], 
     const double y[], double z[], mwSize n);
 
+
+/**
+Square the elements of x into y
+*/
+void v_square(const double x[], 
+    double y[], mwSize n);
+
 /**
 Computes 
 y = alpha * x + y 
@@ -134,6 +141,17 @@ k is the number of column indices and length of x.
 m is the number of rows in A.
 */
 void mult_submat_vec(double alpha, 
+    const double A[], 
+    const mwSize indices[], 
+    const double x[],
+    double y[], mwSize m, mwSize k);
+
+/***
+Compute y = alpha * A(:, indices)' * x
+k is the number of column indices and length of y.
+m is the number of rows in A and the length of x.
+*/
+void mult_submat_t_vec(double alpha, 
     const double A[], 
     const mwSize indices[], 
     const double x[],
