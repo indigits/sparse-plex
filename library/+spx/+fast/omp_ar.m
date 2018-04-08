@@ -21,16 +21,5 @@ function result  = omp_ar(Dict, X, K, epsilon, options)
     [M, S] = size(X);
     N = size(Dict, 2);
     sparse_output  = 1;
-    if S == 1
-        result = mex_omp_ar(Dict, X, K, epsilon, sparse_output);
-    else
-        if sparse_output
-            result = sparse(N, S);
-        else
-            result = zeros(N, S);
-        end
-        for s=1:S
-            result(:, s) = mex_omp_ar(Dict, X(:, s), K, epsilon, sparse_output);
-        end
-    end
+    result = mex_omp_ar(Dict, X, K, epsilon, sparse_output);
 end

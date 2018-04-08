@@ -3,15 +3,22 @@
 #include <mex.h>
 #include <math.h>
 #include "omp.h"
+#include "omp_profile.h"
 #include "spxblas.h"
+#include "spxalg.h"
 
 
-mxArray* omp_chol(const double m_dict[], 
-    const double v_x[],
+#define CHOL_DEBUG 1
+
+
+mxArray* omp(const double m_dict[], 
+    const double m_x[],
     mwSize M, 
     mwSize N,
+    mwSize S,
     mwSize K, 
-    double res_norm_bnd){
+    double res_norm_bnd,
+    int sparse_output){
 
     // List of indices of selected atoms
     mwIndex *selected_atoms = 0; 
@@ -39,14 +46,24 @@ mxArray* omp_chol(const double m_dict[],
     const double* wv_new_atom;
     // residual norm squared
     double res_norm_sqr;
-    /// Output array
-    mxArray* p_alpha;
-    double* v_alpha;
     // square of upper bound on residual norm
     double res_norm_bnd_sqr = SQR(res_norm_bnd);
+    // Pointer to current signal
+    const double *wv_x = 0;
+
+    /// Output array
+    mxArray* p_alpha;
+    double* m_alpha;
+    // row indices for non-zero entries in Alpha
+    mwIndex *ir_alpha;
+    // indices for first non-zero entry in column
+    mwIndex *jc_alpha;
+    /// Index for non-zero entries in alpha
+    mwIndex nz_index;
+
 
     // counters
-    int i, j , k;
+    int i, j , k, s;
     // index of new atom
     mwIndex new_atom_index;
     // misc variables 
@@ -55,10 +72,14 @@ mxArray* omp_chol(const double m_dict[],
     // Maximum number of columns to be used in representations
     mwSize max_cols;
 
+    // structure for tracking time spent.
+    omp_profile profile;
+
     // Print input data
 #if CHOL_DEBUG
-    print_matrix(m_dict, M, N, "D");
-    print_matrix(v_x, M, 1, "x");
+    //print_matrix(m_dict, M, N, "D");
+    //print_matrix(m_x, M, S, "X");
+    //mexPrintf("M: %d, N:%d, S: %d, K: %d\n", M, N, S, K);
 #endif
     if (K < 0 || K > M) {
         // K cannot be greater than M.
@@ -92,80 +113,115 @@ mxArray* omp_chol(const double m_dict[],
     // Residual is in signal space R^M.
     v_r = (double*)mxMalloc(M*sizeof(double));
 
-
-    // Initialization
-    res_norm_sqr = inner_product(v_x, v_x, M);
-    //Compute proxy p  = D' * x
-    mult_mat_t_vec(1, m_dict, v_x, v_proxy, M, N);
-    // h = p = D' * r
-    copy_vec_vec(v_proxy, v_h, N);
-    for (i=0; i<N; ++i){
-        selected_atoms_mask[i] = 0;
+    if (sparse_output == 0){
+        p_alpha = mxCreateDoubleMatrix(N, S, mxREAL);
+        m_alpha =  mxGetPr(p_alpha);
+        ir_alpha = 0;
+        jc_alpha = 0;
+    }else{
+        p_alpha = mxCreateSparse(N, S, max_cols*S, mxREAL);
+        m_alpha = mxGetPr(p_alpha);
+        ir_alpha = mxGetIr(p_alpha);
+        jc_alpha = mxGetJc(p_alpha);
+        nz_index = 0;
+        jc_alpha[0] = 0;
     }
-#if CHOL_DEBUG
-#endif
-    // Number of atoms selected so far.
-    k = 0;
-    // Iterate for each atom
-    while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
-        // Pick the index of (k+1)-th atom
-        new_atom_index = abs_max_index(v_h, N);
-#if CHOL_DEBUG
-        print_matrix(v_h, N, 1, "h");
-        mexPrintf("k = %d, index = %d \n\n", k, new_atom_index);
-#endif
-        // If this atom is already selected, we will break
-        if (selected_atoms_mask[new_atom_index]){
-            // This is unlikely due to orthogonal structure of OMP
-#if CHOL_DEBUG
-            mexPrintf("This atom is already selected.");
-#endif
-            break;
-        }
-        // Check for small values
-        d2 = v_h[new_atom_index];
-        if (SQR(d2) < 1e-14){
-            // The inner product of residual with new atom is way too small.
-            break;
-        }
-        // Store the index of new atom
-        selected_atoms[k] = new_atom_index;
-        selected_atoms_mask[new_atom_index] = 1;
+    omp_profile_init(&profile);
 
-        // Copy the new atom to the sub-dictionary
-        wv_new_atom = m_dict + new_atom_index*M;
-        copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
-
-        // Cholesky update
-        if (k == 0){
-            // Simply initialize the L matrix
-            *m_lt = 1;
-        }else{
-            // Incremental Cholesky decomposition
-            if (chol_update(m_subdict, wv_new_atom, m_lt, 
-                v_b, v_w, M, k) != 0){
+    for(s=0; s<S; ++s){
+        wv_x = m_x + M*s;
+        // Initialization
+        res_norm_sqr = inner_product(wv_x, wv_x, M);
+        //Compute proxy p  = D' * x
+        mult_mat_t_vec(1, m_dict, wv_x, v_proxy, M, N);
+        omp_profile_toctic(&profile, TIME_DtR);
+        // h = p = D' * r
+        copy_vec_vec(v_proxy, v_h, N);
+        for (i=0; i<N; ++i){
+            selected_atoms_mask[i] = 0;
+        }
+        // Number of atoms selected so far.
+        k = 0;
+        // Iterate for each atom
+        while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
+            omp_profile_tic(&profile);
+            // Pick the index of (k+1)-th atom
+            new_atom_index = abs_max_index(v_h, N);
+            omp_profile_toctic(&profile, TIME_MaxAbs);
+            // If this atom is already selected, we will break
+            if (selected_atoms_mask[new_atom_index]){
+                // This is unlikely due to orthogonal structure of OMP
+    #if CHOL_DEBUG
+                //mexPrintf("This atom is already selected.");
+    #endif
                 break;
             }
-        }
-        // It is time to increase the count of selected atoms
-        ++k;
-        // We will now solve the equation L L' alpha_I = p_I
-        vec_extract(v_proxy, selected_atoms, v_t1, k);
-        spd_chol_lt_solve(m_lt, v_t1, v_c, M, k);
-        // Compute residual
-        // r  = x - D_I c
-        mult_mat_vec(-1, m_subdict, v_c, v_r, M, k);
-        sum_vec_vec(1, v_x, v_r, M);
-        // Update h = D' r
-        mult_mat_t_vec(1, m_dict, v_r, v_h, M, N);
-        // Update residual norm squared
-        res_norm_sqr = inner_product(v_r, v_r, M);
-    }
+            // Check for small values
+            d2 = v_h[new_atom_index];
+            if (SQR(d2) < 1e-14){
+                // The inner product of residual with new atom is way too small.
+                break;
+            }
+            // Store the index of new atom
+            selected_atoms[k] = new_atom_index;
+            selected_atoms_mask[new_atom_index] = 1;
 
-    // Write the output vector
-    p_alpha = mxCreateDoubleMatrix(N, 1, mxREAL);
-    v_alpha =  mxGetPr(p_alpha);    
-    fill_vec_sparse_vals(v_c, selected_atoms, v_alpha, N, k);
+            // Copy the new atom to the sub-dictionary
+            wv_new_atom = m_dict + new_atom_index*M;
+            copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
+            omp_profile_toctic(&profile, TIME_DictSubMatrixUpdate);
+
+            // Cholesky update
+            if (k == 0){
+                // Simply initialize the L matrix
+                *m_lt = 1;
+            }else{
+                // Incremental Cholesky decomposition
+                if (chol_update(m_subdict, wv_new_atom, m_lt, 
+                    v_b, v_w, M, k) != 0){
+                    break;
+                }
+            }
+            omp_profile_toctic(&profile, TIME_LCholUpdate);
+            // It is time to increase the count of selected atoms
+            ++k;
+            // We will now solve the equation L L' alpha_I = p_I
+            vec_extract(v_proxy, selected_atoms, v_t1, k);
+            spd_chol_lt_solve(m_lt, v_t1, v_c, M, k);
+            omp_profile_toctic(&profile, TIME_LLtSolve);
+            // Compute residual
+            // r  = x - D_I c
+            mult_mat_vec(-1, m_subdict, v_c, v_r, M, k);
+            sum_vec_vec(1, wv_x, v_r, M);
+            omp_profile_toctic(&profile, TIME_RUpdate);
+            // Update h = D' r
+            mult_mat_t_vec(1, m_dict, v_r, v_h, M, N);
+            // Update residual norm squared
+            res_norm_sqr = inner_product(v_r, v_r, M);
+            omp_profile_toctic(&profile, TIME_DtR);
+            //mexPrintf(".\n");
+        }
+
+        // Write the output vector
+        if(sparse_output == 0){
+            // Write the output vector
+            double* wv_alpha =  m_alpha + N*s;
+            fill_vec_sparse_vals(v_c, selected_atoms, wv_alpha, N, k);
+        }
+        else{
+            // Sort the row indices
+            quicksort_indices(selected_atoms, v_c, k);
+            // add the non-zero entries for this column
+            for(j=0; j <k; ++j){
+                m_alpha[nz_index] = v_c[j];
+                ir_alpha[nz_index] = selected_atoms[j];
+                ++nz_index;
+            }
+            // fill in the total number of nonzero entries in the end.
+            jc_alpha[s+1] = jc_alpha[s] + k;
+        }
+    }
+    omp_profile_print(&profile);
 
     // Memory cleanup
     mxFree(selected_atoms);

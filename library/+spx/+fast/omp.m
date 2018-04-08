@@ -5,10 +5,5 @@ function result  = omp(Dict, X, K, epsilon)
     if ~isa(Dict, 'double')
         error('Dict must be a double matrix');
     end
-    [M, S] = size(X);
-    N = size(Dict, 2);
-    result = zeros(N, S);
-    for s=1:S
-        result(:, s) = mex_omp_chol(Dict, X(:, s), K, epsilon);
-    end
+    result = mex_omp_chol(Dict, X, K, epsilon);
 end

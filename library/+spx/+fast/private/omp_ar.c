@@ -9,11 +9,13 @@
 #include "omp.h"
 #include "spxblas.h"
 #include "spxalg.h"
+#include "omp_profile.h"
 
 mxArray* omp_ar(const double m_dict[], 
-    const double v_x[],
+    const double m_x[],
     mwSize M, 
     mwSize N,
+    mwSize S,
     mwSize K, 
     double res_norm_bnd,
     int sparse_output){
@@ -57,7 +59,7 @@ mxArray* omp_ar(const double m_dict[],
     
     /// Output array
     mxArray* p_alpha;
-    double* v_alpha;
+    double* m_alpha;
     // row indices for non-zero entries in Alpha
     mwIndex *ir_alpha;
     // indices for first non-zero entry in column
@@ -67,9 +69,11 @@ mxArray* omp_ar(const double m_dict[],
 
     // square of upper bound on residual norm
     double res_norm_bnd_sqr = SQR(res_norm_bnd);
+    // Pointer to current signal
+    const double *wv_x = 0;
 
     // counters
-    int i, j , k;
+    int i, j , k, s;
     // index of new atom
     mwIndex max_idx;
     mwIndex orig_idx;
@@ -78,6 +82,9 @@ mxArray* omp_ar(const double m_dict[],
 
     // Maximum number of columns to be used in representations
     mwSize max_cols;
+
+    // structure for tracking time spent.
+    omp_profile profile;
 
     // Print input data
     if (K < 0 || K > M) {
@@ -120,135 +127,149 @@ mxArray* omp_ar(const double m_dict[],
 
 
     if (sparse_output == 0){
-        p_alpha = mxCreateDoubleMatrix(N, 1, mxREAL);
-        v_alpha =  mxGetPr(p_alpha);
+        p_alpha = mxCreateDoubleMatrix(N, S, mxREAL);
+        m_alpha =  mxGetPr(p_alpha);
         ir_alpha = 0;
         jc_alpha = 0;
     }else{
-        p_alpha = mxCreateSparse(N, 1, max_cols, mxREAL);
-        v_alpha = mxGetPr(p_alpha);
+        p_alpha = mxCreateSparse(N, S, max_cols*S, mxREAL);
+        m_alpha = mxGetPr(p_alpha);
         ir_alpha = mxGetIr(p_alpha);
         jc_alpha = mxGetJc(p_alpha);
         nz_index = 0;
         jc_alpha[0] = 0;
     }
 
+    omp_profile_init(&profile);
+    for(s=0; s<S; ++s){
+        wv_x = m_x + M*s;
 
-    // Initialization
-    res_norm_sqr = inner_product(v_x, v_x, M);
-    //Compute proxy p  = D' * x
-    // In the first iteration, we match all atoms
-    for(int i=0; i < N; ++i){
-        atoms_to_match_set[i] = i;
-    }
-    n_atoms_to_match = N;
-    mult_mat_t_vec(1, m_dict, v_x, v_proxy, M, N);
-    // h = p = D' * r
-    copy_vec_vec(v_proxy, v_h, N);
-    // Square all the correlations
-    v_square(v_h, v_h, n_atoms_to_match);
-    copy_vec_vec(v_h, v_sqr_correlations, n_atoms_to_match);
-
-
-    // Number of atoms selected so far.
-    k = 0;
-    // Iterate for each atom
-    while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
-        // Pick the index of (k+1)-th atom
-        max_idx = max_index(v_h, n_atoms_to_match);
-        // Check for small values
-        d2 = v_h[max_idx];
-        if (d2 < 1e-14){
-            // The inner product of residual with new atom is way too small.
-            break;
+        // Initialization
+        res_norm_sqr = inner_product(wv_x, wv_x, M);
+        //Compute proxy p  = D' * x
+        // In the first iteration, we match all atoms
+        for(int i=0; i < N; ++i){
+            atoms_to_match_set[i] = i;
         }
-        // Store the index of new atom
-        orig_idx = atoms_to_match_set[max_idx];
-        support_set[k] = orig_idx;
-        // Update squared correlations
-        for(int ii=0;ii<n_atoms_to_match; ++ii){
-            v_sqr_correlations[atoms_to_match_set[ii]] = v_h[ii];
-        }
-        // Ensure that the selected atom is never reconsidered.
-        v_sqr_correlations[orig_idx] = 0;
-        {
-            double max_value;
-            double factor = 4;
-            double threshold;
-            int reset_interval = 5;
-            // Update atom order
-            copy_vec_vec(v_sqr_correlations, v_sorted_corrs, N);
-            for(int i=0; i < N; ++i){
-                atoms_to_match_set[i] = i;
+        n_atoms_to_match = N;
+        mult_mat_t_vec(1, m_dict, wv_x, v_proxy, M, N);
+        omp_profile_toctic(&profile, TIME_DtR);
+        // h = p = D' * r
+        copy_vec_vec(v_proxy, v_h, N);
+        // Square all the correlations
+        v_square(v_h, v_h, n_atoms_to_match);
+        copy_vec_vec(v_h, v_sqr_correlations, n_atoms_to_match);
+
+
+        // Number of atoms selected so far.
+        k = 0;
+        // Iterate for each atom
+        while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
+            // Pick the index of (k+1)-th atom
+            max_idx = max_index(v_h, n_atoms_to_match);
+            omp_profile_toctic(&profile, TIME_MaxAbs);
+            // Check for small values
+            d2 = v_h[max_idx];
+            if (d2 < 1e-14){
+                // The inner product of residual with new atom is way too small.
+                break;
             }
-            //print_vector(v_sorted_corrs, N, "corrs");
-            quicksort_values_desc(v_sorted_corrs, atoms_to_match_set, N);
-            //print_vector(v_sorted_corrs, N, "corrs");
-            max_value = v_sorted_corrs[0];
-            threshold = max_value / factor;
-            n_atoms_to_match = N;
-            if (k % reset_interval != 0){
-                for (int i=1; i < N; ++i){
-                    if (v_sorted_corrs[i] > threshold){
-                        continue;
+            // Store the index of new atom
+            orig_idx = atoms_to_match_set[max_idx];
+            support_set[k] = orig_idx;
+            // Update squared correlations
+            for(int ii=0;ii<n_atoms_to_match; ++ii){
+                v_sqr_correlations[atoms_to_match_set[ii]] = v_h[ii];
+            }
+            // Ensure that the selected atom is never reconsidered.
+            v_sqr_correlations[orig_idx] = 0;
+            {
+                double max_value;
+                double factor = 4;
+                double threshold;
+                int reset_interval = 5;
+                // Update atom order
+                copy_vec_vec(v_sqr_correlations, v_sorted_corrs, N);
+                for(int i=0; i < N; ++i){
+                    atoms_to_match_set[i] = i;
+                }
+                //print_vector(v_sorted_corrs, N, "corrs");
+                quicksort_values_desc(v_sorted_corrs, atoms_to_match_set, N);
+                //print_vector(v_sorted_corrs, N, "corrs");
+                max_value = v_sorted_corrs[0];
+                threshold = max_value / factor;
+                n_atoms_to_match = N;
+                if (k % reset_interval != 0){
+                    for (int i=1; i < N; ++i){
+                        if (v_sorted_corrs[i] > threshold){
+                            continue;
+                        }
+                        // We found a value lower than threshold
+                        n_atoms_to_match = i+1;
+                        break;
                     }
-                    // We found a value lower than threshold
-                    n_atoms_to_match = i+1;
+                }
+            }
+            omp_profile_toctic(&profile, TIME_AtomRanking);
+
+            // Copy the new atom to the sub-dictionary
+            wv_new_atom = m_dict + orig_idx*M;
+            copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
+            omp_profile_toctic(&profile, TIME_DictSubMatrixUpdate);
+
+            // Cholesky update
+            if (k == 0){
+                // Simply initialize the L matrix
+                *m_lt = 1;
+            }else{
+                // Incremental Cholesky decomposition
+                if (chol_update(m_subdict, wv_new_atom, m_lt, 
+                    v_b, v_w, M, k) != 0){
                     break;
                 }
             }
+            omp_profile_toctic(&profile, TIME_LCholUpdate);
+            // It is time to increase the count of selected atoms
+            ++k;
+            // We will now solve the equation L L' alpha_I = p_I
+            vec_extract(v_proxy, support_set, v_t1, k);
+            spd_chol_lt_solve(m_lt, v_t1, v_c, M, k);
+            omp_profile_toctic(&profile, TIME_LLtSolve);
+            // Compute residual
+            // r  = x - D_I c
+            mult_mat_vec(-1, m_subdict, v_c, v_r, M, k);
+            sum_vec_vec(1, wv_x, v_r, M);
+            omp_profile_toctic(&profile, TIME_RUpdate);
+            // Update h = D(:, Omega)' r
+            mult_submat_t_vec(1, m_dict, atoms_to_match_set, 
+                v_r, v_h, M, n_atoms_to_match);
+            // Square all the correlations
+            v_square(v_h, v_h, n_atoms_to_match);
+            // Update residual norm squared
+            res_norm_sqr = inner_product(v_r, v_r, M);
+            omp_profile_toctic(&profile, TIME_DtR);
         }
 
-        // Copy the new atom to the sub-dictionary
-        wv_new_atom = m_dict + orig_idx*M;
-        copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
-
-        // Cholesky update
-        if (k == 0){
-            // Simply initialize the L matrix
-            *m_lt = 1;
-        }else{
-            // Incremental Cholesky decomposition
-            if (chol_update(m_subdict, wv_new_atom, m_lt, 
-                v_b, v_w, M, k) != 0){
-                break;
-            }
-        }
-        // It is time to increase the count of selected atoms
-        ++k;
-        // We will now solve the equation L L' alpha_I = p_I
-        vec_extract(v_proxy, support_set, v_t1, k);
-        spd_chol_lt_solve(m_lt, v_t1, v_c, M, k);
-        // Compute residual
-        // r  = x - D_I c
-        mult_mat_vec(-1, m_subdict, v_c, v_r, M, k);
-        sum_vec_vec(1, v_x, v_r, M);
-        // Update h = D(:, Omega)' r
-        mult_submat_t_vec(1, m_dict, atoms_to_match_set, 
-            v_r, v_h, M, n_atoms_to_match);
-        // Square all the correlations
-        v_square(v_h, v_h, n_atoms_to_match);
-        // Update residual norm squared
-        res_norm_sqr = inner_product(v_r, v_r, M);
-    }
-
-    // Write the output vector
-    if(sparse_output == 0){
         // Write the output vector
-        fill_vec_sparse_vals(v_c, support_set, v_alpha, N, k);
-    }
-    else{
-        // Sort the row indices
-        quicksort_indices(support_set, v_c, k);
-        // add the non-zero entries for this column
-        for(j=0; j <k; ++j){
-            v_alpha[nz_index] = v_c[j];
-            ir_alpha[nz_index] = support_set[j];
-            ++nz_index;
+        if(sparse_output == 0){
+            // Write the output vector
+            double* wv_alpha =  m_alpha + N*s;
+            fill_vec_sparse_vals(v_c, support_set, wv_alpha, N, k);
         }
-        // fill in the total number of nonzero entries in the end.
-        jc_alpha[1] = jc_alpha[0] + k;
+        else{
+            // Sort the row indices
+            quicksort_indices(support_set, v_c, k);
+            // add the non-zero entries for this column
+            for(j=0; j <k; ++j){
+                m_alpha[nz_index] = v_c[j];
+                ir_alpha[nz_index] = support_set[j];
+                ++nz_index;
+            }
+            // fill in the total number of nonzero entries in the end.
+            jc_alpha[s+1] = jc_alpha[s] + k;
+        }
     }
+    omp_profile_print(&profile);
 
     // Memory cleanup
     mxFree(support_set);

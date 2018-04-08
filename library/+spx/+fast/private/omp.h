@@ -3,7 +3,6 @@
 
 #include "mex.h"
 
-#define CHOL_DEBUG 0
 #define ALLOC_REAL_ARR(n) (double*)mxMalloc((n)*sizeof(double))
 
 typedef struct {
@@ -36,11 +35,15 @@ Pursuit implemented with Cholesky update.
 
 Solves:  D alpha = x
 */
-mxArray* omp_chol(const double m_dict[], 
-    const double v_x[],
+mxArray* omp(const double m_dict[], 
+    const double m_x[],
     mwSize M, 
     mwSize N,
-    mwSize K, double res_norm_bnd);
+    mwSize S,
+    mwSize K, 
+    double res_norm_bnd,
+    int sparse_output // Whether output is sparse matrix
+    );
 
 /**
 Computes the sparse representation of a vector x 
@@ -51,9 +54,10 @@ implemented with Cholesky update.
 Solves:  D alpha = x
 */
 mxArray* omp_ar(const double m_dict[], 
-    const double v_x[],
+    const double m_x[],
     mwSize M, 
     mwSize N,
+    mwSize S,
     mwSize K, // Sparsity level
     double res_norm_bnd, // Residual norm bound
     int sparse_output // Whether output is sparse matrix
