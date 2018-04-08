@@ -15,4 +15,9 @@
 */
 void quicksort_indices(mwIndex indices[], double data[], mwIndex n);
 
+/***
+*  This version sorts values in descending order and indices along with it.
+*/
+void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n);
+
 #endif 
