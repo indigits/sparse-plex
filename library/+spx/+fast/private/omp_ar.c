@@ -22,8 +22,8 @@ mxArray* omp_ar(const double m_dict[],
 
     // List of indices of selected atoms as part of support
     mwIndex *support_set = 0;
-    // List of atoms to match
-    mwIndex* atoms_to_match_set = 0;
+    // Atom indices in the correlation array in descending magnitude
+    mwIndex* sorted_corr_indices = 0;
     int n_atoms_to_match = 0;
     // maintains the count of total number of matched atoms
     int n_matched_atoms;
@@ -52,10 +52,6 @@ mxArray* omp_ar(const double m_dict[],
     // residual norm squared
     double res_norm_sqr;
 
-    // Array to hold squared correlations of residual with atoms
-    double *v_sqr_correlations = 0;
-    // Array to hold Sorted (squared) correlations
-    double *v_sorted_corrs = 0;
     
     /// Output array
     mxArray* p_alpha;
@@ -99,7 +95,7 @@ mxArray* omp_ar(const double m_dict[],
     // Number of selected atoms cannot exceed M
     support_set = (mwIndex*) mxMalloc(M*sizeof(mwIndex));
     // Active indices can be all of 1:N
-    atoms_to_match_set = (mwIndex*) mxMalloc(N*sizeof(mwIndex));
+    sorted_corr_indices = (mwIndex*) mxMalloc(N*sizeof(mwIndex));
     // Number of rows in L cannot exceed M. Number of columns 
     // cannot exceed max_cols.
     m_lt = (double*) mxMalloc(M*max_cols*sizeof (double));
@@ -114,9 +110,6 @@ mxArray* omp_ar(const double m_dict[],
     m_subdict = (double*)mxMalloc(max_cols*M*sizeof(double));
     // Proxy vector is in R^N
     v_proxy = (double*)mxMalloc(N*sizeof(double));
-    // Squared correlations in original atom order
-    v_sqr_correlations = (double*)mxMalloc(N*sizeof(double));
-    v_sorted_corrs = (double*)mxMalloc(N*sizeof(double));
     // Squared correlations in the order in which atoms are matched
     // We actually track squared correlations in matching order
     // h is in R^N. 
@@ -149,16 +142,16 @@ mxArray* omp_ar(const double m_dict[],
         //Compute proxy p  = D' * x
         // In the first iteration, we match all atoms
         for(int i=0; i < N; ++i){
-            atoms_to_match_set[i] = i;
+            sorted_corr_indices[i] = i;
         }
-        n_atoms_to_match = N;
         mult_mat_t_vec(1, m_dict, wv_x, v_proxy, M, N);
         omp_profile_toctic(&profile, TIME_DtR);
         // h = p = D' * r
         copy_vec_vec(v_proxy, v_h, N);
         // Square all the correlations
         v_square(v_h, v_h, n_atoms_to_match);
-        copy_vec_vec(v_h, v_sqr_correlations, n_atoms_to_match);
+        quicksort_values_desc(v_h, sorted_corr_indices, N);
+        n_atoms_to_match = 1;
 
 
         // Number of atoms selected so far.
@@ -175,40 +168,36 @@ mxArray* omp_ar(const double m_dict[],
                 break;
             }
             // Store the index of new atom
-            orig_idx = atoms_to_match_set[max_idx];
+            orig_idx = sorted_corr_indices[max_idx];
             support_set[k] = orig_idx;
-            // Update squared correlations
-            for(int ii=0;ii<n_atoms_to_match; ++ii){
-                v_sqr_correlations[atoms_to_match_set[ii]] = v_h[ii];
+            // Perform circular left shift
+            for(int i=max_idx; i < (N-1); ++i){
+                v_h[i] = v_h[i+1];
+                sorted_corr_indices[i] = sorted_corr_indices[i+1];
             }
             // Ensure that the selected atom is never reconsidered.
-            v_sqr_correlations[orig_idx] = 0;
+            v_h[N-1] = 0;
+            sorted_corr_indices[N-1] = orig_idx;
             {
                 double max_value;
-                double factor = 4;
+                double factor = 2;
                 double threshold;
                 int reset_interval = 5;
-                // Update atom order
-                copy_vec_vec(v_sqr_correlations, v_sorted_corrs, N);
-                for(int i=0; i < N; ++i){
-                    atoms_to_match_set[i] = i;
-                }
-                //print_vector(v_sorted_corrs, N, "corrs");
-                quicksort_values_desc(v_sorted_corrs, atoms_to_match_set, N);
-                //print_vector(v_sorted_corrs, N, "corrs");
-                max_value = v_sorted_corrs[0];
+                quicksort_values_desc(v_h, sorted_corr_indices, N);
+                max_value = v_h[0];
                 threshold = max_value / factor;
                 n_atoms_to_match = N;
-                if (k % reset_interval != 0){
+                if ((k % reset_interval) != 0){
                     for (int i=1; i < N; ++i){
-                        if (v_sorted_corrs[i] > threshold){
+                        if (v_h[i] >= threshold){
                             continue;
                         }
                         // We found a value lower than threshold
-                        n_atoms_to_match = i+1;
+                        n_atoms_to_match = i;
                         break;
                     }
                 }
+                //mexPrintf("%d\n", n_atoms_to_match);
             }
             omp_profile_toctic(&profile, TIME_AtomRanking);
 
@@ -239,15 +228,25 @@ mxArray* omp_ar(const double m_dict[],
             // r  = x - D_I c
             mult_mat_vec(-1, m_subdict, v_c, v_r, M, k);
             sum_vec_vec(1, wv_x, v_r, M);
-            omp_profile_toctic(&profile, TIME_RUpdate);
-            // Update h = D(:, Omega)' r
-            mult_submat_t_vec(1, m_dict, atoms_to_match_set, 
-                v_r, v_h, M, n_atoms_to_match);
-            // Square all the correlations
-            v_square(v_h, v_h, n_atoms_to_match);
             // Update residual norm squared
             res_norm_sqr = inner_product(v_r, v_r, M);
-            omp_profile_toctic(&profile, TIME_DtR);
+            omp_profile_toctic(&profile, TIME_RUpdate);
+            // Update h = D(:, Omega)' r
+            if(n_atoms_to_match == N){
+                mult_mat_t_vec(1, m_dict, v_r, v_h, M, N);
+                // We reset the sorting order.
+                for(int i=0; i < N; ++i){
+                    sorted_corr_indices[i] = i;
+                }
+                omp_profile_toctic(&profile, TIME_Beta);
+            }
+            else{
+                mult_submat_t_vec(1, m_dict, sorted_corr_indices, 
+                    v_r, v_h, M, n_atoms_to_match);
+                omp_profile_toctic(&profile, TIME_HUpdate);
+            }
+            // Square all the correlations
+            v_square(v_h, v_h, n_atoms_to_match);
         }
 
         // Write the output vector
@@ -273,7 +272,7 @@ mxArray* omp_ar(const double m_dict[],
 
     // Memory cleanup
     mxFree(support_set);
-    mxFree(atoms_to_match_set);
+    mxFree(sorted_corr_indices);
     mxFree(m_lt);
     mxFree(v_b);
     mxFree(v_w);
@@ -283,8 +282,6 @@ mxArray* omp_ar(const double m_dict[],
     mxFree(m_subdict);
     mxFree(v_proxy);
     mxFree(v_h);
-    mxFree(v_sqr_correlations);
-    mxFree(v_sorted_corrs);
     mxFree(v_r);
 
     // Return the result
