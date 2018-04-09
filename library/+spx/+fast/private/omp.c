@@ -18,7 +18,8 @@ mxArray* omp(const double m_dict[],
     mwSize S,
     mwSize K, 
     double res_norm_bnd,
-    int sparse_output){
+    int sparse_output,
+    int verbose){
 
     // List of indices of selected atoms
     mwIndex *selected_atoms = 0; 
@@ -151,9 +152,9 @@ mxArray* omp(const double m_dict[],
             // If this atom is already selected, we will break
             if (selected_atoms_mask[new_atom_index]){
                 // This is unlikely due to orthogonal structure of OMP
-    #if CHOL_DEBUG
-                //mexPrintf("This atom is already selected.");
-    #endif
+                if (verbose){
+                    mexPrintf("This atom is already selected.");
+                }
                 break;
             }
             // Check for small values
@@ -221,7 +222,9 @@ mxArray* omp(const double m_dict[],
             jc_alpha[s+1] = jc_alpha[s] + k;
         }
     }
-    omp_profile_print(&profile);
+    if(verbose){
+        omp_profile_print(&profile);
+    }
 
     // Memory cleanup
     mxFree(selected_atoms);

@@ -18,7 +18,10 @@ mxArray* omp_ar(const double m_dict[],
     mwSize S,
     mwSize K, 
     double res_norm_bnd,
-    int sparse_output){
+    double threshold_factor,
+    int reset_cycle,
+    int sparse_output,
+    int verbose){
 
     // List of indices of selected atoms as part of support
     mwIndex *support_set = 0;
@@ -180,14 +183,12 @@ mxArray* omp_ar(const double m_dict[],
             sorted_corr_indices[N-1] = orig_idx;
             {
                 double max_value;
-                double factor = 2;
                 double threshold;
-                int reset_interval = 5;
                 quicksort_values_desc(v_h, sorted_corr_indices, N);
                 max_value = v_h[0];
-                threshold = max_value / factor;
+                threshold = max_value / threshold_factor;
                 n_atoms_to_match = N;
-                if ((k % reset_interval) != 0){
+                if ((k % reset_cycle) != 0){
                     for (int i=1; i < N; ++i){
                         if (v_h[i] >= threshold){
                             continue;
@@ -268,8 +269,9 @@ mxArray* omp_ar(const double m_dict[],
             jc_alpha[s+1] = jc_alpha[s] + k;
         }
     }
-    omp_profile_print(&profile);
-
+    if (verbose != 0){
+        omp_profile_print(&profile);
+    }
     // Memory cleanup
     mxFree(support_set);
     mxFree(sorted_corr_indices);

@@ -94,4 +94,5 @@ void omp_profile_print(omp_profile* profile){
     omp_profile_print_help("Beta", profile->beta_time, total_time);
     omp_profile_print_help("H update", profile->h_update_time, total_time);
     omp_profile_print_help("atom ranking", profile->atom_ranking_time, total_time);
+    mexPrintf("\n");
 }

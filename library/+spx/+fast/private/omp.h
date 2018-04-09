@@ -42,7 +42,8 @@ mxArray* omp(const double m_dict[],
     mwSize S,
     mwSize K, 
     double res_norm_bnd,
-    int sparse_output // Whether output is sparse matrix
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
     );
 
 /**
@@ -60,7 +61,10 @@ mxArray* omp_ar(const double m_dict[],
     mwSize S,
     mwSize K, // Sparsity level
     double res_norm_bnd, // Residual norm bound
-    int sparse_output // Whether output is sparse matrix
+    double threshold_factor, // norm square threshold
+    int reset_cycle, // The cycle at which all correlations should be recomputed. 
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
 );
 
 
