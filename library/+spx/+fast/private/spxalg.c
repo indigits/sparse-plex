@@ -74,7 +74,7 @@ void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n) {
   // Partition counter
   int i = 0;
   // Boundaries of a partition
-  long L, R ;
+  long L, R , M;
   long swap;
 
   beg[0] = 0; end[0] = n;
@@ -83,12 +83,19 @@ void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n) {
     L = beg[i]; 
     R = end[i] - 1;
 
+
     //mexPrintf("1: i: %d, L:%d, R:%d\n", i, L, R);
 
     if (L < R) {
-      // Choose the left element as pivot.
-      pivot = values[L]; 
-      pivot_index = indices[L];
+      M = (L + R) / 2;
+      // Choose the middle element as pivot.
+      pivot = values[M]; 
+      pivot_index = indices[M];
+      // Swap the pivot with the middle element
+      values[M] = values[L];
+      indices[M] = indices[L];
+      values[L] = pivot;
+      indices[L] = pivot_index;
 
       while (L < R) {
         // Skip elements from the right till we find an element greater than pivot
