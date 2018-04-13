@@ -11,6 +11,7 @@ void omp_profile_init(omp_profile* profile){
     profile->gram_submat_update_time  = 0;
     profile->lchol_update_time = 0;
     profile->llt_solve_time = 0;
+    profile->least_square_time = 0;
     profile->beta_time = 0;
     profile->h_update_time = 0;
     profile->r_update_time = 0;
@@ -47,6 +48,9 @@ void omp_profile_toc(omp_profile* profile, int type){
             break;
         case TIME_LLtSolve: 
             profile->llt_solve_time += spent_time;
+            break;
+        case TIME_LeastSquares: 
+            profile->least_square_time += spent_time;
             break;
         case TIME_RUpdate: 
             profile->r_update_time += spent_time;
@@ -90,6 +94,7 @@ void omp_profile_print(omp_profile* profile){
     omp_profile_print_help("SubG update", profile->gram_submat_update_time, total_time);
     omp_profile_print_help("L update", profile->lchol_update_time, total_time);
     omp_profile_print_help("L solve", profile->llt_solve_time, total_time);
+    omp_profile_print_help("Least Square", profile->least_square_time, total_time);
     omp_profile_print_help("R update", profile->r_update_time, total_time);
     omp_profile_print_help("Beta", profile->beta_time, total_time);
     omp_profile_print_help("H update", profile->h_update_time, total_time);

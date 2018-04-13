@@ -12,6 +12,7 @@ enum {
  TIME_GramSubMatrixUpdate,
  TIME_LCholUpdate,
  TIME_LLtSolve,
+ TIME_LeastSquares,
  TIME_RUpdate,
  TIME_Beta,
  TIME_HUpdate,
@@ -29,6 +30,7 @@ typedef struct{
     clock_t gram_submat_update_time;
     clock_t lchol_update_time;
     clock_t llt_solve_time;
+    clock_t least_square_time;
     clock_t r_update_time;
     clock_t beta_time;
     clock_t h_update_time;
