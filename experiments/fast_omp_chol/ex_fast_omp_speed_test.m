@@ -62,6 +62,11 @@ tic; spx.fast.batch_omp(D, X, G, [], T, 0); t5=toc;
 fprintf('\nRunning SPX-Batch-OMP with DtX...');
 tic; spx.fast.batch_omp([], [], G, DtX, T, 0); t6=toc;
 
+fprintf('\nRunning SPX-OMP-LS...');
+options.ls_method = 'ls';
+tic; spx.fast.omp(D, X, T, 1e-12, options); t7=toc;
+
+
 % display summary  %
 fprintf('\n\nSpeed summary for %d signals, dictionary size %d x %d:\n', signum, n, L);
 fprintf('Call syntax        Algorithm               Total time\n');
@@ -72,3 +77,4 @@ fprintf('OMP(DtX,G,T)                     Batch-OMP with D''*X    %5.2f seconds\
 fprintf('SPX-OMP(D, X, T)                 SPX-OMP-Cholesky        %5.2f seconds\n', t4);
 fprintf('SPX-Batch-OMP(D, X, G, [], T)    SPX-Batch-OMP           %5.2f seconds\n', t5);
 fprintf('SPX-Batch-OMP([], [], G, Dtx, T) SPX-Batch-OMP           %5.2f seconds\n', t6);
+fprintf('SPX-OMP-LS(D, X, T)              SPX-OMP-LS              %5.2f seconds\n', t7);
