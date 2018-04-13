@@ -107,6 +107,24 @@ void mat_transpose(const double X[], double Y[], mwSize n, mwSize m)
 }
 
 
+void mat_col_extract(const double A[], 
+    const mwIndex indices[], double B[], mwSize m, mwSize k){
+    mwIndex i;
+    mwIndex index;
+    mwSignedIndex  inc = 1;
+    mwSignedIndex mm = m; 
+    const double* a;
+    double* b;
+    for (i=0; i<k; ++i){
+        index = indices[i];
+        a = A + index*m;
+        b = B + i*m;
+        dcopy(&mm, a, &inc, b, &inc);
+    }
+}
+
+
+
 /********************************************
 * Vector vector operations
 *

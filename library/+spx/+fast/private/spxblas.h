@@ -73,6 +73,13 @@ Y = X'
 void mat_transpose(const double X[], double Y[], mwSize m, mwSize n);
 
 
+/**
+Extracts a submatrix B = A(:, indices)
+*/
+void mat_col_extract(const double A[], 
+    const mwIndex indices[], double B[], mwSize m, mwSize k);
+
+
 /********************************************
 * Vector vector operations
 *
