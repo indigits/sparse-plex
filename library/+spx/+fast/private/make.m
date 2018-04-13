@@ -23,12 +23,17 @@ batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
 batch_omp_spr_sources = [common_sources, 'batch_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
 omp_spr_sources = [common_sources, 'omp_spr.c', 'omp_util.c'];
 batch_flipped_omp_spr_sources = [common_sources, 'batch_flipped_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
+quickselect_sources = {'argcheck.c', 'spxalg.c'};
+
+la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
+
 
 make_program('mex_mult_mat_vec.c', blas_sources,compile_params);
 make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params);
 make_program('mex_mult_mat_mat.c', blas_sources, compile_params);
 make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params);
 make_program('mex_test_blas.c', blas_sources,compile_params);
+make_program('mex_linsolve.c', la_sources, compile_params);
 
 make_program('mex_omp_chol.c', omp_sources,compile_params);
 make_program('mex_omp_ar.c', omp_ar_sources,compile_params);
@@ -36,6 +41,10 @@ make_program('mex_batch_omp.c', batch_omp_sources,compile_params);
 make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params);
 make_program('mex_omp_spr.c', omp_spr_sources,compile_params);
 make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compile_params);
+
+
+make_program('mex_quickselect.c', quickselect_sources, compile_params);
+
 end
 
 function make_program(mex_src_file, other_source_files, compile_params)
