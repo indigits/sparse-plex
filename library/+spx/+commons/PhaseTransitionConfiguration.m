@@ -36,8 +36,8 @@ methods
     	% Number of possible values of K for each value of M
     	num_rhos = 64;
     	% K/Ms 
-    	rhos = (1:num_rhos) / num_rhos;
-    	num_etas = self.N / M_min;
+    	rhos = 0.5 * (1:num_rhos) / num_rhos;
+    	num_etas = self.N / (2 * M_min);
     	Ms = (1:num_etas )  * M_min;
     	etas = Ms / self.N;
     	self.Configuration = zeros(num_rhos, num_etas, 4);
