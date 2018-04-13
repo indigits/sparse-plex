@@ -28,6 +28,8 @@ mxArray* omp_ar(const double m_dict[],
     // Atom indices in the correlation array in descending magnitude
     mwIndex* sorted_corr_indices = 0;
     int n_atoms_to_match = 0;
+    // Minimum number of atoms to match
+    int n_min_atoms_to_match = 0;
     // maintains the count of total number of matched atoms
     int n_matched_atoms;
 
@@ -136,6 +138,15 @@ mxArray* omp_ar(const double m_dict[],
         jc_alpha[0] = 0;
     }
 
+    // Prepare the minimum atoms to match
+    n_min_atoms_to_match = (int) N / 10;
+    if (n_min_atoms_to_match > 4){
+        n_min_atoms_to_match = 4;
+    }
+    if (n_min_atoms_to_match > N){
+        n_min_atoms_to_match = N;
+    }
+
     omp_profile_init(&profile);
     for(s=0; s<S; ++s){
         wv_x = m_x + M*s;
@@ -198,7 +209,12 @@ mxArray* omp_ar(const double m_dict[],
                         break;
                     }
                 }
-                //mexPrintf("%d\n", n_atoms_to_match);
+                if (n_atoms_to_match < n_min_atoms_to_match){
+                    n_atoms_to_match = n_min_atoms_to_match;
+                }
+                if(verbose > 1){
+                    mexPrintf(" %d ", n_atoms_to_match);
+                }
             }
             omp_profile_toctic(&profile, TIME_AtomRanking);
 
@@ -239,7 +255,7 @@ mxArray* omp_ar(const double m_dict[],
                 for(int i=0; i < N; ++i){
                     sorted_corr_indices[i] = i;
                 }
-                omp_profile_toctic(&profile, TIME_Beta);
+                omp_profile_toctic(&profile, TIME_DtR);
             }
             else{
                 mult_submat_t_vec(1, m_dict, sorted_corr_indices, 
@@ -267,6 +283,9 @@ mxArray* omp_ar(const double m_dict[],
             }
             // fill in the total number of nonzero entries in the end.
             jc_alpha[s+1] = jc_alpha[s] + k;
+        }
+        if (verbose > 1){
+            mexPrintf("\n");
         }
     }
     if (verbose != 0){
