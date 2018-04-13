@@ -14,10 +14,23 @@ function result  = omp(Dict, X, K, epsilon, options)
     if ~isfield(options, 'sparse_output')
         options.sparse_output = 1;
     end
+    % Options for least squares
+    ls_ls = 0;
+    ls_chol = 1;
+    if ~isfield(options, 'ls_method')
+        options.ls_method = 'chol';
+    end
+    ls_method = ls_chol;
+    if strcmp(options.ls_method,'ls')
+        ls_method = ls_ls;
+    elseif strcmp(options.ls_method, 'chol')
+        ls_method = ls_chol;
+    end
     if ~isfield(options, 'verbose')
         options.verbose = 0;
     end
     result = mex_omp_chol(Dict, X, K, epsilon, ...
         options.sparse_output,...
+        ls_method, ...
         options.verbose);
 end

@@ -27,6 +27,11 @@ typedef struct {
 } BatchOMPInput;
 
 
+typedef enum{
+    LS_LS = 0,
+    LS_CHOL = 1,
+    LS_QR = 2
+}LS_METHOD;
 
 /**
 Computes the sparse representation of a vector x 
@@ -35,7 +40,22 @@ Pursuit implemented with Cholesky update.
 
 Solves:  D alpha = x
 */
-mxArray* omp(const double m_dict[], 
+mxArray* omp_chol(const double m_dict[], 
+    const double m_x[],
+    mwSize M, 
+    mwSize N,
+    mwSize S,
+    mwSize K, 
+    double res_norm_bnd,
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
+    );
+
+/**
+An implementation of OMP where ls step is done
+using standard least squares 
+*/
+mxArray* omp_ls(const double m_dict[], 
     const double m_x[],
     mwSize M, 
     mwSize N,

@@ -16,7 +16,7 @@ compile_params{end+1} = '-lmwlapack';
 
 % Compile files %
 blas_sources  = {'argcheck.c', 'spxblas.c'};
-common_sources = {'argcheck.c', 'spxblas.c', 'spxalg.c'};
+common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
 omp_sources = [common_sources, 'omp.c', 'omp_util.c', 'omp_profile.c'];
 omp_ar_sources = [common_sources, 'omp_ar.c', 'omp_util.c', 'omp_profile.c'];
 batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
