@@ -20,4 +20,12 @@ void quicksort_indices(mwIndex indices[], double data[], mwIndex n);
 */
 void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n);
 
+
+/**
+* Select k largest values in the array and their indices
+*/
+void quickselect_desc(double values[], mwIndex indices[], 
+    mwIndex n,
+    mwIndex k);
+
 #endif 
