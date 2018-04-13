@@ -63,15 +63,15 @@ void quicksort_indices(mwIndex indices[], double data[], mwIndex n) {
   }
 }
 
-static __inline__ 
+static __inline__
 int insertion_sort_values_desc(double values[], mwIndex indices[], int n) {
   int i, j;
   for (i = 1; i < n; ++i) {
     double tmp = values[i];
     double index = indices[i];
-    for (j = i; j >= 1 && tmp > values[j - 1]; --j){
+    for (j = i; j >= 1 && tmp > values[j - 1]; --j) {
       values[j] = values[j - 1];
-      indices[j] = indices[j-1];
+      indices[j] = indices[j - 1];
     }
     values[j] = tmp;
     indices[j] = index;
@@ -98,7 +98,7 @@ void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n) {
     L = beg[i];
     R = end[i] - 1;
     partition_length = R - L + 1;
-    if (partition_length < 50){
+    if (partition_length < 50) {
       // We fall back to insertion sort for small arrays
       insertion_sort_values_desc(values + L, indices + L, partition_length);
       // go to previous partition.
@@ -170,10 +170,35 @@ void quicksort_values_desc(double values[], mwIndex indices[], mwIndex n) {
   return;
 }
 
+static __inline__
+int select_values_desc(double values[], mwIndex indices[], int n, int k) {
+  int i, j;
+  for (i = 0; i < k; ++i) {
+    double value = values[i];
+    double index = indices[i];
+    int max_index = i;
+    // Find the maximum value in the remaining array
+    for (j = i + 1; j < n; ++j) {
+      if (value < values[j]) {
+        value = values[j];
+        index = indices[j];
+        max_index = j;
+      }
+    }
+    // Place the maximum value at the front
+    if (max_index != i) {
+      values[max_index] = values[i];
+      indices[max_index] = indices[i];
+      values[i] = value;
+      indices[i] = index;
+    }
+  }
+  return 0;
+}
 
-void quickselect_desc(double values[], mwIndex indices[], 
-    mwIndex n,
-    mwIndex k){
+void quickselect_desc(double values[], mwIndex indices[],
+                      mwIndex n,
+                      mwIndex k) {
   // pivot element
   double  pivot;
   mwIndex pivot_index;
@@ -184,12 +209,18 @@ void quickselect_desc(double values[], mwIndex indices[],
   long swap;
   long i;
 
-  begin  = 0; 
+  begin  = 0;
   end = n - 1;
   for (i = 0; ; ++i) {
     L = begin;
     R = end;
     partition_length = R - L + 1;
+    if (partition_length < 50) {
+      // We fall back to insertion sort for small arrays
+      select_values_desc(values + L, indices + L, partition_length, k-L);
+      // The pivot has reached its rightful position
+      return;
+    }
     //mexPrintf("1: i: %d, L:%d, R:%d\n", i, L, R);
     M = (L + R) / 2;
     // Choose the middle element as pivot.
@@ -232,15 +263,15 @@ void quickselect_desc(double values[], mwIndex indices[],
     // Copy pivot to L
     values[L] = pivot;
     indices[L] = pivot_index;
-    if (L+1 == k){
+    if (L + 1 == k) {
       // We have found the k-th element
       return;
     }
-    if (L >= k){
-      end = L-1;
+    if (L >= k) {
+      end = L - 1;
     }
-    else{
-      begin = L+1;
+    else {
+      begin = L + 1;
     }
   }
   return;
