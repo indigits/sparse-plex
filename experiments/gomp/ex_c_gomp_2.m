@@ -37,12 +37,9 @@ for nt=1:100
 
 
     % GOMP solver instance
-    solver = spx.pursuit.single.GOMP(Phi, K);
-    %solver.L = 2;
-    % Solve the sparse recovery problem
-    gomp_result = solver.solve(y);
-    % Solution vector
-    z = gomp_result.z;
+    L = 2;
+    options.ls_method = 'chol';
+    z = spx.fast.gomp(double(Phi), y, K, L, 1e-6, options);
     gomp_stats = spx.commons.sparse.recovery_performance(Phi, K, y, x, z);
     %fprintf('GOMP\n');
     %spx.commons.sparse.print_recovery_performance(gomp_stats);
