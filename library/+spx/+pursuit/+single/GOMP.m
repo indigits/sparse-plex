@@ -90,6 +90,10 @@ classdef GOMP < handle
                 % Find the highest inner products
                 [~, indices] = sort(inner_products, 'descend');
                 % Add l indices to the support
+                if self.Verbose
+                    fprintf('%d ', indices(1:l));
+                    fprintf('\n');
+                end
                 lambdas = [lambdas, indices(1:l)];
                 % Solve least squares problem
                 subdict = columns(dict, lambdas);
