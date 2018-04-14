@@ -155,5 +155,47 @@ int chol_update(const double m_subdict[],
     mwSize k
     );
 
+/*************************************************
+*
+*  GOMP Functions
+*
+*************************************************/
+
+
+/**
+An implementation of GOMP where ls step is done
+using standard least squares. 
+A new parameter is L indicating how many
+atoms to consider in each iteration. 
+*/
+mxArray* gomp_ls(const double m_dict[], 
+    const double m_x[],
+    mwSize M, 
+    mwSize N,
+    mwSize S,
+    mwSize K,
+    mwSize L, 
+    double res_norm_bnd,
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
+    );
+
+/**
+An implementation of GOMP where ls step is done
+using Cholesky updates. 
+A new parameter is L indicating how many
+atoms to consider in each iteration. 
+*/
+mxArray* gomp_chol(const double m_dict[], 
+    const double m_x[],
+    mwSize M, 
+    mwSize N,
+    mwSize S,
+    mwSize K,
+    mwSize L, 
+    double res_norm_bnd,
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
+    );
 
 #endif
