@@ -28,6 +28,7 @@ quickselect_sources = {'argcheck.c', 'spxalg.c'};
 la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
 
 gomp_sources = [common_sources, 'gomp.c', 'omp_util.c', 'omp_profile.c'];
+gomp_spr_sources = [common_sources, 'gomp_spr.c', 'omp_util.c', 'omp_profile.c'];
 
 
 
@@ -47,6 +48,7 @@ make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compil
 
 
 make_program('mex_gomp.c', gomp_sources,compile_params);
+make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params);
 
 
 make_program('mex_quickselect.c', quickselect_sources, compile_params);

@@ -198,4 +198,22 @@ mxArray* gomp_chol(const double m_dict[],
     int verbose // Verbose output (profiling data etc.)
     );
 
+
+/**
+Computes the subspace preserving
+representations of a dataset
+using standard OMP with Cholesky acceleration.
+*/
+mxArray* gomp_spr(const double *m_dataset, // Dataset
+    mwSize M, // Data dimension
+    mwSize S, // Number of signals
+    mwSize K, // Sparsity level
+    mwSize L, 
+    double res_norm_bnd, // Residual norm bound
+    int sparse_output, // Whether output is sparse matrix
+    int verbose // Verbose output (profiling data etc.)
+    );
+
+
+
 #endif

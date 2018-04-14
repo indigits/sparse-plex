@@ -117,6 +117,10 @@ classdef SSC_OMP < handle
             elseif self.RepresentationMethod.isBatchFlippedOMP_C()
                 C = spx.fast.batch_flipped_omp_spr(data_matrix, nk, rnorm_thr);
                 self.Representation = C;
+            elseif self.RepresentationMethod.isGOMP_C()
+                nl  = 2;
+                C = spx.fast.gomp_spr(data_matrix, nk, nl, rnorm_thr);
+                self.Representation = C;
             else
                 error('Invalid representation method.');
             end

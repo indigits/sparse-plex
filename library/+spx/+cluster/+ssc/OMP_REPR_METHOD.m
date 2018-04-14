@@ -1,7 +1,12 @@
 classdef OMP_REPR_METHOD
 % method for computing OMP based representations
 enumeration
-    CLASSIC_OMP_C, BATCH_OMP_C, FLIPPED_OMP_MATLAB, BATCH_FLIPPED_OMP_MATLAB, BATCH_FLIPPED_OMP_C 
+    CLASSIC_OMP_C
+    BATCH_OMP_C 
+    FLIPPED_OMP_MATLAB
+    BATCH_FLIPPED_OMP_MATLAB
+    BATCH_FLIPPED_OMP_C
+    GOMP_C 
 end
 methods
 function result = isClassicOMP_C(self)
@@ -18,6 +23,9 @@ function result = isBatchFlippedOMP_MATLAB(self)
 end
 function result = isBatchFlippedOMP_C(self)
     result = (self == spx.cluster.ssc.OMP_REPR_METHOD.BATCH_FLIPPED_OMP_C);
+end
+function result = isGOMP_C(self)
+    result = (self == spx.cluster.ssc.OMP_REPR_METHOD.GOMP_C);
 end
 end
 end
