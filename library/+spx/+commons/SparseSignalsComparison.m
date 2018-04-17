@@ -27,8 +27,8 @@ classdef SparseSignalsComparison < handle
     methods
         % Constructor
         function self = SparseSignalsComparison(References, Estimates, K)
-            self.References = References;
-            self.Estimates = Estimates;
+            self.References = full(References);
+            self.Estimates = full(Estimates);
             % Sizes must be same
             assert(all(size(References) == size(Estimates)));
             % Number of vectors
