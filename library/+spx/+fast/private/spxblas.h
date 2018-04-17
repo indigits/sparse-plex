@@ -79,6 +79,22 @@ Extracts a submatrix B = A(:, indices)
 void mat_col_extract(const double A[], 
     const mwIndex indices[], double B[], mwSize m, mwSize k);
 
+/**
+Extracts a submatrix B = A(indices, :)
+*/
+void mat_row_extract(const double A[], 
+    const mwIndex indices[], double B[], mwSize m, mwSize n, mwSize k);
+
+/**
+Absolute sum over columns of a matrix
+*/
+void mat_col_asum(const double A[], double v[], mwSize m, mwSize n);
+
+/**
+Absolute sum over rows of a matrix
+*/
+void mat_row_asum(const double A[], double v[], mwSize m, mwSize n);
+
 
 /********************************************
 * Vector vector operations
@@ -286,6 +302,17 @@ void spd_lt_trtrs(const double L[],
     double b[],
     mwSize m, mwSize k);
 
+
+/**
+This version solves multiple
+right hand sides 
+using the LAPACK function trtrs.
+*/
+void spd_lt_trtrs_multi(const double L[],
+    double B[],
+    mwSize m, mwSize k, mwSize s);
+
+
 /********************************************
 * Matrix matrix operations
 *
@@ -315,6 +342,11 @@ Compute X = alpha * A' * B
 
 A' is m x k,  B is k x n
 A is k x m
+
+Output is m x n.
+
+Put the output dimensions first.
+Then the common dimension.
 */
 void mult_mat_t_mat(double alpha, 
     const double A[], 
@@ -343,6 +375,10 @@ Prints the contents of a vector
 */
 void print_vector(const double v_x[], int n, char* vec_name);
 
+/**
+Prints the contents of a vector
+*/
+void print_index_vector(const mwIndex v_x[], int n, char* vec_name);
 
 /**
 Prints the contents of a sparse vector

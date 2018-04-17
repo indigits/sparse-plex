@@ -123,6 +123,45 @@ void mat_col_extract(const double A[],
     }
 }
 
+void mat_row_extract(const double A[], 
+    const mwIndex indices[], double B[], mwSize m, mwSize n, mwSize k){
+    mwIndex i;
+    mwIndex index;
+    mwSignedIndex  inc_a = m;
+    mwSignedIndex  inc_b = k;
+    mwSignedIndex nn = n; 
+    const double* a;
+    double* b;
+    for (i=0; i<k; ++i){
+        index = indices[i];
+        a = A + index;
+        b = B + i;
+        dcopy(&nn, a, &inc_a, b, &inc_b);
+    }
+}
+
+
+void mat_col_asum(const double A[], double v[], mwSize m, mwSize n){
+    const double* a = A;
+    mwSignedIndex  inc = 1;
+    mwSignedIndex  mm = m;
+    for (int c=0; c < n; ++c){
+        v[c] = dasum(&mm, a, &inc);
+        a += m; 
+    }
+}
+
+void mat_row_asum(const double A[], double v[], mwSize m, mwSize n){
+    const double* a = A;
+    mwSignedIndex  inc = m;
+    mwSignedIndex nn = n;
+    for (int c=0; c < m; ++c){
+        v[c] = dasum(&nn, a, &inc);
+        a += 1;
+    }
+}
+
+
 
 
 /********************************************
@@ -415,6 +454,29 @@ void spd_lt_trtrs(const double L[],
     dtrtrs(&uplo, &trans, &diag, &n, &nrhs, L, &lda, b, &ldb, &info);
 }
 
+void spd_lt_trtrs_multi(const double L[],
+    double B[],
+    mwSize m, mwSize k, mwSize s){
+    char uplo = 'L';
+    char trans = 'N';
+    char diag  = 'N';
+    mwSignedIndex  n = k;
+    mwSignedIndex nrhs = s;
+    mwSignedIndex lda = m;
+    mwSignedIndex ldb = k;
+    mwSignedIndex info = 0;
+    /**
+    Solve the problem L t = b
+    */
+    dtrtrs(&uplo, &trans, &diag, &n, &nrhs, L, &lda, B, &ldb, &info);
+    /**
+    Solve the problem L' x = t
+    */
+    trans = 'T';
+    dtrtrs(&uplo, &trans, &diag, &n, &nrhs, L, &lda, B, &ldb, &info);
+}
+
+
 
 
 /********************************************
@@ -509,6 +571,18 @@ void print_vector(const double v_x[], int n, char* vec_name){
     mexPrintf("\n");
 }
 
+void print_index_vector(const mwIndex v_x[], int n, char* vec_name){
+    int i;
+    mexPrintf("\n%s = \n\n", vec_name);
+    if (n==0) {
+        mexPrintf("   Empty vector");
+        return;
+    }
+    for (i=0; i<n; ++i) {
+        mexPrintf("   %d", v_x[i]);
+    }
+    mexPrintf("\n");
+}
 /* print contents of sparse vector */
 
 void print_sparse_vector(const mxArray *A, char* vector_name)
