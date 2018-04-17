@@ -127,9 +127,9 @@ mxArray* gomp_ls(const double m_dict[],
         omp_profile_toctic(&profile, TIME_DtR);
         // h = p = D' * r
         copy_vec_vec(v_proxy, v_h, N);
-        // Number of atoms selected so far.
+        // Iteration counter for selecting bunch of atoms in each iteration.
         k = 0;
-        // Iterate for each atom
+        // In each iteration we select up to L atoms
         while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
             if (verbose > 1){
                 mexPrintf("k: %d :: ", k+1);
@@ -142,7 +142,7 @@ mxArray* gomp_ls(const double m_dict[],
                 // Assign indices to atoms
                 atom_indices[i] = i;
             }
-            // Search for k largest atoms
+            // Search for L largest atoms
             quickselect_desc(v_h, atom_indices, N, L);
             omp_profile_toctic(&profile, TIME_MaxAbs);
             // Store the indices 
@@ -344,9 +344,9 @@ mxArray* gomp_chol(const double m_dict[],
         omp_profile_toctic(&profile, TIME_DtR);
         // h = p = D' * r
         copy_vec_vec(v_proxy, v_h, N);
-        // Number of atoms selected so far.
+        // Iteration counter for selecting bunch of atoms in each iteration.
         k = 0;
-        // Iterate for each atom
+        // In each iteration we select up to L atoms
         while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
             if (verbose > 1){
                 mexPrintf("k: %d :: ", k+1);
@@ -359,7 +359,7 @@ mxArray* gomp_chol(const double m_dict[],
                 // Assign indices to atoms
                 atom_indices[i] = i;
             }
-            // Search for k largest atoms
+            // Search for L largest atoms
             quickselect_desc(v_h, atom_indices, N, L);
             omp_profile_toctic(&profile, TIME_MaxAbs);
             // This index will be used later

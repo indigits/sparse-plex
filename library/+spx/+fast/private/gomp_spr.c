@@ -138,9 +138,9 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
         omp_profile_toctic(&profile, TIME_DtR);
         // h = p = D' * r
         copy_vec_vec(v_proxy, v_h, S);
-        // Number of atoms selected so far.
+        // Iteration counter for selecting bunch of atoms in each iteration.
         k = 0;
-        // Iterate for each atom
+        // In each iteration we select up to L atoms
         while (k < K &&  res_norm_sqr > res_norm_bnd_sqr){
             if (verbose > 1){
                 mexPrintf("k: %d :: ", k+1);
@@ -158,7 +158,7 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
             // Search for L largest atoms
             quickselect_desc(v_h, atom_indices, S, L);
             omp_profile_toctic(&profile, TIME_MaxAbs);
-            // Store the indices 
+            // Store the indices and update Cholesky decomposition
             for (i=0; i < L; ++i){
                 new_atom_index = atom_indices[i];
                 selected_atoms[kk] = new_atom_index;
