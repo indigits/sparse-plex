@@ -6,7 +6,7 @@ function result  = gomp(Dict, X, K, L, epsilon, options)
         error('Dict must be a double matrix');
     end
     if nargin < 4
-        L = 2;
+        L = 1;
     end
     if nargin < 5
         epsilon = 1e-3;
