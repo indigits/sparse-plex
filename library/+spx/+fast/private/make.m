@@ -1,4 +1,8 @@
-function make()
+function make(clean)
+
+if nargin < 1
+    clean = false;
+end
 
 compstr = computer;
 is64bit = strcmp(compstr(end-1:end),'64');
@@ -28,35 +32,44 @@ quickselect_sources = {'argcheck.c', 'spxalg.c'};
 la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
 
 gomp_sources = [common_sources, 'gomp.c', 'omp_util.c', 'omp_profile.c'];
+gomp_mmv_sources = [common_sources, 'gomp_mmv.c', 'omp_util.c', 'omp_profile.c'];
 gomp_spr_sources = [common_sources, 'gomp_spr.c', 'omp_util.c', 'omp_profile.c'];
 
 
 
-make_program('mex_mult_mat_vec.c', blas_sources,compile_params);
-make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params);
-make_program('mex_mult_mat_mat.c', blas_sources, compile_params);
-make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params);
-make_program('mex_test_blas.c', blas_sources,compile_params);
-make_program('mex_linsolve.c', la_sources, compile_params);
+make_program('mex_mult_mat_vec.c', blas_sources,compile_params, clean);
+make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params, clean);
+make_program('mex_mult_mat_mat.c', blas_sources, compile_params, clean);
+make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params, clean);
+make_program('mex_test_blas.c', blas_sources,compile_params, clean);
+make_program('mex_linsolve.c', la_sources, compile_params, clean);
 
-make_program('mex_omp_chol.c', omp_sources,compile_params);
-make_program('mex_omp_ar.c', omp_ar_sources,compile_params);
-make_program('mex_batch_omp.c', batch_omp_sources,compile_params);
-make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params);
-make_program('mex_omp_spr.c', omp_spr_sources,compile_params);
-make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compile_params);
-
-
-make_program('mex_gomp.c', gomp_sources,compile_params);
-make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params);
+make_program('mex_omp_chol.c', omp_sources,compile_params, clean);
+make_program('mex_omp_ar.c', omp_ar_sources,compile_params, clean);
+make_program('mex_batch_omp.c', batch_omp_sources,compile_params, clean);
+make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params, clean);
+make_program('mex_omp_spr.c', omp_spr_sources,compile_params, clean);
+make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compile_params, clean);
 
 
-make_program('mex_quickselect.c', quickselect_sources, compile_params);
+make_program('mex_gomp.c', gomp_sources,compile_params, clean);
+make_program('mex_gomp_mmv.c', gomp_mmv_sources,compile_params, clean);
+make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, clean);
+
+
+make_program('mex_quickselect.c', quickselect_sources, compile_params, clean);
 
 end
 
-function make_program(mex_src_file, other_source_files, compile_params)
+function make_program(mex_src_file, other_source_files, compile_params, clean)
     mex_target_file = strrep(mex_src_file, '.c' , '.mexw64');
+    if clean
+        if exist(mex_target_file)
+            fprintf('Deleting: %s\n', mex_target_file);
+            delete(mex_target_file);
+        end
+        return;
+    end
     build_mex = false;
     if 0 == exist(mex_target_file)
         build_mex = true;
