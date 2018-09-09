@@ -1,0 +1,41 @@
+Notes for copying text from latex to sphinxdoc
+-------------------------------------------------------
+
+- Section headings
+- inline math
+- Citations
+- Definitions
+- texttopdfstring
+- equation
+- l_1 to \ell_1
+- l_2 to \ell_2
+- eqref
+- \term
+- \index 
+- \emph
+- Its vs It's
+
+Replacing inline math:
+
+- Search: \$(.*?)\$
+- Replace: :math:`\1`
+
+
+
+Replacing index:
+
+Search: \\index\{(.*?)\}
+Replace: \n.. index:: \1\n
+
+Replacing term:
+
+Search: \\term\{(.*?)\}
+Replace: **\1**
+
+Replacing: emph
+
+Search: \\emph\{(.*?)\}
+Replace: *\1*
+
+
+

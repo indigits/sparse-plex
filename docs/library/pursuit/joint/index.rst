@@ -6,5 +6,4 @@ Joint recovery algorithms
    :maxdepth: 1
 
    comp
-   sclump
 

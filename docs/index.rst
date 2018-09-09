@@ -2,17 +2,18 @@
    sphinx-quickstart on Mon Feb 16 22:34:29 2015.
 
 
-Sparse-plex Library Documentation
+Sparse-Plex
 ===================================
 
-Contents:
+A journey into sparse and redundant representations.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    intro
    start
    demos/index
+   book/sparse_signal_models
    library/index
    exercises/index
    scripts
@@ -26,6 +27,5 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 

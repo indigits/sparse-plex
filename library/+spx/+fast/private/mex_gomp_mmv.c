@@ -71,7 +71,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         mexErrMsgTxt("Dimensions mismatch");
     }
     if (K*L > M){
-        error_msg(func_name, "K*L is larger than M.");
+        //error_msg(func_name, "K*L is larger than M.");
     }
     // Number of signals
     S = mxGetN(X_IN);

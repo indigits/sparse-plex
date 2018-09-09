@@ -1,4 +1,4 @@
-Introduction
+About Sparse-Plex
 ======================
 
 **Sparse-plex** is a MATLAB library for solving

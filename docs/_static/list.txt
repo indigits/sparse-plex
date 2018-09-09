@@ -1,0 +1,55 @@
+
+
+
+% Row q norm of each row
+\newcommand{\Rowq}[1]{\mathop{\mathrm{row}_{#1}}}
+
+% A vector of all ones
+\newcommand{\OneVec}{\ensuremath{\mathds{1}}}
+% A vector of all zeros
+\newcommand{\ZeroVec}{\ensuremath{0}}
+%\newcommand{\OneVec}{\ensuremath{\vec{1}}}
+% A matrix of all ones
+%\newcommand{\OneMat}{\ensuremath{\stackrel{\leftrightarrow}{1}}}
+\newcommand{\OneMat}{\ensuremath{\mathbf{1}}}
+
+\newcommand{\bigO}[1]{\ensuremath{\mathop{}\mathopen{}\mathcal{O}\mathopen{}\left(#1\right)}}
+
+
+%% Topology related stuff
+\newcommand{\Interior}[1]{\ensuremath{\accentset{\circ}{#1}}}
+\newcommand{\Closure}[1]{\ensuremath{\overline{#1}}}
+
+
+
+\newcommand\smallO[1]{
+    \mathchoice
+    {% mode \displaystyle
+      \scriptstyle\mathcal{O}\left(#1\right)
+    }
+    {% mode \textstyle
+      \scriptstyle\mathcal{O}\left(#1\right)
+    }
+    {% mode \scriptstyle
+      \scriptscriptstyle\mathcal{O}\left(#1\right)
+    }
+    {% mode \scriptscriptstyle
+      \scalebox{0.8}{$\scriptscriptstyle\mathcal{O}$}\left(#1\right)
+    }
+}
+
+% complex numbers related stuff
+\newcommand*\conj[1]{\bar{#1}}
+
+
+% Binary hypothesis test rule
+\newcommand{\BinHypTestRule}{\mathop{\gtrless}_{H_0}^{H_1}}
+
+
+\setcounter{MaxMatrixCols}{30}
+%-----------------------------------------General math commands end ------------------------------------------
+
+
+% number theory
+\newcommand{\divides}{\mid}
+\newcommand{\notdivides}{\nmid}

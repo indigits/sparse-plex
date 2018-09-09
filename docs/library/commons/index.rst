@@ -1,6 +1,7 @@
 Common utilities
 =====================
 
+
 Contents:
 
 .. toctree::
@@ -14,8 +15,4 @@ Contents:
    number
    print
    recovery
-   
-
-
-
 

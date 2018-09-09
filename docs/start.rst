@@ -18,12 +18,12 @@ MATLAB toolboxes
 * Optimization toolbox
 
 
-Third party library dependencies
+Third party library dependencies (optional)
 
 * CVX http://cvxr.com/cvx/
 * LRS library https://github.com/andrewssobral/lrslibrary
 * Wavelab http://statweb.stanford.edu/~wavelab/
-* 
+
 
 We repeat that only some parts of the library and 
 examples depend on the third party libraries. You
@@ -89,7 +89,7 @@ You will require MATLAB XUnit test framework to run the unit tests
 included with the library.
 
 * Change directory to the root directory of ``sparse-plex``.
-* Move to the directory ``library\\tests``.
+* Move to the directory ``library/tests``.
 * Execute the ``runalltests.m`` script.
 * Verify that all unit tests pass.
 
@@ -134,3 +134,9 @@ Pygments library etc. to build the documentation from scratch.
 * Change directory to the root directory of ``sparse-plex``.
 * Go into ``docs`` directory.
 * Build the documentation using Sphinx tool chain. 
+
+Here is the command for building documentation automatically
+as the changes are being made to documentation::
+
+  sphinx-autobuild --port=9102 . _build\html
+

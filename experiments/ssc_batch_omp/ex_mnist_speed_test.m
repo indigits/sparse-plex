@@ -8,9 +8,6 @@ import spx.cluster.ssc.SSC_OMP;
 
 
 % STP.method1 = OMP_REPR_METHOD.FLIPPED_OMP_MATLAB;
-% STP.method2 = OMP_REPR_METHOD.BATCH_OMP_C;
-
-% STP.method1 = OMP_REPR_METHOD.FLIPPED_OMP_MATLAB;
 % STP.method2 = OMP_REPR_METHOD.BATCH_FLIPPED_OMP_MATLAB;
 
 STP.method1 = OMP_REPR_METHOD.CLASSIC_OMP_C;
@@ -25,10 +22,14 @@ STP.method2 = OMP_REPR_METHOD.BATCH_FLIPPED_OMP_C;
 STP.method1 = OMP_REPR_METHOD.CLASSIC_OMP_C;
 STP.method2 = OMP_REPR_METHOD.BATCH_OMP_C;
 
+STP.method1 = OMP_REPR_METHOD.FLIPPED_OMP_MATLAB;
+STP.method2 = OMP_REPR_METHOD.BATCH_OMP_C;
+
 
 % Experiment configuration
 STP.num_samples_per_digit_arr = [50 80 100 150 200 300 400 600];
-STP.num_samples_per_digit_arr = [50 80 100 150 200 300 400 600];
+STP.num_samples_per_digit_arr = [50 80 100 150 200];
+
 % maximum dimension for each subspace
 STP.D = 10;
 % Number of dimensions to which the digits data should be

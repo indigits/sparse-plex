@@ -56,6 +56,8 @@ mxArray* gomp_mmv_chol(const double m_dict[],
     double res_norm_sqr = 1;
     // square of upper bound on residual norm
     double res_norm_bnd_sqr = SQR(res_norm_bnd);
+    // Expected sparsity of signal
+    mwSize sparsity = K;
 
     /// Output array
     mxArray* p_alpha;
@@ -83,7 +85,9 @@ mxArray* gomp_mmv_chol(const double m_dict[],
     // structure for tracking time spent.
     omp_profile profile;
 
-    if (K < 0 || K > M / L) {
+    // K is now the iteration count.
+    // If it is larger than acceptable, we will cut it down here.
+    if (K < 0 || K * L > M) {
         // K cannot be greater than M / L.
         K = M / L;
     }
