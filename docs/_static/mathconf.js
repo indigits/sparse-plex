@@ -1,3 +1,5 @@
+// A $( document ).ready() block.
+$( document ).ready(function() {
 MathJax.Hub.Config({
   TeX: {
     Macros: {
@@ -163,5 +165,7 @@ MathJax.Hub.Config({
         bold: ['{\\bf #1}', 1]
     }
   }
+});
+
 });
 
