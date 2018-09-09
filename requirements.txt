@@ -1,5 +1,1 @@
-sphinx<=1.7.4
-numpy
-scipy
-matplotlib
 sphinxcontrib-bibtex
