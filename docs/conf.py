@@ -59,7 +59,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'sparse-plex'
-copyright = '2015, Shailesh'
+copyright = '2015-{}, Shailesh Kumar'.format(date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -216,7 +216,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'sparse-plex.tex', 'sparse-plex ',
-   'Shailesh', 'manual'),
+   'Shailesh Kumar', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -246,7 +246,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'csf', 'sparse-plex',
-     ['Shailesh'], 1)
+     ['Shailesh Kumar'], 1)
 ]
 
 # If true, show URL addresses after external links.
