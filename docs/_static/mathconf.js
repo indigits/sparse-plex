@@ -162,7 +162,11 @@ MathJax.Hub.Config({
         dag: '\\dagger',
         // bracket operator
         Bracket: '\\left [ \\; \\right ]',
-        bold: ['{\\bf #1}', 1]
+        bold: ['{\\bf #1}', 1],
+        // OneVec
+        OneVec: '\\mathcal{1}',
+        ZeroVec: '0',
+        OneMat: '\\mathbf{1}'
     }
   }
 });
