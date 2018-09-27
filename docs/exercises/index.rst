@@ -482,11 +482,12 @@ the K largest (in magnitude) entries.
 
 #. Write a MATLAB function to compute the K sparse representation of
   any vector.
-
   * Identify the K largest entries and put their locations 
     in the support set :math:`\Lambda`.
   * Compute :math:`\Lambda^c = \{1 \dots N \} \setminus \Lambda`.
   * Set the entries corresponding to :math:`\Lambda^c` in :math:`x` to zero.
+
+
 
 
   

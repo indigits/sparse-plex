@@ -23,9 +23,11 @@ Let the columns of :math:`\Phi` be given by :math:`\phi_1, \phi_2, \dots, \phi_N
 
 Column space of :math:`\Phi` (vector space spanned by all columns of :math:`\Phi`)  is denoted by :math:`\ColSpace(\Phi)`
 i.e.
-\[
-\ColSpace(\Phi) = \sum_{i=1}^{N} c_i \phi_i, \quad c_i \in \CC.
-\]
+
+.. math::
+
+  \ColSpace(\Phi) = \sum_{i=1}^{N} c_i \phi_i, \quad c_i \in \CC.
+
 
 We know that :math:`\ColSpace(\Phi) \subset \CC^M`. 
 

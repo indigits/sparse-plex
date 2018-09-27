@@ -12,6 +12,11 @@ a text, no other nodes, directives are recursive though)
 .. endpar::
 Puts '\n\n' in LaTeX and <br> in html.
 (There is no other way to end a paragraph between two environments)
+
+This code is derived from sphinx_latex package:
+https://github.com/coot/sphinx_latex/blob/master/sphinx_clatex/directives.py
+
+
 """
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
@@ -50,6 +55,8 @@ class EnvironmentDirective(Directive):
 
         self.assert_has_content()
         environment_node = environment(rawsource='\n'.join(self.content), **self.options)
+        # if ('title' in self.options):
+        #         self.state.nested_parse(self.options['title'], self.content_offset, environment_node)
         self.state.nested_parse(self.content, self.content_offset, environment_node)
         self.add_name(environment_node)
         return [environment_node]
@@ -99,6 +106,13 @@ def visit_environment_html(self, node):
 def depart_environment_html(self, node):
     self.body.append('</div>')
     self.body.append('</div>')
+
+#####################################################################################
+#
+#  Definitions for align directive
+# 
+#
+######################################################################################
 
 # AlignDirective:
 class align(nodes.Element):
@@ -155,6 +169,68 @@ def depart_align_html(self, node):
     # XXX: to be implemented.
     pass
 
+#####################################################################################
+#
+#  Definitions for text in small caps role
+# 
+#
+######################################################################################
+
+# TextSCDirective:
+class TextSCDirective(Directive):
+
+    required_arguments = 0
+    optional_arguments = 0
+
+    has_content = True
+
+    def run(self):
+        self.assert_has_content()
+        node = textsc(rawsource='\n'.join(self.content), **self.options)
+        node.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+class textsc(nodes.Element):
+    pass
+
+def textsc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    """\
+    This role is interpreted in the following way:
+    :textsc:`text`
+    in latex:
+    \\textsc{text}
+    (the leading # is removed from color_spec)
+    in html
+    <span class="small_caps">text</span>
+    """
+    text = text.strip()
+    textsc_node = textsc()
+    text_node = nodes.Text(text)
+    text_node.parent = textsc_node
+    textsc_node.children.append(text_node)
+    return [textsc_node], []
+
+def visit_textsc_html(self, node):
+    self.body.append('<span class="small_caps">')
+
+def depart_textsc_html(self, node):
+    self.body.append('</span>')
+
+def visit_textsc_latex(self, node):
+    self.body.append('\n\\textsc{')
+
+def depart_textsc_latex(self, node):
+    self.body.append('}')
+
+
+#####################################################################################
+#
+#  Definitions for text in color role
+# 
+#
+######################################################################################
+
 # TextColorDirective:
 class TextColorDirective(Directive):
 
@@ -207,6 +283,14 @@ def visit_textcolor_latex(self, node):
 def depart_textcolor_latex(self, node):
     self.body.append('}')
 
+
+#####################################################################################
+#
+#  Definitions for end paragraph directive
+# 
+#
+######################################################################################
+
 # EndParDirective:
 class endpar(nodes.Element):
     pass
@@ -232,6 +316,14 @@ def visit_endpar_html(self, node):
 
 def depart_endpar_html(self, node):
     pass
+
+
+#####################################################################################
+#
+#  Definitions for theorem directive factory
+# 
+#
+######################################################################################
 
 # TheoremDirectiveFactory:
 def TheoremDirectiveFactory(thmname, thmcaption, thmnode, counter=None):
@@ -426,6 +518,15 @@ def setup(app):
                 latex = (visit_align_latex, depart_align_latex),
             )
 
+
+    app.add_directive('textsc', TextSCDirective)
+    app.add_role('textsc', textsc_role)
+    app.add_node(textsc,
+            html = (visit_textsc_html, depart_textsc_html),
+            latex = (visit_textsc_latex, depart_textsc_latex)
+            )
+
+
     app.add_directive('textcolor', TextColorDirective)
     app.add_role('textcolor', textcolor_role)
     app.add_node(textcolor,
@@ -446,6 +547,7 @@ def setup(app):
     newtheorem(app, 'lemma', 'Lemma', 'lemma')
     newtheorem(app, 'example', 'Example', 'example')
     newtheorem(app, 'exercise', 'Exercise', 'exercise')
+    newtheorem(app, 'remark', 'Remark', 'remark')
     newtheorem(app, 'proof', 'Proof', None)
 
 # test if there is no global name which starts with 'thmnode_', 

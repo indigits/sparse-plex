@@ -5,6 +5,7 @@ Sparse Signal Models
    :maxdepth: 1
    
    sparse_signal_models/underdetermined
+   sparse_signal_models/dictionary_representations
 
 
 
