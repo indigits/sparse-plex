@@ -1,6 +1,8 @@
 Dictionary based representations
 ========================================
 
+.. highlight:: matlab
+
 Dictionaries
 -------------------------
 
@@ -54,8 +56,152 @@ This definition is adapted from :cite:`tropp2004greed`.
 The indices may have an interpretation, such as the time-frequency or time-scale localization
 of an atom, or they may simply be labels without any underlying meaning.
 
+
+.. note::
+
+    In most cases, the dictionary is a matrix of size :math:`N \times D` 
+    where :math:`D` is the number of columns or atoms in the dictionary.
+    The index set in this situation is :math:`[1:D]` which is the set
+    of integers from 1 to :math:`D`.
+
+.. example:: 
+
+    Let's construct a simple Dirac-DCT dictionary of dimensions :math:`4 \times 8`.
+
+    :: 
+
+        >> A = spx.dict.simple.dirac_dct_mtx(4); A
+
+        A =
+
+            1.0000         0         0         0    0.5000    0.6533    0.5000    0.2706
+                 0    1.0000         0         0    0.5000    0.2706   -0.5000   -0.6533
+                 0         0    1.0000         0    0.5000   -0.2706   -0.5000    0.6533
+                 0         0         0    1.0000    0.5000   -0.6533    0.5000   -0.2706
+
+    This dictionary consists of two parts. The left part is a :math:`4 \times 4`
+    identity matrix and the right part is a :math:`4 \times 4` DCT matrix.
+
+    The rank of this dictionary is 4.
+    Since the columns come from :math:`\RR^4`, any 5 columns are linearly dependent.
+
+    It is interesting to note that there exists a set of 4 columns in this dictionary
+    which is linearly dependent.
+
+    ::
+
+        >> B = A(:, [1, 4, 5, 7]); B
+
+        B =
+
+            1.0000         0    0.5000    0.5000
+                 0         0    0.5000   -0.5000
+                 0         0    0.5000   -0.5000
+                 0    1.0000    0.5000    0.5000
+
+        >> rank(B)
+
+        ans =
+
+             3
+
+    This is a crucial difference between an orthogonal basis and
+    an overcomplete dictionary. 
+    In an orthogonal basis for :math:`\RR^N`, all :math:`N` vectors are linearly
+    independent. As we create overcomplete dictionaries, it is possible
+    that there exist some subsets of columns of size :math:`N` or less
+    which are linearly dependent. 
+
+    Let's quickly examine the null space of :math:`B`::
+
+        >> c = null(B)
+
+        c =
+
+           -0.5000
+           -0.5000
+            0.5000
+            0.5000
+
+        >> B * c
+
+        ans =
+
+           1.0e-16 *
+
+            0.5551
+           -0.2776
+           -0.8327
+           -0.2776    
+
+
 Note that the dictionary need not provide a unique representation for any vector  :math:`x \in \CC^N`, but
 it provides at least one representation for each  :math:`x \in \CC^N`.
+
+.. example:: Non-unique representations
+
+    We will construct a vector in the null space of :math:`A`::
+
+        >> n = zeros(8,1); n([1,4,5,7]) = c; n
+
+        n =
+
+           -0.5000
+                 0
+                 0
+           -0.5000
+            0.5000
+                 0
+            0.5000
+                 0
+
+    Consider the vector::
+
+        >> x = [4 ,2,2,5]';
+
+    Following calculation shows two different representations of :math:`x` 
+    in :math:`A`::
+
+        >> alpha  = [2, 0, 0, 3, 4, 0, 0, 0]'
+        >> A * alpha
+
+        ans =
+
+             4
+             2
+             2
+             5
+
+        >> A * (alpha + n)
+
+        ans =
+
+             4
+             2
+             2
+             5
+
+        >> beta = alpha + n
+
+        beta =
+
+            1.5000
+                 0
+                 0
+            2.5000
+            4.5000
+                 0
+            0.5000
+                 0
+
+    Both alpha and beta are valid representations of x in A. 
+    While alpha has 3 non-zero entries, beta has 4. In that sense
+    alpha is a more sparse representation of x in A. 
+
+    Constructing x from A requires only 3 columns if we choose
+    the alpha representation, but it requires 4 columns if we
+    choose the beta representation.
+
 
 When  :math:`D=N` we have a set of unit norm vectors which span the whole of  :math:`\CC^N`. Thus we have a basis
 (not-necessarily an orthonormal basis). A dictionary cannot have  :math:`D < N`. The more interesting case
@@ -197,7 +343,7 @@ The approximation error is given by
     e  = \| x - x_{\Lambda} \|_2.
 
 
-Clearly we would like to minimize the approximation error over all possible choices of  :math:`K` atoms
+We would like to minimize the approximation error over all possible choices of  :math:`K` atoms
 and corresponding set of coefficients  :math:`b_{\lambda}`.
 
 Thus the sparse approximation problem can be cast as a minimization problem given by
@@ -246,9 +392,10 @@ if :textsc:`exact-sparse` problem is NP-Hard then so is the harder :textsc:`spar
 It is expected that solving the :textsc:`exact-sparse` problem will provide insights into solving the
 :textsc:`sparse` problem.
 
-In \cref{thm:ssm:sparse_uniqueness_two_ortho_basis} we identified conditions
-under which a sparse representation for a given vector  :math:`x` in a two-ortho-basis is unique. 
-It would be useful to get similar conditions for general dictionaries. such conditions
+It would be useful to get some uniqueness conditions 
+for general dictionaries which guarantee that the sparse representation
+of a vector is unique in the dictionary. 
+Such conditions
 would help us guarantee the uniqueness of :textsc:`exact-sparse` problem.
 
 
@@ -271,7 +418,7 @@ vector representation in the standard basis for  :math:`\CC^N`.
 
 The order of columns doesn't matter as long as it remains fixed once chosen.
 
-Thus in matrix terminology a representation of  :math:`x \in \CC^N` in the dictionary can
+Thus, in matrix terminology, a representation of  :math:`x \in \CC^N` in the dictionary can
 be written as
     
 .. math::
@@ -295,7 +442,9 @@ Clearly with  :math:`D > N`,  :math:`b` is not unique. Rather for every vector
 .. definition::
 
     
-    The matrix  :math:`\Phi` is called a **synthesis matrix** since  :math:`x` is synthesized from the columns of
+    The matrix  :math:`\Phi` is called a 
+    **synthesis matrix** since  
+    :math:`x` is synthesized from the columns of
      :math:`\Phi` with the coefficient vector  :math:`b`.
 
 
@@ -331,7 +480,7 @@ There is another way to look at  :math:`x` through  :math:`\Phi`.
 
 .. _def:ssm:d_k_exact_sparse_problem:
 
-.. definition::  D-K exact-sparse
+.. definition::  D-K exact-sparse problem
 
     
     With the help of synthesis matrix  :math:`\Phi`, the 
@@ -356,7 +505,7 @@ There is another way to look at  :math:`x` through  :math:`\Phi`.
 
 .. _def:ssm:d_k_sparse_approximation_problem:
 
-.. definition:: D-K sparse approximation
+.. definition:: D-K sparse approximation problem
 
     
     With the help of synthesis matrix  :math:`\Phi`, the 
