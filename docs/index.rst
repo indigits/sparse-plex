@@ -14,6 +14,7 @@ A journey into sparse and redundant representations.
    start
    demos/index
    book/sparse_signal_models
+   book/compressive_sensing
    library/index
    exercises/index
    scripts
