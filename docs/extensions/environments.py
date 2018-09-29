@@ -542,6 +542,7 @@ def setup(app):
 
     # Add standard theorems:
     newtheorem(app, 'theorem', 'Theorem', 'theorem')
+    newtheorem(app, 'corollary', 'Corollary', 'corollary')
     newtheorem(app, 'proposition', 'Proposition', 'proposition')
     newtheorem(app, 'definition', 'Definition', 'definition')
     newtheorem(app, 'lemma', 'Lemma', 'lemma')

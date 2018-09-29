@@ -119,6 +119,20 @@ pygments_style = 'sphinx'
 html_theme = 'sphinxdoc'
 html_theme = 'sphinx_rtd_theme'
 
+html_theme_options = {
+  'canonical_url' : 'http://sparse-plex.readthedocs.org/en/latest/',
+  'analytics_id' : 'UA-126632348-1',
+  'display_version': False, 
+  'prev_next_buttons_location' : 'both'
+}
+
+html_context = {
+"display_github": False, 
+"last_updated": True,
+"commit": False,
+}
+
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
@@ -178,7 +192,7 @@ html_static_path = ['_static']
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True

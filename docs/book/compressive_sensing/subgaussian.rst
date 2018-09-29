@@ -1,9 +1,7 @@
+.. _sec:subgaussian:
 
- 
 Subgaussian distributions
 ===================================================
-
-.. _sec:subgaussian:
 
 
 In this section we review subgaussian distributions and
