@@ -1,37 +1,23 @@
-
- 
+.. _sec:sm:gaussian_sensing_matrix:
 Gaussian sensing matrices
 ===================================================
 
-.. _sec:sm:gaussian_sensing_matrix:
-
-
-
 In this section we collect several results related to Gaussian sensing matrices.
-
-
 
 .. _def:sm:gaussian_sensing_matrix:
 
+.. index:: Gaussian sensing matrix
+
 .. definition:: 
 
-     
-    .. index:: Gaussian sensing matrix
-    
-
-    
     A Gaussian sensing matrix  :math:`\Phi \in \RR^{M \times N}`  with  :math:`M < N`  is constructed by drawing each
     entry  :math:`\phi_{ij}`  independently from a Gaussian random distribution  :math:`\Gaussian(0, \frac{1}{M})` .
 
 
 We note that 
 
-
 .. math::
     \EE(\phi_{ij}) = 0.
-
-
-
 
 .. math::
     \EE(\phi_{ij}^2) = \frac{1}{M}.
@@ -39,9 +25,7 @@ We note that
 
 We can write
 
-
 .. math:: 
-
     \Phi = \begin{bmatrix}
     \phi_1 & \dots & \phi_N
     \end{bmatrix}
@@ -49,7 +33,6 @@ We can write
 where  :math:`\phi_j \in \RR^M`  is a Gaussian random vector with independent entries.
 
 We note that
-
 
 .. math::
     \EE (\| \phi_j  \|_2^2) = \EE \left ( \sum_{i=1}^M \phi_{ij}^2 \right ) = \sum_{i=1}^M (\EE (\phi_{ij}^2)) = M \frac{1}{M} = 1.
@@ -63,15 +46,14 @@ Joint correlation
 ----------------------------------------------------
 
 
-Columns of  :math:`\Phi`  satisfy a joint correlation property (:cite:`tropp2007signal`) which is described in following lemma.
+Columns of  :math:`\Phi`  satisfy a joint correlation property 
+(:cite:`tropp2007signal`) which is described in following lemma.
 
 
 .. _lem:sm:gaussian:joint_correlation_property:
 
 .. lemma:: 
 
-
-    
     Let  :math:`\{u_k\}`  be a sequence of  :math:`K`  vectors (where  :math:`u_k \in \RR^M` ) whose  :math:`l_2`  norms do not exceed one. Independently 
     choose  :math:`z \in \RR^M`  to be a random vector with i.i.d.  :math:`\Gaussian(0, \frac{1}{M})`  entries. Then
     
@@ -143,8 +125,4 @@ Columns of  :math:`\Phi`  satisfy a joint correlation property (:cite:`tropp2007
         &= 1 - \PP\left(\max_{k} | \langle z,  u_k\rangle | > \epsilon \right) \\
         &\geq 1 - K \exp \left(- \epsilon^2 \frac{M}{2} \right).
         \end{aligned}
-    
-    \todo{Develop a section on Gaussian random vectors}
-    \todo{Develop a section on Boole's inequality}
-    \todo{Develop different tail bounds on Gaussian variables}
 
