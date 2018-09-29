@@ -679,9 +679,3 @@ than the one presented above.
          (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
     
 
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

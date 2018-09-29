@@ -148,10 +148,3 @@ Columns of  :math:`\Phi`  satisfy a joint correlation property (:cite:`tropp2007
     \todo{Develop a section on Boole's inequality}
     \todo{Develop different tail bounds on Gaussian variables}
 
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

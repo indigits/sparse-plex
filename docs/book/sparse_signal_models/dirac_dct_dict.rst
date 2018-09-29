@@ -122,11 +122,3 @@ They are all one.
     TODO prove it.
 
 
-
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

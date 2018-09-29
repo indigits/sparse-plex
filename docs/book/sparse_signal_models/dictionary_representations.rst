@@ -203,9 +203,16 @@ it provides at least one representation for each  :math:`x \in \CC^N`.
     choose the beta representation.
 
 
-When  :math:`D=N` we have a set of unit norm vectors which span the whole of  :math:`\CC^N`. Thus we have a basis
+When  :math:`D=N` we have a set of unit norm vectors which span the whole of  :math:`\CC^N`. Thus, we have a basis
 (not-necessarily an orthonormal basis). A dictionary cannot have  :math:`D < N`. The more interesting case
 is when  :math:`D > N`.
+
+.. note::
+
+  There are also applications of undercomplete dictionaries
+  where the number of atoms :math:`D` is less than the ambient space
+  dimension :math:`N`. However, we will not be considering them
+  unless specifically mentioned.
 
 
 Redundant dictionaries and sparse signals
@@ -522,12 +529,5 @@ There is another way to look at  :math:`x` through  :math:`\Phi`.
           & &  \| \alpha \|_0 \leq K.
         \end{aligned}
 
-
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
 
 

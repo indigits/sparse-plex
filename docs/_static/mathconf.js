@@ -166,9 +166,36 @@ MathJax.Hub.Config({
         // OneVec
         OneVec: '\\mathcal{1}',
         ZeroVec: '0',
-        OneMat: '\\mathbf{1}'
+        OneMat: '\\mathbf{1}',
+        bigO: ['\\mathop{}\\mathopen{}\\mathcal{O}\\mathopen{}\\left(#1\\right)', 1],
+        smallO: ['\\scriptstyle\\mathcal{O}\\left(#1\\right)', 1]
     }
   }
+});
+
+var on_proof_caption_click  = function () {
+
+    $header = $(this);
+    //getting the next element
+    $content = $header.next();
+    //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+    $content.slideToggle(500, function () {
+        //execute this after slideToggle is done
+        //change text of header based on visibility of content div
+        $header.text(function () {
+            //change text based on condition
+            return $content.is(":visible") ? "Proof" : "Click to see proof";
+        });
+    });
+
+}
+// Attach the on click handler to each proof element
+$(".proof_caption").click(on_proof_caption_click);
+// Collapse all proof elements in the beginning
+$(".proof_caption").each(on_proof_caption_click);
+$(".proof_caption").each(function(){
+    $header = $(this);
+    $header.text("Click to see proof");
 });
 
 });

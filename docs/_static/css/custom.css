@@ -9,6 +9,7 @@
     padding-bottom: 5px;
     margin-bottom: 5px;
     padding-left: 10px;
+    padding-top: 10px;
 }
 
 .theoremenv_counter:before{
@@ -27,6 +28,13 @@
     padding-left: 10px;
 }
 
+.think{
+    background: #e7f2fa;    
+}
+
+.think_body{
+    background: #e7f2fa;
+}
 
 span.small_caps {
     font-variant: small-caps;

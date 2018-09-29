@@ -189,12 +189,3 @@ of entries in  :math:`\alpha` .
     \caption{Recovery matrix  :math:`\Phi \Psi` }
 
     
-
-
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

@@ -37,26 +37,21 @@ The set of  :math:`K` -sparse signals is defined as
     *    :math:`x=(1,2, 1, -1, 2 , -3, 4, -2, 2, -2) \in \RR^{10}`  is not a sparse signal.
     *   :math:`x=(0,0,0,0,1,0,0,-1,0,0)\in \RR^{10}`  is a 2-sparse signal. Its also a 4 sparse signal.
     
-    
-    
-
-
-
-
 .. _lem:difference_k_sparse_signals:
 
 .. lemma:: 
 
-
-    
-
-
-
+    If :math:`a` and :math:`b` are two $K$ sparse signals then 
+    :math:`a - b` is a :math:`2K` sparse signal.
 
 .. proof:: 
 
-    Hence number of non-zero components of  :math:`a - b`  cannot exceed  :math:`2K` . Hence  :math:`a - b`  is a 
-     :math:`2K` -sparse signal.
+    :math:`(a - b)_i` is non zero only if at least one of 
+    :math:`a_i` and :math:`b_i` is non-zero.
+    Hence number of non-zero components of  
+    :math:`a - b`  cannot exceed  
+    :math:`2K` . Hence  :math:`a - b`  is a 
+    :math:`2K` -sparse signal.
 
 
 
@@ -66,29 +61,23 @@ The set of  :math:`K` -sparse signals is defined as
     Let N = 5. 
     
     
-    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,2,0,-1, 0)` . Then  :math:`a - b = (0,-1,-1,1, 0)`  is a 3 sparse
-    hence 4 sparse signal.
-    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,2,-1,0, 0)` . Then  :math:`a - b = (0,-1,-2,0, 0)`  is a 2 sparse
-    hence 4 sparse signal.
-    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,0,0,1, -1)` . Then  :math:`a - b = (0,1,-1,-1, 1)`  is a 4 sparse
-    signal.
+    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,2,0,-1, 0)`. 
+       Then  :math:`a - b = (0,-1,-1,1, 0)`  is a 3 sparse 
+       hence 4 sparse signal.
+    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,2,-1,0, 0)`. 
+       Then  :math:`a - b = (0,-1,-2,0, 0)`  is a 2 sparse
+       hence 4 sparse signal.
+    *  Let  :math:`a = (0,1,-1,0, 0)`  and  :math:`b = (0,0,0,1, -1)`. 
+       Then  :math:`a - b = (0,1,-1,-1, 1)`  is a 4 sparse signal.
     
-    
-
-
-
 
 .. _lem:k_sparse_unique_representation_requirement:
 
 .. lemma:: 
 
     A sensing matrix  :math:`\Phi`  uniquely represents all  :math:`x \in \Sigma_K`  if and only if  :math:`\NullSpace(\Phi) \cap \Sigma_{2K} = \phi` . i.e.
-     :math:`\NullSpace(\Phi)`  contains no vectors in  :math:`\Sigma_{2K}` .
-
-    
-  
-
-
+    :math:`\NullSpace(\Phi)`  contains no vectors in  
+    :math:`\Sigma_{2K}` .
 
 .. proof:: 
 
@@ -107,7 +96,8 @@ The spark
 ----------------------------------------------------
 
 
-We recall from  :ref:`def:spark <def:spark>`, that spark of a matrix  :math:`\Phi`  is defined as the
+We recall from  :ref:`definition of spark <def:spark>`, 
+that spark of a matrix  :math:`\Phi`  is defined as the
 minimum number of columns which are linearly dependent.
 
 
@@ -115,39 +105,36 @@ minimum number of columns which are linearly dependent.
 
 .. definition:: 
 
+    A signal :math:`x \in \RR^N` is called an 
+    **explanation** of a measurement 
+    :math:`y \in \RR^M` w.r.t.
     sensing matrix  :math:`\Phi`  if
      :math:`y = \Phi x` . 
      
     .. index:: Explanation signal
     
-
-    
-
-
-
 .. _thm:k_sparse_explanation_spark_requirement:
 
 .. theorem:: 
 
-     :math:`y = \Phi x`  if and only if  :math:`\spark(\Phi) > 2K` .
-
-    
-
-
-
+    For any measurement :math:`y \in \RR^M`, 
+    there exists at most one signal :math:`x  \in \Sigma_K`
+    such that :math:`y = \Phi x`  if and only if  
+    :math:`\spark(\Phi) > 2K` .
 
 .. proof:: 
 
-    
     We need to show
+        
+    *  If for every measurement, there is only one  :math:`K` -sparse 
+       explanation, then  :math:`\spark(\Phi) > 2K` .
+    *  If  :math:`\spark(\Phi) > 2K`  then for every measurement, there 
+       is only one  :math:`K` -sparse explanation.
     
     
-    *  If for every measurement, there is only one  :math:`K` -sparse explanation, then  :math:`\spark(\Phi) > 2K` .
-    *  If  :math:`\spark(\Phi) > 2K`  then for every measurement, there is only one  :math:`K` -sparse explanation.
     
-    
-    
-    Assume that for every  :math:`y \in \RR^M`  there exists at most one signal  :math:`x \in \RR^N`  such that  :math:`y = \Phi x` .
+    Assume that for every  :math:`y \in \RR^M`  there exists at most one :math:`K` sparse signal  :math:`x \in \RR^N`  
+    such that  :math:`y = \Phi x` .
     
     Now assume that  :math:`\spark(\Phi) \leq 2K` . Thus there exists a set of at most  :math:`2K`  columns which are linearly
     dependent. 
@@ -164,7 +151,7 @@ minimum number of columns which are linearly dependent.
     Now suppose that  :math:`\spark(\Phi) > 2K` . 
     
     Assume that for some  :math:`y`  there exist two different K-sparse explanations  :math:`x, x'`  such that
-     :math:`y = \Phi x =\Phi x'` .  
+    :math:`y = \Phi x =\Phi x'` .  
     
     Thus  :math:`\Phi (x  - x') = 0` . Thus  :math:`x - x ' \in \NullSpace (\Phi)`  and  :math:`x - x' \in  \Sigma_{2K}` . 
     
@@ -189,27 +176,30 @@ for ensuring  recovery of approximately sparse signals from compressed measureme
 
 In this context we will deal with two types of errors: 
 
-\begin{description}
-* [Approximation error] Let us approximate a signal  :math:`x`  using only  :math:`K`  coefficients. Let us call
-the approximation as  :math:`\widehat{x}` . Thus  :math:`e_a = (x - \widehat{x})`  is approximation error.
-* [Recovery error] Let  :math:`\Phi`  be a sensing matrix. Let  :math:`\Delta`  be a recovery algorithm. 
-Then  :math:`x'= \Delta(\Phi x)`  is the recovered signal vector. The error  :math:`e_r = (x - x')`  is recovery error.
-\end{description}
+* [Approximation error] Let us approximate a signal  
+  :math:`x`  using only  :math:`K`  coefficients. 
+  Let us call the approximation as  
+  :math:`\widehat{x}` . 
+  Thus  :math:`e_a = (x - \widehat{x})`  is approximation error.
+* [Recovery error] Let  :math:`\Phi`  be a sensing matrix. 
+  Let  :math:`\Delta`  be a recovery algorithm.  
+  Then  :math:`x'= \Delta(\Phi x)`  is the recovered signal vector. 
+  The error  :math:`e_r = (x - x')`  is recovery error.
+
 
 In this section we will
 
+* Formalize the notion of null space property (NSP) 
+  of a matrix  :math:`\Phi` .
+* Describe a measure for performance of an 
+  arbitrary recovery algorithm  :math:`\Delta` .
+* Establish the connection between NSP and 
+  performance guarantee for recovery algorithms.
 
 
-*  Formalize the notion of null space property (NSP) of a matrix  :math:`\Phi` .
-*  Describe a measure for performance of an arbitrary recovery algorithm  :math:`\Delta` .
-*  Establish the connection between NSP and performance guarantee for recovery algorithms.
-
-
-
-
-Suppose we approximate  :math:`x`  by a  :math:`K` -sparse signal  :math:`\widehat{x} \in \Sigma_K` , then the minimum error for  :math:`l_p`  norm is given by
-
-
+Suppose we approximate  :math:`x`  by a  :math:`K` -sparse signal  
+:math:`\widehat{x} \in \Sigma_K`, 
+then the minimum error for  :math:`l_p`  norm is given by
 
 .. math::
     	\sigma_K(x)_p = \min_{\widehat{x} \in \Sigma_K} \| x - \widehat{x}\|_p. 
@@ -226,10 +216,9 @@ Let  :math:`\Lambda \subset I`   be a subset of indices.
 
 Let  :math:`\Lambda^c = I \setminus \Lambda` .
 
- :math:`x_{\Lambda}`  will denote a signal vector obtained by setting the entries of  :math:`x`  indexed by  :math:`\Lambda^c`  to
-zero.
-
-
+:math:`x_{\Lambda}`  will denote a signal vector obtained by 
+setting the entries of  :math:`x`  indexed by  
+:math:`\Lambda^c`  to zero.
 
 
 .. example:: 
@@ -243,8 +232,9 @@ zero.
 
 
 
- :math:`\Phi_{\Lambda}`  will denote a  :math:`M\times N`  matrix obtained by setting the columns of  :math:`\Phi`  indexed by  :math:`\Lambda^c`  to
-zero.
+:math:`\Phi_{\Lambda}`  will denote a  :math:`M\times N`  
+matrix obtained by setting the columns of  
+:math:`\Phi`  indexed by  :math:`\Lambda^c` to zero.
 
 
 
@@ -260,7 +250,8 @@ zero.
     	
     
     .. math:: 
-    
+
+            \Phi = \begin{pmatrix}
         		1 & 0 & -1 & 1\\
         		-1 & -2 & 2 & 3
         	\end{pmatrix}
@@ -270,45 +261,44 @@ zero.
     	
     
     .. math:: 
-    
+            
+            \Phi_{\Lambda} = \begin{pmatrix}
         		1 & 0 & -1 & 0\\
         		-1 & 0 & 2 & 0
         	\end{pmatrix}
-    
-    
-    
-
 
 
 .. _def:null_space_property:
 
 .. definition:: 
 
-    exists a constant  :math:`C > 0`  such that,
+    .. index:: Null space property
     
-    
-    
+    A matrix :math:`\Phi` satisfies the 
+    **null space property (NSP)** of order :math:`K` 
+    if there exists a constant  :math:`C > 0`  such that,
     
     .. math::
         \| h_{\Lambda}\|_2 \leq C \frac{\| h_{{\Lambda}^c}\|_1 }{\sqrt{K}}
-    
-    
+        
     holds  :math:`\forall h \in \NullSpace (\Phi)`  and  :math:`\forall \Lambda`  such that  :math:`|\Lambda| \leq K` .
      
-    .. index:: Null space property
-    
-
-    
 
 
-
-
-*  Let  :math:`h`  be  :math:`K`  sparse. Thus choosing the indices on which  :math:`h`  is non-zero, I can
-	 construct a  :math:`\Lambda`  such that  :math:`|\Lambda| \leq K`  and  :math:`h_{{\Lambda}^c} = 0` . 
-	 Thus  :math:`\| h_{{\Lambda}^c}\|_1`  = 0. Hence above condition is not satisfied. Thus
-	such a vector  :math:`h`  should not belong to  :math:`\NullSpace(\Phi)`  if  :math:`\Phi`  satisfies NSP.
-*  Essentially vectors in  :math:`\NullSpace (\Phi)`  shouldn't be concentrated in a small subset of indices.
-*  If  :math:`\Phi`  satisfies NSP then the only  :math:`K` -sparse vector in  :math:`\NullSpace(\Phi)`  is  :math:`h = 0` .
+*  Let  :math:`h`  be  :math:`K`  sparse. Thus choosing the 
+   indices on which  :math:`h`  is non-zero, I can 
+   construct a  :math:`\Lambda`  such that  :math:`|\Lambda| \leq K` 
+   and  :math:`h_{{\Lambda}^c} = 0` . 
+   Thus  :math:`\| h_{{\Lambda}^c}\|_1`  = 0. 
+   Hence above condition is not satisfied. Thus
+   such a vector  :math:`h`  should not belong to  
+   :math:`\NullSpace(\Phi)`
+   if  :math:`\Phi`  satisfies NSP.
+*  Essentially vectors in  :math:`\NullSpace (\Phi)`  
+   shouldn't be concentrated in a small subset of indices.
+*  If  :math:`\Phi`  satisfies NSP then the only  
+   :math:`K` -sparse vector in  :math:`\NullSpace(\Phi)`
+   is  :math:`h = 0` .
 
 
 
@@ -319,51 +309,49 @@ Measuring the performance of a recovery algorithm
 
 Let  :math:`\Delta : \RR^M \rightarrow \RR^N`  represent a recovery method to recover approximately sparse  :math:`x`  from  :math:`y` .
 
- :math:`l_2`  recovery error is given by 
-	
+:math:`l_2`  recovery error is given by 
 
 .. math:: 
 
     	\| \Delta (\Phi x) - x \|_2.
 
 
-The  :math:`l_1`  error for  :math:`K` -term approximation is given by  :math:`\sigma_K(x)_1` .
+The  :math:`l_1`  error for  :math:`K` -term approximation is 
+given by  :math:`\sigma_K(x)_1` .
 
 We will be interested in guarantees of the form
-
 
 .. math::
     :label: eq:nspguarantee
 
     	\| \Delta (\Phi x) - x \|_2 \leq C \frac{\sigma_K (x)_1}{\sqrt{K}}
 
-
-
 Why, this recovery guarantee formulation?
 
-
-
-*  Exact recovery of K-sparse signals.  :math:`\sigma_K (x)_1 = 0`  if  :math:`x \in \Sigma_K` .
+*  Exact recovery of K-sparse signals.  :math:`\sigma_K (x)_1 = 0`  
+   if  :math:`x \in \Sigma_K` .
 *  Robust recovery of non-sparse signals
-*  Recovery dependent on how well the signals are approximated by  :math:`K` -sparse vectors.
+*  Recovery dependent on how well the signals are 
+   approximated by  :math:`K` -sparse vectors.
 *  Such guarantees are known as  **instance optimal**  guarantees.
 *  Also known as  **uniform**  guarantees.
 
 
 Why the specific choice of norms? 
 
+*  Different choices of  :math:`l_p`  norms lead to 
+   different guarantees.
+*  :math:`l_2`  norm on the LHS is a typical least squares error.
+*  :math:`l_2`  norm on the RHS will require prohibitively large number\todo{Why? Prove it.} of measurements.
+*  :math:`l_1`  norm on the RHS helps us keep the number of measurements less.
 
-*  Different choices of  :math:`l_p`  norms lead to different guarantees.
-*   :math:`l_2`  norm on the LHS is a typical least squares error.
-*   :math:`l_2`  norm on the RHS will require prohibitively large number\todo{Why? Prove it.} of measurements.
-*   :math:`l_1`  norm on the RHS helps us keep the number of measurements less.
 
+If an algorithm  :math:`\Delta`  provides instance optimal guarantees as defined above, 
+what kind of requirements does it place on 
+the sensing matrix  :math:`\Phi` ?
 
-If an algorithm  :math:`\Delta`  provides instance optimal guarantees as defined above, what
-kind of requirements does it place on the sensing matrix  :math:`\Phi` ?
-
-We show that NSP of order  :math:`2K`  is a necessary condition for providing uniform guarantees.
-
+We show that NSP of order  :math:`2K`  is a necessary condition 
+for providing uniform guarantees.
 
 .. _thm:nsp_guarantee_requirement:
 
@@ -371,8 +359,8 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
 
     Let  :math:`\Phi : \RR^N \rightarrow \RR^M`  denote a sensing matrix 
     and  :math:`\Delta : \RR^M \rightarrow \RR^N`  denote an arbitrary recovery algorithm. If
-    the pair  :math:`(\Phi, \Delta)`  satisfies instance optimal guarantee \eqref{eq:nspguarantee}, then 
-     :math:`\Phi`  satisfies NSP of the order  :math:`2K` .
+    the pair  :math:`(\Phi, \Delta)`  satisfies instance optimal guarantee :eq:`eq:nspguarantee`, then 
+    :math:`\Phi`  satisfies NSP of the order  :math:`2K` .
 
     
 
@@ -382,17 +370,23 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
 .. proof:: 
 
     We are given that
-    [leftmargin=*]
+
     *   :math:`(\Phi, \Delta)`  form an encoder-decoder pair.
-    *  Together, they satisfy instance optimal guarantee \eqref{eq:nspguarantee}.
+    *  Together, they satisfy instance optimal guarantee 
+       :eq`eq:nspguarantee`.
     *  Thus they are able to recover all sparse signals exactly.
-    *  For non-sparse signals, they are able to recover their  :math:`K` -sparse approximation with bounded recovery error.
+    *  For non-sparse signals, they are able to recover 
+       their  :math:`K` -sparse approximation with 
+       bounded recovery error.
     
     
-    We need to show that if  :math:`h \in \NullSpace(\Phi)` , then  :math:`h`  satisfies 
-    \begin{align*}
-    \| h_{\Lambda}\|_2 \leq C \frac{\| h_{{\Lambda}^c}\|_1 }{\sqrt{2K}}
-    \end{align*}
+    We need to show that if  :math:`h \in \NullSpace(\Phi)`, 
+    then  :math:`h`  satisfies 
+    
+    .. math::
+
+        \| h_{\Lambda}\|_2 \leq C \frac{\| h_{{\Lambda}^c}\|_1 }{\sqrt{2K}}
+
     where  :math:`\Lambda`  corresponds to  :math:`2K`  largest magnitude entries in  :math:`h` . 
     
     Note that we have used  :math:`2K`  in this expression, since we need to show that  :math:`\Phi`  satisfies
@@ -400,34 +394,26 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
     
     Let  :math:`h \in \NullSpace(\Phi)` .
     
-    Let  :math:`\Lambda`  be the indices corresponding to the  :math:`2K`  largest entries of h.
-    
+    Let  :math:`\Lambda`  be the indices corresponding to the  
+    :math:`2K`  largest entries of h.
     Thus 
-    
     
     .. math:: 
     
         h = h_{\Lambda}  + h_{\Lambda^c}.
     
-    
-    
-    Split  :math:`\Lambda`  into  :math:`\Lambda_0`  and  :math:`\Lambda_1`  such that  :math:`|\Lambda_0| = |\Lambda_1| = K` .
-    
+    Split  :math:`\Lambda`  into  :math:`\Lambda_0`  and  :math:`\Lambda_1`  such that  :math:`|\Lambda_0| = |\Lambda_1| = K` .    
     Now 
-    
     
     .. math:: 
     
         h_{\Lambda} = h_{\Lambda_0} + h_{\Lambda_1}.
     
-    
     Let 
-    
     
     .. math:: 
     
         x = h_{\Lambda_0} + h_{\Lambda^c}.
-    
     
     Let 
     
@@ -435,36 +421,31 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
     
         x' = - h_{\Lambda_1}.
     
-    
     Then 
-    
     
     .. math:: 
     
         h =  x - x'.
      
-    
     By assumption  :math:`h \in \NullSpace(\Phi)` 
     
     Thus
-    
     
     .. math:: 
     
          \Phi h = \Phi(x - x') = 0 \implies \Phi x = \Phi x'.
     
     
-    But since  :math:`x' \in \Sigma_K`  (recall that  :math:`\Lambda_1`  indexes only  :math:`K`  entries) 
+    But since  :math:`x' \in \Sigma_K`  
+    (recall that  :math:`\Lambda_1`  indexes only  :math:`K`  entries) 
     and   :math:`\Delta`  is able to recover all  :math:`K` -sparse signals exactly, hence
     
     
     .. math:: 
     
-        x' = \Delta (\Phi x')
-    .
+        x' = \Delta (\Phi x').
     
     Thus 
-    
     
     .. math:: 
     
@@ -481,11 +462,14 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
         \| h_{\Lambda} \|_2 \leq \| h \|_2  = \| x  - x'\|_2  = \| x - \Delta (\Phi x)\| _2.
     
     
-    But as per instance optimal recovery guarantee \eqref{eq:nspguarantee}
+    But as per instance optimal recovery guarantee 
+    :eq:`eq:nspguarantee`
     for  :math:`(\Phi, \Delta)`  pair,  we have
-    \begin{align*}
-    \| \Delta (\Phi x) - x \|_2 \leq C \frac{\sigma_K (x)_1}{\sqrt{K}}.
-    \end{align*}
+   
+    .. math::
+
+        \| \Delta (\Phi x) - x \|_2 \leq C \frac{\sigma_K (x)_1}{\sqrt{K}}.
+
     
     Thus
     
@@ -494,9 +478,7 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
     
         \| h_{\Lambda} \|_2 \leq C \frac{\sigma_K (x)_1}{\sqrt{K}}.
     
-    
     But 
-    
     
     .. math:: 
     
@@ -504,13 +486,13 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
     
     
     Recall that  :math:`x =h_{\Lambda_0} + h_{\Lambda^c}`  where  :math:`\Lambda_0`  indexes  :math:`K`  entries of  :math:`h` 
-    which are (magnitude wise) larger than all entries indexed by  :math:`\Lambda^c` .
+    which are (magnitude wise) larger than all entries 
+    indexed by  :math:`\Lambda^c` .
     Thus the best  :math:`l_1` -norm  :math:`K`  term
     approximation of  :math:`x`  is given by   :math:`h_{\Lambda_0}` . 
     
     Hence
-    	
-    
+
     .. math:: 
     
         	\sigma_K (x)_1  = \|  h_{\Lambda^c} \|_1. 
@@ -518,7 +500,6 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
     
     Thus we finally have
     	
-    
     .. math:: 
     
         	\| h_{\Lambda} \|_2 \leq C \frac{\|  h_{\Lambda^c} \|_1}{\sqrt{K}} = \sqrt{2}C \frac{\|  h_{\Lambda^c} \|_1}{\sqrt{2K}}  \quad \forall h \in \NullSpace(\Phi).
@@ -528,14 +509,9 @@ We show that NSP of order  :math:`2K`  is a necessary condition for providing un
 
 
 It turns out that NSP of order  :math:`2K`  is also sufficient to establish a guarantee of the form above for 
-a practical recovery algorithm\todo{Prove it.}.
+a practical recovery algorithm
+
+.. todo:: Prove it.
 
 
 
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

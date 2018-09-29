@@ -242,10 +242,3 @@ spark of a dictionary be}? We consider few examples.
     In this case, the sparsity level of a unique solution must be less than  :math:`\sqrt{N}` .
     \todo{Find how to compute spark of DF basis}
 
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

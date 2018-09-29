@@ -247,10 +247,3 @@ There are a number of advantages of the random sensing matrix construction appro
 
  
 
-
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

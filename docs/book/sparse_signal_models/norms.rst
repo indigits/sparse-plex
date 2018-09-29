@@ -379,7 +379,5 @@ in  :math:`\Sigma_K` .
     
           \| u \|_2 \leq \sqrt{K} \| u \|_{\infty}
     
-    
-
 
 

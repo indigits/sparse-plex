@@ -667,9 +667,3 @@ Quasi incoherent dictionaries
 
 
 
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-    

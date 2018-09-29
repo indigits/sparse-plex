@@ -18,6 +18,7 @@ A journey into sparse and redundant representations.
    library/index
    exercises/index
    scripts
+   zzzreferences
 
 ..
    datasets

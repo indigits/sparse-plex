@@ -760,9 +760,3 @@ thus
 is indeed the desired solution for the optimization problem :eq:`l1_norm_minimization_problem`.
 
 
-Bibliography
--------------------
-
-
-.. bibliography:: ../../sksrrcs.bib
-
