@@ -12,5 +12,6 @@ Compressive Sensing
    compressive_sensing/subgaussian
    compressive_sensing/rademacher
    compressive_sensing/gaussian
+   compressive_sensing/examples
 
 

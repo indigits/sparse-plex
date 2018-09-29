@@ -13,7 +13,6 @@ Sparse Signal Models
    sparse_signal_models/spark
    sparse_signal_models/coherence
    sparse_signal_models/babel
-   sparse_signal_models/examples
    sparse_signal_models/dirac_dct_dict
    
 
