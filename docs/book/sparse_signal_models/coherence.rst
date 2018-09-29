@@ -1,49 +1,47 @@
-
- 
 Coherence
 ----------------------------------------------------
 
-Finding out the spark of a dictionary  :math:`\DD`  is NP-hard since it involves considering combinatorially 
-large number of selections of columns from  :math:`\DD` . In this section we consider
-the  *coherence*  of a dictionary which is computationally tractable and quite useful 
+Finding out the spark of a dictionary  :math:`\DDD`  is NP-hard since 
+it involves considering combinatorially 
+large number of selections of columns from  
+:math:`\DDD` . 
+In this section we consider
+the  *coherence*  of a dictionary which is computationally tractable 
+and quite useful 
 in characterizing the solutions of sparse approximation problems.
 
 
+.. index:: Coherence of dictionary
+.. index:: Mutual coherence
 .. _def:ssm:coherence:
 
 .. definition:: 
 
-     
-    .. index:: Coherence of dictionary
-    
-     
-    .. index:: Mutual coherence
-    
-
-    
-    The  **coherence**  of a dictionary  :math:`\DD`  is defined as
+    The  **coherence**  of a dictionary  :math:`\DDD`  is defined as
     the maximum absolute inner product between two distinct atoms in the dictionary:
-    
     
     .. math::
         \mu = \underset{j \neq k}{\text{max}} | \langle d_{\omega_j}, d_{\omega_k} \rangle |
-        = \underset{j \neq k}{\text{max}} | (\DD^H \DD)_{jk} |.
+        = \underset{j \neq k}{\text{max}} | (\DDD^H \DDD)_{jk} |.
     
 
 
-If the dictionary consists of two orthonormal bases, then coherence is also known as  *mutual coherence* 
-or  *proximity* ; see  :ref:`def:ssm:mutual_coherence_two_ortho_bases <def:ssm:mutual_coherence_two_ortho_bases>`.
+If the dictionary consists of two orthonormal bases, then coherence is also known as  *mutual coherence* or  *proximity*. Since the atoms within each
+orthonormal basis are orthogonal to each other, the coherence is determined
+only by the inner products of atoms from one basis with another basis.
 
-We note that  :math:`d_{\omega_i}`  is the  :math:`i` -th column of synthesis matrix  :math:`\DD` . 
-Also  :math:`\DD^H \DD`  is the  **Gram matrix**  for  :math:`\DD`  whose elements are nothing
-but the inner-products of columns of  :math:`\DD` .
+
+We note that  :math:`d_{\omega_i}`  is the  :math:`i` -th column of synthesis matrix  :math:`\DDD` . 
+Also  :math:`\DDD^H \DDD`  is the  **Gram matrix**  for  :math:`\DDD`  whose elements are nothing
+but the inner-products of columns of  :math:`\DDD` .
  
 .. index:: Gram matrix
 
 
-We note that by definition  :math:`\| d_{\omega} \|_2 = 1`  hence 
- :math:`\mu \leq 1`  and since absolute values are considered hence  :math:`\mu \geq 0` .
-Thus,  :math:`0 \leq \mu \leq 1` . 
+We note that by definition  :math:`\| d_{\omega} \|_2 = 1`  
+hence :math:`\mu \leq 1`  and since absolute values are considered 
+hence  :math:`\mu \geq 0` .
+Thus,  :math:`0 \leq \mu \leq 1`. 
 
 For an orthonormal basis  :math:`\Psi`  all atoms are orthogonal to each other, hence
 
@@ -63,10 +61,10 @@ of absolute values of entries in a matrix  :math:`A` . i.e.
     |  A |_{i j}  = |  A _{i j} |.
 
 The off-diagonal entries of the Gram matrix are captured by the 
-matrix  :math:`\DD^H \DD - I` . Note that all diagonal entries in  :math:`\DD^H \DD - I` 
-are zero since atoms of  :math:`\DD`  are unit norm.
-Moreover, each of the entries in  :math:` | \DD^H \DD - I |` 
-is dominated by  :math:`\mu(\DD)` .
+matrix  :math:`\DDD^H \DDD - I` . Note that all diagonal entries in  :math:`\DDD^H \DDD - I` 
+are zero since atoms of  :math:`\DDD`  are unit norm.
+Moreover, each of the entries in  :math:`| \DDD^H \DDD - I |` 
+is dominated by  :math:`\mu(\DDD)` .
 
 
 The inner product between any two atoms  :math:`| \langle d_{\omega_j}, d_{\omega_k} \rangle |` 
@@ -76,7 +74,8 @@ which are most alike and returns their correlation.
 In a way  :math:`\mu`  is quite a blunt measure of the quality of a dictionary, yet it is quite useful.
 
 If a dictionary is uniform in the sense that there is not much variation in 
- :math:`| \langle d_{\omega_j}, d_{\omega_k} \rangle |` , then  :math:`\mu`  captures
+:math:`| \langle d_{\omega_j}, d_{\omega_k} \rangle |` , 
+then  :math:`\mu`  captures
 the behavior of the dictionary quite well.
 
 
@@ -98,29 +97,19 @@ incoherence plays a role in sparse approximation.
 
 .. example:: 
 
-    We established in  :ref:`lem:ssm:bound_two_ortho_basis_mutual_coherence <lem:ssm:bound_two_ortho_basis_mutual_coherence>` that
-    coherence of two ortho-bases is bounded by
-    
+    The coherence of two ortho-bases is bounded by
     
     .. math:: 
     
         \frac{1}{\sqrt{N}} \leq \mu \leq 1.
     
-    In particular we showed in  :ref:`lem:ssm:mutual_coherence_dirac_fourier_basis <lem:ssm:mutual_coherence_dirac_fourier_basis>` that
-    coherence of Dirac Fourier basis is  :math:`\frac{1}{\sqrt{N}}` .
-
-
-
+    The coherence of Dirac Fourier basis is  :math:`\frac{1}{\sqrt{N}}` .
 
 .. example:: Coherence: Multi-ONB dictionary
 
     A dictionary of concatenated orthonormal bases is called a multi-ONB. For some  :math:`N` , it is
     possible to build a multi-ONB which contains  :math:`N`  or even  :math:`N+1`  bases yet retains 
     the minimal coherence  :math:`\mu = \frac{1}{\sqrt{N}}`  possible.
-    \todo{Prove it.}
-
-
-
 
 .. theorem:: 
 
@@ -135,7 +124,7 @@ incoherence plays a role in sparse approximation.
 
 .. _def:ssm:grassmannian_frame:
 
-.. definition:: 
+.. definition::
 
      
     .. index:: Grassmannian frame
@@ -294,43 +283,42 @@ Let us look at an example for a two ortho-basis  :cite:`donoho2003optimally`.
 
 
     
-    Let  :math:`\DD`  be a two ortho-basis. Then
+    Let  :math:`\DDD`  be a two ortho-basis. Then
     
     
     .. math::
-        \spark (\DD) \geq \frac{2}{\mu(\DD)}.
+        \spark (\DDD) \geq \frac{2}{\mu(\DDD)}.
     
 
 
 
 .. proof:: 
 
-    From  :ref:`lem:ssm:two_ortho_basis_nullspace_vector_sparsity <lem:ssm:two_ortho_basis_nullspace_vector_sparsity>` we know that for any
-    vector  :math:`v \in \NullSpace(\DD)` 
-    
-    
+    It can be shown that for any
+    vector  :math:`v \in \NullSpace(\DDD)` 
+        
     .. math:: 
     
-        \| v \|_0 \geq \frac{2}{\mu(\DD)}.
+        \| v \|_0 \geq \frac{2}{\mu(\DDD)}.
     
     But
     
     
     .. math:: 
     
-        \spark(\DD) = \underset{v \in \NullSpace(\DD)} {\min}( \| v \|_0).
+        \spark(\DDD) = \underset{v \in \NullSpace(\DDD)} {\min}( \| v \|_0).
     
     Thus
     
     
     .. math:: 
     
-        \spark(\DD) \geq \frac{2}{\mu(\DD)}.
+        \spark(\DDD) \geq \frac{2}{\mu(\DDD)}.
     
 
 For maximally incoherent two orthonormal bases, we know that  :math:`\mu = \frac{1}{\sqrt{N}}` .
 A perfect example is the pair of Dirac and Fourier bases. In this case
- :math:`\spark(\DD) \geq 2 \sqrt{N}` .
+ :math:`\spark(\DDD) \geq 2 \sqrt{N}` .
 
 
  
@@ -363,34 +351,27 @@ We can now establish a uniqueness condition for sparse solution of  :math:`x = \
 
 .. proof:: 
 
-    This is a straightforward application of  :ref:`thm:ssm:uniqueness_spark <thm:ssm:uniqueness_spark>` 
-    and  :ref:`lem:ssm:spark_lower_bound_coherence <lem:ssm:spark_lower_bound_coherence>`.
+    This is a straightforward application of  
+    :ref:`spark uniqueness theorem <thm:ssm:uniqueness_spark>` 
+    and  :ref:`spark lower bound <lem:ssm:spark_lower_bound_coherence>`
+    on coherence.
 
 
-It is interesting to compare the two uniqueness theorems:  :ref:`thm:ssm:uniqueness_spark <thm:ssm:uniqueness_spark>` 
-and  :ref:`thm:ssm:uniqueness_coherence <thm:ssm:uniqueness_coherence>`.
+It is interesting to compare the two uniqueness theorems:  
+:ref:`spark uniqueness theorem <thm:ssm:uniqueness_spark>` 
+and  :ref:`coherence uniqueness theorem <thm:ssm:uniqueness_coherence>`.
 
- :ref:`thm:ssm:uniqueness_spark <thm:ssm:uniqueness_spark>` uses spark, is sharp and is far more powerful
-than  :ref:`thm:ssm:uniqueness_coherence <thm:ssm:uniqueness_coherence>`. 
+First one is sharp and is far more powerful
+than the second one based on coherence.
 
-Coherence can never be smaller than  :math:`\frac{1}{\sqrt{N}}` , therefore the bound on
- :math:`\| x^* \|_0`  in   :ref:`thm:ssm:uniqueness_coherence <thm:ssm:uniqueness_coherence>` can never be larger than
- :math:`\frac{\sqrt{N} + 1}{2}` .
+Coherence can never be smaller than  :math:`\frac{1}{\sqrt{N}}` , 
+therefore the bound on :math:`\| x^* \|_0`  in   
+:ref:`above <thm:ssm:uniqueness_coherence>` 
+can never be larger than :math:`\frac{\sqrt{N} + 1}{2}` .
 
 However, spark can be easily as large as  :math:`N`  and then bound on  :math:`\| x^* \|_0`  can
 be as large as  :math:`\frac{N}{2}` .
 
-We recall from  :ref:`thm:ssm:sparse_uniqueness_two_ortho_basis <thm:ssm:sparse_uniqueness_two_ortho_basis>` that the bound for
-sparsity level of sparest solution in two-ortho basis 
- :math:`\Eta = \begin{bmatrix}\Psi & \Chi \end{bmatrix}`   is given by 
-
-
-.. math:: 
-
-    \| x^* \|_0 < \frac{1}{\mu(\Eta)}
-
-which is a larger bound than  :ref:`thm:ssm:uniqueness_coherence <thm:ssm:uniqueness_coherence>` for general dictionaries
-by a factor of 2.
 
 Thus, we note that coherence gives a weaker bound than spark for supportable sparsity levels
 of unique solutions. The advantage that coherence has is that it is easily computable and
@@ -408,20 +389,20 @@ Singular values of sub-dictionaries
 
 
     
-    Let  :math:`\DD`  be a dictionary and  :math:`\DD_{\Lambda}`  be a sub-dictionary. 
-    Let  :math:`\mu`  be the coherence of  :math:`\DD` . Let  :math:`K = | \Lambda |` .
+    Let  :math:`\DDD`  be a dictionary and  :math:`\DDD_{\Lambda}`  be a sub-dictionary. 
+    Let  :math:`\mu`  be the coherence of  :math:`\DDD` . Let  :math:`K = | \Lambda |` .
     Then
-    the eigen values of  :math:`G = \DD_{\Lambda}^H \DD_{\Lambda}`  satisfy:
+    the eigen values of  :math:`G = \DDD_{\Lambda}^H \DDD_{\Lambda}`  satisfy:
     
     
     .. math::
         1 - (K - 1)   \mu  \leq \lambda \leq 1 + (K - 1)   \mu.
     
-    Moreover, the singular values of the sub-dictionary  :math:`\DD_{\Lambda}`  satisfy
+    Moreover, the singular values of the sub-dictionary  :math:`\DDD_{\Lambda}`  satisfy
     
     
     .. math::
-        \sqrt{1 - (K - 1)   \mu}  \leq \sigma (\DD_{\Lambda}) \leq \sqrt{1 + (K - 1)   \mu}.
+        \sqrt{1 - (K - 1)   \mu}  \leq \sigma (\DDD_{\Lambda}) \leq \sqrt{1 + (K - 1)   \mu}.
     
 
 
@@ -436,7 +417,7 @@ Singular values of sub-dictionaries
     
         | \lambda  - a_{ii} | \leq \sum_{j \neq i} |a_{ij}| \text{ for some } i \in \{ 1, \dots, K\}.
     
-    Now consider the matrix  :math:`G =  \DD_{\Lambda}^H \DD_{\Lambda}`  
+    Now consider the matrix  :math:`G =  \DDD_{\Lambda}^H \DDD_{\Lambda}`  
     with diagonal elements equal to 1 and off diagonal elements bounded by a value  :math:`\mu` .
     Then
     
@@ -459,7 +440,7 @@ Singular values of sub-dictionaries
     
         \lambda_{\min} (G) \geq 1 - (K - 1) \mu.
     
-    Since  :math:`G`  is positive definite ( :math:`\DD_{\Lambda}`  is full-rank), hence its eigen values
+    Since  :math:`G`  is positive definite ( :math:`\DDD_{\Lambda}`  is full-rank), hence its eigen values
     are positive. Thus, the above lower bound is useful only if
     
     
@@ -474,7 +455,7 @@ Singular values of sub-dictionaries
     
         \lambda_{\max} (G) \leq 1 + (K - 1) \mu.
     
-    The bounds on singular values of  :math:`\DD_{\Lambda}`  are obtained as a straight-forward
+    The bounds on singular values of  :math:`\DDD_{\Lambda}`  are obtained as a straight-forward
     extension by taking square roots on the expressions.
 
 
@@ -489,21 +470,21 @@ Embeddings using sub-dictionaries
 
 
     
-    Let  :math:`\DD`  be a real dictionary and  :math:`\DD_{\Lambda}`  be a sub-dictionary
+    Let  :math:`\DDD`  be a real dictionary and  :math:`\DDD_{\Lambda}`  be a sub-dictionary
     with  :math:`K = |\Lambda|` .
-    Let  :math:`\mu`  be the coherence of  :math:`\DD` .  Let  :math:`v \in \RR^K`  be an
+    Let  :math:`\mu`  be the coherence of  :math:`\DDD` .  Let  :math:`v \in \RR^K`  be an
     arbitrary vector. Then
     
     
     .. math::
-        | v |^T [I - \mu (\OneMat - I)] | v | \leq \| \DD_{\Lambda} v \|_2^2 \leq | v |^T [I + \mu (\OneMat - I)] | v |
+        | v |^T [I - \mu (\OneMat - I)] | v | \leq \| \DDD_{\Lambda} v \|_2^2 \leq | v |^T [I + \mu (\OneMat - I)] | v |
     
     where  :math:`\OneMat`  is a  :math:`K\times K`  matrix of all ones.
     Moreover
     
     
     .. math::
-        (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
+        (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DDD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
     
     
 
@@ -516,13 +497,13 @@ Embeddings using sub-dictionaries
     
     .. math:: 
     
-        \| \DD_{\Lambda} v \|_2^2 =  v^T \DD_{\Lambda}^T \DD_{\Lambda} v
+        \| \DDD_{\Lambda} v \|_2^2 =  v^T \DDD_{\Lambda}^T \DDD_{\Lambda} v
     
     
     
     .. math::
         \begin{aligned}
-        v^T \DD_{\Lambda}^T \DD_{\Lambda} v &= \sum_{i=1}^K \sum_{j=1}^K v_i  d_{\lambda_i}^T d_{\lambda_j} v_j.
+        v^T \DDD_{\Lambda}^T \DDD_{\Lambda} v &= \sum_{i=1}^K \sum_{j=1}^K v_i  d_{\lambda_i}^T d_{\lambda_j} v_j.
         \end{aligned}
     
     The terms in the R.H.S. for  :math:`i = j`  are given by
@@ -567,7 +548,7 @@ Embeddings using sub-dictionaries
     
     .. math:: 
     
-        | v |^T I | v |- \mu | v |^T (\OneMat - I ) | v | \leq v^T \DD_{\Lambda}^T \DD_{\Lambda} v
+        | v |^T I | v |- \mu | v |^T (\OneMat - I ) | v | \leq v^T \DDD_{\Lambda}^T \DDD_{\Lambda} v
         \leq | v |^T I | v |+ \mu | v |^T (\OneMat - I )| v |.
     
     We get the result by slight reordering of terms:
@@ -575,9 +556,9 @@ Embeddings using sub-dictionaries
     
     .. math:: 
     
-        | v |^T [I - \mu (\OneMat - I)] | v | \leq \| \DD_{\Lambda} v \|_2^2 \leq | v |^T [I + \mu (\OneMat - I)] | v |
+        | v |^T [I - \mu (\OneMat - I)] | v | \leq \| \DDD_{\Lambda} v \|_2^2 \leq | v |^T [I + \mu (\OneMat - I)] | v |
     
-    We note that due to  :ref:`res:ssm:ones_matrix_l1_norm <res:ssm:ones_matrix_l1_norm>`
+    We recall that
     
     
     .. math:: 
@@ -589,7 +570,7 @@ Embeddings using sub-dictionaries
     
     .. math:: 
     
-        (1 + \mu) \| v \|_2^2 - \mu \| v \|_1^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq (1 - \mu) \| v \|_2^2 + \mu \| v \|_1^2.
+        (1 + \mu) \| v \|_2^2 - \mu \| v \|_1^2 \leq \| \DDD_{\Lambda} v \|_2^2 \leq (1 - \mu) \| v \|_2^2 + \mu \| v \|_1^2.
     
     Alternatively,
     
@@ -597,11 +578,11 @@ Embeddings using sub-dictionaries
     .. math:: 
     
         \| v \|_2^2  - \mu \left (\| v \|_1^2 - \| v \|_2^2 \right ) 
-        \leq \| \DD_{\Lambda} v \|_2^2 \leq 
+        \leq \| \DDD_{\Lambda} v \|_2^2 \leq 
         \| v \|_2^2  + \mu \left (\| v \|_1^2 - \| v \|_2^2\right ) .
     
     
-    Finally, due to  :ref:`lem:ssm:l1_norm_l2_bounds <lem:ssm:l1_norm_l2_bounds>` 
+    Finally
     
     
     .. math:: 
@@ -613,7 +594,7 @@ Embeddings using sub-dictionaries
     
     .. math:: 
     
-        ( 1- (K - 1) \mu ) \| v \|_2^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq ( 1 + (K - 1) \mu ) \| v \|_2^2 .
+        ( 1- (K - 1) \mu ) \| v \|_2^2 \leq \| \DDD_{\Lambda} v \|_2^2 \leq ( 1 + (K - 1) \mu ) \| v \|_2^2 .
     
 
 
@@ -627,14 +608,14 @@ than the one presented above.
 
 
     
-    Let  :math:`\DD`  be a dictionary and  :math:`\DD_{\Lambda}`  be a sub-dictionary
+    Let  :math:`\DDD`  be a dictionary and  :math:`\DDD_{\Lambda}`  be a sub-dictionary
     with  :math:`K = |\Lambda|` .
-    Let  :math:`\mu`  be the coherence of  :math:`\DD` .  Let  :math:`v \in \CC^K`  be an
+    Let  :math:`\mu`  be the coherence of  :math:`\DDD` .  Let  :math:`v \in \CC^K`  be an
     arbitrary vector. Then
     
     
     .. math::
-        (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
+        (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DDD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
     
 
 
@@ -646,36 +627,34 @@ than the one presented above.
     
     .. math:: 
     
-        \sigma_{\min}^2(\DD_{\Lambda}) \| v \|_2^2  \leq \| \DD_{\Lambda} v \|_2^2 \leq 
-        \sigma_{\max}^2(\DD_{\Lambda}) \| v \|_2^2.
+        \sigma_{\min}^2(\DDD_{\Lambda}) \| v \|_2^2  \leq \| \DDD_{\Lambda} v \|_2^2 \leq 
+        \sigma_{\max}^2(\DDD_{\Lambda}) \| v \|_2^2.
     
     
-     :ref:`res:ssm:subdictionary_eigenvalue_coherence <res:ssm:subdictionary_eigenvalue_coherence>` tells us:
+    :ref:`A previous result <res:ssm:subdictionary_eigenvalue_coherence>` tells us:
+        
+    .. math:: 
     
+        1 - (K - 1)   \mu  \leq \sigma^2 (\DDD_{\Lambda}) \leq 1 + (K - 1)   \mu.
+    
+    Thus,    
     
     .. math:: 
     
-        1 - (K - 1)   \mu  \leq \sigma^2 (\DD_{\Lambda}) \leq 1 + (K - 1)   \mu.
-    
-    Thus,
-    
-    
-    .. math:: 
-    
-        \sigma_{\min}^2(\DD_{\Lambda}) \| v \|_2^2  \geq (1 - (K - 1)   \mu) \| v \|_2^2
+        \sigma_{\min}^2(\DDD_{\Lambda}) \| v \|_2^2  \geq (1 - (K - 1)   \mu) \| v \|_2^2
     
     and
     
     
     .. math:: 
     
-        \sigma_{\max}^2(\DD_{\Lambda}) \| v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2.
+        \sigma_{\max}^2(\DDD_{\Lambda}) \| v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2.
     
     This gives us the result
     
     
     .. math:: 
     
-         (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
+         (1 - (K - 1)   \mu) \| v \|_2^2 \leq \| \DDD_{\Lambda} v \|_2^2 \leq (1 + (K - 1)   \mu)\| v \|_2^2. 
     
 
