@@ -11,8 +11,8 @@ Spark
 
 
     
-    The  **spark**  of a given matrix  :math:`\Phi`  
-    is the smallest number of columns of  :math:`\Phi`  that
+    The  **spark**  of a given matrix  :math:`\Phi` 
+    is the smallest number of columns of  :math:`\Phi` that
     are linearly dependent. If all columns are linearly independent, then
     the spark is defined to be number of columns plus one.
      
@@ -28,14 +28,14 @@ which are linearly dependent.
 
 We recall that  *rank*  of a matrix is defined as the maximum number of columns which
 are linearly independent. Definition of spark bears remarkable resemblance yet its very hard 
-to obtain as it requires a combinatorial search over all possible subsets of columns of  :math:`\Phi` .
+to obtain as it requires a combinatorial search over all possible subsets of columns of  :math:`\Phi`.
 
 
 
 .. example:: Spark
 
     \begin{itemize}
-        \item  Spark of the  :math:`3 \times 3`  identity matrix    
+        \item  Spark of the  :math:`3 \times 3` identity matrix    
             
     
     .. math:: 
@@ -48,7 +48,7 @@ to obtain as it requires a combinatorial search over all possible subsets of col
      is 4 since all columns are linearly independent.
         
     
-    \item Spark of the  :math:`2 \times 4`  matrix 
+    \item Spark of the  :math:`2 \times 4` matrix 
     
     
     .. math:: 
@@ -62,7 +62,7 @@ to obtain as it requires a combinatorial search over all possible subsets of col
     \item If a matrix has a column with all zero entries, then the spark of such a matrix is 1.  This is a trivial case
     and we will not consider such matrices in the sequel.
     
-    \item In general for an  :math:`N \times D`  synthesis matrix,  :math:`\spark(\DD) \in [2, N+1]` .
+    \item In general for an  :math:`N \times D` synthesis matrix,  :math:`\spark(\DD) \in [2, N+1]`.
     
     \end{itemize}
     
@@ -77,33 +77,33 @@ A naive combinatorial algorithm to calculate the spark of a matrix is given in
 
     \small
     \SetAlgoLined
-    \KwIn{ :math:`\Phi`  }
-    \KwOut{ :math:`s =`  Spark of  :math:`\Phi` }
+    \KwIn{ :math:`\Phi` }
+    \KwOut{ :math:`s =` Spark of  :math:`\Phi` }
      :math:`R \leftarrow \text{rank} (\Phi)` \;
     \ForEach { :math:`j  \leftarrow 1,\dots, R` }{
-    Identify  :math:`\binom{D}{j}`  ways of choosing  :math:`j`  columns from  :math:`D`  columns of  :math:`\Phi` \;
-    \ForEach {choice of  :math:`j`  columns}{
+    Identify  :math:`\binom{D}{j}` ways of choosing  :math:`j` columns from  :math:`D` columns of  :math:`\Phi` \;
+    \ForEach {choice of  :math:`j` columns}{
         \If {columns are dependent}{
-             :math:`s \leftarrow j`  \;
+             :math:`s \leftarrow j` \;
             \Return \;
         }
     }
     }
     \tcp{All columns are linearly independent}
-     :math:`s \leftarrow R  + 1`  \;
+     :math:`s \leftarrow R  + 1` \;
     \caption{A naive algorithm for computing the spark of a matrix}
 
     
 
 
 Spark is useful in characterizing the uniqueness of the solution
-of a  :math:`(\DD, K)` - :textsc:`exact-sparse`  problem (see  :ref:`def:ssm:d_k_exact_sparse_problem <def:ssm:d_k_exact_sparse_problem>`).
+of a  :math:`(\DD, K)`- :textsc:`exact-sparse`  problem (see  :ref:`def:ssm:d_k_exact_sparse_problem <def:ssm:d_k_exact_sparse_problem>`).
 
 
 
 .. remark:: 
 
-    The  :math:`l_0` -``norm'' of vectors belonging to null space of a matrix  :math:`\Phi`  is greater than or equal to  :math:`\spark(\Phi)` :
+    The  :math:`l_0`-``norm'' of vectors belonging to null space of a matrix  :math:`\Phi` is greater than or equal to  :math:`\spark(\Phi)` :
     
     
     .. math::
@@ -115,9 +115,9 @@ of a  :math:`(\DD, K)` - :textsc:`exact-sparse`  problem (see  :ref:`def:ssm:d_k
 
 .. proof:: 
 
-    If  :math:`x \in \NullSpace(\Phi)`  then  :math:`\Phi x = 0` . Thus non-zero entries in  :math:`x`  pick a set of columns in  :math:`\Phi`  
-    which are linearly dependent. Clearly  :math:`\| x \|_0`  indicates the number of columns in the set which are
-    linearly dependent. By definition spark of  :math:`\Phi`  indicates the minimum number of columns which are linearly
+    If  :math:`x \in \NullSpace(\Phi)` then  :math:`\Phi x = 0`. Thus non-zero entries in  :math:`x` pick a set of columns in  :math:`\Phi` 
+    which are linearly dependent. Clearly  :math:`\| x \|_0` indicates the number of columns in the set which are
+    linearly dependent. By definition spark of  :math:`\Phi` indicates the minimum number of columns which are linearly
     dependent hence the result.
     
     
@@ -128,7 +128,7 @@ of a  :math:`(\DD, K)` - :textsc:`exact-sparse`  problem (see  :ref:`def:ssm:d_k
 
 
 We now present a criteria based on spark which characterizes the uniqueness of a sparse solution 
-to the problem  :math:`y = \Phi x` .
+to the problem  :math:`y = \Phi x`.
 
 
 .. _thm:ssm:uniqueness_spark:
@@ -140,7 +140,7 @@ to the problem  :math:`y = \Phi x` .
     
 
     
-    Consider a solution  :math:`x^*`  to the under-determined system  :math:`y = \Phi x` . If  :math:`x^*`  obeys
+    Consider a solution  :math:`x^*` to the under-determined system  :math:`y = \Phi x`. If  :math:`x^*` obeys
     
     
     .. math::
@@ -153,7 +153,7 @@ to the problem  :math:`y = \Phi x` .
 
 .. proof:: 
 
-    Let  :math:`x'`  be some other solution to the problem. Then 
+    Let  :math:`x'` be some other solution to the problem. Then 
     
     
     .. math:: 
@@ -174,24 +174,24 @@ to the problem  :math:`y = \Phi x` .
     
         \| x' \|_0 + \| x^* \|_0 \geq \| x' - x^* \|_0 \geq \spark(\Phi).
     
-    Hence, if  :math:`\| x^* \|_0 < \frac{\spark(\Phi)}{2}` , then we have
+    Hence, if  :math:`\| x^* \|_0 < \frac{\spark(\Phi)}{2}`, then we have
     
     
     .. math:: 
     
         \| x' \|_0  > \frac{\spark(\Phi)}{2}
     
-    for all other solutions  :math:`x'`  to the equation  :math:`y = \Phi x` . 
+    for all other solutions  :math:`x'` to the equation  :math:`y = \Phi x`. 
     
-    Thus  :math:`x^*`  is necessarily the sparsest possible solution.
+    Thus  :math:`x^*` is necessarily the sparsest possible solution.
 
 
 This result is quite useful as it establishes a global optimality criterion for the
-  :math:`(\DD, K)` - :textsc:`exact-sparse`  problem in
+  :math:`(\DD, K)`- :textsc:`exact-sparse`  problem in
  :ref:`def:ssm:d_k_exact_sparse_problem <def:ssm:d_k_exact_sparse_problem>`.
 
-As long as  :math:`K < \frac{1}{2}\spark(\Phi)`  this theorem guarantees that
-the solution to   :math:`(\DD, K)` - :textsc:`exact-sparse`  problem
+As long as  :math:`K < \frac{1}{2}\spark(\Phi)` this theorem guarantees that
+the solution to   :math:`(\DD, K)`- :textsc:`exact-sparse`  problem
 is unique. This is quite surprising result for a non-convex combinatorial optimization
 problem. We are able to guarantee a global uniqueness for the solution based
 on a simple check on the sparsity of the solution.
@@ -207,17 +207,17 @@ spark of a dictionary be}? We consider few examples.
 
 .. example:: Spark of Gaussian dictionaries
 
-    Consider a dictionary  :math:`\DD`  whose atoms  :math:`d_{i}`  are random vectors 
+    Consider a dictionary  :math:`\DD` whose atoms  :math:`d_{i}` are random vectors 
     independently drawn from normal distribution.
     Since a dictionary requires all its atoms to be unit-norms, hence we divide the each of 
     the random vectors with their norms.
     
-    We know that with probability  :math:`1`  any set of  :math:`N`  independent Gaussian random vectors is linearly independent. 
-    Also since  :math:`d_i \in \CC^N`  hence a set of  :math:`N+1`  atoms is always linearly dependent. 
+    We know that with probability  :math:`1` any set of  :math:`N` independent Gaussian random vectors is linearly independent. 
+    Also since  :math:`d_i \in \CC^N` hence a set of  :math:`N+1` atoms is always linearly dependent. 
     
-    Thus  :math:`\spark(\DD) = N +1` .
+    Thus  :math:`\spark(\DD) = N +1`.
     
-    Thus, if a solution to  :textsc:`exact-sparse`  problem contains  :math:`\frac{N}{2}`  or fewer non-zero
+    Thus, if a solution to  :textsc:`exact-sparse`  problem contains  :math:`\frac{N}{2}` or fewer non-zero
     entries then it is necessarily unique with probability 1. 
 
 
@@ -239,6 +239,6 @@ spark of a dictionary be}? We consider few examples.
     
         \spark(\DD) = 2 \sqrt{N}.
     
-    In this case, the sparsity level of a unique solution must be less than  :math:`\sqrt{N}` .
+    In this case, the sparsity level of a unique solution must be less than  :math:`\sqrt{N}`.
     \todo{Find how to compute spark of DF basis}
 

@@ -308,7 +308,7 @@ In the sequel, we will simply refer to it as  :math:`\Sigma_K`.
 We also note that set of vectors  :math:`\{ \alpha_{\lambda} : \lambda \in \Lambda \}` with  :math:`K < N`
 form a subspace of  :math:`\CC^N`.
 
-So we have  :math:`\binom{D}{K}`  :math:`K`-sparse subspaces contained in the dictionary  :math:`\mathcal{D}`.
+So we have  :math:`\binom{D}{K}` :math:`K`-sparse subspaces contained in the dictionary  :math:`\mathcal{D}`.
 And the  :math:`K`-sparse signals lie in the **union of all these subspaces**. 
 
 .. _sec:ssm:sparse_approximation_problem:
@@ -341,7 +341,7 @@ Then we can write   :math:`x_{\Lambda}` as
     x_{\Lambda} = \sum_{\lambda \in \Lambda} b_{\lambda} \phi_{\lambda} \quad \text{where } b_{\lambda}  \in \CC.
 
 
-We put all complex valued coefficients  :math:`b_{\lambda}`  in the sum into a list  :math:`b`.
+We put all complex valued coefficients  :math:`b_{\lambda}` in the sum into a list  :math:`b`.
 
 The approximation error is given by
     

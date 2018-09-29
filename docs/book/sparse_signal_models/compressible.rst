@@ -5,7 +5,7 @@ Compressible signals
 
 
 In this section, we first look at some general results and definitions
-related to  :math:`K` -term approximations of arbitrary signals  :math:`x \in \CC^N` . We then define
+related to  :math:`K`-term approximations of arbitrary signals  :math:`x \in \CC^N`. We then define
 the notion of a compressible signal and study properties related to it.
 
  
@@ -23,7 +23,7 @@ K-term approximation of general signals
     
 
     
-    Let  :math:`x \in \CC^N` . Let  :math:`T \subset \{ 1, 2, \dots, N\}`  be any index set.Further let
+    Let  :math:`x \in \CC^N`. Let  :math:`T \subset \{ 1, 2, \dots, N\}` be any index set.Further let
     
     
     .. math:: 
@@ -37,7 +37,7 @@ K-term approximation of general signals
     
         t_1 < t_2 < \dots < t_{|T|}.
     
-    Let  :math:`x_T \in \CC^{|T|}`  be defined as 
+    Let  :math:`x_T \in \CC^{|T|}` be defined as 
     
     
     .. math::
@@ -47,9 +47,9 @@ K-term approximation of general signals
         x_{t_1} & x_{t_2}  & \dots & x_{t_{|T|}}
         \end{pmatrix}.
     
-    Then  :math:`x_T`  is a  **restriction**  of the signal  :math:`x`  on the index set  :math:`T` .
+    Then  :math:`x_T` is a  **restriction**  of the signal  :math:`x` on the index set  :math:`T`.
     
-    Alternatively let  :math:`x_T \in \CC^N`  be defined as
+    Alternatively let  :math:`x_T \in \CC^N` be defined as
     
     
     .. math::
@@ -57,15 +57,15 @@ K-term approximation of general signals
     
         x_{T}(i) = \left\{
                 \begin{array}{ll}
-                    x(i) & \mbox{if  :math:`i \in T` };\\
+                    x(i) & \mbox{if  $i \in T$ };\\
                     0 & \mbox{otherwise}.
                 \end{array}
               \right.
     
-    In other words,  :math:`x_T \in \CC^N`  keeps the entries in  :math:`x`  indexed by  :math:`T`  while sets all other entries to 0. Then we say
-    that  :math:`x_T`  is obtained by  **masking**   :math:`x`  with  :math:`T` .
+    In other words,  :math:`x_T \in \CC^N` keeps the entries in  :math:`x` indexed by  :math:`T` while sets all other entries to 0. Then we say
+    that  :math:`x_T` is obtained by  **masking**   :math:`x` with  :math:`T`.
     As an abuse of notation, we will use any of the two definitions
-    whenever we are referring to  :math:`x_T` . The definition 
+    whenever we are referring to  :math:`x_T`. The definition 
     being used should be obvious from the context.
 
 
@@ -98,7 +98,7 @@ K-term approximation of general signals
         -1 & 0 & 8 & 0 & 0 &  0 & 0 & 0 & 0 & 0
         \end{pmatrix} \in \CC^{10}.
     
-    Since  :math:`|T| = 4` , sometimes we will also write
+    Since  :math:`|T| = 4`, sometimes we will also write
     
     
     .. math:: 
@@ -115,19 +115,20 @@ K-term approximation of general signals
 .. definition:: 
 
      
-    .. index::  :math:`K` -term approximation
+    .. index::  :math:`K`-term approximation
     
 
     
-    Let  :math:`x \in \CC^N`  be an arbitrary signal.  Consider any index set  :math:`T \subset \{1, \dots, N \}` 
-    with  :math:`|T| = K` . Then  :math:`x_T`  is a  **:math:`K` -term approximation**  of  :math:`x` .
+    Let  :math:`x \in \CC^N` be an arbitrary signal.  Consider any index set  :math:`T \subset \{1, \dots, N \}` 
+    with  :math:`|T| = K`. Then  :math:`x_T` is a  
+    :math:`K`-term approximation  of  :math:`x`.
 
 
-Clearly for any  :math:`x \in \CC^N`  there are  :math:`\binom{N}{K}`  possible  :math:`K` -term approximations of  :math:`x` .
+Clearly for any  :math:`x \in \CC^N` there are  :math:`\binom{N}{K}` possible  :math:`K`-term approximations of  :math:`x`.
 
 
 
-.. example::  :math:`K` -term approximation
+.. example::  K-term approximation
 
     Let 
     
@@ -138,7 +139,7 @@ Clearly for any  :math:`x \in \CC^N`  there are  :math:`\binom{N}{K}`  possible 
         -1 & 5 & 8 & 0 & 0 & -3 & 0 & 0 & 0 & 0
         \end{pmatrix} \in \CC^{10}.
     
-    Let  :math:`T= \{ 1, 6 \}` . Then
+    Let  :math:`T= \{ 1, 6 \}`. Then
     
     
     .. math:: 
@@ -147,9 +148,9 @@ Clearly for any  :math:`x \in \CC^N`  there are  :math:`\binom{N}{K}`  possible 
         -1 & 0 & 0 & 0 & 0 & -3 & 0 & 0 & 0 & 0
         \end{pmatrix}
     
-    is a  :math:`2` -term approximation of  :math:`x` . 
+    is a  :math:`2`-term approximation of  :math:`x`. 
     
-    If we choose  :math:`T= \{7,8,9,10\}` , the corresponding  :math:`4` -term approximation of  :math:`x`  is
+    If we choose  :math:`T= \{7,8,9,10\}`, the corresponding  :math:`4`-term approximation of  :math:`x` is
     
     
     .. math:: 
@@ -170,31 +171,30 @@ Clearly for any  :math:`x \in \CC^N`  there are  :math:`\binom{N}{K}`  possible 
     
 
     
-    Let  :math:`x \in \CC^N`  be an arbitrary signal. Let  :math:`\lambda_1, \dots, \lambda_N`  be
-    indices of entries in  :math:`x`  such that
+    Let  :math:`x \in \CC^N` be an arbitrary signal. Let  :math:`\lambda_1, \dots, \lambda_N` be
+    indices of entries in  :math:`x` such that
     
     
     .. math:: 
     
         | x_{\lambda_1} | \geq | x_{\lambda_2} | \geq \dots \geq | x_{\lambda_N} |.
     
-    In case of ties, the order is resolved lexicographically, i.e. if  :math:`|x_i| = |x_j|`  
-    and  :math:`i < j`  then  :math:`i`  will appear first in the sequence  :math:`\lambda_k` .
+    In case of ties, the order is resolved lexicographically, i.e. if  :math:`|x_i| = |x_j|` 
+    and  :math:`i < j` then  :math:`i` will appear first in the sequence  :math:`\lambda_k`.
     
-    Consider the index set  :math:`\Lambda_K = \{ \lambda_1, \lambda_2, \dots, \lambda_K\}` . 
-    The restriction of  :math:`x`  on  :math:`\Lambda_K`  given by  :math:`x_{\Lambda_K}`  (see  :ref:`def:ssm:signal_restriction <def:ssm:signal_restriction>`)
-    contains the  :math:`K`  largest entries  :math:`x`  while setting all other entries to 0. This is known
-    as the  **:math:`K`  largest entries approximation**  of  :math:`x` . 
+    Consider the index set  :math:`\Lambda_K = \{ \lambda_1, \lambda_2, \dots, \lambda_K\}`. 
+    The restriction of  :math:`x` on  :math:`\Lambda_K` given by  :math:`x_{\Lambda_K}` (see  :ref:`above <def:ssm:signal_restriction>`)
+    contains the  :math:`K` largest entries  :math:`x` while setting all other entries to 0. This is known
+    as the  :math:`K` **largest entries approximation**  of  :math:`x`. 
     
-    This signal is denoted henceforth as  :math:`x|_K` . i.e.
-    
+    This signal is denoted henceforth as  :math:`x|_K`. i.e.
     
     .. math::
         :label: eq:equation_label
     
         x|_K = x_{\Lambda_K}
     
-    where  :math:`\Lambda_K`  is the index set corresponding to  :math:`K`  largest entries in  :math:`x`  (magnitude wise).
+    where  :math:`\Lambda_K` is the index set corresponding to  :math:`K` largest entries in  :math:`x` (magnitude wise).
 
 
 
@@ -241,22 +241,22 @@ Clearly for any  :math:`x \in \CC^N`  there are  :math:`\binom{N}{K}`  possible 
     
         x|_4 = x.
     
-    All further  :math:`K`  largest entries approximations are same as  :math:`x` .
+    All further  :math:`K` largest entries approximations are same as  :math:`x`.
 
 
-A pertinent question at this point is: which  :math:`K` -term approximation of  :math:`x`  is the best 
- :math:`K` -term approximation? Certainly in order to compare two approximations we need
-some criterion. Let us choose  :math:`l_p`  norm as the criterion. The next
-lemma gives an interesting result for best  :math:`K` -term approximations in  :math:`l_p`  norm sense.
+A pertinent question at this point is: which  
+:math:`K`-term approximation of  :math:`x` is the best 
+:math:`K`-term approximation? 
+Certainly in order to compare two approximations we need
+some criterion. 
+Let us choose  :math:`l_p` norm as the criterion. The next
+lemma gives an interesting result for best  :math:`K`-term approximations in  :math:`l_p` norm sense.
 
 
 .. _lem:ssm:best_k_term_approximation:
-
 .. lemma:: 
 
-
-    
-    Let  :math:`x \in \CC^N` . Let the best  :math:`K`  term approximation of  :math:`x`  be obtained by the following optimization program:
+    Let  :math:`x \in \CC^N`. Let the best  :math:`K` term approximation of  :math:`x` be obtained by the following optimization program:
     
     
     .. math::
@@ -269,10 +269,10 @@ lemma gives an interesting result for best  :math:`K` -term approximations in  :
             & & |T| = K.
         \end{aligned}
     
-    where  :math:`p \in [1, \infty]` .
+    where  :math:`p \in [1, \infty]`.
     
-    Let an optimal solution for this optimization problem be denoted by 
-     :math:`x_{T^*}` . 
+    Let an optimal solution for this optimization problem 
+    be denoted by :math:`x_{T^*}`. 
     Then  
     
     
@@ -280,18 +280,19 @@ lemma gives an interesting result for best  :math:`K` -term approximations in  :
     
         \| x|_K \|_p = \| x_{T^*} \|_p.
     
-    i.e. the  :math:`K` -largest entries approximation of  :math:`x`  is an optimal solution to  :eq:`eq:best_k_term_approximation_optimization_problem` .
+    i.e. the  :math:`K`-largest entries approximation of  :math:`x` is an optimal solution to  
+    :eq:`eq:best_k_term_approximation_optimization_problem` .
 
 
 
 .. proof:: 
 
-    For  :math:`p=\infty` , the result is obvious. In the following, we focus on  :math:`p \in [1, \infty)` .
+    For  :math:`p=\infty`, the result is obvious. In the following, we focus on  :math:`p \in [1, \infty)`.
     
-    We note that maximizing  :math:` \| x_T \|_p`  is equivalent to maximizing  :math:` \| x_T \|^p_p` .
+    We note that maximizing  :math:`\| x_T \|_p` is equivalent to maximizing  :math:`\| x_T \|^p_p`.
     
-    Let  :math:`\lambda_1, \dots, \lambda_N`  be
-    indices of entries in  :math:`x`  such that
+    Let  :math:`\lambda_1, \dots, \lambda_N` be
+    indices of entries in  :math:`x` such that
     
     
     .. math:: 
@@ -299,7 +300,7 @@ lemma gives an interesting result for best  :math:`K` -term approximations in  :
         | x_{\lambda_1} | \geq | x_{\lambda_2} | \geq \dots \geq | x_{\lambda_N} |.
     
     
-    Further let  :math:`\{ \omega_1, \dots, \omega_N\}`  be any permutation of  :math:`\{1, \dots, N \}` .
+    Further let  :math:`\{ \omega_1, \dots, \omega_N\}` be any permutation of  :math:`\{1, \dots, N \}`.
     
     Clearly
     
@@ -309,7 +310,7 @@ lemma gives an interesting result for best  :math:`K` -term approximations in  :
         \| x|_K \|_p^{p} = \sum_{i=1}^K |x_{\lambda_i}|^{p}  \geq \sum_{i=1}^K |x_{\omega_i}|^{p}.
     
     
-    Thus if  :math:`T^*`  corresponds to an optimal solution of  :eq:`eq:best_k_term_approximation_optimization_problem` 
+    Thus if  :math:`T^*` corresponds to an optimal solution of  :eq:`eq:best_k_term_approximation_optimization_problem` 
     then 
     
     
@@ -317,25 +318,25 @@ lemma gives an interesting result for best  :math:`K` -term approximations in  :
     
         \| x|_K \|_p^{p}  = \| x_{T^*} \|_p^{p}.
     
-    Thus  :math:`x|_K`  is an optimal solution to  :eq:`eq:best_k_term_approximation_optimization_problem` .
+    Thus  :math:`x|_K` is an optimal solution to  :eq:`eq:best_k_term_approximation_optimization_problem` .
 
 
-This lemma helps us establish that whenever we are looking for a best  :math:`K` -term 
-approximation of  :math:`x`  under any  :math:`l_p`  norm, all we have to do is to pickup
-the  :math:`K` -largest entries in  :math:`x` .
+This lemma helps us establish that whenever we are looking for a best  :math:`K`-term 
+approximation of  :math:`x` under any  :math:`l_p` norm, all we have to do is to pickup
+the  :math:`K`-largest entries in  :math:`x`.
 
 
 
+.. index:: Restriction of a matrix on an index set
 .. _def:ssm:matrix_restriction:
 
 .. definition:: 
 
      
-    .. index:: Restriction of a matrix on an index set
     
 
     
-    Let  :math:`\Phi \in \CC^{M \times N}` . Let  :math:`T \subset \{ 1, 2, \dots, N\}`  be any index set.Further let
+    Let  :math:`\Phi \in \CC^{M \times N}`. Let  :math:`T \subset \{ 1, 2, \dots, N\}` be any index set.Further let
     
     
     .. math:: 
@@ -349,7 +350,7 @@ the  :math:`K` -largest entries in  :math:`x` .
     
         t_1 < t_2 < \dots < t_{|T|}.
     
-    Let  :math:`\Phi_T \in \CC^{M \times |T|}`  be defined as 
+    Let  :math:`\Phi_T \in \CC^{M \times |T|}` be defined as 
     
     
     .. math::
@@ -359,9 +360,9 @@ the  :math:`K` -largest entries in  :math:`x` .
         \phi_{t_1} & \phi_{t_2}  & \dots & \phi_{t_{|T|}}
         \end{bmatrix}.
     
-    Then  :math:`\Phi_T`  is a  **restriction**  of the matrix  :math:`\Phi`  on the index set  :math:`T` .
+    Then  :math:`\Phi_T` is a  **restriction**  of the matrix  :math:`\Phi` on the index set  :math:`T`.
     
-    Alternatively let  :math:`\Phi_T \in \CC^{M \times N}`  be defined as
+    Alternatively let  :math:`\Phi_T \in \CC^{M \times N}` be defined as
     
     
     .. math::
@@ -369,15 +370,15 @@ the  :math:`K` -largest entries in  :math:`x` .
     
         (\Phi_{T})_i = \left\{
                 \begin{array}{ll}
-                    \phi_i & \mbox{if  :math:`i \in T` };\\
+                    \phi_i & \mbox{if  $i \in T$ };\\
                     0 & \mbox{otherwise}.
                 \end{array}
               \right.
     
-    In other words,  :math:`\Phi_T \in \CC^{M \times N}`  keeps the columns in  :math:`\Phi`  indexed by  :math:`T`  while sets all other columns to 0. Then we say
-    that  :math:`\Phi_T`  is obtained by  **masking**   :math:`\Phi`  with  :math:`T` .
+    In other words,  :math:`\Phi_T \in \CC^{M \times N}` keeps the columns in  :math:`\Phi` indexed by  :math:`T` while sets all other columns to 0. Then we say
+    that  :math:`\Phi_T` is obtained by  **masking**   :math:`\Phi` with  :math:`T`.
     As an abuse of notation, we will use any of the two definitions
-    whenever we are referring to  :math:`\Phi_T` . The definition 
+    whenever we are referring to  :math:`\Phi_T`. The definition 
     being used should be obvious from the context.
 
 
@@ -388,7 +389,7 @@ the  :math:`K` -largest entries in  :math:`x` .
 
 
     
-    Let  :math:`\supp(x) = \Lambda` . Then 
+    Let  :math:`\supp(x) = \Lambda`. Then 
     
     
     .. math::
@@ -413,9 +414,9 @@ the  :math:`K` -largest entries in  :math:`x` .
 .. remark:: 
 
     The lemma remains valid whether we use
-    the restriction or the mask version of  :math:`x_{\Lambda}`  
+    the restriction or the mask version of  :math:`x_{\Lambda}` 
     notation as long as same version is used
-    for both  :math:`\Phi`  and  :math:`x` .
+    for both  :math:`\Phi` and  :math:`x`.
 
 
 
@@ -425,14 +426,14 @@ the  :math:`K` -largest entries in  :math:`x` .
 
 
     
-    Let  :math:`S`  and  :math:`T`  be two disjoint index sets such that
+    Let  :math:`S` and  :math:`T` be two disjoint index sets such that
     for some  :math:`x \in \CC^N` 
     
     
     .. math::
         x = x_T + x_S
     
-    using the mask version of  :math:`x_T`  notation.
+    using the mask version of  :math:`x_T` notation.
     Then the following holds
     
     
@@ -445,7 +446,7 @@ the  :math:`K` -largest entries in  :math:`x` .
 .. proof:: 
 
     Straightforward application of 
-     :ref:`lem:ssm:restriction_simplification_sparse_vector <lem:ssm:restriction_simplification_sparse_vector>`:
+    :ref:`previous result <lem:ssm:restriction_simplification_sparse_vector>`:
     
     
     .. math:: 
@@ -461,8 +462,8 @@ the  :math:`K` -largest entries in  :math:`x` .
 
 
     
-    Let  :math:`T`  be any index set. Let  :math:`\Phi \in \CC^{M \times N}` 
-    and  :math:`y \in \CC^M` .
+    Let  :math:`T` be any index set. Let  :math:`\Phi \in \CC^{M \times N}` 
+    and  :math:`y \in \CC^M`.
     Then
     
     
@@ -511,7 +512,7 @@ the  :math:`K` -largest entries in  :math:`x` .
 .. remark:: 
 
     The lemma remains valid whether we use
-    the restriction or the mask version of  :math:`\Phi_T`  
+    the restriction or the mask version of  :math:`\Phi_T` 
     notation.
 
 
@@ -525,26 +526,23 @@ We will now define the notion of a compressible signal in terms of the decay rat
 of magnitude of its entries when sorted in descending order.
 
 
+.. index::  :math:`p`-compressible signal
 .. _def:ssm:p_compressible_signal:
 
 .. definition:: 
 
-     
-    .. index::  :math:`p` -compressible signal
-    
-
-    
-    Let  :math:`x \in \CC^N`  be an arbitrary signal. Let  :math:`\lambda_1, \dots, \lambda_N`  be
-    indices of entries in  :math:`x`  such that
-    
-    
+    Let  :math:`x \in \CC^N` be an arbitrary signal. 
+    Let  :math:`\lambda_1, \dots, \lambda_N` be
+    indices of entries in  :math:`x` such that
+        
     .. math:: 
     
         | x_{\lambda_1} | \geq | x_{\lambda_2} | \geq \dots \geq | x_{\lambda_N} |.
     
-    In case of ties, the order is resolved lexicographically, i.e. if  :math:`|x_i| = |x_j|`  
-    and  :math:`i < j`  then  :math:`i`  will appear first in the sequence  :math:`\lambda_k` .
-    Define
+    In case of ties, the order is resolved lexicographically, i.e. 
+    if  :math:`|x_i| = |x_j|` 
+    and  :math:`i < j` then  :math:`i` will appear first in the 
+    sequence  :math:`\lambda_k`. Define
     
     
     .. math::
@@ -552,16 +550,12 @@ of magnitude of its entries when sorted in descending order.
     
         \widehat{x} = (x_{\lambda_1}, x_{\lambda_2}, \dots, x_{\lambda_N}).
     
-    The signal  :math:`x`  is called  **:math:`p` -compressible**  with magnitude  :math:`R`  if there exists  :math:`p \in (0, 1)`  such that
-    
-    
+    The signal  :math:`x` is called  :math:`p`-**compressible**  with magnitude  :math:`R` if there exists  :math:`p \in (0, 1]` such that
+        
     .. math::
         :label: eq:p_compressible_signal_entry
     
         | \widehat{x}_i |\leq R \cdot i^{-\frac{1}{p}} \quad \forall i=1, 2,\dots, N.
-    
-
-
 
 .. _lem:ssm:compressible_p_1:
 
@@ -569,7 +563,7 @@ of magnitude of its entries when sorted in descending order.
 
 
     
-    Let  :math:`x`  be be  :math:`p` -compressible  with  :math:`p=1` . Then
+    Let  :math:`x` be be  :math:`p`-compressible  with  :math:`p=1`. Then
     
     
     .. math::
@@ -580,17 +574,18 @@ of magnitude of its entries when sorted in descending order.
 
 .. proof:: 
 
-    Recalling  :math:`\widehat{x}`  from \eqref{eq:x_sorted_in_magnitude_descending} its straightforward to see that
-    
+    Recalling  :math:`\widehat{x}` from 
+    :eq:`eq:x_sorted_in_magnitude_descending` 
+    it's straightforward to see that
     
     .. math:: 
     
         \|x\|_1 = \|\widehat{x}\|_1
     
-    since the  :math:`l_1`  norm doesn't depend on the ordering of entries in  :math:`x` .
+    since the  :math:`l_1` norm doesn't depend on the ordering of entries in  :math:`x`.
     
-    Now since  :math:`x`  is  :math:`1` -compressible, hence from \eqref{eq:p_compressible_signal_entry} we have
-    
+    Now since  :math:`x` is  :math:`1`-compressible, hence from 
+    :eq:`eq:p_compressible_signal_entry` we have
     
     .. math:: 
     
@@ -598,14 +593,12 @@ of magnitude of its entries when sorted in descending order.
     
     This gives us
     
-    
     .. math:: 
     
         \|\widehat{x}\|_1  \leq \sum_{i=1}^N R \frac{1}{i} = R \sum_{i=1}^N \frac{1}{i}.
     
-    The sum on the R.H.S. is the  :math:`N` -th Harmonic number (sum of reciprocals of first  :math:`N`  natural numbers).
+    The sum on the R.H.S. is the  :math:`N`-th Harmonic number (sum of reciprocals of first  :math:`N` natural numbers).
     A simple upper bound on Harmonic numbers is
-    
     
     .. math:: 
     
@@ -622,8 +615,8 @@ We now demonstrate how a compressible signal is well approximated by a sparse si
 
 
     
-    Let  :math:`x`  be a  :math:`p` -compressible signal and let  :math:`x|_K`  be its best  :math:`K` -term approximation. 
-    Then the  :math:`l_1`  norm of approximation error satisfies 
+    Let  :math:`x` be a  :math:`p`-compressible signal and let  :math:`x|_K` be its best  :math:`K`-term approximation. 
+    Then the  :math:`l_1` norm of approximation error satisfies 
     
     
     .. math::
@@ -638,7 +631,7 @@ We now demonstrate how a compressible signal is well approximated by a sparse si
     
         C_p = \left (\frac{1}{p} - 1 \right)^{-1}.
     
-    Moreover the  :math:`l_2`  norm of approximation error satisfies
+    Moreover the  :math:`l_2` norm of approximation error satisfies
     
     
     .. math::
@@ -685,5 +678,5 @@ We now demonstrate how a compressible signal is well approximated by a sparse si
         \left [ \frac{x^{1-\frac{1}{p}}}{1-\frac{1}{p}} \right ]_{K}^{\infty}
         = C_p K^{1 - \frac{1}{p}}.
     
-    We can similarly show the result for  :math:`l_2`  norm.
+    We can similarly show the result for  :math:`l_2` norm.
 

@@ -26,14 +26,14 @@ We can sort the wavelet coefficients by magnitude and plot
 them in descending order to visualize how sparse the 
 representation is in  :ref:`fig:ssm:piecewise_polynomial:representation_sorted <fig:ssm:piecewise_polynomial:representation_sorted>`. The chosen basis is a Daubechies wavelet basis  :math:`\Psi` 
  :ref:`fig:ssm:piecewise_polynomial:dictionary <fig:ssm:piecewise_polynomial:dictionary>`.
-A Gaussian random sensing matrix  :math:`\Phi`  
+A Gaussian random sensing matrix  :math:`\Phi` 
 ( :ref:`fig:ssm:piecewise_polynomial:sensing_matrix <fig:ssm:piecewise_polynomial:sensing_matrix>`)
 is used to generate
-the measurement vector  :math:`y`  
+the measurement vector  :math:`y` 
 ( :ref:`fig:ssm:piecewise_polynomial:measurements <fig:ssm:piecewise_polynomial:measurements>`).
-Finally the product of  :math:`\Phi`  and  :math:`\Psi`  given by  :math:`\Phi \Psi`  
+Finally the product of  :math:`\Phi` and  :math:`\Psi` given by  :math:`\Phi \Psi` 
 will be used for actual recovery of sparse representation
- :math:`\alpha`  from the measurements  :math:`y`  
+ :math:`\alpha` from the measurements  :math:`y` 
 ( :ref:`fig:ssm:piecewise_polynomial:recovery_matrix <fig:ssm:piecewise_polynomial:recovery_matrix>`).
 Fundamental equations are:
 
@@ -49,13 +49,13 @@ and
 
     y = \Phi x + e = \Phi \Psi \alpha + e.
 
-with  :math:`x \in \RR^N` . In this example  :math:`N = 2048` .
- :math:`\Psi`  is a complete dictionary of size  :math:`N \times N` .
-Thus we have  :math:`D = N`  and  :math:`\alpha \in \RR^N` . 
- :math:`\Phi \in \RR^{M \times N}` . In this example, 
-the number of measurements  :math:`M=600` . The 
-measurement vector  :math:`y \in \RR^M` . For this problem
-we chose  :math:`e = 0` . 
+with  :math:`x \in \RR^N`. In this example  :math:`N = 2048`.
+ :math:`\Psi` is a complete dictionary of size  :math:`N \times N`.
+Thus we have  :math:`D = N` and  :math:`\alpha \in \RR^N`. 
+ :math:`\Phi \in \RR^{M \times N}`. In this example, 
+the number of measurements  :math:`M=600`. The 
+measurement vector  :math:`y \in \RR^M`. For this problem
+we chose  :math:`e = 0`. 
 
 Sparse signal recovery problem is denoted as
 
@@ -64,15 +64,15 @@ Sparse signal recovery problem is denoted as
 
     \widehat{\alpha} = \text{recovery}(\Phi \Psi, y, K).
 
-where  :math:`\widehat{\alpha}`  is a  :math:`K` -sparse approximation of  :math:`\alpha` .
+where  :math:`\widehat{\alpha}` is a  :math:`K`-sparse approximation of  :math:`\alpha`.
 
-Closely examining the coefficients in  :math:`\alpha`  we can note that
- :math:`\max(\alpha_i) = 78.0546` . Further if we put different thresholds
-over magnitudes of entries in  :math:`\alpha`  we can find the number
+Closely examining the coefficients in  :math:`\alpha` we can note that
+ :math:`\max(\alpha_i) = 78.0546`. Further if we put different thresholds
+over magnitudes of entries in  :math:`\alpha` we can find the number
 of coefficients higher than the threshold as listed in 
  :ref:`tbl:ssm:piecewise_polynomial:nonzero_entries <tbl:ssm:piecewise_polynomial:nonzero_entries>`. 
-A choice of  :math:`M = 600`  looks quite reasonable given the decay
-of entries in  :math:`\alpha` .
+A choice of  :math:`M = 600` looks quite reasonable given the decay
+of entries in  :math:`\alpha`.
 
 
 .. _tbl:ssm:piecewise_polynomial:nonzero_entries:
