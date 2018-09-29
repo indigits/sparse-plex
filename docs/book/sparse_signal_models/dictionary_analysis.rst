@@ -4,7 +4,8 @@ Tools for dictionary analysis
 ===================================================
 
 
-In this section we review various properties associated with a dictionary  :math:`\mathcal{D}` which are
+In this and following sections we review various properties associated 
+with a dictionary  :math:`\mathcal{D}` which are
 useful in understanding the behavior and capabilities of a dictionary.
 
 
@@ -26,17 +27,17 @@ the atoms of  :math:`\mathcal{D}` by a vector  :math:`\alpha \in \CC^D` as
 
 .. math:: 
 
-    x = \DD \alpha.
+    x = \DDD \alpha.
 
-Note that we are using the same symbol  :math:`\DD` to represent the dictionary
+Note that we are using the same symbol  :math:`\DDD` to represent the dictionary
 as a set of atoms as well as the corresponding synthesis matrix.
 
-We can write the matrix  :math:`\DD` consisting of its columns as
+We can write the matrix  :math:`\DDD` consisting of its columns as
 
 
 .. math:: 
 
-    \DD = 
+    \DDD = 
     \begin{bmatrix}
     d_1 & \dots & d_D
     \end{bmatrix}
@@ -55,7 +56,7 @@ will take the form of  :math:`\Lambda \subseteq \{\omega_1, \dots, \omega_D\}` o
 the subset of atoms in the dictionary or a subset of columns from the corresponding
 synthesis matrix.
 
-Often we will need the notion of a sub-dictionary \cite{tropp2006just} described below.
+We will need the notion of a sub-dictionary :cite:`tropp2006just` described below.
 
 .. _def:ssm:subdictionary:
 
@@ -68,8 +69,8 @@ Often we will need the notion of a sub-dictionary \cite{tropp2006just} described
     
     A sub-dictionary is a linearly independent collection of atoms. 
     Let  :math:`\Lambda \subset \{\omega_1, \dots, \omega_D\}` be the index set for the
-    atoms in the sub-dictionary. We denote the sub-dictionary as  :math:`\DD_{\Lambda}`.
-    We also use  :math:`\DD_{\Lambda}` to denote the corresponding matrix with  :math:`\Lambda \subset \{1, \dots, D\}`.
+    atoms in the sub-dictionary. We denote the sub-dictionary as  :math:`\DDD_{\Lambda}`.
+    We also use  :math:`\DDD_{\Lambda}` to denote the corresponding matrix with  :math:`\Lambda \subset \{1, \dots, D\}`.
 
 
 
@@ -80,11 +81,13 @@ Often we will need the notion of a sub-dictionary \cite{tropp2006just} described
 
 This is obvious since it is a collection of linearly independent atoms.
 
-For subdictionaries often we will say  :math:`K = | \Lambda |` and  :math:`G = \DD_{\Lambda}^H \DD_{\Lambda}` as its
-Gram matrix. Sometimes, we will also be considering  :math:`G^{-1}`.  :math:`G^{-1}` has a useful interpretation
-in terms of the  **dual vectors**  for the atoms in  :math:`\DD_{\Lambda}` \cite{tropp2004just}.
+For subdictionaries often we will say  :math:`K = | \Lambda |` and  :math:`G = \DDD_{\Lambda}^H \DDD_{\Lambda}` as its
+Gram matrix. Sometimes, we will also be considering  
+:math:`G^{-1}`.  :math:`G^{-1}` has a useful interpretation
+in terms of the  **dual vectors**  for the atoms in  
+:math:`\DDD_{\Lambda}` :cite:`tropp2004just`.
 
-Let  :math:`\{ d_{\lambda} \}_{\lambda \in \Lambda}` denote the atoms in  :math:`\DD_{\Lambda}`. 
+Let  :math:`\{ d_{\lambda} \}_{\lambda \in \Lambda}` denote the atoms in  :math:`\DDD_{\Lambda}`. 
 Let  :math:`\{ c_{\lambda} \}_{\lambda \in \Lambda}` 
 be chosen such that
 
@@ -103,17 +106,18 @@ and
 Each dual vector  :math:`c_{\lambda}` is orthogonal to atoms in the subdictionary at different indices
 and is long enough so that its inner product with  :math:`d_{\lambda}` is one. The dual system somehow
 inverts the sub-dictionary. In fact the dual vectors are nothing but the columns of the 
-matrix  :math:`B = (\DD_{\Lambda}^{\dag})^H`. Now, a simple calculation:
+matrix  :math:`B = (\DDD_{\Lambda}^{\dag})^H`. Now, a simple calculation:
 
 
 .. math:: 
 
-    B^H B = (\DD_{\Lambda}^{\dag}) (\DD_{\Lambda}^{\dag})^H = (\DD_{\Lambda}^H \DD_{\Lambda})^{-1} \DD_{\Lambda}^H \DD_{\Lambda} (\DD_{\Lambda}^H \DD_{\Lambda})^{-1} = (\DD_{\Lambda}^H \DD_{\Lambda})^{-1} = G^{-1}.
+    B^H B = (\DDD_{\Lambda}^{\dag}) (\DDD_{\Lambda}^{\dag})^H = (\DDD_{\Lambda}^H \DDD_{\Lambda})^{-1} \DDD_{\Lambda}^H \DDD_{\Lambda} (\DDD_{\Lambda}^H \DDD_{\Lambda})^{-1} = (\DDD_{\Lambda}^H \DDD_{\Lambda})^{-1} = G^{-1}.
 
 Therefore, the inverse Gram matrix lists the inner products between the dual vectors. 
 
 
-Sometimes we will be discussing tools which apply for general matrices. We will use
+Sometimes we will be discussing tools which also apply for general matrices. 
+We will use
 the symbol  :math:`\Phi` for representing general matrices.  Whenever the dictionary is 
 an orthonormal basis, we will use the symbol  :math:`\Psi`.
 
