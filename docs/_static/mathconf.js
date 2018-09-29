@@ -191,11 +191,15 @@ var on_proof_caption_click  = function () {
 }
 // Attach the on click handler to each proof element
 $(".proof_caption").click(on_proof_caption_click);
-// Collapse all proof elements in the beginning
-$(".proof_caption").each(on_proof_caption_click);
-$(".proof_caption").each(function(){
-    $header = $(this);
-    $header.text("Click to see proof");
+
+MathJax.Hub.Queue(function () {
+    // Collapse all proof elements in the beginning
+    $(".proof_caption").each(on_proof_caption_click);
+    // We want to disable the proofs initially
+    $(".proof_caption").each(function(){
+        $header = $(this);
+        $header.text("Click to see proof");
+    });
 });
 
 });
