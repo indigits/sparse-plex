@@ -123,7 +123,7 @@ html_theme_options = {
   'canonical_url' : 'http://sparse-plex.readthedocs.org/en/latest/',
   'analytics_id' : 'UA-126632348-1',
   'display_version': False, 
-  'prev_next_buttons_location' : 'both'
+  'prev_next_buttons_location' : 'bottom'
 }
 
 html_context = {

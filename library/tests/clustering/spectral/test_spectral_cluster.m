@@ -34,7 +34,7 @@ function test_gaussian_values(testCase)
     sigma = .5;
     sim_matrix = spx.cluster.similarity.gaussian_similarity(dist_matrix, sigma);
     % lets see the impact of filtering the similarity matrix
-    % sim_matrix = SPX_Similarity.filter_k_nearest_neighbors(sim_matrix, points_per_set*1.5);
+    % sim_matrix = spx.cluster.similarity.filter_k_nearest_neighbors(sim_matrix, points_per_set*1.5);
 
     % We can now run spectral clustering on it
     fprintf('Initializing spectral clustering algorithm for unnormalized laplacian\n');

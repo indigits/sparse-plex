@@ -26,7 +26,7 @@ for nd=1:num_data_sets
     fprintf('Expected number of groups: %d\n', num_clusters);
     % prepare the distance matrix
     sqrt_dist_mat = spx.commons.distance.sqrd_l2_distances_rw(dataset);
-    sim_mat = SPX_Similarity.gauss_sim_from_sqrd_dist_mat(sqrt_dist_mat, scale);
+    sim_mat = spx.cluster.similarity.gauss_sim_from_sqrd_dist_mat(sqrt_dist_mat, scale);
     % Run clustering on the dataset
     clusterer = spx.cluster.spectral.Clustering(sim_mat);
     clusterer.NumClusters = num_clusters;
