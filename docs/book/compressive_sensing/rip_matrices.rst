@@ -205,25 +205,26 @@ Advantages of random construction
 There are a number of advantages of the random sensing matrix construction approach:
 
 
-*  One can show that for random construction, the measurements are  *democratic* \todo{Explain democracy further}.
-  This means that all measurements are equal in importance and it is possible to recover the
+* One can show that for random construction, 
+  the measurements are  *democratic*.
+  This means that all measurements are equal in importance and 
+  it is possible to recover the
   signal from any sufficiently large subset of the measurements.
- 
-  Thus by using random  :math:`\Phi`  one can be robust to the loss of loss or corruption of a small fraction
-  of measurements.
-*  In general we are more interested in  :math:`x`  which is sparse in some basis  :math:`\Psi` . In this setting,
+  Thus by using random  :math:`\Phi`  one can be robust to the loss 
+  or corruption of a small fraction of measurements.
+* In general we are more interested in  :math:`x`  which is sparse 
+  in some basis  :math:`\Psi` . In this setting,
   we require that  :math:`\Phi \Psi`  satisfy the RIP.
-  
-  Deterministic construction would explicitly require taking  :math:`\Psi`  into account.
-  
+  Deterministic construction would explicitly require taking  
+  :math:`\Psi`  into account.
   But if  :math:`\Phi`  is random, we can avoid this issue.
-  
-  If  :math:`\Phi`  is Gaussian and  :math:`\Psi`  is an orthonormal basis, then one can easily show that  :math:`\Phi \Psi`  will also
+  If  :math:`\Phi`  is Gaussian and  :math:`\Psi`  is an orthonormal basis, 
+  then one can easily show that  :math:`\Phi \Psi`  will also
   have a Gaussian distribution.
-  
-  Thus if  :math:`M`  is high,  :math:`\Phi \Psi`  will also satisfy RIP with very high probability.
-  
-  Similar results hold for other sub-Gaussian distributions as well.
+  Thus if  :math:`M`  is high,  :math:`\Phi \Psi`  will also satisfy RIP 
+  with very high probability.
+
+Similar results hold for other sub-Gaussian distributions as well.
 
  
 
