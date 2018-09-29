@@ -435,7 +435,7 @@ be written as
 where  :math:`b \in \CC^D` is a vector of coefficients to produce a superposition  :math:`x` from the
 atoms of dictionary  :math:`\mathcal{D}`. 
 Clearly with  :math:`D > N`,  :math:`b` is not unique. Rather for every vector
- :math:`z \in \NullSpace(\Phi)`, we have:
+:math:`z \in \NullSpace(\Phi)`, we have:
     
 .. math::
 
@@ -452,7 +452,7 @@ Clearly with  :math:`D > N`,  :math:`b` is not unique. Rather for every vector
     The matrix  :math:`\Phi` is called a 
     **synthesis matrix** since  
     :math:`x` is synthesized from the columns of
-     :math:`\Phi` with the coefficient vector  :math:`b`.
+    :math:`\Phi` with the coefficient vector  :math:`b`.
 
 
 We can also view the synthesis matrix  :math:`\Phi` as a linear operator from  :math:`\CC^D` to  :math:`\CC^N`.

@@ -1,6 +1,5 @@
 Babel function
 ====================================================
-----------------------------------------------------
 
 Recalling the definition of coherence, we note that 
 it reflects only the extreme correlations between atoms of dictionary.

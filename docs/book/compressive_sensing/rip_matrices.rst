@@ -126,6 +126,7 @@ We will impose some conditions on the random distribution.
         \EE (\Phi_{ij}^2) = \frac{1}{M}
 
   Hence variance of distribution should be  :math:`\frac{1}{M}`.
+  
 * We require that distribution is a sub-Gaussian distribution i.e. there exists 
   a constant  :math:`c > 0`  such that
   

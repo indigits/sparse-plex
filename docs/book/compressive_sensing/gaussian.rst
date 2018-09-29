@@ -1,4 +1,5 @@
 .. _sec:sm:gaussian_sensing_matrix:
+
 Gaussian sensing matrices
 ===================================================
 

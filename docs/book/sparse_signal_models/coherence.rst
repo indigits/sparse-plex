@@ -318,7 +318,7 @@ Let us look at an example for a two ortho-basis  :cite:`donoho2003optimally`.
 
 For maximally incoherent two orthonormal bases, we know that  :math:`\mu = \frac{1}{\sqrt{N}}` .
 A perfect example is the pair of Dirac and Fourier bases. In this case
- :math:`\spark(\DDD) \geq 2 \sqrt{N}` .
+:math:`\spark(\DDD) \geq 2 \sqrt{N}` .
 
 
  

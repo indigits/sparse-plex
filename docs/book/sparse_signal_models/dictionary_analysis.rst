@@ -1,5 +1,3 @@
-
- 
 Tools for dictionary analysis
 ===================================================
 
@@ -52,7 +50,8 @@ holds still.
 Often, we will be working with a subset of atoms in a dictionary. Usually such a subset
 of atoms will be indexed by an index set  :math:`\Lambda \subseteq \Omega`.  :math:`\Lambda` 
 will take the form of  :math:`\Lambda \subseteq \{\omega_1, \dots, \omega_D\}` or
- :math:`\Lambda \subseteq \{1, \dots, D\}` depending upon whether we are talking about
+:math:`\Lambda \subseteq \{1, \dots, D\}` depending upon whether 
+we are talking about
 the subset of atoms in the dictionary or a subset of columns from the corresponding
 synthesis matrix.
 

@@ -157,7 +157,7 @@ Columns of  :math:`\Phi`  satisfy a joint correlation property (:cite:`tropp2007
     
     Let  :math:`\{u_k\}`  be a sequence of  :math:`K`  vectors (where  :math:`u_k \in \RR^M` ) whose  :math:`l_2`  norms do not exceed one. Independently 
     choose  :math:`z \in \RR^M`  to be a random vector with i.i.d. entries
-     :math:`z_i`   that take a value  :math:`\pm \frac{1}{\sqrt{M}}`  with equal probability. Then
+    :math:`z_i`   that take a value  :math:`\pm \frac{1}{\sqrt{M}}`  with equal probability. Then
     
     
     .. math::

@@ -83,7 +83,7 @@ The set of  :math:`K` -sparse signals is defined as
 
     Let  :math:`a`  and  :math:`b`  be two  :math:`K`  sparse signals. Then  :math:`\Phi a`  and  :math:`\Phi b`  are corresponding measurements.
     Now if  :math:`\Phi`  allows recovery of all  :math:`K`  sparse signals, then  :math:`\Phi a \neq \Phi b` . Thus 
-     :math:`\Phi (a - b) \neq 0` . Thus  :math:`a - b \notin \NullSpace(\Phi)` . 
+    :math:`\Phi (a - b) \neq 0` . Thus  :math:`a - b \notin \NullSpace(\Phi)` . 
     
     Let  :math:`x \in \NullSpace(\Phi) \cap \Sigma_{2K}` . Thus  :math:`\Phi x = 0`  and  :math:`\#x \leq 2K` . Then we can find  :math:`y, z \in \Sigma_K` 
     such that  :math:`x = z - y` . Thus  :math:`m = \Phi z = \Phi y` . But then,  :math:`\Phi`  doesn't uniquely represent  :math:`y, z \in \Sigma_K` . 
@@ -109,7 +109,7 @@ minimum number of columns which are linearly dependent.
     **explanation** of a measurement 
     :math:`y \in \RR^M` w.r.t.
     sensing matrix  :math:`\Phi`  if
-     :math:`y = \Phi x` . 
+    :math:`y = \Phi x` . 
      
     .. index:: Explanation signal
     
@@ -164,7 +164,7 @@ Since  :math:`\spark(\Phi) \in [2, M+1]`  and we require that  :math:`\spark(\Ph
 
  
 Recovery of approximately sparse signals
-===================================================
+----------------------------------------------------
 
 
 
@@ -304,7 +304,7 @@ matrix obtained by setting the columns of
 
  
 Measuring the performance of a recovery algorithm
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
+----------------------------------------------------
 
 
 Let  :math:`\Delta : \RR^M \rightarrow \RR^N`  represent a recovery method to recover approximately sparse  :math:`x`  from  :math:`y` .

@@ -1,5 +1,3 @@
-
- 
 Compressible signals
 ===================================================
 
@@ -190,7 +188,6 @@ Clearly for any  :math:`x \in \CC^N` there are  :math:`\binom{N}{K}` possible  :
     This signal is denoted henceforth as  :math:`x|_K`. i.e.
     
     .. math::
-        :label: eq:equation_label
     
         x|_K = x_{\Lambda_K}
     
@@ -635,7 +632,6 @@ We now demonstrate how a compressible signal is well approximated by a sparse si
     
     
     .. math::
-        :label: eq:compressible_p_sparse_approximation_error_l1_norm
     
         \| x - x|_K\|_2 \leq D_p \cdot R \cdot K^{1 - \frac{1}{p}}
     

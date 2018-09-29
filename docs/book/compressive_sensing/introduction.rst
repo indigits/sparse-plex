@@ -177,7 +177,6 @@ us following result
 
 
 .. math::
-    :label: eq:equation_label
 
     \begin{bmatrix}
     y_1\\
@@ -332,7 +331,7 @@ The algorithms can be broadly classified into following categories
   and IHT (iterative hard thresholding). 
 
 * [Convex relaxation] These techniques relax the  
-  :math:`l_0`  ``norm'' minimization problem into a suitable 
+  :math:`l_0`  "norm" minimization problem into a suitable 
   problem which is a convex optimization problem. 
   This relaxation is valid for a large class of signals of interest.
   Once the problem has been formulated as a convex optimization 

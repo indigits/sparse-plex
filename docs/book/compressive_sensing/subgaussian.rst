@@ -107,6 +107,7 @@ Gaussian random variable  :math:`\sim \mathcal{N}(0, c^2)`.
     
           \sum_{n = 0}^{\infty}\frac{(at)^{2 n}}{(2 n + 1)!} \leq \sum_{n = 0}^{\infty}\frac{(at)^{2 n}}{( n! 2^n)} 
           = \sum_{n = 0}^{\infty}\frac{(a^2 t^2 / 2)^{n}}{( n!)} = \exp \left (\frac{a^2 t^2}{2} \right )               
+    
     Thus
 
     .. math::    
@@ -407,11 +408,13 @@ We quickly review Markov's inequality which will help us establish the results i
     
     .. math::
           \EE [\exp(X t) ] \leq \exp \left (\frac{c^2 t^2}{2} \right ) \Forall t \in \RR.
+    
     *  subgaussian tail estimate: There exists  :math:`a > 0` such that 
     
     
     .. math::
              \PP(|X| \geq \lambda) \leq 2 \exp (- a \lambda^2) \Forall \lambda > 0.
+    
     *   :math:`\psi_2`-condition: There exists some  :math:`b > 0` such that
     
     
