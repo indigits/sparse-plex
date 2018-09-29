@@ -1,10 +1,10 @@
 
  
-Rademacher sensing matrices
-===================================================
 
 .. _sec:sm:rademacher_sensing_matrix:
 
+Rademacher sensing matrices
+===================================================
 
 In this section we collect several results related to Rademacher sensing matrices.
 
@@ -50,19 +50,14 @@ we can draw individual entries of  :math:`\Chi`  from a simpler Rademacher distr
 
 Thus entries in  :math:`\Chi`  take values of  :math:`\pm 1`  with equal probability. 
 
-This construction is useful since it allows us to implement the multiplication with 
- :math:`\Phi`  in terms of just additions and subtractions. The scaling can be implemented
+This construction is useful since it allows us to implement the multiplication with :math:`\Phi`  in terms of just additions 
+and subtractions. The scaling can be implemented
 towards the end in the signal processing chain.
-
 
 We note that 
 
-
 .. math::
     \EE(\phi_{ij}) = 0.
-
-
-
 
 .. math::
     \EE(\phi_{ij}^2) = \frac{1}{M}.
@@ -121,24 +116,13 @@ Thus the squared length of each of the columns in  :math:`\Phi`  is  :math:`1` .
         \PP \left ( | \langle z, u \rangle | > \epsilon \right ) \leq 2 \exp \left (- \epsilon^2 \frac{M}{2} \right ).
     
 
-Representative values of this bound are plotted in 
- :ref:`fig:sm:rademacher:random_vector_tail_bound <fig:sm:rademacher:random_vector_tail_bound>`.
-
+Representative values of this bound are plotted below.
 
 .. _fig:sm:rademacher:random_vector_tail_bound:
-
-.. code:: 
-
-    \centering 
-    \includegraphics[width=0.95\textwidth]
-    {dictionaries/images/img_rademacher_rand_vec_tail_bound.pdf}
-    \caption{Tail bound for the probability of inner product of a Rademacher random vector with a 
-    unit norm vector}
-
+.. figure:: images/rademacher_rand_vec_tail_bound.png
     
-
-
-
+    Tail bound for the probability of inner product of a 
+    Rademacher random vector with a unit norm vector
 
 
 .. proof:: 
@@ -192,9 +176,8 @@ Columns of  :math:`\Phi`  satisfy a joint correlation property (:cite:`tropp2007
     Thus if we prove the bound for vectors  :math:`u_k`  with  :math:`\| u_k\|_2 = 1 \Forall 1 \leq k \leq K` , it will
     be applicable for all  :math:`u_k`  whose  :math:`l_2`  norms do not exceed one. Hence we will assume that  :math:`\| u_k \|_2 = 1` .
     
-    From  :ref:`lem:sm:rademacher:random_vector_tail_bound <lem:sm:rademacher:random_vector_tail_bound>` we have
-    
-    
+    From  :ref:`previous lemma <lem:sm:rademacher:random_vector_tail_bound>` we have
+        
     .. math:: 
     
         \PP \left ( | \langle z, u_k \rangle | > \epsilon \right ) \leq 2 \exp \left (- \epsilon^2 \frac{M}{2} \right ).
@@ -252,7 +235,7 @@ We show that coherence of Rademacher sensing matrix is fairly small with high pr
 
     
     Fix  :math:`\delta \in (0,1)` . For an  :math:`M \times N`  Rademacher sensing matrix  :math:`\Phi`  
-    as defined in  :ref:`def:sm:rademacher_sensing_matrix <def:sm:rademacher_sensing_matrix>`, the coherence
+    as defined  :ref:`above <def:sm:rademacher_sensing_matrix>`, the coherence
     statistic 
     
     
@@ -264,25 +247,12 @@ We show that coherence of Rademacher sensing matrix is fairly small with high pr
 
 
 .. _fig:sm:rademacher:coherence_bound:
+.. figure:: images/rademacher_coherence_bound.png
+
+    Coherence bounds for Rademacher sensing matrices
 
 .. proof:: 
 
-    
-    
-    
-
-    
-    .. code:: 
-    
-        \centering 
-        \includegraphics[width=0.95\textwidth]
-        {dictionaries/images/img_rademacher_coherence_bound.pdf}
-        \caption{Coherence bounds for Rademacher sensing matrices}
-    
-        
-    
-    
-    
     We recall the definition of coherence as
     
     
@@ -295,7 +265,7 @@ We show that coherence of Rademacher sensing matrix is fairly small with high pr
     Since  :math:`\Phi`  is a Rademacher sensing matrix hence each column of  :math:`\Phi`  is unit norm column.
     Consider some  :math:`1 \leq j < k \leq N`  identifying columns  :math:`\phi_j`  and  :math:`\phi_k` . We note
     that they are independent of each other. Thus from 
-     :ref:`lem:sm:rademacher:random_vector_tail_bound <lem:sm:rademacher:random_vector_tail_bound>` we have
+    :ref:`above <lem:sm:rademacher:random_vector_tail_bound>` we have
     
     
     .. math:: 
@@ -312,7 +282,7 @@ We show that coherence of Rademacher sensing matrix is fairly small with high pr
         \leq 2 \frac{N(N-1)}{2} \exp \left (- \epsilon^2 \frac{M}{2} \right )
         \leq N^2 \exp \left (- \epsilon^2 \frac{M}{2} \right ).
      
-    Thus we have
+    Thus, we have
     
     
     .. math:: 
