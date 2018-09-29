@@ -100,14 +100,14 @@ They are all one.
 
 
     
-    The \hyperref[def:proj:babel:p_babel_function_K]{ :math:`p` Babel function}
+    The :math:`p`-babel function
     for Dirac-DCT dictionary is given by
     
     
     .. math::
         \mu_p(k) = k^{\frac{1}{p}} \mu \Forall 1\leq k \leq N.
     
-    In particular, the standard \hyperref[def:babel_function]{Babel function}
+    In particular, the standard babel function
     is given by
     
     
