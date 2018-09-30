@@ -3,6 +3,8 @@
 Gaussian sensing matrices
 ===================================================
 
+.. highlight:: matlab
+
 In this section we collect several results related to Gaussian sensing matrices.
 
 .. _def:sm:gaussian_sensing_matrix:
@@ -126,4 +128,121 @@ Columns of  :math:`\Phi`  satisfy a joint correlation property
         &= 1 - \PP\left(\max_{k} | \langle z,  u_k\rangle | > \epsilon \right) \\
         &\geq 1 - K \exp \left(- \epsilon^2 \frac{M}{2} \right).
         \end{aligned}
+
+
+.. _cs-hands-on-gaussian-sensing-matrices:
+
+Hands on with Gaussian sensing matrices
+----------------------------------------------
+
+We will show several examples of working with
+Gaussian sensing matrices through the 
+`sparse-plex` library.
+
+.. example:: Constructing a Gaussian sensing matrix
+
+    Let's specify the size of representation space::
+
+        N = 1000;
+
+    Let's specify the number of measurements::
+
+        M = 100;
+
+    Let's construct the sensing matrix::
+
+        Phi = spx.dict.simple.gaussian_mtx(M, N, false);
+
+    By default the function `gaussian_mtx` constructs
+    a matrix with normalized columns. When we set
+    the third argument to `false` as in above, it 
+    constructs a matrix with unnormalized columns.
+
+
+    We can visualize the matrix easily::
+
+        imagesc(Phi);
+        colorbar;
+
+    .. figure:: images/demo_gaussian_1.png
+
+
+    Let's compute the norms of each of the columns::
+
+        column_norms = spx.norm.norms_l2_cw(Phi);
+
+    Let's look at the mean value::
+
+        >> mean(column_norms)
+
+        ans =
+
+            0.9942
+
+    We can see that the mean value is very close to 
+    unity as expected.
+
+    Let's compute the standard deviation::
+
+        >> std(column_norms)
+
+        ans =
+
+            0.0726
+
+    As expected, the column norms are concentrated 
+    around its mean.
+
+
+    We can examine the variation in norm values by
+    looking at the quantile values::
+
+        >> quantile(column_norms, [0.1, 0.25, 0.5, 0.75, 0.9])
+
+        ans =
+
+            0.8995    0.9477    0.9952    1.0427    1.0871
+
+    The histogram of column norms can help us visualize 
+    it better::
+
+        hist(column_norms);
+
+    .. figure:: images/demo_gaussian_1_norm_hist.png
+
+    The singular values of the matrix help us get
+    deeper understanding of how well behaved the
+    matrix is::
+
+        singular_values = svd(Phi);
+        figure;
+        plot(singular_values);
+        ylim([0, 5]);
+        grid;
+
+    .. figure:: images/demo_gaussian_1_singular_values.png
+
+    As we can see, singular values decrease quite slowly.
+
+
+    The condition number captures the variation in 
+    singular values::
+
+        >> max(singular_values)
+
+        ans =
+
+            4.1177
+
+        >> min(singular_values)
+
+        ans =
+
+            2.2293
+
+        >> cond(Phi)
+
+        ans =
+
+            1.8471
 

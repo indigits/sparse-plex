@@ -1,3 +1,5 @@
+.. _clustering-handson-spectral-clustering:
+
 Hands-on spectral clustering
 ======================================
 
