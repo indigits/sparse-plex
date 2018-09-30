@@ -1,0 +1,12 @@
+{% extends "!layout.html" %}
+{% block sidebartitle %}
+{{ super() }}
+<div class='oss-widget-interface'></div>
+<script type="text/javascript" src="//sharecdn.social9.com/v2/js/opensocialshare.js"></script><script type="text/javascript" src="//sharecdn.social9.com/v2/js/opensocialsharedefaulttheme.js"></script><link rel="stylesheet" type="text/css" href="//sharecdn.social9.com/v2/css/os-share-widget-style.css"/><script type="text/javascript">var shareWidget = new OpenSocialShare();shareWidget.init({isHorizontalLayout: 1,widgetIconSize: "32",widgetStyle: "square",theme: 'OpenSocialShareDefaultTheme',providers: { top: ["Facebook","GooglePlus","LinkedIn","Twitter"]}});shareWidget.injectInterface(".oss-widget-interface");shareWidget.setWidgetTheme(".oss-widget-interface");</script>
+{% endblock %}
+{% block menu %}
+    {{ super() }}
+    <li class="toctree-l1"><a class="reference internal" href="{{ pathto('genindex') }}">Index</a></li>
+    <!--li class="toctree-l1"><a class="reference internal" href="{{ pathto('py-modindex') }}">Modules index</a></li-->
+{% endblock %}
+
