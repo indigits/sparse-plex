@@ -293,3 +293,6 @@ texinfo_documents = [
 def setup(app):
     app.add_stylesheet('css/custom.css')
     app.add_javascript('mathconf.js')
+
+# Indicates if we are on readthedocs.org or local
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True' 
