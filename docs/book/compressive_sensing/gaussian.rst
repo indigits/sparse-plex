@@ -246,3 +246,5 @@ Gaussian sensing matrices through the
 
             1.8471
 
+    The source code can be downloaded 
+    :download:`here <demo_gaussian_1.m>`.

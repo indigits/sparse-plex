@@ -16,6 +16,7 @@ A journey into sparse and redundant representations.
    book/sparse_signal_models
    book/compressive_sensing
    book/clustering
+   book/pursuit
    library/index
    exercises/index
    scripts
