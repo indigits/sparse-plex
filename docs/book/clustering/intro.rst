@@ -47,6 +47,8 @@ look at the angle between two points or inner product of the normalized
 points. Another way to measure similarity is to consider the
 inverse of an appropriate distance measure.
 
+
+.. _sec:clustering:performance:measure:intro:
  
 Measurement of clustering performance
 ----------------------------------------------------
@@ -76,7 +78,7 @@ obtained from :math:`L`.
  
 
 
-Following :cite:`wagner2007comparing`, we will quickly establish the measures used in this paper for 
+Following :cite:`wagner2007comparing`, we will quickly establish the measures used in this work for 
 clustering performance of synthetic experiments. 
 We have a reference clustering of
 vectors in :math:`Y` given by :math:`\BBB = \{Y_1, \dots, Y_K\}` which is known
@@ -123,7 +125,7 @@ follows:
     {\text{total \# of points}}.
 
 The definition is adopted from :cite:`elhamifar2013sparse` for comparing
-the results in this paper with their results. This definition can be
+the results in this work with their results. This definition can be
 used after a proper one-one mapping between original labels
 and cluster labels assigned by the clustering algorithms has been 
 identified. We can compute this mapping by comparing :math:`F`-scores.

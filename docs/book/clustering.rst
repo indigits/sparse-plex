@@ -8,5 +8,6 @@ Data Clustering
    clustering/k_means
    clustering/spectral_clustering
    clustering/expectation_maximization
+   clustering/comparing_clusterings
    clustering/spectral_clustering_demos
 

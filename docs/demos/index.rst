@@ -18,5 +18,6 @@ Clustering
 -------------------------
 
 
+* :ref:`sec:handson:cluster:comparing:clusterings`
 * :ref:`clustering-handson-spectral-clustering`
 
