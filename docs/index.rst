@@ -15,8 +15,12 @@ A journey into sparse and redundant representations.
    demos/index
    book/sparse_signal_models
    book/compressive_sensing
+   book/data_analysis
    book/clustering
    book/pursuit
+   book/subspace_clustering
+   book/linear_algebra
+   book/geometry
    library/index
    exercises/index
    scripts

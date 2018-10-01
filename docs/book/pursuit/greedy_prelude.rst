@@ -89,6 +89,7 @@ Setting up notation
 .. math:: 
 
     x = \Phi \alpha.
+
 *  It is assumed that :math:`\alpha \in \CC^D` is sparse with :math:`|\alpha|_0 \leq K`.
 *  Also we assume that :math:`\alpha` is the sparsest possible solution for :math:`x` that we are looking.
 *  We know :math:`x`, we know :math:`\Phi`, we don't know :math:`\alpha`. We are looking for it.
@@ -211,33 +212,6 @@ Since :math:`x \in \CC^N` and :math:`\phi_j \in \CC^N`, hence computation of :ma
 
 Since we may need to do it for all :math:`D` columns, hence finding the index :math:`i` takes
 :math:`\bigO{ND}` time.
-
-
-.. _fig:single_sparse_vector_recovery:
-
-.. comment:: 
-
-    At this point it is interesting to implement this algorithm and see it in action.
-    
-    \lstinputlisting[caption=demoSingleSparseVectorRecovery.m]{greedy/demoSingleSparseVectorRecovery.m}
-    
-    The results are plotted in \autoref{fig:single_sparse_vector_recovery}.
-    
-
-    
-    .. code-block:: 
-    
-        \centering
-        \includegraphics[width = 0.9\textwidth]{greedy/singleSparseRecovery}
-        \caption{Recovery of a sparse vector with single nonzero value}
-    
-    
-    Some comments are in order.
-    
-    *  The sensing matrix :math:`\Phi` was randomly generated.
-    *  The one sparse vector :math:`x` was also randomly generated.
-    *  We can clearly see that error becomes 0 exactly at the correct index and is much higher at other places.
-    
 
 
 
