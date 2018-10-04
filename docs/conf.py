@@ -41,6 +41,7 @@ extensions = [
         'sphinx.ext.viewcode',
         'sphinx.ext.autodoc',
         'sphinx.ext.doctest',
+        'sphinx.ext.ifconfig',
         'sphinxcontrib.bibtex',
         'environments'
 ]
@@ -290,9 +291,12 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
+# Indicates if we are on readthedocs.org or local
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True' 
+
+
 def setup(app):
     app.add_stylesheet('css/custom.css')
     app.add_javascript('mathconf.js')
+    app.add_config_value('on_rtd', on_rtd, 'env')
 
-# Indicates if we are on readthedocs.org or local
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True' 

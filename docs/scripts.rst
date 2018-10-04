@@ -42,98 +42,99 @@ Typical steps in figures::
     grid on;
 
 
+.. ifconfig:: not on_rtd
 
-.. rubric:: Math Symbols
+    .. rubric:: Math Symbols
 
-Ignore this section. This is just for testing
-some command definitions for mathjax.
-
-
-
-:math:`\Tau \Chi, \Eta, \RR`
-
-:math:`\spark`
-
-:math:`\RRMN`
-
-:math:`\CC \KK \Re{} \Im{} \Nat \NN \ZZ \EE \PP`
-
-:math:`\QQ \II`
-
-:math:`\FF \VV \WW \TT \UU \XX \HH`
-
-:math:`\AAA \BBB \CCC \DDD \EEE \FFF \GGG \HHH \III \JJJ \KKK`
-:math:`\LLL \MMM \NNN \OOO \PPP \QQQ \RRR \SSS \TTT`
-:math:`\UUU \VVV \WWW \XXX \YYY \ZZZ`
+    Ignore this section. This is just for testing
+    some command definitions for mathjax.
 
 
-:math:`\AA \BB \CC \DD \EE \FF \GG \HH \II \JJ \KK`
+
+    :math:`\Tau \Chi, \Eta, \RR`
+
+    :math:`\spark`
+
+    :math:`\RRMN`
+
+    :math:`\CC \KK \Re{} \Im{} \Nat \NN \ZZ \EE \PP`
+
+    :math:`\QQ \II`
+
+    :math:`\FF \VV \WW \TT \UU \XX \HH`
+
+    :math:`\AAA \BBB \CCC \DDD \EEE \FFF \GGG \HHH \III \JJJ \KKK`
+    :math:`\LLL \MMM \NNN \OOO \PPP \QQQ \RRR \SSS \TTT`
+    :math:`\UUU \VVV \WWW \XXX \YYY \ZZZ`
 
 
-:math:`\NullSpace \ColSpace \RowSpace`
-
-:math:`\Range{} \, \Kernel{} \,\Span{} \, \Image{} \,`
-:math:`\Nullity{} \, \Dim\, \Rank\, \Trace\, \Diag\,`
-:math:`\sgn \, \supp \, \rowsupp`
- 
-:math:`\abs\, \erf \, \erfc \, \Sub \, \SSub \, \Var\,\Cov\,`
-
-:math:`\Power`
-
-:math:`\forall\,\Forall\,`
+    :math:`\AA \BB \CC \DD \EE \FF \GG \HH \II \JJ \KK`
 
 
-:math:`\Bracket\,`
+    :math:`\NullSpace \ColSpace \RowSpace`
+
+    :math:`\Range{} \, \Kernel{} \,\Span{} \, \Image{} \,`
+    :math:`\Nullity{} \, \Dim\, \Rank\, \Trace\, \Diag\,`
+    :math:`\sgn \, \supp \, \rowsupp`
+     
+    :math:`\abs\, \erf \, \erfc \, \Sub \, \SSub \, \Var\,\Cov\,`
+
+    :math:`\Power`
+
+    :math:`\forall\,\Forall\,`
 
 
-:math:`\Card{\SSS} \; \argmin (\SSS)  \; \argmax_{x \in A} \ZZZ`
-
-:math:`\EmptySet`
-
-:math:`\AffineHull \, \ConvexHull`
-
-:math:`\Gaussian`
+    :math:`\Bracket\,`
 
 
-:math:`\spark \, \ERC \, \Maxcor\,`
+    :math:`\Card{\SSS} \; \argmin (\SSS)  \; \argmax_{x \in A} \ZZZ`
+
+    :math:`\EmptySet`
+
+    :math:`\AffineHull \, \ConvexHull`
+
+    :math:`\Gaussian`
 
 
-.. rubric:: Environments
-
-.. theorem::
-
-    hello world
+    :math:`\spark \, \ERC \, \Maxcor\,`
 
 
-.. proposition::
+    .. rubric:: Environments
 
-    hello world
-    
-.. definition::
+    .. theorem::
 
-    hello world
-    
-.. lemma::
+        hello world
 
-    hello world
-    
-.. example::
 
-    hello world
-    
-.. example:: Title
+    .. proposition::
 
-    hello world
-    
-.. example:: Title
+        hello world
+        
+    .. definition::
 
-    hello world
-    
-.. example::
+        hello world
+        
+    .. lemma::
 
-    hello world
-    
-.. exercise::
+        hello world
+        
+    .. example::
 
-    hello world
-    
+        hello world
+        
+    .. example:: Title
+
+        hello world
+        
+    .. example:: Title
+
+        hello world
+        
+    .. example::
+
+        hello world
+        
+    .. exercise::
+
+        hello world
+        
