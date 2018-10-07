@@ -1,18 +1,20 @@
-
+.. _sec:dic:dirac_dct_dictionary:
  
 Dirac-DCT dictionary
 ===================================================
 
-.. _sec:dic:dirac_dct_dictionary:
+.. highlight:: matlab
 
+
+
+.. index:: Dirac-DCT dictionary
+    
 
 .. _def:dic:dirac_dct_dictionary:
 
 .. definition:: 
 
      
-    .. index:: Dirac-DCT dictionary
-    
 
     
     The Dirac-DCT dictionary is a two-ortho dictionary consisting of 
@@ -121,4 +123,63 @@ They are all one.
 
     TODO prove it.
 
+
+.. _sec:dirac-dct-dict:handson:
+
+Hands-on with Dirac DCT dictionaries
+-------------------------------------------
+
+
+.. example:: Constructing a Dirac DCT dictionary
+
+    We need to specify the dimension of the ambient space::
+
+        N = 256;
+
+    We are ready to construct the dictionary::
+
+        Phi = spx.dict.simple.dirac_dct_mtx(N);
+
+    Let's visualize the dictionary::
+
+        imagesc(Phi);
+        colorbar;
+
+
+    .. figure:: images/demo_dirac_dct_1.png
+
+
+    Measuring the coherence of the dictionary::
+
+        >> spx.dict.coherence(Phi)
+
+        ans =
+
+            0.0884
+
+    We can cross-check with the theoretical estimate::
+
+        >> sqrt(2/N)
+
+        ans =
+
+            0.0884
+
+
+    Let's construct the babel function for this dictionary::
+
+
+        mu1 = spx.dict.babel(Phi);
+
+    We can plot it::
+
+        plot(mu1);
+        grid on;
+
+    .. figure:: images/demo_dirac_dct_babel.png
+
+
+    We note that the babel function increases linearly
+    for the initial part and saturates to a value
+    of 16 afterwards.
 

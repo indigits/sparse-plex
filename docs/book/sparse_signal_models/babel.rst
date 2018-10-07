@@ -667,4 +667,41 @@ Quasi incoherent dictionaries
     we say that the dictionary is **quasi-incoherent** .
 
 
+.. _sec:ssm-babel-function-implementation:
 
+Implementing the Babel function
+-------------------------------------
+
+
+We will implement the babel function in Matlab. 
+Here is the signature of the function::
+
+    function [ babel ] = babel( Phi )
+
+Let's compute the Gram matrix::
+
+    G = Phi' * Phi;
+
+We now take the absolute values of all entries in 
+the gram matrix::
+
+    absG = abs(G);
+
+We sort the rows in ``absG`` in descending order::
+
+    GS = sort(absG, 2,'descend');
+
+
+We compute the cumulative sums over each row
+of ``GS`` leaving out the first column::
+
+    rowSums = cumsum(GS(:, 2:end), 2);
+
+The babel function is now obtained by simply
+taking maximum over each column::
+
+    babel = max(rowSums);
+
+This implementation is available in the
+``sparse-plex`` library as
+``spx.dict.babel``.

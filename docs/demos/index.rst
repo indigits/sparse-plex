@@ -9,6 +9,13 @@ Demos
    basic_cs
    
 
+Dictionaries
+-------------------
+
+* :ref:`sec:ssm-babel-function-implementation`
+* :ref:`sec:dirac-dct-dict:handson`
+* :ref:`sec:dirac-hadamard-dict:handson`
+
 Compressive Sensing
 ---------------------------
 
