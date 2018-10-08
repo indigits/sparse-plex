@@ -4,6 +4,8 @@ Comparing signals
 .. highlight:: matlab
 
 
+.. _sec:library-commons-comparison-sparse:
+
 Comparing sparse or approximately sparse signals
 ---------------------------------------------------
 

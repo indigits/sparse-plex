@@ -4,6 +4,8 @@ Sparse signals
 .. highlight:: matlab
 
 
+.. _sec:library-commons-sparse:
+
 Working with signal support
 ----------------------------------------
 

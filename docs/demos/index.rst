@@ -21,6 +21,13 @@ Compressive Sensing
 
 * :ref:`cs-hands-on-gaussian-sensing-matrices`
 
+Pursuit Algorithms
+----------------------------
+
+* :ref:`sec:library-commons-sparse`
+* :ref:`sec:pursuit:testing-framework`
+* :ref:`sec:library-commons-comparison-sparse`
+
 Clustering
 -------------------------
 

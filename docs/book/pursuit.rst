@@ -11,3 +11,4 @@ Pursuit Algorithms
    pursuit/cosamp/index
    pursuit/iht/index
    pursuit/htp/index
+   pursuit/testing_framework
