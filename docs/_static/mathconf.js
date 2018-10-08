@@ -91,7 +91,7 @@ MathJax.Hub.Config({
         RowSpace: '{\\mathcal{R}}',
         // Power set
         Power: '{\\mathop{\\mathcal{P}}}',
-
+        LinTSpace:'{\\mathcal{L}}',
 
         // Range
         Range: '{\\mathrm{R}}',
