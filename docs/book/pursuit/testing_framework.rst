@@ -293,3 +293,18 @@ the non-zero values should be drawn from Rademacher distribution.
 
     .. figure:: images/demo_sparse_rademacher_1.png
 
+
+
+Generating compressible signals
+----------------------------------
+
+:cite:`cevher2009learning` describes a set of probability 
+distributions, dubbed *compressible priors* whose 
+independent and identically distributed realizations 
+result in *p*-compressible signals. 
+
+The authors provided a Matlab function ``randcs.m`` 
+for generating compressible signals. It is included
+in ``sparse-plex``.
+
+

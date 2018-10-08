@@ -546,6 +546,7 @@ def setup(app):
     newtheorem(app, 'proposition', 'Proposition', 'proposition')
     newtheorem(app, 'definition', 'Definition', 'definition')
     newtheorem(app, 'lemma', 'Lemma', 'lemma')
+    newtheorem(app, 'axiom', 'Axiom', 'axiom')
     newtheorem(app, 'example', 'Example', 'example')
     newtheorem(app, 'exercise', 'Exercise', 'exercise')
     newtheorem(app, 'remark', 'Remark', 'remark')

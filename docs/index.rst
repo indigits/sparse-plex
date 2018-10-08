@@ -19,6 +19,7 @@ A journey into sparse and redundant representations.
    book/clustering
    book/pursuit
    book/subspace_clustering
+   book/set_theory
    book/linear_algebra
    book/geometry
    library/index
