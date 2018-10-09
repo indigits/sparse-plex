@@ -9,6 +9,7 @@ Matrix Algebra
    matrices/invertible_matrices
    matrices/trace_det
    matrices/unitary_matrices
+   matrices/eigen_values
 
 
 
