@@ -146,6 +146,10 @@ MathJax.Hub.Config({
         Forall: '\\; \\forall \\;',
 
 
+        // Topology related stuff
+        Interior:['\\mathring{#1}', 1],
+        Closure:['\\overline{#1}', 1],
+
         // Probability distributions
         Gaussian: '{\\mathcal{N}}',
 
