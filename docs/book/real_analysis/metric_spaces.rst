@@ -373,3 +373,216 @@ Open sets
 
 
 
+
+ 
+Closed sets
+---------------
+
+
+.. index:: Closed set
+
+.. _def:metric:closed_set:
+
+.. definition:: 
+
+
+    A subset :math:`A` of a metric space :math:`(X, d)` is called **closed** if its complement :math:`X \setminus A` 
+    denoted as :math:`A^c` is open.
+
+
+
+.. _thm:metric:closed_set_properties:
+
+.. theorem:: 
+
+
+    For a metric space :math:`(X, d)` the following statements hold:
+
+    a.  :math:`X` and :math:`\EmptySet` are closed sets.
+    #.  Arbitrary intersections of closed sets are closed sets.
+    #.  Finite unions of closed sets are closed sets.
+    
+
+
+
+
+.. proof:: 
+
+    Since :math:`\EmptySet` is open hence :math:`X = X \setminus \EmptySet` is closed.
+    Since :math:`X` is open hence :math:`\EmptySet = X \setminus X` is closed.
+    
+    Let :math:`\{A_i\}_{i \in I}` be an arbitrary family of closed sets with :math:`A_i \subseteq X`. 
+    Then :math:`A_i^c` are open. Thus :math:`\bigcup A_i^c` is open.
+    Thus :math:`\left ( \bigcup A_i^c \right )^c` is closed. By De Morgan's law,  :math:`\bigcap A_i` is closed.
+    
+    
+    Let :math:`\{A_1, \dots, A_n\}` be a finite collection of closed subsets of :math:`X`. 
+    Then :math:`A_i^c` are open. Hence their finite intersection :math:`\bigcap A_i^c` is open.
+    Hence :math:`\left ( \bigcap A_i^c \right )^c` is closed. By De Morgan's law, :math:`\bigcup A_i` is closed.
+    
+
+
+
+
+.. remark:: 
+
+    A set :math:`A` is open if and only if :math:`A^c` is closed. Similarly a set :math:`A` is closed
+    if and only if :math:`A^c` is open.
+
+
+
+.. index:: Closure point
+
+.. _def:metric:closure_point:
+
+.. definition:: 
+
+
+    A point :math:`x \in X` is called a **closure point** of  a set :math:`A \subseteq X` if every open ball
+    at :math:`x` contains at least one element of :math:`A`; i.e. :math:`B(x, r) \cap A \neq \EmptySet \Forall r > 0`.
+
+
+Note that a closure point of :math:`A` need not belong to :math:`A`. At the same time, every point in :math:`A` 
+is a closure point of :math:`A`. 
+
+
+.. index:: Closure
+
+.. _def:metric:closure: 
+
+.. definition:: 
+
+
+    The set of all closure points of a set :math:`A \subseteq X` is called **closure** of :math:`A` and is 
+    denoted by :math:`\Closure{A}`.
+
+
+Clearly :math:`A \subseteq \Closure{A}`.
+
+
+.. _lem:closure_is_closed: 
+
+.. lemma:: 
+
+
+    The closure of a set :math:`A` in a metric space :math:`(X, d)` is a closed set. 
+
+
+
+.. proof:: 
+
+    We will show that :math:`C = \Closure{A}^c` is open. 
+    
+    Let :math:`x \in C`. Then :math:`x` is  not a closure point of :math:`A`. Hence, there
+    exists an open ball :math:`B(x, r)` such that :math:`B(x, r) \cap A  = \EmptySet`.
+    Now, consider :math:`z \in B (x, r)`. Since :math:`B(x, r)` is open, there exists :math:`r_1 > 0` such that
+    :math:`B (z, r_1) \subseteq B(x, r)`. Thus, :math:`B (z, r_1)  \cap A = \EmptySet`. Hence,
+    :math:`z` is not a closure point of :math:`A`. Hence, :math:`z \in C`.  Thus, :math:`B( x, r) \subseteq C`.
+    Thus, we have shown that for every :math:`x \in C`, there exists an open ball :math:`B(x, r) \subseteq C`.
+    Thus, :math:`C` is open. Consequently, :math:`\Closure{A} = C^c` is closed.
+
+
+
+
+
+.. _thm:metric:closure_is_smallest:
+
+.. theorem:: 
+
+
+    For every subset :math:`A` of a metric space :math:`(X, d)` 
+    its closure :math:`\Closure{A}` is the smallest
+    closed set containing :math:`A`.
+
+
+
+
+.. proof:: 
+
+    Let :math:`C` be a closed set such that :math:`A \subseteq C`. Then, :math:`C^c` is open. Hence, for every
+    :math:`x \in C^c`, there exists an open ball :math:`B(x, r) \subseteq C^c`. Thus, 
+    :math:`B (x, r) \cap C = \EmptySet \implies B (x, r) \cap A = \EmptySet`. Thus, :math:`x` is not a closure
+    point of :math:`A`. Since every point in :math:`C^c` is not a closure point of :math:`A`, hence every closure point
+    of :math:`A` belongs to :math:`C`. Thus, :math:`\Closure{A} \subseteq C`.  Finally, since :math:`\Closure{A}` is closed,
+    hence it is the smallest closed set containing :math:`A`.
+
+
+
+
+.. lemma:: 
+
+    A set :math:`A` is closed if and only if :math:`A = \Closure{A}`.
+
+
+
+
+.. proof:: 
+
+    Let :math:`A` be closed. Then, :math:`\Closure{A} \subseteq A` 
+    due to :ref:`this <thm:metric:closure_is_smallest>`. But since :math:`A \subseteq \Closure{A}`, hence,
+    :math:`A = \Closure{A}`. 
+    
+    Now assume :math:`A = \Closure{A}`. Since :math:`\Closure{A}` is closed, :math:`A` is closed.
+
+
+
+.. index:: Closed ball
+
+.. _def:metric:closed_ball:
+
+.. definition:: 
+
+
+    A set of the form :math:`A = \{x \in X : d(x, a) \leq r \}` is called the **closed ball** 
+    at :math:`a` with radius :math:`r`.
+
+
+
+
+.. _lem:metric:closed_ball_is_closed:
+
+.. lemma:: 
+
+
+    A closed ball at point :math:`a` with radius :math:`r` given by :math:`A = \{x \in X : d(x, a) \leq r \}`
+    is a closed set.
+
+
+
+.. proof:: 
+
+    We show that :math:`A^c` is open. 
+    
+    Let :math:`y \in A^c`. Then :math:`d(y, a) > r`. Now consider :math:`r_1 = d(y, a) - r > 0` and an open ball
+    :math:`B(y, r_1)`. For any :math:`z \in B(y, r_1)`
+    
+    
+    .. math:: 
+    
+        d(z, a) \geq d(y, a) - d(z, y) > d(y, a) - r_1 = r. 
+    
+    Thus, :math:`z \in A^c`. Hence, :math:`B(y, r_1) \subseteq A^c`. Hence, :math:`A^c` is open. Thus, :math:`A` is closed.
+
+
+
+.. _lem:closure_of_open_ball:
+
+.. lemma:: 
+
+
+    The closure of an open ball :math:`B (x, r) =  \{ y \in X : d(x, y) < r\}`
+    is the closed ball :math:`A =  \{ y \in X : d(x, y) \leq r\}`.
+
+
+
+.. proof:: 
+
+    Any point :math:`y :  d(x, y) < r` is obviously a closure point of :math:`B (x, r)`. 
+    
+    We show that a point :math:`y : d(x, y) = r` is a closure point of :math:`B (x, r)`.
+    For contradiction, suppose :math:`y` is not a closure point of :math:`B (x, r)`. Then,
+    there exists an open ball :math:`B(y, r_1)` such that :math:`B (y, r_1) \cap B (x, r) = \EmptySet`.
+    
+    We show that a point :math:`y : d(x, y) > r` is not a closure point of :math:`B (x, r)`.
+    Let :math:`r_1 = d(x, y) -r > 0`. Then, :math:`B ( y, r_1) \cap B (x, r) = \EmptySet`. Hence
+    :math:`y` is not a closure point of :math:`B (x, r)`.
