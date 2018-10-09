@@ -269,14 +269,15 @@ as :math:`f^{-1} : f(X) \to X` given by :math:`f^{-1}(y) = x \Forall y \in f(X)`
 Clearly :math:`f^{-1}` so defined is one-one and onto between :math:`X` and :math:`f(X)`.
 
 
+.. index:: Schroeder-Bernstein Theorem
+
 .. _res:function:schroder_bernstein_theorem:
 
 .. theorem:: 
 
 
-     .. index:: Schr{\"oder-Bernstein Theorem}
-    Given two one-one functions :math:`f : X \to Y` and :math:`g : Y \to X`, there exists
-    a one-one onto function :math:`h : X \to Y`.
+    Given two one-one functions :math:`f : X \to Y` and :math:`g : Y \to X`, 
+    there exists a one-one onto function :math:`h : X \to Y`.
 
 
 
@@ -458,16 +459,12 @@ i.e. :math:`A^I` is the set of all functions from :math:`I` to :math:`A`.
 
 
 .. example:: 
-
     
-    
-    *  Let :math:`A = \{0, 1\}`. :math:`A^{\RR}` is a set of all functions on :math:`\RR` 
-    which can take only one of the two values :math:`0` or :math:`1`.
-    
-    :math:`A^{\Nat}` is a set of all sequences of :math:`0`s and :math:`1`s.
-    *  :math:`\RR^\RR` is a set of all functions from :math:`\RR` to :math:`\RR`.
-    
-    
+    *  Let :math:`A = \{0, 1\}`. :math:`A^{\RR}` is a set of all functions 
+       on :math:`\RR` which can take only one of the two values 
+       :math:`0` or :math:`1`.    
+       :math:`A^{\Nat}` is a set of all sequences of zeros and ones.
+    *  :math:`\RR^\RR` is a set of all functions from :math:`\RR` to :math:`\RR`.    
 
 
  

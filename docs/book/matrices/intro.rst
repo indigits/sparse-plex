@@ -191,7 +191,7 @@ The inner product or dot product of two column / row vectors :math:`u` and :math
 
 
 .. math::
-    :label: eq:mat:column:inner_product
+    :label: eq:mat:column:inner_product:hermitian
 
     u \cdot v = \langle u, v \rangle = \sum_{i=1}^n u_i \overline{v_i}.
 

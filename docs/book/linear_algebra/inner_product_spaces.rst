@@ -26,33 +26,31 @@ Inner product is a generalization of the notion of dot product.
     satisfying following requirements:
     
     
-    *  Positive definiteness
+    #. Positive definiteness
       
     
-    .. math::
-        :label: eq:inner_product_pd
-    
-            \langle v, v \rangle \geq 0 \text{  and  } \langle v, v \rangle = 0 \iff v = 0
-    *  Conjugate symmetry
+       .. math::
+            :label: eq:inner_product_pd
+        
+                \langle v, v \rangle \geq 0 \text{  and  } \langle v, v \rangle = 0 \iff v = 0
+
+    #. Conjugate symmetry
         
     
-    .. math::
-        :label: eq:inner_product_conj_sym
-    
-            \langle v_1, v_2 \rangle = \overline{\langle v_2, v_1 \rangle} \quad \forall v_1, v_2 \in V
-    *  Linearity in the first argument
+       .. math::
+            :label: eq:inner_product_conj_sym
+        
+                \langle v_1, v_2 \rangle = \overline{\langle v_2, v_1 \rangle} \quad \forall v_1, v_2 \in V
+
+    #. Linearity in the first argument
       
-    
-    .. math::
-        :label: eq:inner_product_conj_linearity
-    
-            \begin{aligned}
-            &\langle \alpha v, w \rangle = \alpha \langle v, w \rangle \quad \forall v, w \in V; \forall \alpha \in K\\
-            &\langle v_1 + v_2, w \rangle = \langle v_1, w \rangle + \langle v_2, w \rangle \quad \forall v_1, v_2,w \in V
-            \end{aligned}
-    
-    
-    
+       .. math::
+            :label: eq:inner_product_conj_linearity
+        
+                \begin{aligned}
+                &\langle \alpha v, w \rangle = \alpha \langle v, w \rangle \quad \forall v, w \in V; \forall \alpha \in K\\
+                &\langle v_1 + v_2, w \rangle = \langle v_1, w \rangle + \langle v_2, w \rangle \quad \forall v_1, v_2,w \in V
+                \end{aligned}
 
 
 Remarks
@@ -63,6 +61,7 @@ Remarks
 
 .. math::
         \left \langle \sum \alpha_i v_i, w \right \rangle = \sum \alpha_i \langle v_i, w \rangle
+
 *  Similarly we have conjugate linearity in second argument for any arbitrary linear combination:
   
 
@@ -143,22 +142,24 @@ Norm
     satisfying following requirements:
     
     
-    *  Positive definiteness
+    #. Positive definiteness
       
     
-    .. math::
-        :label: eq:norm_pd
-    
-            \| v\| \geq 0 \quad \forall v \in V \text{  and  } \| v\| = 0 \iff v = 0
-    *  Scalar multiplication
+       .. math::
+            :label: eq:norm_pd
+        
+                \| v\| \geq 0 \quad \forall v \in V \text{  and  } \| v\| = 0 \iff v = 0
+
+    #. Scalar multiplication
       
     
-    .. math::
+       .. math::
             \| \alpha v \| = | \alpha | \| v \| \quad \forall \alpha \in K; \forall v \in V
-    *  Triangle inequality
+
+    #. Triangle inequality
       
     
-    .. math::
+       .. math::
           \| v_1 + v_2 \| \leq \| v_1 \| + \| v_2 \| \quad \forall v_1, v_2 \in V
     
     

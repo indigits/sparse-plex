@@ -19,7 +19,7 @@ elements.
 .. index:: Equivalent sets
 .. index:: Same cardinality
 
-.. _def:set:cardinality:
+.. _def:set:cardinality_equivalence:
 
 .. definition:: 
 

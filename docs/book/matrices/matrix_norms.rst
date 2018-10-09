@@ -23,30 +23,27 @@ Matrix norms will follow the usual definition of norms for a vector space.
     :math:`\CC^{m \times n}` if for all :math:`A, B \in \CC^{m \times n}` and all :math:`\alpha \in \CC`
     it satisfies the following
     
-    * [Positivity] 
+    #. [Positivity] 
     
     
-    .. math:: 
+       .. math::     
+            \| A \| \geq 0 
     
-        \| A \| \geq 0 
+       with :math:`\| A \| = 0 \iff A  = 0`.
     
-    with :math:`\| A \| = 0 \iff A  = 0`.  
-    *  [Homogeneity]
-    
-    
-    .. math:: 
-    
-        \| \alpha A \| = | \alpha | \| A \|.
-    *  [Triangle inequality]
+    #. [Homogeneity]
     
     
-    .. math:: 
+       .. math:: 
+            \| \alpha A \| = | \alpha | \| A \|.
     
-        \| A + B \| \leq \| A \| + \| B \|.
+    #. [Triangle inequality]
     
     
-
-
+       .. math:: 
+            \| A + B \| \leq \| A \| + \| B \|.
+    
+    
 We recall some of the standard results on normed vector spaces.
 
 All matrix norms are equivalent. Let :math:`\| \cdot \|` and :math:`\| \cdot \|'`
@@ -2047,7 +2044,7 @@ Similarly :math:`\| A \|_{p, q}` is different from :math:`\| A \|_{p \to q}`.
 
  
 Block diagonally dominant matrices and generalized Gershgorin disc theorem
-----------------------------------------------------
+-----------------------------------------------------------------------------
 
 In :cite:`feingold1962block` the idea of diagonally dominant matrices (see :ref:`here <sec:mat:diagonally_dominant_matrix>`)
 has been generalized to block matrices using matrix norms. We consider the specific case with spectral norm. 

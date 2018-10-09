@@ -39,7 +39,7 @@ Spaces associated with a matrix
 .. index:: Row space
 
 
-.. _def:mat:column_space:
+.. _def:mat:row_space:
 
 .. definition:: 
 

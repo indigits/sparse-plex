@@ -176,12 +176,13 @@ we can express :math:`\mathcal{F}` in the form of :math:`\{ A_i\}_{i \in I}`.
     *  The **union** of the family is defined to be
         
     
-    .. math::
+       .. math::
                 \bigcup_{i\in I} A_i = \{ x : \exists i \in I \text{ such that } x \in A_i\}.
+    
     *  The **intersection** of the family is defined to be
         
     
-    .. math::
+       .. math::
                 \bigcap_{i \in I} A_i  = \{ x : x \in A_i \quad \forall i \in I\}.
     
     

@@ -985,16 +985,17 @@ singular values of its pseudo-inverse.
 
 
 
+.. _sec:mat:sngular:full_column_rank_matrices:
  
 Full column rank matrices
 ----------------------------------------------------
 
-.. _sec:mat:sngular:full_column_rank_matrices:
-In this subsection we consider some specific results related to singular value
-decomposition of a full column rank matrix. 
+In this subsection we consider some specific results related to 
+singular value decomposition of a full column rank matrix. 
 
-We will consider :math:`A` to be an :math:`m \times n` matrix in :math:`\FF^{m \times n}` with :math:`m \geq n` and 
-:math:`\Rank(A) = n`. 
+We will consider :math:`A` to be an :math:`m \times n` matrix 
+in :math:`\FF^{m \times n}` with :math:`m \geq n` 
+and  :math:`\Rank(A) = n`. 
 Let :math:`A = U \Sigma V^H` be its singular value decomposition. 
 From :ref:`here <lem:mat:singular:rank_svd>` we observe that
 there are :math:`n` non-zero singular values of :math:`A`.
@@ -1352,9 +1353,11 @@ Low rank approximation of a matrix
 
 Following is a simple procedure for making a low rank approximation of a given matrix :math:`A`.
 
-*  Perform the singular value decomposition of :math:`A` given by :math:`A = U \Sigma V^H`.
-*  Identify the singular values of :math:`A` in :math:`\Sigma`.
-*  Keep the first :math:`r` singular values (where :math:`r \ll \min(m, n)` is the rank of the approximation).
-and set all other singular values to 0 to obtain :math:`\widehat{\Sigma}`.
-*  Compute :math:`\widehat{A} = U \widehat{\Sigma} V^H`.
+#. Perform the singular value decomposition of :math:`A` given by 
+   :math:`A = U \Sigma V^H`.
+#. Identify the singular values of :math:`A` in :math:`\Sigma`.
+#. Keep the first :math:`r` singular values (where :math:`r \ll \min(m, n)` 
+   is the rank of the approximation)
+   and set all other singular values to 0 to obtain :math:`\widehat{\Sigma}`.
+#. Compute :math:`\widehat{A} = U \widehat{\Sigma} V^H`.
 

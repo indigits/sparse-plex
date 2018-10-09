@@ -163,7 +163,8 @@ aspects of the signal.
  
 Quasi-norms
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
- In some cases it is useful to extend the notion of :math:`\ell_p` norms to the case
+In some cases it is useful to extend the notion of 
+:math:`\ell_p` norms to the case
 where :math:`0 < p < 1`. 
 
 In such cases norm as defined in :eq:`eq:complex_l_p_norm` doesn't 

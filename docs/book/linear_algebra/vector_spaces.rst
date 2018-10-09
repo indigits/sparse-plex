@@ -1106,8 +1106,8 @@ if :math:`W_1 \subset\WW _2`.
     
     .. math:: 
     
-        \dim \WW  = \dim \VV
-    ,
+        \dim \WW  = \dim \VV,
+    
     then :math:`\WW = \VV`.
 
 

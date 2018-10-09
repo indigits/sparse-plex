@@ -261,7 +261,7 @@ Null space and range
 
 
 
-.. _thm:nullspace_is_subspace:
+.. _thm:basis_image_spans_whole_image:
 
 .. theorem:: 
 
