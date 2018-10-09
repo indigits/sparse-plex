@@ -8,6 +8,7 @@ Matrix Algebra
    matrices/rank_span_independence
    matrices/invertible_matrices
    matrices/trace_det
+   matrices/unitary_matrices
 
 
 
