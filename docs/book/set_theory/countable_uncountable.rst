@@ -81,13 +81,13 @@ Note that two sets may be equivalent yet not equal to each other.
     
     (ii). It is given that :math:`A \sim B`. Thus, there exists a function :math:`f : A \to B` which is
     one-one and onto. Thus, there exists an 
-    \hyperref[def:set:inverse_function]{inverse function} :math:`g : B \to A` which is one-one 
+    :ref:`inverse function <def:set:inverse_function>` :math:`g : B \to A` which is one-one 
     and onto. Thus, :math:`B \sim A`.
     
     (iii). It is given that :math:`A \sim B` and :math:`B \sim C`. Thus there exist two one-one and onto
     functions :math:`f : A \to B` and :math:`g : B \to C`. Define a function :math:`h : A \to C` given by
     :math:`h = g \circ f`. Since 
-    \hyperref[res:composition_of_one_one_onto_functions]{composition of bijective functions is bijective}
+    :ref:`composition of bijective functions is bijective <res:composition_of_one_one_onto_functions>`
     , :math:`h` is one-one and onto. Thus, :math:`A \sim C`.
 
 We now look closely at the set of natural numbers :math:`\Nat = \{1,2,3,\dots\}`.
@@ -230,12 +230,12 @@ satisfies the property :math:`P`.
     Since :math:`A` is countable, hence :math:`A \sim \Nat`. Thus, :math:`B` is equivalent to a subset
     of :math:`\Nat`. Without loss of generality, let us assume that :math:`B` is a subset of :math:`\Nat`.
     We now construct a mapping :math:`f : \Nat \to B` as follows. Let :math:`b_1` be the
-    least element of :math:`B` (which exists due to \hyperref[res:set:well_ordering_principle]{well ordering principle}).
+    least element of :math:`B` (which exists due to :ref:`well ordering principle <res:set:well_ordering_principle>`).
     We assign :math:`f(1) = b_1`. Now, let :math:`b_2` be the least element of :math:`B \setminus \{ b_1\}`. We
     assign :math:`f(2) = b_2`. Similarly, assuming that :math:`f(1) = b_1, f(2) = b_2, \dots , f(n) = b_n` has
     been assigned, we assign :math:`f(n+1) =` the least element of :math:`B \setminus \{b_1, \dots, b_n\}`. This
-    least element again exists due to \hyperref[res:set:well_ordering_principle]{well ordering principle}.
-    This completes the definition of :math:`f` using the \hyperref[res:set:principle_mathematical_induction]{principle of mathematical induction}. It is easy to show that the function is one-one and onto.  This proves
+    least element again exists due to :ref:`well ordering principle <res:set:well_ordering_principle>`.
+    This completes the definition of :math:`f` using the :ref:`principle of mathematical induction <res:set:principle_mathematical_induction>`. It is easy to show that the function is one-one and onto.  This proves
     that :math:`B \sim \Nat`.
 
 
@@ -265,7 +265,7 @@ We present different characterizations of a countable set.
     We are given that there exists a subset :math:`B` of :math:`\Nat` and a function :math:`f: B \to A` that is on-to.
     For some :math:`a \in A`, consider :math:`f^{-1}{a} = \{ b \in B : f(b) = a \}`.
     Since :math:`f` is on-to, hence :math:`f^{-1}(a)` is non-empty. Since :math:`f^{-1}(a)` is a set of natural 
-    numbers, it has a least element due to \hyperref[res:set:well_ordering_principle]{well ordering principle}. 
+    numbers, it has a least element due to :ref:`well ordering principle <res:set:well_ordering_principle>`. 
     Further if :math:`a_1, a_2 \in A` are distinct, then :math:`f^{-1}(a_1)` 
     and :math:`f^{-1}(a_2)` are disjoint and the corresponding least elements are distinct.
     Assign :math:`g(a) = \text{ least element of } f^{-1}(a) \Forall a \in A`. Such a 
@@ -414,10 +414,10 @@ In this sense, :math:`B` has at least as many elements as :math:`A`.
     (i). We can use the identity function :math:`f (a ) = a \Forall a \in A`.
     
     (ii). Straightforward application of the result that
-    \hyperref[res:composition_of_one_one_functions]{composition of injective functions is injective}.
+    :ref:`composition of injective functions is injective <res:composition_of_one_one_functions>`.
     
     (iii). Straightforward application of 
-    \hyperref[res:function:schroder_bernstein_theorem]{Schr{\"o}der-Bernstein theorem}.
+    :ref:`Schröder-Bernstein theorem <res:function:schroder_bernstein_theorem>`.
 
 
 
