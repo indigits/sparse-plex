@@ -11,6 +11,7 @@ Matrix Algebra
    matrices/unitary_matrices
    matrices/eigen_values
    matrices/singular_values
+   matrices/matrix_norms
 
 
 

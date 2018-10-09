@@ -348,7 +348,7 @@ with
 put in a data matrix :math:`Y \in \RR^{2F \times S}`.
 In general, we don't know which feature point belongs
 to which object and how many feature points are there
-for each object. Off course there is at least one
+for each object. Of course there is at least one
 feature point for each object (otherwise the object
 isn't being tracked at all). We could permute the
 columns of :math:`Y` via an (unknown) permutation :math:`\Gamma`
