@@ -23,6 +23,7 @@ A journey into sparse and redundant representations.
    book/linear_algebra
    book/matrices
    book/real_analysis
+   book/probability
    book/geometry
    library/index
    exercises/index
