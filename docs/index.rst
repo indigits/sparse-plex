@@ -21,6 +21,7 @@ A journey into sparse and redundant representations.
    book/subspace_clustering
    book/set_theory
    book/linear_algebra
+   book/matrices
    book/geometry
    library/index
    exercises/index
