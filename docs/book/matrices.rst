@@ -10,6 +10,8 @@ Matrix Algebra
    matrices/trace_det
    matrices/unitary_matrices
    matrices/eigen_values
+   matrices/singular_values
+
 
 
 
