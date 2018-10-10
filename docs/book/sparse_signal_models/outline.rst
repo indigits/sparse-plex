@@ -4,6 +4,27 @@ Outline
 
 In this chapter we develop initial concepts of sparse signal models.
 
+.. figure:: images/sparse_representation_framework.png
+
+    A bird's eye view of the sparse representations 
+    and compressive sensing framework. Signals 
+    (like speech, images, etc.) reside in a signal
+    space :math:`\RR^N`. Analytical or trained dictionaries
+    can be constructed such that the signals can 
+    have a sparse representation in such dictionaries.
+    These sparse representations reside in a representation 
+    space :math:`\RR^D`. A sparse approximation algorithm :math:`\Delta_a` can
+    construct a representation :math:`\alpha` for a signal :math:`x` in
+    the dictionary :math:`\DDD`. The approximation error is :math:`e`.
+    A small number of :math:`M` random
+    measurements are sufficient to capture all the information
+    in :math:`x`. The sensing process :math:`y  = \Phi x + n` constructs
+    the measurement vector :math:`y \in \RR^M` for a given signal
+    where :math:`n` is the measurement noise. In order to get
+    :math:`x` from :math:`y`, we first need to recover the sparse
+    representation :math:`\alpha` using the sparse recovery algorithm
+    :math:`\Delta_r`. Then :math:`x \approx \DDD \alpha`.
+
 
 We begin our study with a review of solutions of under-determined systems.
 We build a case for solutions which promote sparsity. 

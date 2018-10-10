@@ -5,9 +5,19 @@ About Sparse-Plex
 sparse representation problems. 
 
 
-Currently the library is broken as it is going through
-massive changes. Will update later.
+.. figure:: images/union_of_subspaces.png
 
+  This is an example of a union of subspaces model. While
+  the ambient space is :math:`\RR^3`, the data points  
+  actually fall in one of the three 2-d planes. 
+  The black points are in :math:`xy`-plane, 
+  yellow points in :math:`yz`-plane and red points in :math:`zx` plane.
+  Each of the 3 planes is a subspace of the ambient 3 dimensional space.
+  Once an appropriate basis for each of the subspaces is chosen, 
+  the data points require only 2 coordinates to identify them in the subspace.
+  In this case, it is easy to see that the standard basis for :math:`\RR^3` 
+  contains the basis vectors for individual subspaces also. Thus, 
+  in the standard basis, each data point has only 2-non-zero coordinates.
 
 
 

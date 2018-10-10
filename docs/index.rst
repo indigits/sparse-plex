@@ -31,6 +31,8 @@ A journey into sparse and redundant representations.
    scripts
    zzzreferences
 
+.. figure:: images/union_of_subspaces.png
+
 ..
    datasets
 
