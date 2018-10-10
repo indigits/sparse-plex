@@ -1,0 +1,263 @@
+\documentclass[
+]{article} % The class file specifying the document structure
+
+% workflow support
+\usepackage{subfiles}
+
+% Graphics support
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{flowchart}
+\usepackage{pgfplots}
+% Disable backward compatibility mode of pgfplots.
+\pgfplotsset{compat=newest}
+\usepackage{pgfplotstable}
+\usepackage{pgf}
+\usetikzlibrary{shapes, arrows.meta, positioning, 
+skflowchart, skthesis, dsp, chains}
+\usepackage{tikz-3dplot}
+% captions
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{textcomp}
+
+
+% Math support
+\usepackage{amsmath}%
+% \usepackage{amsthm}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+% \usepackage{dsfont}% math font package
+% \usepackage{thmtools}%
+% \usepackage{multirow}
+% \usepackage{blkarray}
+% \usepackage{mathpazo} % Use the Palatino font by default
+\usepackage{skmath}
+
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\z}{\mathpzc{z}}
+
+\begin{document}
+
+% \begin{figure}[ht]
+% \subfile{diagrams/dg_template}
+% \end{figure}
+\clearpage
+
+
+
+
+\begin{figure}[ht]
+\begin{subfigure}[b]{.48\linewidth}
+\centering
+\begin{tikzpicture}[]
+\end{tikzpicture}
+\end{subfigure}\hfill%
+\begin{subfigure}[b]{.48\linewidth}
+\centering
+\begin{tikzpicture}[]
+\end{tikzpicture}
+\end{subfigure}
+\caption{Figure}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[]
+\end{tikzpicture}
+\end{figure}
+
+\section{Geometry}
+
+\begin{figure}[ht]
+\begin{subfigure}[b]{.5\linewidth}
+\centering
+\begin{tikzpicture}[scale=3]
+\clip (-0.1,-0.2) rectangle (1.1,0.75);
+\draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+\draw (-1.5,0) -- (1.5,0);
+\draw (0,-1.5) -- (0,1.5);
+\draw (0,0) circle [radius=1cm];
+\filldraw[fill=green!20,draw=green!50!black] (0,0) -- (3mm,0mm)
+arc [start angle=0, end angle=30, radius=3mm] -- cycle;
+\draw[red,very thick] (30:1cm) -- +(0,-0.5);
+\end{tikzpicture}
+\end{subfigure}%
+\begin{subfigure}[b]{.5\linewidth}
+\centering
+\begin{tikzpicture}[scale=3]
+\clip (-0.1,-0.2) rectangle (1.1,0.75);
+\draw[step=.5cm,gray,very thin] (-1.4,-1.4) grid (1.4,1.4);
+\draw (-1.5,0) -- (1.5,0);
+\draw (0,-1.5) -- (0,1.5);
+\draw (0,0) circle [radius=1cm];
+\filldraw[fill=green!20,draw=green!50!black] (0,0) -- (3mm,0mm)
+arc [start angle=0, end angle=30, radius=3mm] -- cycle;
+\draw[red,very thick] (30:1cm) -- +(0,-0.5);
+\draw[blue,very thick] (30:1cm) ++(0,-0.5) -- (0,0);
+\end{tikzpicture}
+\end{subfigure}
+\caption{A figure}
+\end{figure}
+
+\section{Block Diagrams}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[auto, thick, 
+node distance=2cm, >=triangle 45]
+% nodes
+\node at (0,0)[right=-3mm]{\Large \textopenbullet};
+\node [sk-blk-input] (input1) {};
+\node [sk-blk-ring, right of=input1] (suma1) {\tSumLabel};
+\node [sk-blk-block, right of=suma1] (inte1) {\tIntLabel};
+% edges
+\draw[->](input1) -- node {$X(Z)$}(suma1);
+\draw[->](suma1) -- node {} (inte1);
+\end{tikzpicture}
+\end{figure}
+
+\section{Flow Charts}
+
+\begin{figure}[ht]
+\begin{subfigure}[b]{.48\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+\tikzstyle{every node}=[font=\scriptsize]
+% nodes
+\node [sk-process] (init) {init};
+\node [sk-agent, left=of init] (expert) {expert};
+\node [sk-agent, right=of init] (system) {system};
+\node [sk-process, below=of init] (identify) {identify };
+% edges
+\path [sk-arrow] (init) -- (identify);
+\path [sk-arrow,dashed] (expert) -- (init);
+\path [sk-arrow,dashed] (system) -- (init);
+\end{tikzpicture}
+\end{subfigure}\hfill%
+\begin{subfigure}[b]{.48\linewidth}
+\centering
+\begin{tikzpicture}[]
+\end{tikzpicture}
+\end{subfigure}
+\caption{Figure}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[]
+% Place nodes using a matrix
+    \matrix (m1) [row sep=2.5mm, column sep=5mm]
+    {
+        %--------------------------------------------------------------------
+        \node[dspnodeopen,dsp/label=above] (m00) {$x[n]$};    &
+        \node[coordinate]                  (m01) {};          &
+        \node[dspnodefull]                 (m02) {};          &
+        \node[dspsquare]                   (m03) {$\z^{-1}$}; &
+        \node[dspnodefull]                 (m04) {};          &
+        \node[dspsquare]                   (m05) {$\z^{-1}$}; &
+        \node[dspnodefull]                 (m06) {};          &
+        \node[dspsquare]                   (m07) {$\z^{-1}$}; &
+        \node[coordinate]                  (m08) {};          &
+        \node[coordinate]                  (m09) {};          &
+        \node[coordinate]                  (m0X) {};          \\
+        %--------------------------------------------------------------------
+        \node[coordinate]                  (m10) {};          &
+        \node[coordinate]                  (m11) {};          &
+        \node[dspmixer, dsp/label=right]   (m12) {$h[0]$};    &
+        \node[coordinate]                  (m13) {};          &
+        \node[dspmixer, dsp/label=right]   (m14) {$h[1]$};    &
+        \node[coordinate]                  (m15) {};          &
+        \node[dspmixer, dsp/label=right]   (m16) {$h[2]$};    &
+        \node[coordinate]                  (m17) {};          &
+        \node[dspmixer, dsp/label=right]   (m18) {$h[3]$};    &
+        \node[coordinate]                  (m19) {};          &
+        \node[coordinate]                  (m1X) {};          \\
+        %--------------------------------------------------------------------
+        \\
+        %--------------------------------------------------------------------
+        \node[coordinate]                  (m20) {};          &
+        \node[coordinate]                  (m21) {};          &
+        \node[coordinate]                  (m22) {};          &
+        \node[coordinate]                  (m23) {};          &
+        \node[dspadder]                    (m24) {};          &
+        \node[coordinate]                  (m25) {};          &
+        \node[dspadder]                    (m26) {};          &
+        \node[coordinate]                  (m27) {};          &
+        \node[dspadder]                    (m28) {};          &
+        \node[coordinate]                  (m29) {};          &
+        \node[dspnodeopen,dsp/label=above] (m2X) {$y[n]$};    \\
+        %--------------------------------------------------------------------
+    };
+
+    % Draw connections
+    
+    \begin{scope}[start chain]
+        \chainin (m00);
+        \chainin (m02) [join=by dspflow];
+        \chainin (m12) [join=by dspconn];
+        \chainin (m22) [join=by dspline];
+    \end{scope}
+
+    \foreach \i [evaluate = \i as \j using int(\i+1),
+                 evaluate = \i as \k using int(\i+2),] in {2,4,6}
+    {
+        \begin{scope}[start chain]
+            \chainin (m0\i);
+            \chainin (m0\j) [join=by dspconn];
+            \chainin (m0\k) [join=by dspline];
+            \chainin (m1\k) [join=by dspconn];
+            \chainin (m2\k) [join=by dspconn];
+        \end{scope}
+        \draw[dspconn] (m2\i) -- (m2\k);
+    }
+
+    \draw[dspflow] (m28) -- (m2X);
+
+
+    % Place nodes using another matrix for another picture
+    \matrix (m2) [row sep=15mm, column sep=15mm, below=of m1]
+    {
+        %--------------------------------------------------------------------
+        \node[dspnodeopen,dsp/label=left]  (m00) {$x[n]$};  &
+        \node[dspnodeopen]                 (m01) {};        &
+        \node[dspnodeopen]                 (m02) {};        &
+        \node[dspnodeopen]                 (m03) {};        &
+        \node[dspnodeopen]                 (m04) {};        &
+        \node[coordinate]                  (m05) {};        \\
+        %--------------------------------------------------------------------
+        \node[coordinate]                  (m10) {};        &
+        \node[dspnodeopen]                 (m11) {};        &
+        \node[dspnodeopen]                 (m12) {};        &
+        \node[dspnodeopen]                 (m13) {};        &
+        \node[dspnodeopen]                 (m14) {};        &
+        \node[dspnodeopen,dsp/label=right] (m15) {$y[n]$};  \\
+        %--------------------------------------------------------------------
+    };
+
+    % Draw connections
+
+    \draw[dspflow] (m00) -- (m01);
+    
+    \foreach \i [evaluate = \i as \j using int(\i+1)] in {1,2,3}
+        \draw[dspflow] (m0\i) -- node[midway,above] {$\z^{-1}$} (m0\j);
+
+    \foreach \i [evaluate = \i as \j using int(\i-1)] in {1,2,...,4}
+        \draw[dspflow] (m0\i) -- node[midway,right] {$h[\j]$} (m1\i);
+        
+    \foreach \i [evaluate = \i as \j using int(\i+1)] in {1,2,...,4}
+        \draw[dspflow] (m1\i) -- (m1\j);
+    
+    % Other elements
+    \node[dspsquare, below=of m10, below=10ex]       (c0) {\upsamplertext{L}};
+    \node[dspsquare,right= of c0]                    (c1) {\downsamplertext{M}};
+    \node[dspfilter,right=of c1]                     (c2) {$H(\z)$};
+    \node[dspmultiplier,right=of c2,dsp/label=below] (c3) {$\gamma$};
+    \node[dspfilter,right=of c3,minimum size=2cm,text height=2em]
+                                                     (c4) {Weird\\ Stuff};
+    \foreach \i [evaluate = \i as \j using int(\i+1)] in {0,1,...,3}
+        \draw[dspconn] (c\i) -- (c\j);
+\end{tikzpicture}
+\end{figure}
+
+\end{document}  

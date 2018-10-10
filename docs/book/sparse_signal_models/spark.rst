@@ -186,7 +186,6 @@ We consider few examples.
 
 
 
-
 .. example:: Spark of Dirac Fourier basis
 
     For 
@@ -204,4 +203,155 @@ We consider few examples.
         \spark(\DDD) = 2 \sqrt{N}.
     
     In this case, the sparsity level of a unique solution must be less than  :math:`\sqrt{N}`.
+
+
+.. _ex:ssm:spark:partial-hadamard:
+
+.. example:: Spark of a Partial Hadamard matrix
+
+    Let's construct a Hadamard matrix of size :math:`20 \times 20`::
+
+        PhiA = hadamard(20);
+
+    Let's print it::
+
+        >> PhiA
+
+        PhiA =
+
+             1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1
+             1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1
+             1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1
+             1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1
+             1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1
+             1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1
+             1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1
+             1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1
+             1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1
+             1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1
+             1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1
+             1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1
+             1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1
+             1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1
+             1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1
+             1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1
+             1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1
+             1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1
+             1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1
+             1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1
+
+    We will now select 10 rows randomly from it::
+
+        >> rng default;
+        >> rows = randperm(20, 10)
+
+        rows =
+
+             6    18     7    16    12    13     3     4    19    20
+
+        >> Phi = PhiA(rows, :)
+
+        Phi =
+
+             1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1
+             1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1
+             1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1
+             1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1
+             1  1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1
+             1 -1  1  1  1  1 -1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1
+             1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1
+             1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1  1 -1 -1
+             1 -1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1
+             1  1 -1 -1  1  1 -1 -1 -1 -1  1 -1  1 -1  1  1  1  1 -1 -1
+
+    Let's measure its spark::
+
+        >> spx.dict.spark(Phi)
+
+        ans =
+
+             8
+
+    We can also find out the set of 8 columns which are linearly dependent::
+
+        >> [spark, columns] = spx.dict.spark(Phi)
+
+        spark =
+
+             8
+
+
+        columns =
+
+             1     2     3     7    11    14    19    20
+
+    Let's find out this sub-matrix ::
+
+        >> PhiD = Phi(:, columns)
+
+        PhiD =
+
+             1 -1 -1 -1  1 -1  1  1
+             1 -1 -1  1 -1 -1  1  1
+             1 -1 -1  1  1 -1  1 -1
+             1  1  1 -1 -1 -1  1  1
+             1  1 -1  1 -1  1  1 -1
+             1 -1  1 -1 -1 -1 -1  1
+             1 -1  1 -1  1  1  1 -1
+             1  1  1 -1 -1  1 -1 -1
+             1 -1  1  1 -1  1  1 -1
+             1  1 -1 -1  1 -1 -1 -1
+
+    Let's verify that this matrix is indeed singular::
+
+        >> rank(PhiD)
+
+        ans =
+
+             7
+
+
+    We can find out a vector in its null space::
+
+        >> z = null(PhiD)'
+
+        z =
+
+            0.4472    0.2236    0.2236    0.4472    0.4472    0.2236   -0.2236    0.4472
+
+    Verify that it is indeed a null space vector::
+
+        >> norm (PhiD * z')
+
+        ans =
+
+           1.1776e-15
+
+    The rank of this matrix is 10. If every set of 10 columns was 
+    independent, then the spark would have been 11 and the
+    matrix would be a full spark matrix. Unfortunately, it is not so.
+    However the spark is still quite large.
+
+    We can normalize the columns of this matrix to make it 
+    a proper dictionary::
+
+        >> Phi = spx.norm.normalize_l2(Phi);
+
+    Let's verify the column-wise norms::
+
+        >> spx.norm.norms_l2_cw(Phi)
+
+        ans =
+
+          Columns 1 through 12
+
+            1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000
+
+          Columns 13 through 20
+
+            1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000    1.0000
+
+
+    The coherence of this dictionary [to be discussed in next section]
+    is 0.6 which is moderate (but not low).
 

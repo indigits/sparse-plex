@@ -1,0 +1,44 @@
+%!TEX root = ../article_algorithm.tex
+\begin{algorithm}[!ht]
+\caption{Orthogonal matching pursuit for sparse approximation}
+\label{alg:srr:omp}
+\small
+\SetAlgoLined
+\KwIn{Dictionary: $\DD \in \CC^{N \times D}$}
+\KwIn{Signal: $x \in \CC^N$}
+\KwIn{Sparsity level: $K$}
+\KwIn{Bound on residual error: $\epsilon$}
+
+\KwOut{A $K$-sparse estimate $\widehat{\alpha} \in \Sigma_{K} \subseteq \CC^D$ for the signal $x$}
+\KwOut{An index set $\Lambda \subset [D]$ identifying the support of $\widehat{\alpha}$}
+\KwOut{An approximation $\widehat{x} \in \CC^N$ of $x$}
+\KwOut{A  residual $r = x  - \widehat{x} \in \CC^N$}
+
+\tcp{Initialization}
+$k \leftarrow 0$ \tcp*{Iteration counter}
+$x^0 \leftarrow 0$ \tcp*{Approximation of $x$}
+$r^0 \leftarrow x - x^0$ \tcp*{Residual $r \in \CC^N$}
+$\Lambda^0 \leftarrow \EmptySet$ \tcp*{Solution support $\Lambda = \supp(\widehat{\alpha})$}
+
+\While {$k < K$}
+{
+    $k \leftarrow k + 1$ \tcp*{Increase the iteration count}
+    \tcp{Sweep}
+    $\lambda_k  = \text{arg} \; \underset{1 \leq j \leq N}{\max} |\langle r^{k-1}, d_j \rangle|$ \tcp*{maximum inner product}
+    \tcp{Update support}
+    $\Lambda^{k} \leftarrow \Lambda^{k - 1} \cup \{ \lambda_k\}$ \; 
+    \tcp{Update provisional solution}
+     $z \leftarrow \underset{z}{\text{arg min}}\, \| \DD_{\Lambda^k} z - x \|^2_2$\tcp*{Least squares}
+    \tcp{Update residual}
+    $x^k = \DD_{\Lambda^k} z$ \;
+    $r^k = x - x^k$ \;
+    \If{$\|r^k\|_2  \leq \epsilon$}{
+        break \;
+    }
+}
+$\widehat{\alpha} \leftarrow 0$;
+$\widehat{\alpha}_{\Lambda^k} \leftarrow z$ \tcp*{Non-zero entries on support}
+$\Lambda \leftarrow \Lambda^k$; 
+$\widehat{x} \leftarrow x^k$;
+$r \leftarrow r^k$\;
+\end{algorithm}

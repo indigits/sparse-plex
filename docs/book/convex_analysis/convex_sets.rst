@@ -1167,9 +1167,7 @@ i.e.
 
 .. math:: 
 
-    \theta x_1 + (1 - \theta) x_2 \in C \Forall x_1, x_2 \in C, \theta \in [0,1]
-.
-
+    \theta x_1 + (1 - \theta) x_2 \in C \Forall x_1, x_2 \in C, \theta \in [0,1].
 
  
 Intersection

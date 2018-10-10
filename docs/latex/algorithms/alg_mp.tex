@@ -1,0 +1,21 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-3.5cm)]
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoLined
+\DontPrintSemicolon
+\label{alg:mp}
+$z = \text{MP}(\Phi, y, \epsilon)$\;
+$z \leftarrow 0$\; 
+$r \leftarrow y$ \tcp*{$r = y  - \Phi z$} 
+
+\Repeat{$\|r\|_2  \leq \epsilon$}{
+    $h \leftarrow \Phi^T r$ \tcp*{Match}
+    $ k \leftarrow  \underset{1 \leq j \leq N}{\text{arg} \;\max} (\abs(h_j))$\tcp*{Identify}
+    $z_k \leftarrow z_k + h_k$ \tcp*{Update representation}
+    $r \leftarrow r - h_k \phi_k$ \tcp*{Update residual}
+}
+\end{algorithm}
+\end{tcolorbox}
+\end{document}

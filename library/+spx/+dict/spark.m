@@ -13,7 +13,7 @@ for K=1:R+1
         break;
     end
     numChoices = nchoosek(N,K);
-    if (numChoices > 40000)
+    if (numChoices > 160000)
         error('N=%d, K=%d too large!',N,K);
     end
     % All possible choices of K columns out of N

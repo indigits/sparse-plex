@@ -8,18 +8,18 @@ methods (Static)
     function [ ] = sparse_signal( x )
     %sparse_signal Prints a sparse vector as pairs of indices and values
     N = length(x);
-    K = 0;
+    K = 1;
     for i=1:N
         if x(i)
+            fprintf('(%d,%0.4f) ',i, x(i));
             if mod(K, 5) == 0
-                % We introduce a new line after every 8 values
+                % We introduce a new line after every few values
                 fprintf('\n');
             end
-            fprintf('(%d,%0.4f) ',i, x(i));
             K = K+1;
         end
     end
-    fprintf('  N=%d, K=%d\n', N, K);
+    fprintf('  N=%d, K=%d\n', N, K-1);
     end
 
     function [ ] = sorted_sparse_signal( x )

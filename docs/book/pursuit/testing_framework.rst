@@ -59,6 +59,8 @@ from the index set :math:`[1, N]`.
 
 After that it provides various ways to generate the non-zero values.
 
+.. _sec:pursuit:tf:uniform:
+
 Uniform
 '''''''''
 
@@ -118,6 +120,8 @@ We can specify a custom range :math:`[a, b]` by calling::
 
     rep =  gen.uniform(a, b);
 
+.. _sec:pursuit:tf:biuniform:
+
 Bi-uniform
 ''''''''''''''''''''
 
@@ -166,6 +170,7 @@ using bi-uniform generator.
 
     .. figure:: images/demo_sparse_biuniform_2.png
 
+.. _sec:pursuit:tf:gaussian:
 
 Gaussian
 '''''''''''''''
@@ -190,6 +195,7 @@ Gaussian
 
     .. figure:: images/demo_sparse_gaussian_1.png
 
+.. _sec:pursuit:tf:bigaussian:
 
 Bi-Gaussian
 '''''''''''''''''''''
@@ -265,6 +271,7 @@ The bi-Gaussian distribution is quite flexible.
 * Too small values are not allowed.
 * Dynamic range between largest and smallest non-zero values is not much.
 
+.. _sec:pursuit:tf:rademacher:
 
 Rademacher
 ''''''''''''''

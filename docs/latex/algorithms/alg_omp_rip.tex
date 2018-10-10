@@ -1,0 +1,27 @@
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoLined
+\caption{Orthogonal matching pursuit}
+\label{alg:omp_rip}
+$x, r, \Lambda = \text{OMP}(\Phi, y)$\;
+$x^0 \leftarrow 0$\; 
+$r^0 \leftarrow y$ \tcp*{$r = y  - \Phi x$} 
+$\Lambda^0 = \EmptySet$ \tcp*{Index set of chosen atoms}
+$k \leftarrow 0$ \tcp*{Iteration counter}
+
+\Repeat{halting criteria is satisfied}{
+    $k \leftarrow k+1$\tcp*{Update iteration counter}
+    $h^{ k} \leftarrow \Phi^T r^{k-1}$ \tcp*{Match}
+    $\lambda^{k} = \underset{j \notin \Lambda^{k-1}}{\text{arg} \, \max} 
+    | h^{ k}_j |$\tcp*{Identify}
+    $\Lambda^{k} \leftarrow \Lambda^{k-1} \cup \{\lambda^{k}\}$ 
+    \tcp*{Update support}
+    $x^{k} \leftarrow 0$ \;
+    $x^{k}_{\Lambda^{k}} \leftarrow \Phi_{\Lambda^{k}}^{\dag} y$ \tcp*{Update representation LS}
+    $y^{k} = \Phi_{\Lambda^{k}} x_{\Lambda^{k}}^{k} $ \tcp*{Update approximation}
+    $r^{k} \leftarrow y - y^{k}$ \tcp*{Update residual}
+}
+$x \leftarrow x^k$ ;
+$\Lambda  \leftarrow \Lambda^k$ ;
+$r \leftarrow r^k$ \;
+\end{algorithm}

@@ -10,3 +10,7 @@ scratch.txt
 *.swp
 *.mexw64
 *.html
+*.gz
+*.aux
+*.pdf
+*.synctex(busy)

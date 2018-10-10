@@ -1,0 +1,42 @@
+\documentclass[
+]{article} % The class file specifying the document structure
+
+% workflow support
+\usepackage{subfiles}
+
+% Graphics support
+\usepackage{graphicx}
+% Disable backward compatibility mode of pgfplots.
+% captions
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{textcomp}
+
+
+% Math support
+\usepackage{amsmath}%
+% \usepackage{amsthm}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+% \usepackage{dsfont}% math font package
+% \usepackage{thmtools}%
+% \usepackage{multirow}
+% \usepackage{blkarray}
+% \usepackage{mathpazo} % Use the Palatino font by default
+\usepackage{skmath}
+\usepackage{tcolorbox}
+\usepackage{algorithm2e}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\z}{\mathpzc{z}}
+
+\begin{document}
+
+\clearpage
+
+\section{Greedy Algorithms}
+
+\subfile{algorithms/alg_mp}
+\subfile{algorithms/alg_omp}
+\subfile{algorithms/alg_omp_rip}
+
+\end{document}  
