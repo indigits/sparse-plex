@@ -100,6 +100,7 @@ than the sparsity level :math:`K`. However,
 under suitable conditions, it does converge
 to the correct solution.
 
+.. _sec:pursuit:mp:hands-on:
 
 Hands-on with Matching Pursuit
 ----------------------------------------

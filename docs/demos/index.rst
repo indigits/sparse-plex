@@ -25,6 +25,8 @@ Pursuit Algorithms
 ----------------------------
 
 * :ref:`sec:library-commons-sparse`
+* :ref:`sec:pursuit:mp:hands-on`
+* :ref:`sec:pursuit:omp:-hands-on`
 * :ref:`sec:pursuit:testing-framework`
 * :ref:`sec:library-commons-comparison-sparse`
 

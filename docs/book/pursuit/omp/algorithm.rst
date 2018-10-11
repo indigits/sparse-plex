@@ -104,6 +104,8 @@ Each iteration of algorithm consists of following stages:
    :math:`r^{k+1}` based on new solution vector estimate.
 
 
+.. _sec:pursuit:omp:-hands-on:
+
 Hands-on with Orthogonal Matching Pursuit
 -----------------------------------------------
 

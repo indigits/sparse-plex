@@ -1,4 +1,4 @@
-Orthogonal matching pursuit
+Orthogonal Matching Pursuit
 =======================================
 
 .. toctree::
