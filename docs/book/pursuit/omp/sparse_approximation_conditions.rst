@@ -1,15 +1,15 @@
 Sparse approximation conditions
 =========================================
 
-.. figure:: images/algorithm_omp_x_alpha_version.png
-
-
 We now remove the assumption that :math:`x` is :math:`K`-sparse in :math:`\Phi`.  This
 is indeed true for all real life signals as they are not truly sparse.
 
 In this section we will look at conditions under which
 OMP can successfully solve the :math:`(\mathcal{D}, K)`-:textsc:`sparse` approximation
 problem. 
+
+.. figure:: images/algorithm_omp_x_alpha_version.png
+
 
 Let :math:`x` be an arbitrary signal and suppose that :math:`\alpha_{\text{opt}}` is
 an optimum :math:`K`-term approximation representation of :math:`x`. i.e. 
@@ -66,20 +66,16 @@ to recover the optimal atoms.
 A few remarks are in order.
 
 *  :math:`\| x - \Phi \alpha^k \|_2` is the approximation error norm at 
-:math:`k`-th iteration.
-*   :math:`\| x - \Phi \alpha_{\text{opt}}\|_2` is the optimum approximation
-error after :math:`K` iterations.
+   :math:`k`-th iteration.
+*  :math:`\| x - \Phi \alpha_{\text{opt}}\|_2` is the optimum approximation
+   error after :math:`K` iterations.
 *  The theorem says that OMP makes absolute progress whenever the current
-error is larger than optimum error by a factor.
+   error is larger than optimum error by a factor.
 *  As a result of this theorem, we note that every optimal :math:`K`-term
-approximation of :math:`x` contains the same kernel of atoms. The optimum error
-is always independent of choice of atoms in :math:`K` term approximation (since 
-it is optimum). Initial error is also independent of choice of atoms (since
-initial support is empty). OMP always selects the same set of atoms by design.
-
-
-
-
+   approximation of :math:`x` contains the same kernel of atoms. The optimum error
+   is always independent of choice of atoms in :math:`K` term approximation (since 
+   it is optimum). Initial error is also independent of choice of atoms (since
+   initial support is empty). OMP always selects the same set of atoms by design.
 
 .. proof:: 
 
@@ -344,7 +340,7 @@ If :math:`x \in \CC^N` is completely arbitrary, then it may not be possible that
 situation, a question arises as to what is the worst :math:`K`-term approximation error that
 OMP will incur if :eq:`eq:greedy:omp:general_recovery` doesn't hold true all the way.
 
-This is answered in following corollary of :ref:`here <thm:greedy:omp:general_recovery>`.
+This is answered in following corollary of :ref:`previous theorem <thm:greedy:omp:general_recovery>`.
 
 
 .. corollary:: 

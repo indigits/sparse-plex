@@ -993,11 +993,10 @@ It turns out that operator norm is also consistent under certain conditions.
     
 
 
+.. _sec:mat:p_norm:
  
 p-norm for matrices
 ----------------------------------------------------
-
-.. _sec:mat:p_norm:
 
 We recall the definition of :math:`\ell_p` norms for vectors :math:`x \in \CC^n` from :eq:`eq:complex_l_p_norm`
 

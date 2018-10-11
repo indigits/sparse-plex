@@ -1,3 +1,5 @@
+.. _sec:pursuit:greedy:mp: 
+
 Matching Pursuit
 =======================================
 

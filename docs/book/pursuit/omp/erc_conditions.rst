@@ -2,16 +2,35 @@
 Exact recovery conditions
 ==========================================
 
+Recall the :math:`(\mathcal{D}, K)`-:textsc:`exact-sparse` problem
+discussed in :ref:`sec:ssm:sparse_approximation_problem`. 
+OMP is a good and fast algorithm for solving this problem.
+
+In terms of theoretical understanding, it is quite useful to 
+know of certain conditions under which a sparse representation
+can be exactly recovered from a given signal using OMP. 
+Such guarantees are known as *exact recovery guarantees*.
+
+In this section, following Tropp in :cite:`tropp2004greed`, 
+we will closely look at some conditions under which OMP is
+guaranteed to recover the solution for 
+:math:`(\mathcal{D}, K)`-:textsc:`exact-sparse` problem.
+
+We rephrase the OMP algorithm following the conventions in 
+:math:`(\mathcal{D}, K)`-:textsc:`exact-sparse` problem.
+
 .. figure:: images/algorithm_omp_x_alpha_version.png
 
 
-In this section following Tropp in :cite:`tropp2004greed` we will closely look at some conditions under which OMP is
-guaranteed to recover the solution for :math:`(\mathcal{D}, K)`-:textsc:`exact-sparse` problem.
-
-It is known that :math:`x = \Phi \alpha` where :math:`\alpha` contains at most :math:`K` non-zero entries. 
+It is known that :math:`x = \Phi \alpha` where :math:`\alpha` contains 
+at most :math:`K` non-zero entries. 
 Both the support and entries of :math:`\alpha` are known.
+OMP is only given :math:`\Phi`, :math:`x` and :math:`K` and is estimating 
+:math:`\alpha`. The estimate returned by OMP is denoted as
+:math:`\widehat{\alpha}`.
 
-Let :math:`\Lambda_{\text{opt}} = \supp(\alpha)` i.e. the set of indices at which optimal representation :math:`\alpha` has non-zero entries.
+Let :math:`\Lambda_{\text{opt}} = \supp(\alpha)` be the set of indices at which 
+optimal representation :math:`\alpha` has non-zero entries.
 Then we can write
 
 
@@ -23,15 +42,12 @@ Then we can write
 From the synthesis matrix :math:`\Phi` we can extract a :math:`N \times K` matrix :math:`\Phi_{\text{opt}}` whose columns are
 indexed by :math:`\Lambda_{\text{opt}}`. 
 
-
 .. math:: 
 
     \Phi_{\text{opt}} \triangleq \begin{bmatrix} \phi_{\lambda_1} & \dots & \phi_{\lambda_K} \end{bmatrix} 
 
 where :math:`\lambda_i \in \Lambda_{\text{opt}}`.
-
-Thus we can also write
-
+Thus, we can also write
 
 .. math:: 
 
@@ -63,7 +79,8 @@ We note that maximum value of inner product of :math:`r^k` with any of the colum
     \| \Psi_{\text{opt}}^H r^k \|_{\infty}.
 
 
-Correspondingly maximum value of inner product of :math:`r^k` with any of the columns in :math:`\Phi_{\text{opt}}` is given by
+Correspondingly, maximum value of inner product of :math:`r^k` with any of 
+the columns in :math:`\Phi_{\text{opt}}` is given by
 
 
 .. math:: 
@@ -71,10 +88,12 @@ Correspondingly maximum value of inner product of :math:`r^k` with any of the co
     \| \Phi_{\text{opt}}^H r^k \|_{\infty}.
 
 
-Actually since we have already shown that :math:`r^k` is orthogonal to the columns already chosen, hence they will not contribute 
+Actually since we have already shown that :math:`r^k` is 
+orthogonal to the columns already chosen, hence they will not contribute 
 to this equation.
 
-In order to make sure that none of the columns in :math:`\Psi_{\text{opt}}` is selected, we need
+In order to make sure that none of the columns in 
+:math:`\Psi_{\text{opt}}` is selected, we need
 
 
 .. math:: 
@@ -101,12 +120,16 @@ In order to make sure that none of the columns in :math:`\Psi_{\text{opt}}` is s
 
 
 
-We can see that as long as :math:`\rho(r^k) < 1`, OMP will make a right decision at :math:`(k+1)`-th stage. If :math:`\rho(r^k) = 1` then
-there is no guarantee that OMP will make the right decision. We will assume pessimistically that 
+We can see that as long as :math:`\rho(r^k) < 1`, OMP will make a 
+right decision at :math:`(k+1)`-th stage. If :math:`\rho(r^k) = 1` then
+there is no guarantee that OMP will make the right decision. 
+We will assume pessimistically that 
 OMP makes wrong decision in such situations.
 
-We note that this definition of :math:`\rho(r^k)` looks very similar to matrix :math:`p`-norms defined in 
-:ref:`here <def:mat:p_matrix_norm>`. It is suggested to review the properties of :math:`p`-norms for matrices at this point.
+We note that this definition of :math:`\rho(r^k)` looks very similar to matrix 
+:math:`p`-norms defined in 
+:ref:`sec:mat:p_norm`. 
+It is suggested to review the properties of :math:`p`-norms for matrices at this point.
 
 We now present a condition which guarantees that :math:`\rho(r^k) < 1` is always satisfied.
 
@@ -263,7 +286,7 @@ Babel function estimates
 ----------------------------------------------------
 
 
-There is a small problem with :ref:`here <thm:greedy:omp_exact_recovery_sufficient_condition>`.
+There is a small problem with :ref:`this result <thm:greedy:omp_exact_recovery_sufficient_condition>`.
 Since we don't know the support a-priori hence its not possible to verify that 
 
 
@@ -271,10 +294,12 @@ Since we don't know the support a-priori hence its not possible to verify that
 
      \underset{\psi}{\max} \| \Phi_{\text{opt}}^{\dag} \psi \|_1 < 1
 
-holds. Off course verifying this for all :math:`K` column sub-matrices is computationally prohibitive. 
+holds. 
+Of course, verifying this for all :math:`K` column sub-matrices is 
+computationally prohibitive. 
 
-It turns out that Babel function (recall :ref:`here <def:babel_function>`) is there to help. We show
-how Babel function guarantees that exact recovery condition for OMP holds.
+It turns out that Babel function (recall from :ref:`sec:ssm:babel`) is there to help.
+We show how Babel function guarantees that exact recovery condition for OMP holds.
 
 
 .. _thm:greedy:omp_exact_recovery_babel_function:

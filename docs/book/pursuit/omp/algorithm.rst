@@ -1,12 +1,111 @@
 The Algorithm
 =======================
 
+**Orthogonal Matching Pursuit** (OMP) addresses some of the limitations of 
+:ref:`sec:pursuit:greedy:mp`. In particular, in each iteration:
+
+* The current estimate is computed by performing a least squares
+  estimation on the subdictionary formed by atoms selected so far.
+* It ensures that the residual is totally orthogonal to already selected atoms.
+* It also means that an atom is selected only once.
+* Further, if all the atoms in the support are selected by OMP correctly, then
+  the least squares estimate is able to achieve perfect recovery. 
+  The residual becomes 0.
+* In other words, if OMP is recovering a K-sparse representation, then 
+  it can recover it in exactly K iterations (if in each iteration it 
+  recovers one atom correctly).
+* OMP performs far better than MP in terms of the set of signals it can 
+  recover correctly.
+* At the same time, OMP is a much more complex algorithm (due to the least squares step).
+
 
 .. figure:: images/algorithm_orthogonal_matching_pursuit.png
 
     Orthogonal Matching Pursuit
 
+The core OMP algorithm is presented above.
+The algorithm is iterative. 
 
+*  We start with the initial estimate of solution as :math:`x=0`. 
+*  We also maintain the support of :math:`x` i.e. the set of indices for which :math:`x` is non-zero
+   in a variable :math:`\Lambda`.
+   We start with an empty support.
+*  In each (:math:`k`-th) iteration we attempt to reduce the difference between the 
+   actual signal :math:`y` 
+   and the approximate signal based on current solution 
+   :math:`x^{k}` given by :math:`r^{k} = y - \Phi x^{k}`.
+*  We do this by choosing a new index in :math:`x` given by :math:`\lambda^{k+1}` for the 
+   column :math:`\phi_{\lambda^{k+1}}`
+   which most closely matches our current residual.
+*  We include this to our support for :math:`x`, estimate 
+   new solution vector :math:`x^{k+1}` and compute
+   new residual.
+*  We stop when the residual magnitude is below a threshold :math:`\epsilon` defined by us.
+
+Each iteration of algorithm consists of following stages:
+
+#. **Match** For each column :math:`\phi_j` in our dictionary, 
+   we measure the projection of residual from previous iteration  on the column
+#. **Identify** We identify the atom with largest inner product and store its index 
+   in the variable :math:`\lambda^{k+1}`.
+#. **Update support** We include :math:`\lambda^{k+1}` in the support set :math:`\Lambda^{k}`.
+#. **Update representation** In this step we find the solution of minimizing 
+   :math:`\| \Phi x - y \|^2` over the
+   support :math:`\Lambda^{k+1}` as our next candidate solution vector.
+
+   By keeping :math:`x_i = 0` for :math:`i \notin \Lambda^{k+1}` we are essentially 
+   leaving out corresponding columns :math:`\phi_i` from our calculations.
+   
+   Thus we pickup up only the columns specified by :math:`\Lambda^{k+1}` 
+   from :math:`\Phi`. Let us call this matrix
+   as :math:`\Phi_{\Lambda^{k+1}}`. 
+   The size of this matrix is :math:`N \times | \Lambda^{k+1} |`. 
+   Let us call corresponding sub vector as :math:`x_{\Lambda^{k+1}}`.
+   
+   E.g. suppose :math:`D=4`, then 
+   :math:`\Phi = \begin{bmatrix} \phi_1 & \phi_2 & \phi_3 & \phi_4 \end{bmatrix}`.
+   Let :math:`\Lambda^{k+1} = \{1, 4\}`. 
+   Then :math:`\Phi_{\Lambda^{k+1}} = \begin{bmatrix} \phi_1 & \phi_4 \end{bmatrix}` 
+   and :math:`x_{\Lambda^{k+1}} = (x_1, x_4)`.
+   
+   Our minimization problem then reduces to minimizing 
+   :math:`\|\Phi_{\Lambda^{k+1}} x_{\Lambda^{k+1}} - y \|_2`.
+   
+   We use standard least squares estimate for getting the coefficients for 
+   :math:`x_{\Lambda^{k+1}}` over these indices.
+   We put back :math:`x_{\Lambda^{k+1}}` to obtain our 
+   new solution estimate :math:`x^{k+1}`.
+   
+   In the running example after obtaining the values 
+   :math:`x_1` and :math:`x_4`, we will have 
+   :math:`x^{k+1} = (x_1, 0 , 0, x_4)`.
+   
+   The solution to this minimization problem is given by
+   
+   .. math:: 
+   
+       \Phi_{\Lambda^{k+1}}^H ( \Phi_{\Lambda^{k+1}}x_{\Lambda^{k+1}} - y ) = 0 
+       \implies x_{\Lambda^{k+1}} = ( \Phi_{\Lambda^{k+1}}^H \Phi_{\Lambda^{k+1}} )^{-1} \Phi_  {\Lambda^{k+1}}^H y.
+   
+   Interestingly, we note that :math:`r^{k+1} = y - \Phi x^{k+1} = y - \Phi_{\Lambda^{k+1}}   x_{\Lambda^{k+1}}`, thus
+   
+   .. math:: 
+   
+       \Phi_{\Lambda^{k+1}}^H r^{k+1} = 0
+   
+   which means that columns in :math:`\Phi_{\Lambda^k}` which are part of support 
+   :math:`\Lambda^{k+1}` are necessarily
+   orthogonal to the residual :math:`r^{k+1}`. 
+   This implies that these columns will not be considered
+   in the coming iterations for extending the support. 
+   This orthogonality is the reason
+   behind the name of the algorithm as OMP.
+#. **Update residual** We finally update the residual vector to 
+   :math:`r^{k+1}` based on new solution vector estimate.
+
+
+Hands-on with Orthogonal Matching Pursuit
+-----------------------------------------------
 
 .. example::
 
