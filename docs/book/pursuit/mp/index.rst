@@ -1,5 +1,10 @@
-Matching pursuit
+Matching Pursuit
 =======================================
+
+
+Algorithm
+---------------------
+
 
 .. highlight:: matlab
 
@@ -94,8 +99,11 @@ under suitable conditions, it does converge
 to the correct solution.
 
 
+Hands-on with Matching Pursuit
+----------------------------------------
+
 Matching pursuit on a 2-sparse vector
-----------------------------------------------
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 In this example, we will reconstruct a 2-sparse
 representation vector :math:`x` from a signal
@@ -242,3 +250,68 @@ each iteration.
 
 The complete code can be downloaded 
 :download:`here <demo_mp_partial_hadamard_10x20_k_3.m>`.
+
+
+
+.. example:: When matching pursuit fails::
+
+    Although the spark of the dictionary in previous example
+    is :math:`8`, matching pursuit fails to recover signals
+    which are 3-sparse.
+
+    Here is an example output of running matching pursuit on a 3-sparse vector
+    for 20 iterations::
+
+        The representation: (6,-1.9014) (8,1.3481) (11,1.6150)   N=20, K=3
+        [1]: k: 6, h_k : 1.9189, r_norm: -2.7636, estimate: (6,-2.7636)   N=20, K=1
+        [2]: k: 11, h_k : 1.2654, r_norm: 1.4425, estimate: (6,-2.7636) (11,1.4425)   N=20, K=2
+        [3]: k: 8, h_k : 0.7712, r_norm: 1.0032, estimate: (6,-2.7636) (8,1.0032) (11,1.4425)   N=20, K=3
+        [4]: k: 6, h_k : 0.3449, r_norm: 0.6898, estimate: (6,-2.0738) (8,1.0032) (11,1.4425)   N=20, K=3
+        [5]: k: 8, h_k : 0.2069, r_norm: 0.2759, estimate: (6,-2.0738) (8,1.2791) (11,1.4425)   N=20, K=3
+        [6]: k: 11, h_k : 0.1542, r_norm: 0.1380, estimate: (6,-2.0738) (8,1.2791) (11,1.5805)   N=20, K=3
+        [7]: k: 6, h_k : 0.0690, r_norm: 0.1380, estimate: (6,-1.9359) (8,1.2791) (11,1.5805)   N=20, K=3
+        [8]: k: 8, h_k : 0.0414, r_norm: 0.0552, estimate: (6,-1.9359) (8,1.3343) (11,1.5805)   N=20, K=3
+        [9]: k: 16, h_k : 0.0308, r_norm: 0.0276, estimate: (6,-1.9359) (8,1.3343) (11,1.5805) (16,0.0276)   N=20, K=4
+        [10]: k: 14, h_k : 0.0241, r_norm: -0.0193, estimate: (6,-1.9359) (8,1.3343) (11,1.5805) (14,-0.0193) (16,0.0276) 
+          N=20, K=5
+        [11]: k: 10, h_k : 0.0197, r_norm: 0.0138, estimate: (6,-1.9359) (8,1.3343) (10,0.0138) (11,1.5805) (14,-0.0193) 
+        (16,0.0276)   N=20, K=6
+        [12]: k: 6, h_k : 0.0151, r_norm: 0.0127, estimate: (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5805) (14,-0.0193) 
+        (16,0.0276)   N=20, K=6
+        [13]: k: 11, h_k : 0.0115, r_norm: 0.0097, estimate: (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5902) (14,-0.0193) 
+        (16,0.0276)   N=20, K=6
+        [14]: k: 15, h_k : 0.0095, r_norm: -0.0065, estimate: (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5902) (14,-0.0193) 
+        (15,-0.0065) (16,0.0276)   N=20, K=7
+        [15]: k: 13, h_k : 0.0078, r_norm: 0.0055, estimate: (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5902) (13,0.0055) 
+        (14,-0.0193) (15,-0.0065) (16,0.0276)   N=20, K=8
+        [16]: k: 1, h_k : 0.0056, r_norm: -0.0054, estimate: (1,-0.0054) (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5902) 
+        (13,0.0055) (14,-0.0193) (15,-0.0065) (16,0.0276)   N=20, K=9
+        [17]: k: 20, h_k : 0.0044, r_norm: -0.0035, estimate: (1,-0.0054) (6,-1.9232) (8,1.3343) (10,0.0138) (11,1.5902) 
+        (13,0.0055) (14,-0.0193) (15,-0.0065) (16,0.0276) (20,-0.0035) 
+          N=20, K=10
+        [18]: k: 2, h_k : 0.0034, r_norm: 0.0028, estimate: (1,-0.0054) (2,0.0028) (6,-1.9232) (8,1.3343) (10,0.0138) 
+        (11,1.5902) (13,0.0055) (14,-0.0193) (15,-0.0065) (16,0.0276) 
+        (20,-0.0035)   N=20, K=11
+        [19]: k: 4, h_k : 0.0025, r_norm: 0.0023, estimate: (1,-0.0054) (2,0.0028) (4,0.0023) (6,-1.9232) (8,1.3343) 
+        (10,0.0138) (11,1.5902) (13,0.0055) (14,-0.0193) (15,-0.0065) 
+        (16,0.0276) (20,-0.0035)   N=20, K=12
+        [20]: k: 17, h_k : 0.0021, r_norm: -0.0014, estimate: (1,-0.0054) (2,0.0028) (4,0.0023) (6,-1.9232) (8,1.3343) 
+        (10,0.0138) (11,1.5902) (13,0.0055) (14,-0.0193) (15,-0.0065) 
+        (16,0.0276) (17,-0.0014) (20,-0.0035)   N=20, K=13
+
+    The sparse vector is supported on atoms 6, 8 and 11.
+    If we order the atoms in terms of the magnitude of their coefficients, 
+    the order is 6,11 and 8.
+
+    * Atom 6 is discovered in first iteration.
+    * Atom 11 is discovered in second iteration.
+    * Atom 8 is discovered in the third iteration.
+    * The coefficients for atom 6, 8 and 11 continue to be updated till 8 iterations.
+    * In 9-th iteration, it discovers an incorrect atom 16. 
+    * In the following iterations, it keeps discovering more incorrect atoms 14, 10, 15, 13, 1, 20, etc.
+    * The algorithm is side-tracked after 9-th iteration. The residual doesn't belong to the 
+      range :math:`\Range(\Phi_{\Lambda})` anymore. 
+    * After 20 iterations, as many as 13 atoms are involved in the representation.
+    * Yet, most of the energy is concentrated in atoms 6, 8, 11 only. In that sense, MP hasn't failed
+      completely. 
+    * A simple thresholding can remove the spurious contributions from incorrect atoms.
