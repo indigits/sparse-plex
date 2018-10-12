@@ -26,6 +26,7 @@ A journey into sparse and redundant representations.
    book/convex_analysis
    book/probability
    book/geometry
+   book/wavelets
    library/index
    exercises/index
    scripts
