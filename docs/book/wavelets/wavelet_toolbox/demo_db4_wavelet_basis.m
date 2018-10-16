@@ -50,3 +50,9 @@ imagesc(Psi);
 colorbar;
 
 export_fig images/wavelet_basis_db4_level_4_N_1024.png -r120 -nocrop;
+
+
+PsiMP = wmpdictionary(N, 'lstcpt', {{'db4', 4}});
+
+max(max(abs(PsiMP - Psi)))
+

@@ -421,6 +421,31 @@ entries are non-zero::
 This is expected since wavelets have 
 a very small support.
 
+
+MATLAB provides a function for constructing
+a dictionary from one or more orthonormal or
+biorthogonal bases.  Let's try to construct
+a our ONB matrix using this function::
+
+    PsiMP = wmpdictionary(N, 'lstcpt', {{'db4', 4}});
+
+Let's verify that the two approaches are giving us
+same result::
+
+    >> max(max(abs(PsiMP - Psi)))
+
+    ans =
+
+       7.9581e-13
+
+A quick note, the ``wmpdictionary`` function
+returns a sparse matrix.
+
+Complete example code can be downloaded
+:download:`here <demo_db4_wavelet_basis.m>`.
+
+
+
 Stationary Wavelet Transform
 ------------------------------------------
 
