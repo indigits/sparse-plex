@@ -108,7 +108,7 @@ methods(Static)
         x_refined =  zeros(1, n2);
 
         % Intersperse x_coarse with zeros
-        x = SPX_Wavelet.up_sample(x_coarse);
+        x = spx.wavelet.up_sample(x_coarse);
 
         % Filter it with the refinement filter
         tmp = conv(refinement_filter, x);

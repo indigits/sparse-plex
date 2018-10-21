@@ -11,7 +11,7 @@ epsilon = 0.2;
 stop = 2;
 x = 0:step:stop;
 func_x = func(x);
-projection = SPX_LCSBase.project_0_right(func, step, stop, epsilon, polarity);
+projection = spx.wavelet.lcs.project_0_right(func, step, stop, epsilon, polarity);
 subplot(311);
 plot(x, func_x, 'r');
 subplot(312);

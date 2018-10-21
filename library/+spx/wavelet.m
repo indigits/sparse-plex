@@ -1,5 +1,5 @@
-classdef SPX_Wavelet
-% SPX_Wavelet provides common functions for implementation of wavelets
+classdef wavelet
+% wavelet provides common functions for implementation of wavelets
 % 
 % Dyadic index structure
 % -----------------------------
@@ -155,7 +155,7 @@ methods(Static)
     function y = lo_pass_down_sample(h, x)
         % Performs low pass filtering followed by downsampling on periodic extension of x
         % Perform filtering
-        y = SPX_Wavelet.aconv(h, x);
+        y = spx.wavelet.aconv(h, x);
         % Perform downsampling
         n = length(y);
         y = y(1:2:(n-1));
@@ -164,11 +164,11 @@ methods(Static)
     function y = hi_pass_down_sample(h, x)
         % Performs high pass filtering followed by downsampling on periodic extension of x
         % Construct  the high pass mirror filter 
-        g = SPX_Wavelet.mirror_filter(h);
+        g = spx.wavelet.mirror_filter(h);
         % circular left shift the contents of x by 1.
         x  = spx.commons.vector.shift_lc(x);
         % Perform filtering
-        y = SPX_Wavelet.iconv(g, x);
+        y = spx.wavelet.iconv(g, x);
         % Perform downsampling
         n = length(y);
         y = y(1:2:(n-1));
@@ -178,22 +178,22 @@ methods(Static)
         % Performs upsampling followed by low pass filtering
 
         % Upsample by a factor of 2 and introduce zeros
-        x = SPX_Wavelet.up_sample(x);
+        x = spx.wavelet.up_sample(x);
         % Perform low pass filtering
-        y = SPX_Wavelet.iconv(h, x);
+        y = spx.wavelet.iconv(h, x);
     end
 
     function y = up_sample_hi_pass(h, x)
         % Performs upsampling followed by high pass filtering
 
         % Construct  the high pass mirror filter 
-        g = SPX_Wavelet.mirror_filter(h);
+        g = spx.wavelet.mirror_filter(h);
         % Upsample by a factor of 2 and introduce zeros
-        x = SPX_Wavelet.up_sample(x);
+        x = spx.wavelet.up_sample(x);
         % circular right shift the contents of x by 1.
         x  = spx.commons.vector.shift_rc(x);
         % Perform low pass filtering
-        y = SPX_Wavelet.aconv(g, x);
+        y = spx.wavelet.aconv(g, x);
     end
 
     function y = up_sample_cdjv(x, h, left_edge, right_edge)

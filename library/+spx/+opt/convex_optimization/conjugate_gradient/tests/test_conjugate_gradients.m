@@ -11,7 +11,7 @@ function test_1
     solver = SPX_ConjugateDescent(A, B);
     x = solver.solve();
     %solver.printResults();
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 function test_2
@@ -24,7 +24,7 @@ function test_2
     solver = SPX_ConjugateDescent(A, B);
     solver.MaxIterations = 50; 
     x = solver.solve();
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 

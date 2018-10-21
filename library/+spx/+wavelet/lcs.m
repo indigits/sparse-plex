@@ -1,4 +1,4 @@
-classdef SPX_LCSBase
+classdef lcs
 % Provides methods for implementing projections using local sine and cosine bases
 
 methods(Static)
@@ -20,17 +20,17 @@ methods(Static)
     end
 
     function result = s_eps(epsilon, x)
-        result = sin(SPX_LCSBase.theta(epsilon, x));
+        result = sin(spx.wavelet.lcs.theta(epsilon, x));
     end
 
     function result = c_eps(epsilon, x)
-        result = cos(SPX_LCSBase.theta(epsilon, x));
+        result = cos(spx.wavelet.lcs.theta(epsilon, x));
     end
 
     function result = project_0_right(f, step, stop, epsilon, polarity)
         x = 0:step:stop;
-        s_e = SPX_LCSBase.s_eps(epsilon, x);
-        c_e = SPX_LCSBase.c_eps(epsilon, x);
+        s_e = spx.wavelet.lcs.s_eps(epsilon, x);
+        c_e = spx.wavelet.lcs.c_eps(epsilon, x);
         fx = f(x);
         f_minus_x = f(-x);
         first = (s_e.^2) .* fx;

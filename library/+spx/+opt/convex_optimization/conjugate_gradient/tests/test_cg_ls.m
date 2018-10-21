@@ -19,7 +19,7 @@ function test_1
     solver = SPX_CGLeastSquare(A, B);
     x = solver.solve();
     %solver.printResults();
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 function test_2
@@ -35,7 +35,7 @@ function test_2
     % solver.printResults();
     % disp(X);
     % disp(XX);
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 function test_3
@@ -51,7 +51,7 @@ function test_3
     % solver.printResults();
     % disp(X);
     % disp(XX);
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 

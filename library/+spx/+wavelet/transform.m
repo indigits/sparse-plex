@@ -1,4 +1,4 @@
-classdef SPX_WaveletTransform
+classdef transform
 % Implements different versions of wavelet transform
 % n=1024, J=10, L=6
 % L - J = 10 - 6 = 4.
@@ -23,7 +23,7 @@ methods(Static)
 
         % Let's get the dyadic length of x and verify that
         % length of x is a power of 2.
-        [n, J, consistent] = SPX_Wavelet.dyad_length(x);
+        [n, J, consistent] = spx.wavelet.dyad_length(x);
         if ~consistent
             error('x must be of dyadic length');
         end
@@ -42,12 +42,12 @@ methods(Static)
         for j=J-1:-1:L
             % Start from the finest level and keep going down.
             % identify the hipass component of x and downsample it.
-            c = SPX_Wavelet.hi_pass_down_sample(qmf, x);
+            c = spx.wavelet.hi_pass_down_sample(qmf, x);
             % Identify the locations where the hipass component will be stored.
-            indices = SPX_Wavelet.dyad(j);
+            indices = spx.wavelet.dyad(j);
             w(indices) = c;
             % Replace x with its low pass downsampled version
-            x = SPX_Wavelet.lo_pass_down_sample(qmf, x);
+            x = spx.wavelet.lo_pass_down_sample(qmf, x);
         end
         % Store the remaining contents of x in the beginning of array
         w(1:(2^L)) = x;
@@ -70,7 +70,7 @@ methods(Static)
 
         % Let's get the dyadic length of w and verify that
         % length of w is a power of 2.
-        [n, J, consistent] = SPX_Wavelet.dyad_length(w);
+        [n, J, consistent] = spx.wavelet.dyad_length(w);
         if ~consistent
             error('w must be of dyadic length');
         end
@@ -88,12 +88,12 @@ methods(Static)
         x = w(1:2^L);
         for j=L:J-1
             % Identify the locations where the hipass component is stored.
-            indices = SPX_Wavelet.dyad(j);
+            indices = spx.wavelet.dyad(j);
             c = w(indices);
             % Compute the low pass portion of the next level of approximation
-            x_low = SPX_Wavelet.up_sample_lo_pass(qmf, x);
+            x_low = spx.wavelet.up_sample_lo_pass(qmf, x);
             % Compute the high pass portion of the next level of approximation
-            x_hi = SPX_Wavelet.up_sample_hi_pass(qmf, c);
+            x_hi = spx.wavelet.up_sample_hi_pass(qmf, c);
             % Compute the next level approximation of x
             x = x_low + x_hi;
         end

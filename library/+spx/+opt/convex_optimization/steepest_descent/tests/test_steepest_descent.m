@@ -12,7 +12,7 @@ function test_1
     solver = SPX_SteepestDescent(A, B);
     x = solver.solve();
     %solver.printResults();
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 function test_2
@@ -26,7 +26,7 @@ function test_2
     % This one doesn't converge in 30 iterations
     solver.MaxIterations = 50; 
     x = solver.solve();
-    assertTrue(solver.hasConverged());
+    verifyTrue(testCase, solver.hasConverged());
 end
 
 

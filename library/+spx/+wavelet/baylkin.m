@@ -1,4 +1,4 @@
-classdef SPX_BeylkinWavelet
+classdef baylkin
 
 methods(Static)
 

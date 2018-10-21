@@ -1,4 +1,4 @@
-classdef SPX_VaidyanathanWavelet
+classdef vaidyanathan
 
 methods(Static)
 

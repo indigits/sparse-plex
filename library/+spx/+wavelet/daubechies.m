@@ -1,4 +1,4 @@
-classdef SPX_DaubechiesWavelet
+classdef daubechies
 
 methods(Static)
 
@@ -66,12 +66,12 @@ methods(Static)
         % Inputs: 
         %  j, k - scale and location indices
         %  n - signal length (dyadic)
-        qmf = SPX_DaubechiesWavelet.quad_mirror_filter(filter_length);
+        qmf = spx.wavelet.daubechies.quad_mirror_filter(filter_length);
         w = zeros(1, n);
         % identify the index of the j-th scale at k-th translation
-        index = SPX_Wavelet.dyad_to_index(j, k);
+        index = spx.wavelet.dyad_to_index(j, k);
         w(index) = 1;         
-        wave = SPX_WaveletTransform.inverse_periodized_orthogonal(qmf, w, j);
+        wave = spx.wavelet.transform.inverse_periodized_orthogonal(qmf, w, j);
     end
 
     function wave = scaling_function(j, k, n, filter_length)
@@ -80,11 +80,11 @@ methods(Static)
         % Inputs: 
         %  j, k - scale and location indices
         %  n - signal length (dyadic)
-        qmf = SPX_DaubechiesWavelet.quad_mirror_filter(filter_length);
+        qmf = spx.wavelet.daubechies.quad_mirror_filter(filter_length);
         w = zeros(1, n);
         % k-th translate in the coarsest part of the wavelet coefficients
         w(k) = 1;
-        wave = SPX_WaveletTransform.inverse_periodized_orthogonal(qmf, w, j);
+        wave = spx.wavelet.transform.inverse_periodized_orthogonal(qmf, w, j);
     end
 end
 
