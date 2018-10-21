@@ -15,6 +15,7 @@ Sparse Signal Models
    sparse_signal_models/babel
    sparse_signal_models/dirac_dct_dict
    sparse_signal_models/dirac_hadamard_dict
+   sparse_signal_models/wavelet_toolbox_dictionaries
    
    
 
