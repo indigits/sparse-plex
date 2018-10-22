@@ -10,8 +10,8 @@ function test_batch_omp_spr_1(testCase)
     % number of subspaces = number of clusters
     ns = 2;
     % dimensions of individual subspaces 1 and 2
-    d1  = 2;
-    d2 = 2;
+    d1  = 3;
+    d2 = 3;
     % number of signals in individual subspaces
     s1 = 100;
     s2 = 100;
@@ -38,7 +38,10 @@ function test_batch_omp_spr_1(testCase)
     % All signals are expected to  have a K-sparse representation
     ssc_omp = spx.cluster.ssc.SSC_OMP(X, K, ns);
     result_omp = ssc_omp.solve();
-    ssc_batch_omp = spx.cluster.ssc.SSC_BATCH_OMP(X, K, ns);
+    import spx.cluster.ssc.OMP_REPR_METHOD;
+    method = OMP_REPR_METHOD.BATCH_OMP_C;
+    rnorm_thr  = 1e-3;
+    ssc_batch_omp = spx.cluster.ssc.SSC_OMP(X, K, ns, rnorm_thr, method);
     result_batch_omp = ssc_batch_omp.solve();
     %combined_labels = [result_omp.Labels result_batch_omp.Labels]'
     combined_labels = [result_omp.Labels true_labels]'
