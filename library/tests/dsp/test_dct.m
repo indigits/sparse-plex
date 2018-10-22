@@ -5,7 +5,7 @@ end
 function test_dct_2_3(testCase)
     n = 256;
     for i=randperm(n, 40)
-        x = spx.commons.vector.unit_vector(n, i);
+        x = spx.vector.unit_vector(n, i);
         alpha = spx.dsp.dct.forward_2(x);
         tolerance = 0.0001;
         verifyEqual(testCase, norm(x), norm(alpha), 'AbsTol', tolerance);

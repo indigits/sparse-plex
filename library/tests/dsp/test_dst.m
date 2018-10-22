@@ -16,7 +16,7 @@ function test_dst_2(testCase)
     n = 256;
     tolerance = 1e-6;
     for i=randperm(n, 40)
-        x = spx.commons.vector.unit_vector(n, i);
+        x = spx.vector.unit_vector(n, i);
         alpha = spx.dsp.dst.forward_2(x);
         verifyEqual(testCase, norm(x), norm(alpha), 'AbsTol', tolerance);
         y = spx.dsp.dst.inverse_2(alpha);

@@ -39,13 +39,13 @@ classdef vector
                 if isrow(x)
                     vec = x;
                 else
-                    vec = spx.commons.vector.reshape_as_row_vec(x);
+                    vec = spx.vector.reshape_as_row_vec(x);
                 end
             else
                 if iscolumn(x)
                     vec = x;
                 else
-                    vec = spx.commons.vector.reshape_as_col_vec(x);
+                    vec = spx.vector.reshape_as_col_vec(x);
                 end
             end
         end

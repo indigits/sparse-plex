@@ -3,10 +3,10 @@ classdef wavelet
 % 
 % Dyadic index structure
 % -----------------------------
-% Let us say we are working with a signal s_n which has n=2^J samples.
-% 1st level transform will lead to s_{n-1} with 2^{J-1} and 
-% d_{n - 1} with 2^{J-2} samples. Applying the transform again on s_{n-1}, 
-% we will obtain s_{n-2} with 2^{J-2} and d_{n-2} with 2^{J-2} samples.
+% Let us say we are working with a signal s_J which has n=2^J samples.
+% 1st level transform will lead to s_{J-1} with 2^{J-1} and 
+% d_{J - 1} with 2^{J-1} samples. Applying the transform again on s_{J-1}, 
+% we will obtain s_{J-2} with 2^{J-2} and d_{J-2} with 2^{J-2} samples.
 % Consider a specific case of J=4.
 % s_4 has 16 samples.
 % s_3 and d_3 both have 8 samples each.
@@ -102,9 +102,9 @@ methods(Static)
         n = length(x);
         p = length(f);
         % pad x with its periodic repetitions at the end
-        x_padded =  spx.commons.vector.repeat_vector_at_end(x, p);
+        x_padded =  spx.vector.repeat_vector_at_end(x, p);
         % Reverse the filter
-        f_reversed = spx.commons.vector.reverse(f);
+        f_reversed = spx.vector.reverse(f);
         % Perform the filtering
         y_padded = filter(f_reversed, 1, x_padded);
         % Remove the padding (remove first p-1 samples ) and keep n samples
@@ -113,11 +113,11 @@ methods(Static)
 
 
     function y = iconv(f, x)
-        % Filtering by periodic convolution of x with the time reverse of f.
+        % Filtering by periodic convolution of x with f.
         n = length(x);
         p = length(f);
         % pad x with its periodic repetitions at the beginning
-        x_padded =  spx.commons.vector.repeat_vector_at_start(x, p);
+        x_padded =  spx.vector.repeat_vector_at_start(x, p);
         % Perform the filtering
         y_padded = filter(f, 1, x_padded);
         % Remove the padding (remove first p samples ) and keep n samples
@@ -166,7 +166,7 @@ methods(Static)
         % Construct  the high pass mirror filter 
         g = spx.wavelet.mirror_filter(h);
         % circular left shift the contents of x by 1.
-        x  = spx.commons.vector.shift_lc(x);
+        x  = spx.vector.shift_lc(x);
         % Perform filtering
         y = spx.wavelet.iconv(g, x);
         % Perform downsampling
@@ -191,7 +191,7 @@ methods(Static)
         % Upsample by a factor of 2 and introduce zeros
         x = spx.wavelet.up_sample(x);
         % circular right shift the contents of x by 1.
-        x  = spx.commons.vector.shift_rc(x);
+        x  = spx.vector.shift_rc(x);
         % Perform low pass filtering
         y = spx.wavelet.aconv(g, x);
     end
