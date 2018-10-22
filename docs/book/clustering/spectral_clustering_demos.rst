@@ -111,3 +111,185 @@ Hands-on spectral clustering
 
     Complete example code can be downloaded
     :download:`here <demo_spectral_clustering_1.m>`.
+
+
+Inside Unnormalized Spectral Clustering
+----------------------------------------------
+
+In this section, we will start with a similarity
+matrix and go through the steps of unnormalized 
+spectral clustering.
+
+
+We will consider a simple case of of 8 data
+points which are known to be falling into
+two clusters. 
+
+We construct an undirected graph :math:`G`
+where the nodes in same cluster are connected
+to each other and nodes in different clusters
+are not connected to each other.
+
+In this simple example, we will assume
+that the graph is unweighted.
+
+The adjacency matrix for the graph is :math:`W`::
+
+    >> W = [ones(4) zeros(4); zeros(4) ones(4)]
+    W =
+
+         1     1     1     1     0     0     0     0
+         1     1     1     1     0     0     0     0
+         1     1     1     1     0     0     0     0
+         1     1     1     1     0     0     0     0
+         0     0     0     0     1     1     1     1
+         0     0     0     0     1     1     1     1
+         0     0     0     0     1     1     1     1
+         0     0     0     0     1     1     1     1
+
+We have arranged the adjacency matrix in a manner
+so that the clusters are easily visible.
+
+
+Let's just get the number of nodes::
+
+    >> [num_nodes, ~] = size(W);
+
+Let's also assign the true labels to these nodes
+which will be used for verification later::
+
+    >> true_labels = [1 1 1 1 2 2 2 2];
+
+We construct the degree matrix :math:`D` for the graph::
+
+    >> Degree = diag(sum(W))
+    Degree =
+
+         4     0     0     0     0     0     0     0
+         0     4     0     0     0     0     0     0
+         0     0     4     0     0     0     0     0
+         0     0     0     4     0     0     0     0
+         0     0     0     0     4     0     0     0
+         0     0     0     0     0     4     0     0
+         0     0     0     0     0     0     4     0
+         0     0     0     0     0     0     0     4
+
+The unnormalized Laplacian is given by :math:`L = D - W`::
+
+    >> Laplacian = Degree - W
+    Laplacian =
+
+         3    -1    -1    -1     0     0     0     0
+        -1     3    -1    -1     0     0     0     0
+        -1    -1     3    -1     0     0     0     0
+        -1    -1    -1     3     0     0     0     0
+         0     0     0     0     3    -1    -1    -1
+         0     0     0     0    -1     3    -1    -1
+         0     0     0     0    -1    -1     3    -1
+         0     0     0     0    -1    -1    -1     3
+
+We now compute the singular value decomposition of
+the Laplacian :math:`U \Sigma V^T = L`::
+
+    >> [~, S, V] = svd(Laplacian);
+    >> singular_values = diag(S);
+    >> fprintf('Singular values: \n');
+    >> spx.io.print.vector(singular_values);
+    Singular values: 
+    4.00 4.00 4.00 4.00 4.00 4.00 0.00 0.00 
+
+
+We know that the number of connected components
+in an undirected graph is equal to the number
+of singular values of the Laplacian which are zero.
+On inspection, we can see that the there are
+indeed two such zeros.
+
+For more general cases, the lower singular values
+may not indeed be zero.  We need to find the
+knee of the singular value curve.
+
+.. figure:: images/simple_unnormalized_singular_values.png
+
+A simple way to find it to look
+at the changes between consecutive
+singular values and find the place
+where the change is largest::
+
+    >> sv_changes = diff( singular_values(1:end-1) );
+    >> spx.io.print.vector(sv_changes);
+    0.00 0.00 0.00 -0.00 0.00 -4.00 
+
+Note that it is known that the Laplacian
+always has one singular value which is 0.
+Thus, we need to look at the changes only
+in remaining singular values.
+
+Locate the largest change::
+
+    >> [min_val , ind_min ] = min(sv_changes)
+    min_val =
+
+       -4.0000
+
+
+    ind_min =
+
+         6
+
+The number of clusters is now easy to determine::
+
+    >> num_clusters = num_nodes - ind_min
+    num_clusters =
+
+         2
+
+We pickup the right singular vector
+corresponding to the last 2 smallest
+singular values::
+
+    >> Kernel = V(:,num_nodes-num_clusters+1:num_nodes);
+
+
+Each row of this matrix corresponds to one data
+point. At this point, the standard k-means clustering
+can be invoked to cluster the points 
+into clusters where the number of clusters
+was determined as above::
+
+    % Maximum iteration for KMeans Algorithm
+    >> max_iterations = 1000; 
+    % Replication for KMeans Algorithm
+    >> replicates = 100;
+    >> labels = kmeans(Kernel, num_clusters, ...
+        'start','sample', ...
+        'maxiter',max_iterations,...
+        'replicates',replicates, ...
+        'EmptyAction','singleton'...
+        );
+
+Print the labels given by k-means::
+
+    >> spx.io.print.vector(labels, 0);
+    1 1 1 1 2 2 2 2 
+
+As expected, the algorithm has been able
+to group the points into two clusters.
+The labels are matching with the original 
+true labels.
+
+Complete example code can be downloaded
+:download:`here <demo_unnormalized_spectral_clustering.m>`.
+
+
+``sparse-plex`` includes a function
+which implements the unnormalized
+spectral clustering algorithm. We
+can use it on the data above as follows::
+
+    >> result = spx.cluster.spectral.simple.unnormalized(W);
+    >> result.labels'
+
+    ans =
+
+         1     1     1     1     2     2     2     2
