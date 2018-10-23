@@ -1,0 +1,24 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-4cm)]
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoLined
+$L = \text{SSC}(Y)$\;
+\KwIn{Data Set: $Y \in \RR^{M \times S}$} 
+\begin{enumerate}
+\item For each $y_s \in Y$ obtain its sparse representation $c_s$ in the dictionary $\Phi$ where $\Phi= Y^{-s} = Y \setminus \{ y_s \}$ using a sparse recovery algorithm \;
+\item Combine representations to form a representation matrix $C \in \RR^{S \times S}$ \;
+\item Form a similarity graph $\GGG$ with $S$ nodes representing the data points $y_s$.\\
+Set the weights on the edges between the nodes from the affinity matrix: \\
+\Indp $W = | C | + | C |^T$\;
+\Indm
+\item Apply spectral clustering on $W$\;
+\item Identify number of clusters $K$\;
+\item Identify labels for each point in $Y$\;
+\end{enumerate}
+\KwOut{Number of clusters: $K$}
+\KwOut{The labels vector $L\in [K]^S$}
+\end{algorithm}
+\end{tcolorbox}
+\end{document}

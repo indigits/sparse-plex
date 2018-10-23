@@ -96,9 +96,10 @@ Orthogonal Matching Pursuit (OMP) :cite:`pati1993orthogonal,tropp2007signal`
 can also be used for obtaining
 subspace preserving representations under appropriate conditions.
 We will call these two variants of SSC as SSC-:math:`\ell_1` and SSC-OMP 
-respectively. The essential SSC method is described in :ref:`here <alg:ssc>`.
+respectively. The essential SSC method is described below.
 
-
+.. _alg:ssc:
+.. figure:: images/alg_ssc.png
 
 
 

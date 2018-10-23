@@ -13,7 +13,12 @@ Subspace Clustering
    subspace_clustering/alg_em_k_subspaces
    subspace_clustering/alg_generalized_pca
    subspace_clustering/alg_ssc
+   subspace_clustering/alg_ssc_bp
+   subspace_clustering/alg_ssc_omp
    subspace_clustering/app_motion_segmentation
+   subspace_clustering/synthetic_data
+
+   
 
 
 
