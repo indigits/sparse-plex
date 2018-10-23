@@ -3,19 +3,19 @@ function tests = test_spx_checks
 end
 
 function setupOnce(testCase)
-    import spx.commons.matrix;
+    import spx.matrix;
 end
 
 
 function test_is_square(testCase)
-    import spx.commons.matrix;
+    import spx.matrix;
     a = randn(3, 4);
     verifyFalse(testCase, matrix.is_square(a));
     verifyTrue(testCase, matrix.is_square(zeros(3, 3)));
 end
 
 function test_is_symmetric(testCase)
-    import spx.commons.matrix;
+    import spx.matrix;
     a  = randn(3, 4);
     verifyFalse(testCase, matrix.is_symmetric(a));
     a = [1 2; 3 4];
@@ -30,7 +30,7 @@ end
 
 
 function test_is_hermitian(testCase)
-    import spx.commons.matrix;
+    import spx.matrix;
     a  = randn(3, 4);
     verifyFalse(testCase, matrix.is_hermitian(a));
     a = [1 2; 3 4];
@@ -48,7 +48,7 @@ end
 
 
 function test_is_pd(testCase)
-    import spx.commons.matrix;
+    import spx.matrix;
     a = randn(3, 3);
     verifyFalse(testCase, matrix.is_positive_definite(a));
     a  = [

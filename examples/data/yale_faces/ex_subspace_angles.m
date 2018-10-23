@@ -22,7 +22,7 @@ fprintf('Computing angles between subspaces:');
 angles = spx.la.spaces.smallest_angles_deg(bases);
 % angles = spx.la.spaces.smallest_angles_deg(Y, ni);
 elapsed = toc(tstart);
-off_diag_angles = spx.commons.matrix.off_diag_upper_tri_elements(angles);
+off_diag_angles = spx.matrix.off_diag_upper_tri_elements(angles);
 off_diag_angles = sort(off_diag_angles);
 minimum_angle = min(off_diag_angles);
 maximum_angle = max(off_diag_angles);

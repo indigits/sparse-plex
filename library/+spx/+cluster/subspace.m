@@ -90,7 +90,7 @@ function result = subspace_preservation_stats(C, cluster_sizes)
 
     labels = spx.cluster.labels_from_cluster_sizes(cluster_sizes);
     % C must be an SxS square matrix.
-    if ~spx.commons.matrix.is_square(C)
+    if ~spx.matrix.is_square(C)
         error('C must be a square matrix.');
     end
     % number of points

@@ -42,16 +42,16 @@ function test_two_spaces_at_angle(testCase)
     N = 50;
     theta = pi/4;
     [A, B] = spx.data.synthetic.subspaces.two_spaces_at_angle(N, theta);
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(A));
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(B));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(A));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(B));
     phi = spx.la.spaces.smallest_angle_rad(A, B);
     verifyEqual (testCase, phi, theta, 'AbsTol', 1e-12);
     thetas = 0.1:0.1:pi/2;
     for i=1:numel(thetas)
         theta = thetas(i);
         [A, B] = spx.data.synthetic.subspaces.two_spaces_at_angle(N, theta);
-        verifyTrue(testCase, spx.commons.matrix.is_orthonormal(A));
-        verifyTrue(testCase, spx.commons.matrix.is_orthonormal(B));
+        verifyTrue(testCase, spx.matrix.is_orthonormal(A));
+        verifyTrue(testCase, spx.matrix.is_orthonormal(B));
         phi = spx.la.spaces.smallest_angle_rad(A, B);
         verifyEqual (testCase, phi, theta, 'AbsTol', 1e-12);
     end
@@ -70,9 +70,9 @@ function test_three_disjoint_spaces_at_angle(testCase)
     theta = pi/6;
     [A, B, C] = spx.la.spaces.three_disjoint_spaces_at_angle(N, theta);
     spx.la.spaces.describe_three_spaces(A, B, C);
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(A));
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(B));
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(C));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(A));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(B));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(C));
     phi = spx.la.spaces.smallest_angle_rad(A, B);
     verifyEqual (testCase, phi, theta, 'AbsTol', 1e-12);
     phi = spx.la.spaces.smallest_angle_rad(B, C);

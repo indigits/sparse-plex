@@ -6,8 +6,8 @@ function test_affinity(testCase)
     N = 4;
     theta = pi/4;
     [A, B] = spx.data.synthetic.subspaces.two_spaces_at_angle(N, theta);
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(A));
-    verifyTrue(testCase, spx.commons.matrix.is_orthonormal(B));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(A));
+    verifyTrue(testCase, spx.matrix.is_orthonormal(B));
     phi = spx.la.spaces.smallest_angle_rad(A, B);
     verifyEqual (testCase, phi, theta, 'AbsTol', 1e-12);
     thetas = spx.la.spaces.principal_angles_degree(A, B);

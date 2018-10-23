@@ -7,7 +7,7 @@ classdef matrix < handle
         end
 
         function result = is_symmetric(A)
-            result = spx.commons.matrix.is_square(A);
+            result = spx.matrix.is_square(A);
             if ~result
                 return;
             end
@@ -15,7 +15,7 @@ classdef matrix < handle
         end
 
         function result = is_hermitian(A)
-            result = spx.commons.matrix.is_square(A);
+            result = spx.matrix.is_square(A);
             if ~result
                 return;
             end
@@ -23,7 +23,7 @@ classdef matrix < handle
         end
 
         function result = is_positive_definite(A)
-            result = spx.commons.matrix.is_hermitian(A);
+            result = spx.matrix.is_hermitian(A);
             if ~result
                 return;
             end

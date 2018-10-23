@@ -37,7 +37,7 @@ for i=1:ne
     fprintf('\n');
     % bases  = spx.la.spaces.bases(X, example.counts);
     angles = spx.la.spaces.smallest_angles_deg(bases);
-    off_diag_angles = spx.commons.matrix.off_diag_upper_tri_elements(angles);
+    off_diag_angles = spx.matrix.off_diag_upper_tri_elements(angles);
     off_diag_angles = sort(off_diag_angles);
     minimum_angle = min(off_diag_angles);
     maximum_angle = max(off_diag_angles);
