@@ -1,0 +1,23 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-3.5cm)]
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoLined
+\DontPrintSemicolon
+\footnotesize
+\SetAlgoLined
+\For{$k \leftarrow 1$ \KwTo $n$}{
+    $v_k \leftarrow a_k$\tcp*{Initialize $Q$ matrix}
+}
+\For{$k \leftarrow 1$ \KwTo $n$}{
+    $r_{kk} \leftarrow \| v_k \|_2$\tcp*{Compute norm}
+    $q_k \leftarrow v_k / r_{kk}$ \tcp*{Normalize}
+    \For{$j \leftarrow k+1$ \KwTo $n$} {
+        $r_{kj} \leftarrow q_k^T v_j$ \tcp*{Compute projection}
+        $v_j \leftarrow v_j - r_{kj} q_k$ \tcp*{Subtract projection} 
+    }
+}
+\end{algorithm}
+\end{tcolorbox}
+\end{document}

@@ -29,6 +29,7 @@ A journey into sparse and redundant representations.
    book/signal_processing
    book/wavelets
    book/ecg
+   book/complexity
    library/index
    exercises/index
    scripts
