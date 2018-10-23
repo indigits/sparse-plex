@@ -6,3 +6,4 @@ Computational Complexity
 
    complexity/intro
    complexity/basic
+   complexity/omp
