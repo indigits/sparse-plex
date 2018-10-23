@@ -293,3 +293,193 @@ can use it on the data above as follows::
     ans =
 
          1     1     1     1     2     2     2     2
+
+
+Inside Normalized (Random Walk) Spectral Clustering
+-----------------------------------------------------
+
+In this section, we will look at a spectral
+clustering method using normalized Laplacians.
+The primary difference is the way the graph
+Laplacian is computed :math:`L = I - D^{-1} W`.
+
+We will use the third example from self tuning
+paper for demonstration here.
+
+.. figure:: images/st3_nrw_raw_data.png
+
+There are three clusters in the dataset.
+While two of the clusters have very clear 
+convex shapes, the third one forms a 
+half moon. It is this cluster which causes
+problems with a simple algorithm like k-means.
+The semi-moon is the first cluster, while the
+other two above it are cluster 2 and 3 (from left to right).
+
+Loading the dataset::
+
+    dataset_file = fullfile(spx.data_dir, 'clustering', ...
+        'self_tuning_paper_clustering_data');
+    data = load(dataset_file);
+    datasets = data.XX;
+    raw_data = datasets{3};
+    % Scale the raw_data
+    raw_data = raw_data - repmat(mean(raw_data),size(raw_data,1),1);
+    raw_data = raw_data/max(max(abs(raw_data)));
+    num_clusters = data.group_num(1);
+    X = raw_data(:, 1);
+    Y = raw_data(:, 2);
+    % plot it
+    axis equal;
+    plot(X, Y, '.', 'MarkerSize',16);
+
+Let's compute the pairwise (squared) :math:`\ell_2` distances
+between the points::
+
+    sqrt_dist_mat = spx.commons.distance.sqrd_l2_distances_rw(raw_data);
+    imagesc(sqrt_dist_mat);
+    title('Distance Matrix');
+
+.. figure:: images/st3_nrw_distances.png
+
+* In cluster 2 and 3, the distances are quite small
+  between all pairs of points.
+* In cluster 1, every point is near to some of the
+  points. The points form kind of a chain structure.
+  They keep getting farther and farther.
+  This is visible from the gradual color change 
+  from blue to yellow in the off diagonal parts of
+  the first (diagonal) sub-part in the image above.
+
+We map the (squared) distances to similarity values
+between 0 to 1::
+
+    scale = 0.04;
+    W = spx.cluster.similarity.gauss_sim_from_sqrd_dist_mat(sqrt_dist_mat, scale);
+    imagesc(W);
+    title('Similarity Matrix');
+
+The transformation involved here is
+
+.. math::
+
+    w_{i j} = \exp \left ( - \frac{d_{i j}^2}{\sigma^2} \right).
+
+.. figure:: images/st3_nrw_similarity.png
+
+The chain structure of similarity in cluster 1 is
+clearly visible here. In cluster 2 and 3 points are
+fairly similar to each other.
+
+We now compute the graph Laplacian::
+
+    [num_nodes, ~] = size(W);
+    Degree = diag(sum(W));
+    DegreeInv = Degree^(-1);
+    Laplacian = speye(num_nodes) - DegreeInv * W;
+    imagesc(Laplacian);
+    title('Normalized Random Walk Laplacian');
+
+Note how the Laplacian has been computed slightly differently.
+
+.. figure:: images/st3_nrw_laplacian.png
+
+Let's look at the singular values::
+
+    [~, S, V] = svd(Laplacian);
+    singular_values = diag(S);
+    plot(singular_values, 'b.-');
+    grid on;
+    title('Singular values of the Laplacian');
+
+.. figure:: images/st3_nrw_singular_values.png
+
+This time no clear knee is visible in the 
+singular value plot. We can verify this
+by looking at the differences::
+
+    sv_changes = diff( singular_values(1:end-1) );
+    plot(sv_changes, 'b.-');
+    grid on;
+    title('Changes in singular values');
+
+.. figure:: images/st3_nrw_sv_changes.png
+
+Finding the largest change in singular values
+will not give us the correct number of clusters::
+
+    >> [min_val , ind_min ] = min(sv_changes);
+    >> num_clusters = num_nodes - ind_min;
+    >> num_clusters
+
+    num_clusters =
+
+        26
+
+However, by data inspection, we can clearly see
+that there are only 3 clusters of interest.
+
+In this case, since the data are well segregated,
+the number of singular values which is close to
+zero actually matches with the number of clusters::
+
+    >> num_clusters = sum(singular_values < 1e-6)
+    num_clusters =
+
+         3
+
+Let's verify by printing 10 smallest singular
+values::
+
+    >> spx.io.print.vector(singular_values(end-10:end), 6)
+    0.027412 0.023242 0.014100 0.012101 0.006108 0.003988 0.001655 0.000471 0.000000 0.000000 0.000000 
+
+
+We will stick to this way of computing number of
+clusters here.
+
+
+Let's pick up the right singular vectors
+corresponding to the last 3 singular values::
+
+    % Choose the last num_clusters eigen vectors
+    Kernel = V(:,num_nodes-num_clusters+1:num_nodes);
+
+
+Time to perform k-means clustering on the row vectors
+of this kernel::
+
+    % Maximum iteration for KMeans Algorithm
+    max_iterations = 1000; 
+    % Replication for KMeans Algorithm
+    replicates = 100;
+    cluster_labels = kmeans(Kernel, num_clusters, ...
+        'start','plus', ...
+        'maxiter',max_iterations,...
+        'replicates',replicates, ...
+        'EmptyAction','singleton'...
+        );
+
+
+The labels are returned in the variable ``cluster_labels``.
+
+Let's plot the original data by assigning different colors
+to points belonging to different labels::
+
+    hold on;
+    axis equal;
+    for c=1:num_clusters
+        % Identify points in this cluster
+        points = raw_data(cluster_labels == c, :);
+        X = points(:, 1);
+        Y = points(:, 2);
+        plot(X, Y, '.', 'MarkerSize',16);
+    end
+    hold off;
+
+
+.. figure:: images/st3_nrw_clustered_data.png
+
+
+We can see that the clusters have been clearly 
+identified.
