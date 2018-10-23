@@ -148,3 +148,85 @@ between them::
        47.2059   20.5399   21.9036   14.0794         0   39.5866
        24.9171   42.5358   34.4935   26.5235   39.5866         0
 
+
+We can pull off the upper off-diagonal entries
+in the matrix to look at the distribution of angles::
+
+  >> angles = spx.matrix.off_diag_upper_tri_elements(angles)'
+  angles =
+
+    Columns 1 through 13
+
+     19.9756   32.3022   14.9874   21.1835   17.8499   34.6420   47.2059   20.5399   21.9036   14.0794   24.9171   42.5358   34.4935
+
+    Columns 14 through 15
+
+     26.5235   39.5866
+
+
+For more information about ``off_diag_upper_tri_elements``, 
+see :ref:`sec:library:commons:matrix`.
+
+The statistics::
+
+    >> max(angles)
+    ans =
+
+       47.2059
+
+    >> min(angles)
+    ans =
+
+       14.0794
+
+    >> mean(angles)
+    ans =
+
+       27.5151
+
+    >> std(angles)
+    ans =
+
+       10.3412
+
+
+There is quite variation in the distribution of angles.
+While some pairs of subspaces are so closely aligned
+that their smallest principle angle is as low as 14
+degrees, there are some pairs for which the smallest
+principal angle is as high as 47 degrees.
+
+While it is possible to select two subspaces
+which are arbitrarily close to each other, 
+the distribution of principal angles gives us
+an idea as to who close/aligned the subspaces are likely to be
+if chosen randomly.
+
+
+Above, we computed the smallest principal angles 
+in degrees. We can also compute them in radians::
+
+  >> angles = spx.la.spaces.smallest_angles_rad(bases)
+  angles =
+
+           0    0.3486    0.5638    0.3697    0.8239    0.4349
+      0.3486         0    0.2616    0.3115    0.3585    0.7424
+      0.5638    0.2616         0    0.6046    0.3823    0.6020
+      0.3697    0.3115    0.6046         0    0.2457    0.4629
+      0.8239    0.3585    0.3823    0.2457         0    0.6909
+      0.4349    0.7424    0.6020    0.4629    0.6909         0
+
+
+Or directly the largest singular values for each
+pair of subspaces::
+
+  >> angles = spx.la.spaces.smallest_angles_cos(bases)
+  angles =
+
+      1.0000    0.9398    0.8452    0.9324    0.6794    0.9069
+      0.9398    1.0000    0.9660    0.9519    0.9364    0.7369
+      0.8452    0.9660    1.0000    0.8227    0.9278    0.8242
+      0.9324    0.9519    0.8227    1.0000    0.9700    0.8948
+      0.6794    0.9364    0.9278    0.9700    1.0000    0.7707
+      0.9069    0.7369    0.8242    0.8948    0.7707    1.0000
+
