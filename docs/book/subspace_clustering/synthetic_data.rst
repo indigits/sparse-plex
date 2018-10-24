@@ -50,6 +50,62 @@ We can verify that the basis is indeed orthogonal::
              0    1.0000
 
 
+Visualizing Subspaces
+'''''''''''''''''''''''''''''
+
+It is possible to visualize 2D subspaces
+in 3D space.
+
+Let's pick one subspace::
+
+  rng(10);
+  A = orth(randn(3, 2))
+
+Identify its basis vectors::
+
+  e1 = A(:, 1);
+  e2 = A(:, 2);
+
+
+Identify the corner points of a square
+around its basis vectors::
+
+  corners = [e1+e2, e2-e1, -e1-e2, -e2+e1];
+
+
+Visualize it::
+
+  fill3(corners(1,:),corners(2,:),corners(3,:),'r');
+  grid on;
+  hold on;
+  alpha(0.3);
+
+Add the arrows of basis vectors from origin::
+
+  quiver3(0, 0, 0, e1(1), e1(2), e1(3), 'color', 'r');
+  quiver3(0, 0, 0, e2(1), e2(2), e2(3), 'color', 'r');
+
+
+.. figure:: images/random_subspace_a_3d.png
+
+
+Let's add one more basis::
+
+  B = orth(randn(3, 2));
+  e1 = B(:, 1);
+  e2 = B(:, 2);
+  corners = [e1+e2, e2-e1, -e1-e2, -e2+e1];
+  fill3(corners(1,:),corners(2,:),corners(3,:),'g');
+  alpha(0.3);
+  quiver3(0, 0, 0, e1(1), e1(2), e1(3), 'color', spx.graphics.rgb('DarkGreen'));
+  quiver3(0, 0, 0, e2(1), e2(2), e2(3), 'color', spx.graphics.rgb('DarkGreen'));
+
+
+.. figure:: images/random_subspace_a_b_3d.png
+
+Multiple Subspaces
+''''''''''''''''''''''''''
+
 ``sparse-plex`` provides a way to draw
 multiple random subspaces of a given dimension
 from an ambient space.
@@ -127,4 +183,92 @@ denoted by :math:`\theta` is defined as :cite:`bjorck1973numerical`
 .. math::
     \cos \theta = \underset{u \in \UUU, v \in \VVV}{\max} \frac{u^T v}{\| u \|_2 \| v \|_2}.
 
+
+For the functions provided in ``sparse-plex``
+for measuring principal angles, see
+:ref:`sec:la:principal_angles:hands-on`.
+
+
+Uniformly Distributed Points in Subspaces
+--------------------------------------------
+
+
+For subspace clustering purposes, 
+individual vectors are usually normalized.
+They then fall onto the surface of 
+the unit sphere of the
+subspace to which they belong.
+
+For experimentation, it is useful to 
+generate uniformly distributed points
+on the unit sphere of a random subspace.
+
+
+It is actually very easy to do.
+Let's start with a simple example
+of a random 2D plane inside 3D space.
+
+Let's choose a random plane::
+
+
+  basis = orth(randn(3, 2));
+
+Let's choose coordinates of some
+points in this basis where the
+coordinates are Gaussian distributed::
+
+  num_points = 100;
+  coefficients = randn(2, num_points);
+
+Let's normalize the coefficients::
+
+  coefficients = spx.norm.normalize_l2(coefficients);
+
+
+The coordinates of these points in the 3D 
+space can be easily calculated now::
+
+  uniform_points = basis * coefficients;
+
+Verify that these points are indeed on
+unit sphere::
+
+  >> max(abs(spx.norm.norms_l2_cw(uniform_points) - 1))
+
+  ans =
+
+     4.4409e-16
+
+
+Time to visualize everything. First the
+plane::
+
+    e1 = basis(:, 1);
+    e2 = basis(:, 2);
+    corners = [e1+e2, e2-e1, -e1-e2, -e2+e1];
+    spx.graphics.figure.full_screen;
+    fill3(corners(1,:),corners(2,:),corners(3,:),'r');
+    grid on;
+    hold on;
+    alpha(0.3);
+
+Then the unit vectors::
+
+  quiver3(0, 0, 0, e1(1), e1(2), e1(3), 'color', 'blue');
+  quiver3(0, 0, 0, e2(1), e2(2), e2(3), 'color', 'blue');
+
+
+Finally the points::
+
+  x = uniform_points(1, :);
+  y = uniform_points(2, :);
+  z = uniform_points(3, :);
+  plot3(x, y, z, '.', 'color', spx.graphics.rgb('Brown') );
+
+We might as well draw the origin too::
+
+  plot3(0, 0, 0, '+k', 'MarkerSize', 10, 'color', spx.graphics.rgb('DarkRed'));
+
+
+.. figure:: images/uniform_points_2d_subspace.png
 

@@ -26,6 +26,8 @@ matrix :math:`G = Q_U^T Q_V`. The SVD of :math:`G` gives the principal angles.
 In particular, the smallest principal angle is given by :math:`\cos \theta = \sigma_1`,
 the largest singular value. 
 
+.. _sec:la:principal_angles:hands-on:
+
 Hands on with Principal Angles
 ---------------------------------------
 
