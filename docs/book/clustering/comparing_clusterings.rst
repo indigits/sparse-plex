@@ -238,3 +238,92 @@ hungarian mapping by Niclas Borlin.
 
 
 The ``bestMap`` method is easy to use.
+
+
+.. _sec:clustering:clustering-error:
+
+Clustering Error
+-----------------------
+
+If two clusterings have same number of labels, then 
+a simpler clustering error metric is quite useful.
+
+We start with an example set of true labels A
+and estimated labels B::
+
+    A  = [2 1 3 2 4 2 1 1 1 1 4 3 3 3];
+    B  = [4 2 3 4 2 4 2 2 3 2 1 3 3 3];
+
+
+Total number of labels::
+
+    num_labels = numel(A);
+    num_labels =
+
+        14
+
+
+Let's use the Hungarian mapping technique to find the mapping
+of labels between A and B::
+
+    mapped_B = bestMap(A, B)'
+    mapped_B =
+
+         2 1 3 2 1 2 1 1 3 1 4 3 3 3
+
+After this mapping, the mapped B labels are looking
+pretty much like A. The difference between these two
+labels is where the algorithm has made some mistakes::
+
+    mistakes =
+
+      1×14 logical array
+
+       0   0   0   0   1   0   0   0   1   0   0   0   0   0
+
+
+Total number of mistakes::
+
+    num_mistakes = sum(mistakes)
+    num_mistakes =
+
+         2
+
+Clustering error is nothing but the ratio of mistakes made
+and total number of data points::
+
+    clustering_error  = num_mistakes / num_labels
+    clustering_error =
+
+        0.1429
+
+In percentage::
+
+    clustering_error_perc = clustering_error * 100
+    clustering_error_perc =
+
+       14.2857
+
+
+Accuracy can be computed from error::
+
+    clustering_acc_perc = 100 -clustering_error_perc
+
+
+Sparse-Plex provides a function which does 
+all of this together::
+
+    >> spx.cluster.clustering_error_hungarian_mapping(A, B)
+
+    ans = 
+
+      struct with fields:
+
+               num_labels: 14
+        num_missed_points: 2
+                    error: 0.1429
+               error_perc: 14.2857
+            mapped_labels: [2 1 3 2 1 2 1 1 3 1 4 3 3 3]
+                   misses: [0 0 0 0 1 0 0 0 1 0 0 0 0 0]
+
+

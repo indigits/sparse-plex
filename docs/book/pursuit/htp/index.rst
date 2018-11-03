@@ -1,3 +1,3 @@
-Heard thresholding pursuit
+Hard thresholding pursuit
 =======================================
 
