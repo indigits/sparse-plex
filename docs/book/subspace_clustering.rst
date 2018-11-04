@@ -17,6 +17,8 @@ Subspace Clustering
    subspace_clustering/alg_ssc_omp
    subspace_clustering/app_motion_segmentation
    subspace_clustering/synthetic_data
+   subspace_clustering/performance_metrics
+
 
    
 

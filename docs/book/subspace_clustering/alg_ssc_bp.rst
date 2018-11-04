@@ -256,7 +256,12 @@ statistics::
     spr_perc = spr_stats.spr_perc;
 
 
+See :ref:`sec:sc:ssc:performance_metrics` for more details.
+
 Print it::
 
     >> fprintf('mean spr error: %0.2f, preserving : %0.2f %%\n', spr_stats.spr_error, spr_stats.spr_perc);
     mean spr error: 0.68, preserving : 0.00 %
+
+Complete example code can be downloaded
+:download:`here <demo_ssc_bp_random_subspaces.m>`.
