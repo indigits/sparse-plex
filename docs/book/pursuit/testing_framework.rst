@@ -18,6 +18,7 @@ needs following components:
 to help with the study of pursuit algorithms. 
 
 
+.. _sec:pursuit:testing:synthetic-sparse-representations:
 
 Generation of synthetic sparse representations
 ---------------------------------------------------

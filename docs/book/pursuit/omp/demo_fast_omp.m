@@ -1,0 +1,20 @@
+close all;
+clear all;
+clc;
+rng default;
+M = 100;
+N = 1000;
+A = spx.dict.simple.gaussian_mtx(M, N);
+S = 1000;
+K = 10;
+gen = spx.data.synthetic.SparseSignalGenerator(N, K, S);
+% create a sparse vector
+X =  gen.biGaussian();
+Y = A*X;
+start_time = tic;
+result = spx.fast.omp(A, Y, K, 1e-12);
+elapsed_time = toc(start_time);
+fprintf('Time taken: %.2f seconds\n', elapsed_time);
+fprintf('Per signal time: %.2f usec', elapsed_time * 1e6/ S);
+cmpare = spx.commons.SparseSignalsComparison(X, result, K);
+cmpare.summarize();

@@ -1,6 +1,10 @@
 Getting Started
 ================================
 
+.. highlight:: matlab
+
+
+.. _sec:start:requirements:
 
 Requirements
 ---------------------------
@@ -31,6 +35,7 @@ can install them on need basis. You don't need to
 install them in advance.
 
 
+.. _sec:start:installation:
 
 Installation
 ---------------------
@@ -54,12 +59,16 @@ Installation
     creates a local settings file. For creating these
     files, write access is needed.
 
+.. _sec:start:acquaintance:
+
 Getting acquainted
 ---------------------------
 
 The online library documentation includes a number of step-by-step
 demonstrations. Follow these tutorials to get familiar with the
 library.
+
+.. _sec:start:examples:
 
 Running examples
 ----------------------
@@ -68,6 +77,9 @@ Running examples
 * Go into ``examples`` directory.
 * Browse the examples.
 * Run the example you want.
+
+.. _sec:start:source-code:
+
 
 Checking the source code
 -----------------------------
@@ -80,18 +92,65 @@ Checking the source code
   * Unit-tests for the library are maintained in ``tests`` directory.
 
 
+.. _sec:start:unit-testing:
 
 
 Verifying the installation
 ----------------------------------
 
-You will require MATLAB XUnit test framework to run the unit tests
-included with the library.
+A number of unit tests have been included in the software
+to verify its integrity. The unit tests are 
+based on MATLAB's 
+`built in testing frameworks <https://in.mathworks.com/help/matlab/matlab-unit-test-framework.html>`_.
 
 * Change directory to the root directory of ``sparse-plex``.
 * Move to the directory ``library/tests``.
 * Execute the ``runalltests.m`` script.
 * Verify that all unit tests pass.
+
+.. _sec:start:extensions:
+
+Building MATLAB Extensions
+------------------------------
+
+Some of the fast implementations of various algorithms
+are written in C as MATLAB extensions. You will 
+need to build them before using them.
+
+This section assumes that you have the necessary build tools
+available in your MATLAB installation.
+See `What You Need to Build MEX Files <https://in.mathworks.com/help/matlab/matlab_external/what-you-need-to-build-mex-files.html>`_  for details.
+
+
+* Go to the ``sparse-plex\library\+spx\+fast\private`` directory
+  inside MATLAB.
+* Run the ``make.m`` script.
+
+The script ``make.m`` contains necessary commands to invoke
+the mex compiler on each of the source files in this ``private``
+directory. The script takes care of building only those files
+which have been modified since last build.
+
+
+.. _sec:start:documentation:
+
+Building documentation
+------------------------------
+
+Only if you really want to do it! Normally, you can
+read it online.
+
+You will require Python Sphinx and other related packages like
+Pygments library etc. to build the documentation from scratch.
+
+* Change directory to the root directory of ``sparse-plex``.
+* Go into ``docs`` directory.
+* Build the documentation using Sphinx tool chain. 
+
+Here is the command for building documentation automatically
+as the changes are being made to documentation::
+
+  sphinx-autobuild --port=9102 . _build\html
 
 Configuring test data directories
 ----------------------------------------
@@ -123,20 +182,5 @@ Specific settings in ``spx_local.ini`` are:
 
 For more information, read the file.
 
-Building documentation
-------------------------------
 
-Only if you really want to do it!
-
-You will require Python Sphinx and other related packages like
-Pygments library etc. to build the documentation from scratch.
-
-* Change directory to the root directory of ``sparse-plex``.
-* Go into ``docs`` directory.
-* Build the documentation using Sphinx tool chain. 
-
-Here is the command for building documentation automatically
-as the changes are being made to documentation::
-
-  sphinx-autobuild --port=9102 . _build\html
 

@@ -7,3 +7,4 @@ Orthogonal Matching Pursuit
    algorithm
    erc_conditions
    sparse_approximation_conditions
+   fast_omp

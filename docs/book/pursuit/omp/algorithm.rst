@@ -1,3 +1,5 @@
+.. _sec:pursuit:omp:algorithm:
+
 The Algorithm
 =======================
 
