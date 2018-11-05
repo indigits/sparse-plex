@@ -128,6 +128,7 @@ randomly generated signal in the given dictionary.
 
 Our implementation is close to 4 times faster.
 
+The benchmark generation code is in `ex_fast_omp_speed_test.m`_.
 
 .. _sparse-plex: https://github.com/indigits/sparse-plex
 
@@ -137,3 +138,5 @@ Our implementation is close to 4 times faster.
 
 
 .. _OMPBOX: http://www.cs.technion.ac.il/~ronrubin/software.html
+
+.. _ex_fast_omp_speed_test.m: https://github.com/indigits/sparse-plex/blob/master/experiments/fast_omp_chol/ex_fast_omp_speed_test.m
