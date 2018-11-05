@@ -3,11 +3,15 @@ Fast Implementation of OMP
 
 As part of `sparse-plex`_,
 we provide a fast CPU based implementation of OMP.
+It is up to 4 times faster than the OMP implementation
+in `OMPBOX`_.
+
 This is written in C and uses the
 BLAS and LAPACK features available in MATLAB.
 The implementation is available in the function
 `spx.fast.omp`_.  
 The corresponding C code is in `omp.c`_. 
+
 
 For a :math:`100 \times 1000`
 sensing matrix, the implementation can recover
@@ -105,11 +109,11 @@ The method for benchmarking has been adopted from
 the file ``ompspeedtest.m`` in the `OMPBOX`_ 
 package by Ron Rubinstein.
 
-We compare following algorithms::
+We compare following algorithms:
 
 * The Cholesky decomposition based OMP implementation
   in OMPBOX.
-* Our C version.
+* Our C version in `sparse-plex`_.
 
 The work load consists of a Gaussian dictionary of
 size :math:`512 \times 1000`.  Sufficient signals
