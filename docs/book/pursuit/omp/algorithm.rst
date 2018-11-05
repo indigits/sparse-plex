@@ -1,6 +1,6 @@
 .. _sec:pursuit:omp:algorithm:
 
-The Algorithm
+The OMP Algorithm
 =======================
 
 **Orthogonal Matching Pursuit** (OMP) addresses some of the limitations of 
