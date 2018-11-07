@@ -1,0 +1,36 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-3.5cm)]
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\footnotesize
+\SetAlgoLined
+$x = \text{Batch-OMP}(\bar{h}, G, \epsilon^0 = \| \bar{y} \|_2^2, K, \epsilon)$\;
+$I = \EmptySet$\;
+$L \leftarrow [1]$\;
+$x \leftarrow 0$\;
+$h \leftarrow \bar{h}$\;
+$k \leftarrow 0$\;
+
+\Repeat{$k < K$ or $\epsilon^k > \epsilon$}{
+    $k \leftarrow k + 1$ \;
+    $i \leftarrow \underset{j \notin I}{\text{arg} \, \max} 
+    | h_j |$ \;
+    \If(Cholesky update) {$k > 1$}{
+        $v \leftarrow G(I, i)$ \;
+        $w \leftarrow$ Solve for $w$ $\left \{ L w = v \right \}$\;
+        $L \leftarrow \begin{bmatrix}
+            L & 0 \\
+            w^T & \sqrt{1 - w^T w}
+        \end{bmatrix} $\; 
+    }
+    $I \leftarrow I \cup \{ i\}$ \;
+    $x_I \leftarrow$ Solve for $x_I$ $\{L L^T x_I = \bar{h}_I\}$ \;
+    $\beta \leftarrow G_I x_I$ \;
+    $h \leftarrow \bar{h} - \beta$\; 
+    $\delta^k \leftarrow x_I^T \beta_I$\;
+    $\epsilon^k \leftarrow \epsilon^{k-1} - \delta^k + \delta^{k-1}$\;
+}
+\end{algorithm}
+\end{tcolorbox}
+\end{document}

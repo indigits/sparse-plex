@@ -8,3 +8,5 @@ Orthogonal Matching Pursuit
    erc_conditions
    sparse_approximation_conditions
    fast_omp
+   batch_omp
+   
