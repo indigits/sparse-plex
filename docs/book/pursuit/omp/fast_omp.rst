@@ -1,3 +1,5 @@
+.. _sec:pursuit:omp:fast:
+
 Fast Implementation of OMP
 ================================
 

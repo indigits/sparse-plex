@@ -33,7 +33,7 @@ D = D*diag(1./sqrt(sum(D.*D)));    % normalize the dictionary
 x = randn(n,20);
 result = spx.fast.omp(D, x, T, 1e-12);
 tic; omp(D,x,[],T,'messages',-1); t=toc;
-signum = ceil(20/(t/20));     % approximately 20 seconds of OMP-Cholesky
+signum = ceil(100/(t/100));     % approximately 20 seconds of OMP-Cholesky
 
 
 % generate random signals %
@@ -44,37 +44,29 @@ G = D' * D;
 DtX = D'*X;
 % run OMP  %
 
-fprintf('\nRunning OMP-Cholesky...');
-tic; omp(D,X,[],T,'messages',4); t1=toc;
-
 fprintf('\nRunning Batch-OMP...');
-tic; omp(D,X,G,T,'messages',1); t2=toc;
+tic; omp(D,X,G,T,'messages',1); t1=toc;
 
 fprintf('\nRunning Batch-OMP with D''*X specified...');
-tic; omp(DtX,G,T,'messages',1); t3=toc;
-
-fprintf('\nRunning SPX-OMP-Cholesky...');
-tic; spx.fast.omp(D, X, T, 1e-12); t4=toc;
+tic; omp(DtX,G,T,'messages',1); t2=toc;
 
 fprintf('\nRunning SPX-Batch-OMP...');
-tic; spx.fast.batch_omp(D, X, G, [], T, 0); t5=toc;
+tic; spx.fast.batch_omp(D, X, G, [], T, 0); t3=toc;
 
 fprintf('\nRunning SPX-Batch-OMP with DtX...');
-tic; spx.fast.batch_omp([], [], G, DtX, T, 0); t6=toc;
-
-fprintf('\nRunning SPX-OMP-LS...');
-options.ls_method = 'ls';
-tic; spx.fast.omp(D, X, T, 1e-12, options); t7=toc;
+tic; spx.fast.batch_omp([], [], G, DtX, T, 0); t4=toc;
 
 
 % display summary  %
 fprintf('\n\nSpeed summary for %d signals, dictionary size %d x %d:\n', signum, n, L);
 fprintf('Call syntax        Algorithm               Total time\n');
 fprintf('--------------------------------------------------------\n');
-fprintf('OMP(D,X,[],T)                    OMP-Cholesky            %5.2f seconds\n', t1);
-fprintf('OMP(D,X,G,T)                     Batch-OMP               %5.2f seconds\n', t2);
-fprintf('OMP(DtX,G,T)                     Batch-OMP with D''*X    %5.2f seconds\n', t3);
-fprintf('SPX-OMP(D, X, T)                 SPX-OMP-Cholesky        %5.2f seconds\n', t4);
-fprintf('SPX-Batch-OMP(D, X, G, [], T)    SPX-Batch-OMP           %5.2f seconds\n', t5);
-fprintf('SPX-Batch-OMP([], [], G, Dtx, T) SPX-Batch-OMP           %5.2f seconds\n', t6);
-fprintf('SPX-OMP-LS(D, X, T)              SPX-OMP-LS              %5.2f seconds\n', t7);
+fprintf('OMP(D,X,G,T)                     Batch-OMP               %5.2f seconds\n', t1);
+fprintf('OMP(DtX,G,T)                     Batch-OMP with DTX    %5.2f seconds\n', t2);
+fprintf('SPX-Batch-OMP(D, X, G, [], T)    SPX-Batch-OMP           %5.2f seconds\n', t3);
+fprintf('SPX-Batch-OMP([], [], G, Dtx, T) SPX-Batch-OMP DTX     %5.2f seconds\n', t4);
+
+
+fprintf('Gain SPX/OMPBOX without DTX %.2f\n', t1 / t3 );
+fprintf('Gain SPX/OMPBOX with DTX %.2f\n', t2 / t4 );
+

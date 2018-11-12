@@ -1,6 +1,8 @@
 Batch OMP
 ==================
 
+.. highlight:: matlab
+
 In this section, we develop an efficient version of OMP 
 known as Batch OMP :cite:`rubinstein2008efficient`.
 
@@ -257,5 +259,198 @@ which is a simple inner product.
 The Batch OMP Algorithm
 ---------------------------------
 
+The batch OMP algorithm is described in the figure 
+below.
+
+The inputs are
+
+* The Gram matrix :math:`G = \Phi^T \Phi`.
+* The initial correlation vector :math:`\bar(h) = \Phi^T \bar{y}`.
+* The squared norm :math:`\epsilon^0` of the signal 
+  :math:`\bar{y}` whose sparse representation we are
+  constructing.
+* The upper bound on the desired sparsity level :math:`K`
+* Residual norm (squared) threshold :math:`\epsilon`.
+
+It returns the sparse representation :math:`x`.
+
+Note that the algorithm doesn't need direct access to
+either the dictionary :math:`\Phi` or the signal
+:math:`\bar{y}`.
+
 
 .. figure:: images/algorithm_batch_omp.png
+
+
+.. note::
+
+    The sparse vector :math:`x` is
+    usually returned as a pair of 
+    vectors :math:`I` and :math:`x_I`.
+    This is more efficient in terms of
+    space utilization.
+
+
+
+Fast Batch OMP Implementation
+--------------------------------------
+
+As part of `sparse-plex`_,
+we provide a fast CPU based implementation of Batch OMP.
+It is up to 3 times faster than the Batch OMP 
+implementation in `OMPBOX`_.
+
+This is written in C and uses the
+BLAS and LAPACK features available in MATLAB.
+The implementation is available in the function
+`spx.fast.batch_omp`_.  
+The corresponding C code is in `batch_omp.c`_. 
+
+
+.. rubric:: A Simple Example
+
+Let's create a Gaussian matrix (with normalized columns)::
+
+    M = 400;
+    N = 1000;
+    Phi = spx.dict.simple.gaussian_mtx(M, N);
+
+See :ref:`cs-hands-on-gaussian-sensing-matrices` for details.
+
+
+Let's create a few thousand sparse signals::
+
+    K = 16;
+    S = 5000;
+    X = spx.data.synthetic.SparseSignalGenerator(N, K, S).biGaussian();
+
+See :ref:`sec:pursuit:testing:synthetic-sparse-representations` 
+for details.
+
+Let's compute their measurements using the Gaussian matrix::
+
+    Y = Phi*X;
+
+We wish to recover :math:`X` from :math:`Y` and :math:`\Phi`.
+
+Let's precompute the Gram matrix::
+
+    G = Phi' * Phi;
+
+Let's precompute the correlation vectors for each signal::
+
+    DtY = Phi' * Y;
+
+
+Let's perform sparse recovery using Batch OMP and time it::
+
+    start_time = tic;
+    result = spx.fast.batch_omp(Phi, [], G, DtY, K, 1e-12);
+    elapsed_time = toc(start_time);
+    fprintf('Time taken: %.2f seconds\n', elapsed_time);
+    fprintf('Per signal time: %.2f usec', elapsed_time * 1e6/ S);
+
+    Time taken: 0.52 seconds
+    Per signal time: 103.18 usec
+
+
+We note that the reconstruction has happened very quickly
+taking about just 100 micro seconds per signal.
+
+
+We can verify the correctness of the result::
+
+    cmpare = spx.commons.SparseSignalsComparison(X, result, K);
+    cmpare.summarize();
+
+    Signal dimension: 1000
+    Number of signals: 5000
+    Combined reference norm: 536.04604784
+    Combined estimate norm: 536.04604784
+    Combined difference norm: 0.00000000
+    Combined SNR: 302.5784 dB
+
+    All signals have indeed been recovered correctly.
+    See :ref:`sec:library-commons-comparison-sparse` for 
+    details about ``SparseSignalsComparison``.
+
+For comparison, let's see the time taken by Fast OMP 
+implementation::
+
+    fprintf('Reconstruction with Fast OMP')
+    start_time = tic;
+    result = spx.fast.omp(Phi, Y, K, 1e-12);
+    elapsed_time = toc(start_time);
+    fprintf('Time taken: %.2f seconds\n', elapsed_time);
+    fprintf('Per signal time: %.2f usec', elapsed_time * 1e6/ S);
+
+    Reconstruction with Fast OMPTime taken: 4.39 seconds
+    Per signal time: 878.88 usec
+
+See :ref:`sec:pursuit:omp:fast` for details about our
+fast OMP implementation.
+
+Fast Batch OMP implementation is more than 
+8 times faster than fast OMP implementation
+for this problem configuration (M, N, K, S).
+
+
+.. rubric:: Benchmarks
+
+
+.. list-table:: System configuration
+
+    * - OS
+      - Windows 7 Professional 64 Bit
+    * - Processor
+      - Intel(R) Core(TM) i7-3630QM CPU @ 2.40GHz
+    * - Memory (RAM)
+      - 16.0 GB
+    * - Hard Disk
+      - SATA 120GB
+    * - MATLAB
+      - R2017b
+
+The method for benchmarking has been adopted from 
+the file ``ompspeedtest.m`` in the `OMPBOX`_ 
+package by Ron Rubinstein.
+
+We compare following algorithms:
+
+* Batch OMP in OMPBOX.
+* Our C version in `sparse-plex`_.
+
+
+The work load consists of a Gaussian dictionary of
+size :math:`512 \times 1000`.  Sufficient signals
+are chosen so that the benchmarks can run reasonable duration.
+8 sparse representations are constructed for each 
+randomly generated signal in the given dictionary.
+
+::
+
+    Speed summary for 178527 signals, dictionary size 512 x 1000:
+    Call syntax        Algorithm               Total time
+    --------------------------------------------------------
+    OMP(D,X,G,T)                     Batch-OMP               60.83 seconds
+    OMP(DtX,G,T)                     Batch-OMP with DTX    12.73 seconds
+    SPX-Batch-OMP(D, X, G, [], T)    SPX-Batch-OMP           19.78 seconds
+    SPX-Batch-OMP([], [], G, Dtx, T) SPX-Batch-OMP DTX      7.25 seconds
+    Gain SPX/OMPBOX without DTX 3.08
+    Gain SPX/OMPBOX with DTX 1.76
+
+
+Our implementation is up to 3 times faster on this large 
+workload.
+
+The benchmark generation code is in `ex_fast_batch_omp_speed_test.m`_.
+
+.. _sparse-plex: https://github.com/indigits/sparse-plex
+
+.. _OMPBOX: http://www.cs.technion.ac.il/~ronrubin/software.html
+
+.. _batch_omp.c: https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bfast/private/batch_omp.c
+
+.. _spx.fast.batch_omp: https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bfast/batch_omp.m
+
+.. _ex_fast_batch_omp_speed_test.m: https://github.com/indigits/sparse-plex/blob/master/experiments/fast_batch_omp/ex_fast_batch_omp_speed_test.m
