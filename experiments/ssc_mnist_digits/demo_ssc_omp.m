@@ -1,9 +1,9 @@
 clc;
 close all;
 % initialize the random number generator for repeatability
-rng('shuffle');
+rng('default');
 digit_set = 0:9;
-num_samples_per_digit = 400;
+num_samples_per_digit = 700;
 K = length(digit_set);
 % Number of subspaces
 K = K;
@@ -64,7 +64,8 @@ max(spx.norm.norms_l2_cw(Y - Y2))
 
 rng('default');
 tstart = tic;
-solver = spx.cluster.ssc.SSC_BATCH_OMP(Y, D, K);
+import spx.cluster.ssc.OMP_REPR_METHOD;
+solver = spx.cluster.ssc.SSC_OMP(Y, D, K, 1e-3, OMP_REPR_METHOD.BATCH_FLIPPED_OMP_C);
 solver.Quiet = true;
 clustering_result = solver.solve();
 elapsed_time = toc (tstart);
@@ -91,3 +92,30 @@ fprintf('\n\n');
 Y2 = Y * solver.Representation;
 max(spx.norm.norms_l2_cw(Y - Y2))
 
+
+if 1
+fprintf('Running Chong You Implementation\n');
+rng('default');
+% representation     
+buildRepresentation = @(data) OMP_mat_func(data, D, 1e-3); % second parameter is sparsity
+% spectral clustering       
+genLabel = @(affinity, nCluster) SpectralClustering(affinity, nCluster, 'Eig_Solver', 'eigs');
+R = buildRepresentation(Y);
+R(1:S+1:end) = 0;
+R = cnormalize(R, Inf);
+A = abs(R) + abs(R)';
+% generate label
+%     fprintf('Generate label...\n')
+cluster_labels = genLabel(A, K);          
+comparsion_result = spx.cluster.clustering_error_hungarian_mapping(cluster_labels, true_labels, K);
+clustering_error_perc = comparsion_result.error_perc;
+clustering_acc_perc = 100 - comparsion_result.error_perc;
+spr_stats = spx.cluster.subspace.subspace_preservation_stats(R, cluster_sizes);
+spr_error = spr_stats.spr_error;
+spr_flag = spr_stats.spr_flag;
+spr_perc = spr_stats.spr_perc;
+fprintf('\nclustering error: %0.2f %% , clustering accuracy: %0.2f %%\n, mean spr error: %0.4f preserving : %0.2f %%\n',...
+    clustering_error_perc, clustering_acc_perc,...
+    spr_stats.spr_error, spr_stats.spr_perc);
+fprintf('\n\n');
+end
