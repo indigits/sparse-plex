@@ -154,8 +154,10 @@ methods(Static)
         [m, ~] = size(W);
         num_nodes = m; 
         % degree matrix
-        degree_vec = full(sum(W));
-        W2 = bsxfun(@rdivide, W, degree_vec + eps);
+        % degree_vec = full(sum(W));
+        % W2 = bsxfun(@rdivide, W, degree_vec + eps);
+        % following is a shortcut to compute D^{-1} W
+        W2 = spx.norm.normalize_l1(W)';
         [Kernel, ~] = eigs(W2, num_clusters, 'LR');
         % We need to normalize the rows of kernel
         Kernel = spx.norm.normalize_l2_rw(Kernel);
