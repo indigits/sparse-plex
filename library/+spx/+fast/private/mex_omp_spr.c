@@ -9,26 +9,31 @@
 const char* func_name = "mex_omp_spr";
 
 #define Y_IN prhs[0]
-#define K_IN prhs[1]
-#define EPS_IN prhs[2]
-#define SPARSE_IN prhs[3]
+#define Y_NORMALIZED_IN prhs[1]
+#define K_IN prhs[2]
+#define EPS_IN prhs[3]
+#define SPARSE_IN prhs[4]
 
 #define C_OUT plhs[0]
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
     // Initialize input arguments
+    // Unnormalized dataset
     double *m_dataset = 0;
+    // Normalized dataset as dictionary
+    double *m_dict = 0;
     mwSize M = 0;
     mwSize S = 0;
     mwSize K = 0;
     double res_norm_bnd = 0;
     int sparse_output = 0;
     // Verify number of arguments
-    check_num_input_args(nrhs, 2, 4);
+    check_num_input_args(nrhs, 3, 5);
     check_num_output_args(nlhs, 0,1);
 
     check_is_double_matrix(Y_IN, func_name, "Y");
+    check_is_double_matrix(Y_NORMALIZED_IN, func_name, "Y_normalized");
     check_is_double_scalar(K_IN,  func_name, "K");
     // Read the value of K
     K = (int)(mxGetScalar(K_IN) + 1e-2);
@@ -46,6 +51,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     }else{
         error_msg(func_name, "Data set is empty.");
     }
+    if (!mxIsEmpty(Y_NORMALIZED_IN)){
+        m_dict = mxGetPr(Y_NORMALIZED_IN);
+    }else{
+        error_msg(func_name, "Normalized data set is empty.");
+    }
     if (m_dataset){
         // Number of signal space dimension
         M = mxGetM(Y_IN);
@@ -56,6 +66,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         error_msg(func_name, "No signals for sparse coding.");
     }
     // Create Sparse Representation matrix
-    C_OUT = omp_spr(m_dataset, M, S, K, res_norm_bnd, sparse_output);
+    C_OUT = omp_spr(m_dataset, m_dict, M, S, K, res_norm_bnd, sparse_output);
 }
 

@@ -14,6 +14,7 @@
 #define SPR_DEBUG 1
 
 mxArray* omp_spr(double *m_dataset, // Dataset
+    double *m_dict, // Normalized dataset
     mwSize M, // Data dimension
     mwSize S, // Number of signals
     mwSize K, // Sparsity level
@@ -77,9 +78,11 @@ mxArray* omp_spr(double *m_dataset, // Dataset
     mwIndex new_atom_index;
 
     // counters
-    int i, j , k, s;
+    int i, j , k, s, ii;
     // misc variables 
     double d1, d2;
+    // information about any low rank issues in DGELS
+    mwSignedIndex info;
 
     // Maximum number of columns to be used in representations
     mwSize max_cols;
@@ -138,7 +141,7 @@ mxArray* omp_spr(double *m_dataset, // Dataset
     // Loop over signals
     for (s=0; s < S; ++s){
         // Current data point
-        wv_x = m_dataset + M*s;
+        wv_x = m_dict + M*s;
         // By default, there is no need to track the residual norm
         // since data points are unit norm, hence residual norm
         // is initialized to 1.
@@ -181,7 +184,7 @@ mxArray* omp_spr(double *m_dataset, // Dataset
             selected_atoms[k] = new_atom_index;
             selected_atoms_mask[new_atom_index] = 1;
             // Copy  the new atom in subdictionary
-            wv_new_atom = m_dataset + new_atom_index*M;
+            wv_new_atom = m_dict + new_atom_index*M;
             copy_vec_vec(wv_new_atom, m_subdict+k*M, M);
             // Cholesky update
             if (k == 0){
@@ -207,8 +210,10 @@ mxArray* omp_spr(double *m_dataset, // Dataset
             }
             // It is time to increase the count of selected atoms
             ++k;
-            // We will now solve the equation L L' alpha_I = p_I
-            vec_extract(v_proxy, selected_atoms, v_t1, k);
+            // We will now solve the equation L L' alpha_I = b
+            // Compute b = Phi_I^T y
+            mult_mat_t_vec(1, m_subdict, wv_x, v_t1, M, k);
+            // vec_extract(v_proxy, selected_atoms, v_t1, k);
             //spd_chol_lt_solve(m_lt, v_t1, v_z, lrows, k);
             spd_chol_lt_solve2(m_lt, v_t1, v_z, v_t2, lrows, k);
             // spd_lt_trtrs(m_lt, v_t1, lrows, k);
@@ -233,7 +238,23 @@ mxArray* omp_spr(double *m_dataset, // Dataset
     #if SPR_DEBUG
         //mexPrintf("%d: %d, \n.", s, k);
     #endif
-
+        // Solve the LS problem again
+        // Build the sub dictionary from the dataset
+        for (i=0; i<k; ++i){
+            new_atom_index = selected_atoms[i];
+            wv_new_atom = m_dataset + new_atom_index*M;
+            copy_vec_vec(wv_new_atom, m_subdict+i*M, M);
+        }
+        // The signal whose representation is to be constructed.
+        wv_x = m_dataset + M*s;
+        copy_vec_vec(wv_x, v_z, M);
+        // Solving the least squares problem using QR through DGELS
+        info = ls_qr_solve(m_subdict, v_z, M, k);
+        if (info > 0) {
+             mexPrintf( "The diagonal element %i of the triangular factor ", info );
+             mexPrintf( "of A is zero, so that A does not have full rank;\n" );
+        }
+        // The solution coefficients are stored in v_z
         if(sparse_output == 0){
             // Write the output vector
             wv_alpha =  m_alpha + S*s;   

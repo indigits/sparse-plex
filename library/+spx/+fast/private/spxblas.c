@@ -16,6 +16,7 @@ Some useful references:
 #if !defined(_WIN32)
 #define dgemm dgemm_
 #define dgemv dgemv_
+#define dgels dgels_
 #endif
 
 
@@ -477,6 +478,31 @@ void spd_lt_trtrs_multi(const double L[],
 }
 
 
+mwSignedIndex ls_qr_solve(double A[],
+    double b[],
+    mwSize m, mwSize n) {
+
+
+    mwSignedIndex lda = m;
+    mwSignedIndex ldb = m;
+    mwSignedIndex nrhs = 1;
+    mwSignedIndex info = 0;    
+    char trans = 'N';
+    double wkopt;
+    double* work = 0;
+    mwSignedIndex lwork;
+
+    /* Query and allocate the optimal workspace */
+    lwork = -1;
+    dgels(&trans, &m, &n, &nrhs, A, &lda, b, &ldb, &wkopt, &lwork, &info);
+    lwork = (mwSignedIndex) wkopt;
+    work = mxMalloc(lwork*sizeof(double));
+    // Solve the linear equation
+    dgels(&trans, &m, &n, &nrhs, A, &lda, b, &ldb, work, &lwork, &info);
+    // Free the workspace
+    mxFree(work);
+    return info;
+}
 
 
 /********************************************

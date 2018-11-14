@@ -108,6 +108,7 @@ representations of a dataset
 using standard OMP with Cholesky acceleration.
 */
 mxArray* omp_spr(double *m_dataset, // Dataset
+    double *m_dict, // Normalized dataset
     mwSize M, // Data dimension
     mwSize S, // Number of signals
     mwSize K, // Sparsity level

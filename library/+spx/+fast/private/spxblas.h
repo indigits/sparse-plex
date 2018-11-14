@@ -314,6 +314,19 @@ void spd_lt_trtrs_multi(const double L[],
 
 
 /********************************************
+* Least Square Problems
+*
+*********************************************/
+
+/**
+Solves the least square problem A x = b
+*/
+mwSignedIndex ls_qr_solve(double A[],
+    double b[],
+    mwSize m, mwSize n);
+
+
+/********************************************
 * Matrix matrix operations
 *
 *********************************************/
