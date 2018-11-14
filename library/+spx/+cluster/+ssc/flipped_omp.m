@@ -6,7 +6,7 @@ function [representations, iterations] = flipped_omp(data_matrix, nk, threshold,
         quiet = false;
     end
     % Computes sparse representations of the data vectors
-    data_matrix = spx.norm.normalize_l2(data_matrix);
+    dictionary = spx.norm.normalize_l2(data_matrix);
     %data_matrix = data_matrix2;
     % Number of data vectors
     ns = size(data_matrix, 2);
@@ -20,7 +20,7 @@ function [representations, iterations] = flipped_omp(data_matrix, nk, threshold,
     % in this vector
     termination_vector = nk * ones(ns, 1);
     % the normalized data is the starting point of vector
-    residual_matrix  = data_matrix;
+    residual_matrix  = dictionary;
     for iter=1:nk
         if ~quiet 
             fprintf('.');
@@ -42,11 +42,11 @@ function [representations, iterations] = flipped_omp(data_matrix, nk, threshold,
                 if termination_vector(s) == nk
                     % this vector requires more iterations.
                     % pick the vector
-                    x = data_matrix(:, s);
+                    x = dictionary(:, s);
                     % pick support for this vector
                     support_set = support_sets(s, 1:iter);
                     % pick atoms
-                    submatrix = data_matrix(:, support_set);
+                    submatrix = dictionary(:, support_set);
                     % solve the least squares problem
                     r = x - submatrix * (submatrix \ x);
                     % put the new residual into residual matrix
