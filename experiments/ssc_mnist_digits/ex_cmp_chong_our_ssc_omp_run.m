@@ -8,6 +8,7 @@ rnorm_thr = 1e-3;
 method = spx.cluster.ssc.OMP_REPR_METHOD.CLASSIC_OMP_C;
 method = spx.cluster.ssc.OMP_REPR_METHOD.BATCH_OMP_C;
 method = spx.cluster.ssc.OMP_REPR_METHOD.FLIPPED_OMP_MATLAB;
+method = spx.cluster.ssc.OMP_REPR_METHOD.BATCH_FLIPPED_OMP_MATLAB;
 solver = spx.cluster.ssc.SSC_OMP(Y, D, K, rnorm_thr, method);
 clustering_result = solver.solve();
 elapsed_time = toc (tstart);

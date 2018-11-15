@@ -8,7 +8,7 @@ function representations = batch_flipped_omp(data_matrix, nk, threshold, quiet)
     % Number of data vectors
     ns = size(data_matrix, 2);
     % Computes sparse representations of the data vectors
-    data_matrix = spx.norm.normalize_l2(data_matrix);
+    dictionary = spx.norm.normalize_l2(data_matrix);
     % support set for each vector [one row for each vector]
     support_sets = ones(ns, nk);
     % termination vector
@@ -19,9 +19,10 @@ function representations = batch_flipped_omp(data_matrix, nk, threshold, quiet)
     % in this vector
     termination_vector = nk * ones(ns, 1);
     % gram matrix
-    gram_matrix = data_matrix' * data_matrix;
+    gram_matrix = dictionary' * dictionary;
     % initialize the correlation matrix
-    correlation_matrix = abs(gram_matrix);
+    y_gram_matrix = data_matrix' * dictionary;
+    correlation_matrix = abs(y_gram_matrix);
     prev_delta = zeros(1, ns);
     % Initialization of residual norms
     res_norm_sqr = ones(1, ns);
@@ -44,17 +45,18 @@ function representations = batch_flipped_omp(data_matrix, nk, threshold, quiet)
                     % pick support for this vector
                     support_set = support_sets(s, 1:iter);
                     h0 = gram_matrix(:,s);
-                    h0lamba = h0(support_set);
+                    h0lambda = h0(support_set);
 
                     % pick gram submatrix
                     submatrix = gram_matrix(:, support_set);
                     sub_submatrix = submatrix(support_set, :);
-                    z = sub_submatrix \ h0lamba;
-                    beta = submatrix * z;
-                    h = h0 - beta;
+                    z = sub_submatrix \ h0lambda;
+                    beta_1 = submatrix * z;
+                    beta_2 = y_gram_matrix(:, support_set) * z;
+                    h = y_gram_matrix(:, s) - beta_2;
                     % put the new correlations into correlation matrix
                     correlation_matrix(:, s) = abs(h);
-                    delta = z' * beta(support_set);
+                    delta = z' * beta_1(support_set);
                     res_norm_sqr(s) = res_norm_sqr(s) - delta + prev_delta(s);
                     prev_delta(s) = delta;
                     if res_norm_sqr(s) < threshold
