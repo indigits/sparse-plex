@@ -11,7 +11,7 @@ spr_error_mat = zeros(1, nns);
 
 for ns=1:nns
     num_samples_per_digit = num_samples_per_digit_arr(ns);
-    filepath = sprintf('bin/solver_name_%s_digits=%d.mat', solver_name, num_samples_per_digit);
+    filepath = sprintf('bin/%s_digits=%d.mat', solver_name, num_samples_per_digit);
     load(filepath);
     results{ns} = result;
     clustering_acc_perc_mat(ns) = result.clustering_acc_perc;

@@ -45,7 +45,7 @@ for r=1:R
     [Y, true_labels] = md.selected_samples(sample_list);
     % disp(Y(1:10, 1)');
     % Perform PCA to reduce dimensionality
-    Y = spx.la.pca.low_rank_approx(Y, 100);
+    Y = spx.la.pca.low_rank_approx(Y, 500);
     %spx.norm.norms_l2_cw(Y)
     % disp(Y(1:10, 1)');
     % Ambient space dimension and number of data points

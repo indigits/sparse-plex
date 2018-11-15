@@ -16,7 +16,7 @@ for ns=1:nns
         solver_name = sprintf('ssc_mc_omp_%s', config.name);
         fprintf('Simulating: %s, for %d samples per digit\n', solver_name, num_samples_per_digit);
         result = check_digits(md, num_samples_per_digit, @ssc_mc_omp, solver_name, config);
-        filepath = sprintf('bin/solver_name_%s_digits=%d.mat', solver_name, num_samples_per_digit);
+        filepath = sprintf('bin/%s_digits=%d.mat', solver_name, num_samples_per_digit);
         save(filepath, 'result');
     end
 end

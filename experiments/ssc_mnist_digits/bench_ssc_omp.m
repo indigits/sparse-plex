@@ -8,7 +8,7 @@ for ns=1:nns
     num_samples_per_digit = num_samples_per_digit_arr(ns);
     fprintf('Simulating: %s, for %d samples per digit\n', solver_name, num_samples_per_digit);
     result = check_digits(md, num_samples_per_digit, @ssc_omp, solver_name);
-    filepath = sprintf('bin/solver_name_%s_digits=%d.mat', solver_name, num_samples_per_digit);
+    filepath = sprintf('bin/%s_digits=%d.mat', solver_name, num_samples_per_digit);
     save(filepath, 'result');
 end
 
