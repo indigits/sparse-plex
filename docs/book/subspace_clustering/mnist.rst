@@ -124,7 +124,7 @@ We will work on all the digits::
 
 Number of samples for each digit::
 
-    num_samples_per_digit = 200;
+    num_samples_per_digit = 400;
 
 
 Number of clusters or corresponding low dimensional
@@ -172,7 +172,7 @@ to 500::
 ::
 
     Performing PCA
-    Time taken in PCA 4.21 seconds
+    Time taken in PCA 17.69 seconds
 
 The ambient space dimension M and the
 number of data vectors S::
@@ -185,7 +185,7 @@ with orthogonal matching pursuit::
     tstart = tic;
     fprintf('Performing SSC OMP\n');
     import spx.cluster.ssc.OMP_REPR_METHOD;
-    solver = spx.cluster.ssc.SSC_OMP(Y, D, K, 1e-3, OMP_REPR_METHOD.BATCH_FLIPPED_OMP_C);
+    solver = spx.cluster.ssc.SSC_OMP(Y, D, K, 1e-3, OMP_REPR_METHOD.FLIPPED_OMP_MATLAB);
     solver.Quiet = true;
     clustering_result = solver.solve();
     elapsed_time = toc (tstart);
@@ -194,7 +194,7 @@ with orthogonal matching pursuit::
 ::
 
     Performing SSC OMP
-    Time taken in SSC-OMP 1.67 seconds
+    Time taken in SSC-OMP 10.54 seconds
 
 Let's collect the statistics related to
 clustering error and subspace preserving
@@ -221,10 +221,10 @@ representations error::
     fprintf('\n\n');
 
 
-:: 
+Results :: 
 
     Measuring clustering error and accuracy
 
-    clustering error: 10.00 % , clustering accuracy: 90.00 %
-    , mean spr error: 0.3630 preserving : 0.00 %
-    , connectivity: -1.00, elapsed time: 1.67 sec
+    clustering error: 6.42 % , clustering accuracy: 93.58 %
+    , mean spr error: 0.3404 preserving : 0.00 %
+    , connectivity: -1.00, elapsed time: 10.54 sec

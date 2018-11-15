@@ -1,11 +1,15 @@
 clc;
 close all;
+if ~exist('md', 'var')
+    clear all;
+    md = spx.data.image.ChongMNISTDigits;
+end
 % initialize the random number generator for repeatability
 rng('default');
 digit_set = 0:9;
 fprintf('Digit set: ');
 spx.io.print.vector(digit_set, 0);
-num_samples_per_digit = 200;
+num_samples_per_digit = 400;
 K = length(digit_set);
 fprintf('Selecting data subset\n');
 cluster_sizes = num_samples_per_digit*ones(1, K);
@@ -34,7 +38,7 @@ rng('default');
 tstart = tic;
 fprintf('Performing SSC OMP\n');
 import spx.cluster.ssc.OMP_REPR_METHOD;
-solver = spx.cluster.ssc.SSC_OMP(Y, D, K, 1e-3, OMP_REPR_METHOD.BATCH_FLIPPED_OMP_C);
+solver = spx.cluster.ssc.SSC_OMP(Y, D, K, 1e-3, OMP_REPR_METHOD.FLIPPED_OMP_MATLAB);
 solver.Quiet = true;
 clustering_result = solver.solve();
 elapsed_time = toc (tstart);
