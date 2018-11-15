@@ -77,6 +77,27 @@ void vec_set_value(double x[], double value, mwSize n){
     }
 }
 
+void vec_elt_wise_sqrt(const double x[], double y[], mwSize n){
+    int i;
+    for(i=0;i<n;++i){
+        y[i] = sqrt(x[i]);
+    }
+}
+
+void vec_elt_wise_inv(const double x[], double y[], mwSize n){
+    int i;
+    for(i=0;i<n;++i){
+        double value = x[i];
+        if (value) {
+            y[i] =  1/value;    
+        } else{
+            y[i] = 0;
+        }
+    }
+
+}
+
+
 
 /********************************************
 * One matrix operations
@@ -162,8 +183,63 @@ void mat_row_asum(const double A[], double v[], mwSize m, mwSize n){
     }
 }
 
+void mat_element_wise_sqr(double A[], mwSize m, mwSize n){
+    mwSize l = m*n;
+    for(mwSignedIndex i=0; i < l; ++i){
+        A[i] = SQR(A[i]);
+    }
+}
 
+void mat_col_sum_sqr(const double A[], double v[], mwSize m, mwSize n){
+    const double* a = A;
+    mwSignedIndex  inc = 1;
+    mwSignedIndex  mm = m;
+    for (int c=0; c < n; ++c){
+        double sum = 0;
+        for (int r=0; r < m; ++r){
+            sum += SQR(a[r]);
+        }
+        v[c] = sum;
+        a += m; 
+    }
+}
 
+void mat_col_norms(const double A[], double v[], mwSize m, mwSize n){
+    mat_col_sum_sqr(A, v, m, n);
+    vec_elt_wise_sqrt(v, v, n);
+}
+
+void mat_col_scale(double A[], const double v[], mwSize m, mwSize n){
+    double* a = A;
+    mwSignedIndex  inc = 1;
+    mwSignedIndex  mm = m;
+    for (int c=0; c < n; ++c){
+        dscal(&m, v + c, a, &inc);
+        a += m;
+    }
+}
+
+void mat_row_scale(double A[], const double v[], mwSize m, mwSize n){
+    double* a = A;
+    mwSignedIndex  inc = m;
+    mwSignedIndex nn = n;
+    for (int r=0; r < m; ++r){
+        dscal(&nn, v + r, a, &inc);
+        a += 1;
+    }
+}
+
+void mat_col_normalize(double A[], mwSize m, mwSize n){
+    double *v;
+    v = mxMalloc(n*sizeof(double));
+    // Compute the norms
+    mat_col_norms(A, v, m, n);
+    // Inverse the norms
+    vec_elt_wise_inv(v, v, n);
+    // Scale by norms
+    mat_col_scale(A, v, m, n);
+    mxFree(v);
+}
 
 /********************************************
 * Vector vector operations

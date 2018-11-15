@@ -61,6 +61,17 @@ Set same value to all entries in vector
 */
 void vec_set_value(double x[], double value, mwSize n);
 
+/**
+Element wise square root
+*/
+void vec_elt_wise_sqrt(const double x[], double y[], mwSize n);
+
+/**
+Element wise inverse
+*/
+void vec_elt_wise_inv(const double x[], double y[], mwSize n);
+
+
 /********************************************
 * One matrix operations
 *
@@ -94,6 +105,37 @@ void mat_col_asum(const double A[], double v[], mwSize m, mwSize n);
 Absolute sum over rows of a matrix
 */
 void mat_row_asum(const double A[], double v[], mwSize m, mwSize n);
+
+
+/**
+Square the values in a matrix
+*/
+void mat_element_wise_sqr(double A[], mwSize m, mwSize n);
+
+/**
+Sum  squared over columns of a matrix
+*/
+void mat_col_sum_sqr(const double A[], double v[], mwSize m, mwSize n);
+
+/**
+Column wise norm of a matrix
+*/
+void mat_col_norms(const double A[], double v[], mwSize m, mwSize n);
+
+/**
+Scale each column of a matrix by a given value
+*/
+void mat_col_scale(double A[], const double v[], mwSize m, mwSize n);
+
+/**
+Scale each row of a matrix by a given value
+*/
+void mat_row_scale(double A[], const double v[], mwSize m, mwSize n);
+
+/**
+Normalize the columns of a matrix
+*/
+void mat_col_normalize(double A[], mwSize m, mwSize n);
 
 
 /********************************************
