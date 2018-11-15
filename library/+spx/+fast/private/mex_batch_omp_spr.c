@@ -5,6 +5,8 @@
 #include "spxblas.h"
 #include "omp.h"
 
+const char* func_name = "mex_bach_omp_spr";
+
 
 #define Y_IN prhs[0]
 #define K_IN prhs[1]
@@ -26,16 +28,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     check_num_input_args(nrhs, 2, 4);
     check_num_output_args(nlhs, 0,1);
 
-    check_is_double_matrix(Y_IN, "mex_batch_omp_spr", "D");
-    check_is_double_scalar(K_IN,  "mex_batch_omp_spr", "K");
+    check_is_double_matrix(Y_IN, func_name, "Y");
+    check_is_double_scalar(K_IN,  func_name, "K");
     // Read the value of K
     K = (int)(mxGetScalar(K_IN) + 1e-2);
     if (nrhs > 2){
-        check_is_double_scalar(EPS_IN,  "mex_batch_omp_spr", "eps");
+        check_is_double_scalar(EPS_IN,  func_name, "eps");
         res_norm_bnd  = mxGetScalar(EPS_IN);
     }
     if (nrhs > 3){
-        check_is_double_scalar(SPARSE_IN, "mex_batch_omp_spr","sparse");
+        check_is_double_scalar(SPARSE_IN, func_name,"sparse");
         sparse_output = (int) mxGetScalar(SPARSE_IN);
     }
     // Check an argument for empty matrix before taking it.
