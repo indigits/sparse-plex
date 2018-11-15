@@ -265,7 +265,7 @@ below.
 The inputs are
 
 * The Gram matrix :math:`G = \Phi^T \Phi`.
-* The initial correlation vector :math:`\bar(h) = \Phi^T \bar{y}`.
+* The initial correlation vector :math:`\bar{h} = \Phi^T \bar{y}`.
 * The squared norm :math:`\epsilon^0` of the signal 
   :math:`\bar{y}` whose sparse representation we are
   constructing.
