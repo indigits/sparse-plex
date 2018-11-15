@@ -37,11 +37,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     check_is_double_scalar(K_IN,  func_name, "K");
     // Read the value of K
     K = (int)(mxGetScalar(K_IN) + 1e-2);
-    if (nrhs > 2){
+    if (nrhs > 3){
         check_is_double_scalar(EPS_IN,  func_name, "eps");
         res_norm_bnd  = mxGetScalar(EPS_IN);
     }
-    if (nrhs > 3){
+    if (nrhs > 4){
         check_is_double_scalar(SPARSE_IN, func_name,"sparse");
         sparse_output = (int) mxGetScalar(SPARSE_IN);
     }
