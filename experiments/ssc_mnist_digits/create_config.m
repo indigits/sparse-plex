@@ -1,5 +1,5 @@
-function result = create_config(BranchingFactor, MaxCandidatesToRetain, name)
-    result.BranchingFactor = BranchingFactor;
-    result.MaxCandidatesToRetain = MaxCandidatesToRetain;
+function result = create_config(branching_factor, max_candidates_to_retain, name)
+    result.branching_factor = branching_factor;
+    result.max_candidates_to_retain = max_candidates_to_retain;
     result.name  = name;
 end

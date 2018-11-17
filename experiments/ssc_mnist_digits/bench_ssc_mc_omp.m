@@ -5,7 +5,7 @@ configs{1} = create_config([1 1 1 1 1 1 1 1 1 1], 4, '1-4');
 configs{2} = create_config([2 1 1 1 1 1 1 1 1 1], 4, '2.1-4');
 configs{3} = create_config([4 2 1 1 1 1 1 1 1 1], 4, '42.1-4');
 configs{4} = create_config([2 2 2 2 2 2 2 2 2 2], 4, '2-4');
-num_samples_per_digit_arr = [20 30 40 50 60 70 80 90 100];
+num_samples_per_digit_arr = [50 80 100 150 200 300 400];
 
 nns = numel(num_samples_per_digit_arr);
 nc = numel(configs);

@@ -1,7 +1,7 @@
 function result = ssc_mc_omp(X, D, K, params)
     if nargin < 4
-        params.BranchingFactor = 2;
-        params.MaxCandidatesToRetain = 4;
+        params.branching_factor = 2;
+        params.max_candidates_to_retain = 4;
     end
     rnorm_thr = 1e-3;
     method = spx.cluster.ssc.OMP_REPR_METHOD.MC_OMP;

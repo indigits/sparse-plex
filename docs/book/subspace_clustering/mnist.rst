@@ -247,39 +247,46 @@ Results ::
 SSC-OMP on MNIST Benchmarks
 ------------------------------
 
+The table below reports the performance of SSC-OMP 
+algorithm on MNIST dataset. The data consists of
+randomly chosen number of images for each of the
+10 digits. Scattering network features are extracted
+from the image and they are projected to dimension
+500 using PCA. The images per digit are varied 
+for each experiment from 50 to 400. 
 
 .. list-table::
     :header-rows: 1
 
-    * - Points per Digit
+    * - Images per Digit
       - a%
       - e%
       - t
     * - 50
       - 82.18
-      - 0.42
+      - 42.11
       - 0.36
     * - 80
       - 87.39
-      - 0.40
+      - 39.79
       - 0.81
     * - 100
       - 87.20
-      - 0.39
+      - 38.86
       - 1.11
     * - 150
       - 89.16
-      - 0.37
+      - 37.33
       - 2.02
     * - 200
       - 89.68
-      - 0.36
+      - 36.39
       - 3.25
     * - 300
       - 92.19
-      - 0.35
+      - 35.18
       - 6.27
     * - 400
       - 91.13
-      - 0.34
+      - 34.26
       - 7.07
