@@ -3,6 +3,9 @@
 Principal Angles
 ================================
 
+.. contents:: :local:
+
+
 .. highlight:: matlab
 
 

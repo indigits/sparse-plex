@@ -1,9 +1,9 @@
-
+.. _sec:euclidean_space:
  
 The Euclidean space
 ===================================================
 
-.. _sec:euclidean_space:
+.. contents:: :local:
 
 In this book we will be generally concerned with the Euclidean space :math:`\RR^N`. This section
 summarizes important results for this space.

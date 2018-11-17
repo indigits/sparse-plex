@@ -6,7 +6,8 @@ enumeration
     FLIPPED_OMP_MATLAB
     BATCH_FLIPPED_OMP_MATLAB
     BATCH_FLIPPED_OMP_C
-    GOMP_C 
+    GOMP_C
+    MC_OMP 
 end
 methods
 function result = isClassicOMP_C(self)
@@ -26,6 +27,9 @@ function result = isBatchFlippedOMP_C(self)
 end
 function result = isGOMP_C(self)
     result = (self == spx.cluster.ssc.OMP_REPR_METHOD.GOMP_C);
+end
+function result = isMC_OMP(self)
+    result = (self == spx.cluster.ssc.OMP_REPR_METHOD.MC_OMP);
 end
 end
 end

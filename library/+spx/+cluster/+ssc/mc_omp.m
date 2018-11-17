@@ -1,4 +1,4 @@
-function [R, details] = mc_omp(data_matrix, nk, threshold, options)
+function [representations, details] = mc_omp(data_matrix, nk, threshold, options)
     if nargin < 4
         options = struct;
     end
@@ -7,6 +7,9 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
     end
     if ~isfield(options, 'max_candidates_to_retain')
         options.max_candidates_to_retain = 10;
+    end
+    if ~isfield(options, 'quiet')
+        options.quiet = true;
     end
     % Computes sparse representations of the data vectors
     dict = spx.norm.normalize_l2(data_matrix);
@@ -47,7 +50,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
     num_total_candidates = sum(num_candidate_list);
     candidate_supports = [];
     candidate_ids = [];
-    candidate_residuals = data_matrix;
+    candidate_residuals = dict;
     residual_norms = [];
     % the sorted index matrix for the inner products of data with candidate residuals
     sorted_index_matrix = [];
@@ -58,7 +61,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
 
     function [r, r_norm] = compute_residual(x, support_set)
         % pick atoms
-        submatrix = data_matrix(:, support_set);
+        submatrix = dict(:, support_set);
         % solve the least squares problem
         r = x - submatrix * (submatrix \ x);
         % residual norm
@@ -80,7 +83,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
         for s=1:ns
             % this vector requires more iterations.
             % pick the vector
-            x = data_matrix(:, s);
+            x = dict(:, s);
             cand_start = cand_starts(s);
             cand_end = cand_ends(s);
             if termination_vector(s) 
@@ -131,6 +134,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
             [sorted_norms, norm_indices] = sort(r_norms);
             min_norm = sorted_norms(1);
             if min_norm <= threshold
+                % The residual norm has come below the target
                 % this vector processing is complete
                 retained = norm_indices(1);
                 % processing for this vector is completed
@@ -454,7 +458,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
     filter_candidates();
     % print_processing_status;
     for iter=2:nk
-        if ~self.Quiet 
+        if ~options.quiet 
             fprintf('.');
         end
         bf = bfs(iter);
@@ -479,7 +483,7 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
             break;
         end
     end
-    if ~self.Quiet 
+    if ~options.quiet 
         fprintf('\n');
     end
 
@@ -578,12 +582,12 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
             coeff_norms = zeros(1, nc);
             coeff_mat = zeros(k, nc);
             local_r_norms = zeros(1, nc);
-            x = self.Data(:, s);
+            x = data_matrix(:, s);
             for c=1:nc
                 cc = c+cs-1;
                 candidate_support = candidate_supports(1:k, cc);
                 % pick atoms from the unnormalized data matrix
-                submatrix = self.Data(:, candidate_support);
+                submatrix = data_matrix(:, candidate_support);
                 % solve the least squares problem
                 coeff = submatrix \ x;
                 coeff_mat(:, c) = coeff;
@@ -625,6 +629,6 @@ function [R, details] = mc_omp(data_matrix, nk, threshold, options)
     % the column_indices contains the column number
     % the values contains the value of the non-zero entry
     % ns, ns is the size of the sparse matrix.
-    self.Representation = sparse( support_sets(:), column_indices(:), coefficients_matrix(:), ns, ns);
-    self.Iterations = num_iterations_vec;
+    representations = sparse( support_sets(:), column_indices(:), coefficients_matrix(:), ns, ns);
+    details.iterations = num_iterations_vec;
 end

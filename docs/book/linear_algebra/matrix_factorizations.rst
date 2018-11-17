@@ -3,6 +3,8 @@
 Matrix Factorizations
 ----------------------------------------------------
 
+.. contents:: :local:
+
 
  
 Singular Value Decomposition

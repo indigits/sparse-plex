@@ -1,3 +1,5 @@
+.. _sec:sc:ssc:mnist:
+
 Sparse Subspace Clustering with MNIST Digits
 =============================================
 
@@ -5,6 +7,9 @@ Sparse Subspace Clustering with MNIST Digits
 
 In this section, we discuss using SSC algorithms on
 MNIST dataset. 
+
+.. contents::
+    :local:
 
 MNIST dataset :cite:`lecun1998gradient` contains
 gray scale images of handwritten digits 0-9. The 
@@ -16,6 +21,12 @@ The feature vector is translation invariant and
 deformation stable. Each feature vector is of
 length :math:`3,472`. The feature vectors are available
 `here <https://www.kaggle.com/shailesh1729/mnist-digits-scattering-transform>`_.
+
+.. _sec:sc:ssc:mnist:dataset:
+
+MNIST Dataset
+----------------------------------------------------
+
 
 Please download the file ``MNIST_SC.mat``
 and place it in ``sparse-plex/data/mnist`` directory.
@@ -110,6 +121,7 @@ along with the labels as follows::
 
          5     4     3     6
 
+.. _sec:sc:ssc:mnist:ssc-omp:
 
 SSC-OMP on MNIST Dataset
 --------------------------------
@@ -228,3 +240,46 @@ Results ::
     clustering error: 6.42 % , clustering accuracy: 93.58 %
     , mean spr error: 0.3404 preserving : 0.00 %
     , connectivity: -1.00, elapsed time: 10.54 sec
+
+
+.. _sec:sc:ssc:mnist:benchmark:
+
+SSC-OMP on MNIST Benchmarks
+------------------------------
+
+
+.. list-table::
+    :header-rows: 1
+
+    * - Points per Digit
+      - a%
+      - e%
+      - t
+    * - 50
+      - 82.18
+      - 0.42
+      - 0.36
+    * - 80
+      - 87.39
+      - 0.40
+      - 0.81
+    * - 100
+      - 87.20
+      - 0.39
+      - 1.11
+    * - 150
+      - 89.16
+      - 0.37
+      - 2.02
+    * - 200
+      - 89.68
+      - 0.36
+      - 3.25
+    * - 300
+      - 92.19
+      - 0.35
+      - 6.27
+    * - 400
+      - 91.13
+      - 0.34
+      - 7.07

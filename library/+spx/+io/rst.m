@@ -4,13 +4,13 @@ properties
 end
 
 methods(Static)
-    function print_list_table_from_matrix(data, headers)
+    function print_list_table(data, headers)
         if ~iscell(data)
             data = num2cell(data);
         end
         [rows, cols] = size(data);
         fprintf('.. list-table::\n');
-        fprintf('  :header-rows: 1\n');
+        fprintf('    :header-rows: 1\n\n');
         if nargin > 1
             % headers are to be printed
             for c=1:cols
@@ -52,8 +52,8 @@ methods(Static)
         end
     end
 
-    function printDataTable(tbl)
-        spx.io.latex.printTabular(tbl, tbl.Properties.VariableNames)
+    function print_data_table(tbl)
+        spx.io.rst.print_list_table(tbl, tbl.Properties.VariableNames)
     end
 end
 

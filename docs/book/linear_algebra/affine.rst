@@ -5,6 +5,8 @@
 Affine Subspaces Review
 ----------------------------------------------------
 
+.. contents:: :local:
+
 For a detailed introduction to affine concepts,
 see :cite:`kelly1979geometry`.
 For a vector :math:`v \in \RR^n`, the function :math:`f` defined

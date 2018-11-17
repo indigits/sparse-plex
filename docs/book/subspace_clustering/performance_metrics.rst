@@ -3,6 +3,10 @@
 Performance Metrics for Sparse Subspace Clustering
 ===================================================
 
+
+.. contents:: :local:
+
+
 Consider a sparse representation matrix :math:`C`
 where each signal has been represented in terms
 of other signals. With :math:`S` signals, the

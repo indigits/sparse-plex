@@ -3,6 +3,12 @@ SSC by Basis Pursuit
 
 .. highlight:: matlab
 
+
+.. contents::
+    :local:
+
+
+
 Hands-on SSC-BP with Synthetic Data
 ---------------------------------------
 

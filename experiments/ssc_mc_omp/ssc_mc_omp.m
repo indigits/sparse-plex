@@ -3,11 +3,12 @@ function result = ssc_mc_omp(X, D, K, params)
         params.BranchingFactor = 2;
         params.MaxCandidatesToRetain = 4;
     end
-    solver = spx.cluster.ssc.SSC_MC_OMP(X, D, K);
-    solver.BranchingFactor = params.BranchingFactor;
-    solver.MaxCandidatesToRetain = params.MaxCandidatesToRetain;
-    fprintf('candidates: %d, bf: ', solver.MaxCandidatesToRetain);
-    fprintf('%d ', solver.BranchingFactor);
+    rnorm_thr = 1e-3;
+    method = spx.cluster.ssc.OMP_REPR_METHOD.MC_OMP;
+    solver = spx.cluster.ssc.SSC_OMP(X, D, K, rnorm_thr, method);
+    solver.RepSolverOptions = params;
+    fprintf('candidates: %d, bf: ', params.max_candidates_to_retain);
+    fprintf('%d ', params.branching_factor);
     fprintf('\n');
     result = solver.solve();
 end

@@ -4,6 +4,8 @@
 N dimensional complex space
 ===================================================
 
+.. contents:: :local:
+
 
 In this section we review important features of N dimensional
 complex vector space :math:`\CC^N`. 

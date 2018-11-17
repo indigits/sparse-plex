@@ -3,6 +3,8 @@ classdef SSC_OMP < handle
     properties
         Quiet = false
         RepresentationMethod
+        % Options to be passed on to the solver which is computing the representations
+        RepSolverOptions = struct
     end
 
 
@@ -120,6 +122,12 @@ classdef SSC_OMP < handle
                 nl  = 2;
                 options.verbose = 0;
                 C = spx.fast.gomp_spr(data_matrix, nk, nl, rnorm_thr, options);
+                self.Representation = C;
+            elseif self.RepresentationMethod.isMC_OMP()
+                options = self.RepSolverOptions;
+                options.quiet = quiet;
+                C = spx.cluster.ssc.mc_omp(...
+                    data_matrix, nk, rnorm_thr, options);
                 self.Representation = C;
             else
                 error('Invalid representation method.');

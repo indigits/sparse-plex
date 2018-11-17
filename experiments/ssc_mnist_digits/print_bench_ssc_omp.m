@@ -29,3 +29,7 @@ disp(clustering_acc_perc_mat);
 
 fprintf('Subspace representation error: \n');
 disp(spr_error_mat);
+
+headers = {'Points per Digit', 'a%', 'e%', 't'};
+data = [num_samples_per_digit_arr' clustering_acc_perc_mat' spr_error_mat', elapsed_time_mat'];
+spx.io.rst.print_list_table(data, headers);

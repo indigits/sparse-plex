@@ -3,6 +3,12 @@
 Generalized PCA
 ----------------------------------------------------
 
+
+.. contents::
+    :local:
+
+
+
 Generalized Principal Component Analysis (GPCA)
 is algebraic subspace clustering technique based on 
 polynomial fitting and differentiation 

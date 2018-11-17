@@ -3,6 +3,12 @@
 Motion Segmentation
 ----------------------------------------------------
 
+
+.. contents::
+    :local:
+
+
+
 The theory of structure from motion and motion segmentation
 has evolved over a set of papers 
 :cite:`tomasi1991detection,tomasi1992shape,boult1991factorization,poelman1997paraperspective,gear1998multibody,costeira1998multibody,kanatani2001motion`. 

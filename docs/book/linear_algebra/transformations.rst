@@ -1,6 +1,8 @@
 Linear transformations
 ===================================================
 
+.. contents:: :local:
+
 
 In this section, we will be using symbols 
 :math:`\VV` and :math:`\WW` to represent arbitrary vector spaces 

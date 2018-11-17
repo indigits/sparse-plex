@@ -1,6 +1,11 @@
 Synthetic Data Generation
 ================================
 
+
+.. contents:: :local:
+
+
+
 .. highlight:: matlab
 
 .. _sec:sc:synthetic:random-subspaces:

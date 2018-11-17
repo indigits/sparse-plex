@@ -3,6 +3,8 @@
 Notation and problem formulation
 ===================================================
 
+.. contents:: :local:
+
 First some general 
 notation for vectors and matrices.
 For a vector :math:`v \in \RR^n`, its support

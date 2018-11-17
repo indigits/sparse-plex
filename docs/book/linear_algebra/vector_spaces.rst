@@ -1,7 +1,7 @@
-
- 
-Vector spaces
+Vector Spaces
 ===================================================
+
+.. contents:: :local:
 
 
 .. _def:alg:algebraic_structure:
