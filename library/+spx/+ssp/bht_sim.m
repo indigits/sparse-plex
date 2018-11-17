@@ -1,4 +1,4 @@
-classdef SPX_BHTSimulator
+classdef bht_sim
 
     methods(Static)
 

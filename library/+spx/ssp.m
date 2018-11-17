@@ -1,4 +1,4 @@
-classdef SPX_SSP
+classdef ssp
 
     methods(Static)
 

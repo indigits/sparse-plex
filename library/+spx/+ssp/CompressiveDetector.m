@@ -1,4 +1,4 @@
-classdef SPX_CompressiveDetector < handle
+classdef CompressiveDetector < handle
 
     properties
     end
@@ -19,7 +19,7 @@ classdef SPX_CompressiveDetector < handle
     end
 
     methods 
-        function self  = SPX_CompressiveDetector(phi, signal, sigma, expectedPF)
+        function self  = CompressiveDetector(phi, signal, sigma, expectedPF)
             self.Phi  = phi;
             self.Signal = signal;
             self.ExpectedPF = expectedPF;
