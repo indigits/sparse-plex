@@ -1,3 +1,5 @@
+.. _ch:sparse_signal_models:
+
 Sparse Signal Models
 ======================================
 

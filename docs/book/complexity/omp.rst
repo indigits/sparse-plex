@@ -1,12 +1,13 @@
+.. _sec:complexity:omp:
 
- 
 Orthogonal Matching Pursuit
 ===================================================
 
-.. _sec:complexity:omp:
-We are modeling a signal :math:`y \in \RR^M` in a dictionary 
-:math:`\Phi \in \RR^{M \times N}` consisting of :math:`N` atoms as :math:`y = \Phi x + r` where 
-:math:`r` is the approximation error. Our objective is to construct
+We are modeling a signal :math:`y \in \RR^M` in a 
+dictionary :math:`\Phi \in \RR^{M \times N}` 
+consisting of :math:`N` atoms as :math:`y = \Phi x + r` 
+where :math:`r` is the approximation error. 
+Our objective is to construct
 a sparse model :math:`x \in \RR^N`. 
 :math:`\Lambda = \supp(x)` is the set
 of indices on which :math:`x_i` is non-zero. 
@@ -84,11 +85,11 @@ Updating iteration counter takes 1 flop and can
 be ignored.
 
 
+.. _sec:complexity:omp:qr:
  
 Least Squares through  QR Update
 ----------------------------------------------------
 
-.. _sec:complexity:omp:qr:
 Let's come back to the least squares step.
 Assume that :math:`\Phi_{\Lambda^{k-1}}` has a QR decomposition
 :math:`Q_{k-1} R_{k-1}`. Addition of :math:`\phi_{\lambda^{k}}`
@@ -160,7 +161,7 @@ for OMP.
 
 .. _tbl:complexity:omp:qr:steps:
 
-.. code-block:: 
+:: 
 
     \centering
     \caption{Operations in OMP using QR update}
@@ -181,11 +182,11 @@ for OMP.
 
 
 
+.. _sec:complexity:omp:chol:
  
 Least Squares through  Cholesky Update
 ----------------------------------------------------
 
-.. _sec:complexity:omp:chol:
 If the OMP least squares step is computed through Cholesky decomposition,
 then we maintain the Cholesky decomposition of :math:`G = \Phi_{\Lambda}^T \Phi_{\Lambda}`
 as :math:`G = L L^T`. Then
@@ -243,7 +244,7 @@ requires :math:`2k^2` flops.
 
 .. _tbl:complexity:omp:chol:steps:
 
-.. code-block:: 
+:: 
 
     \centering
     \caption{Operations in OMP using Cholesky update}

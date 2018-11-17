@@ -332,7 +332,7 @@ A few remarks are in order.
     :eq:`eq:greedy:omp:general_recovery` which is the desired result.
 
 
- :ref:`here <thm:greedy:omp:general_recovery>` establishes that
+:ref:`This result <thm:greedy:omp:general_recovery>` establishes that
 as long as :eq:`eq:greedy:omp:general_recovery` holds for each of the
 steps from 1 to :math:`K`, OMP will recover a :math:`K` term optimum approximation :math:`x_{\text{opt}}`.
 If :math:`x \in \CC^N` is completely arbitrary, then it may not be possible that 

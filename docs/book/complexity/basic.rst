@@ -184,7 +184,7 @@ flops using Modified Gram-Schmidt algorithm presented in :ref:`here <alg:gram_sc
 
 .. _alg:gram_schmidt:
 
-.. code-block:: 
+:: 
 
     \caption{Modified Gram-Schmidt Algorithm}
 

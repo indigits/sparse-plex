@@ -1,12 +1,7 @@
-Data Sets
-===========================
+Yale Faces Dataset
+============================
 
 .. highlight:: matlab
-
-
-
-Yale Faces Database
------------------------------------
 
 
 Loading the faces::

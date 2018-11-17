@@ -19,6 +19,7 @@ Subspace Clustering
    subspace_clustering/synthetic_data
    subspace_clustering/performance_metrics
    subspace_clustering/mnist
+   subspace_clustering/yale_faces
 
 
 

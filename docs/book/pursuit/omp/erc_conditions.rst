@@ -134,12 +134,13 @@ It is suggested to review the properties of :math:`p`-norms for matrices at this
 We now present a condition which guarantees that :math:`\rho(r^k) < 1` is always satisfied.
 
 
+.. index:: Exact recovery condition for OMP
+
 .. _thm:greedy:omp_exact_recovery_sufficient_condition:
 
 .. theorem:: 
 
 
-     .. index:: Exact recovery condition for OMP
     A sufficient condition for Orthogonal Matching Pursuit to resolve :math:`x` completely in :math:`K` steps is that
     
     
@@ -263,8 +264,7 @@ We now present a condition which guarantees that :math:`\rho(r^k) < 1` is always
     
     .. math:: 
     
-        \rho(r^k) \leq \underset{\psi}{\max} \| \Phi_{\text{opt}}^{\dag} \psi \|_1
-    .
+        \rho(r^k) \leq \underset{\psi}{\max} \| \Phi_{\text{opt}}^{\dag} \psi \|_1.
     
     Thus assuming that OMP has made :math:`k` correct decision and :math:`r^k` 
     lies in :math:`\ColSpace( \Phi_{\text{opt}})`, :math:`\rho(r^k) < 1` whenever

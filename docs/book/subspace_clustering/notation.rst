@@ -94,8 +94,7 @@ subspaces is contained in another. A pair of
 subspaces may not intersect (e.g. parallel lines or planes),
 may have a trivial intersection (lines passing through origin),
 or a non-trivial intersection (two planes intersecting at a line).
-The collection of subspaces may also be independent or disjoint
-(see :ref:`here <sec:linear_subspaces>`). 
+The collection of subspaces may also be independent or disjoint. 
 
 The vectors in :math:`Y` can be grouped (or segmented or clustered) 
 as submatrices 

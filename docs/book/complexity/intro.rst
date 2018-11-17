@@ -1,7 +1,8 @@
+.. _ch:complexity:
+
 Introduction
 =======================
 
-.. _ch:complexity:
 This chapters provides a framework for 
 analysis of computational complexity
 of sparse recovery algorithms. 

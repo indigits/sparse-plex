@@ -19,6 +19,7 @@ A journey into sparse and redundant representations.
    book/clustering
    book/pursuit
    book/subspace_clustering
+   book/diclearn
    book/set_theory
    book/linear_algebra
    book/matrices
@@ -28,6 +29,7 @@ A journey into sparse and redundant representations.
    book/geometry
    book/signal_processing
    book/wavelets
+   book/dce
    book/ecg
    book/complexity
    library/index

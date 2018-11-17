@@ -1,9 +1,8 @@
-
+.. _sec:complexity:sorting:
  
 Sorting
 ===================================================
 
-.. _sec:complexity:sorting:
 We sometimes need sorting and searching
 operations on arrays of numbers in 
 the numerical algorithms. This section summarizes

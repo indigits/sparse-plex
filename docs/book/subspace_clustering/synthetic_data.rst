@@ -163,7 +163,8 @@ containing the orthogonal basis for each subspace::
 
 Verify orthogonality::
 
-    >> bases{1}' * bases{1}
+    >> Psi = bases{1}
+    >> Psi' * Psi
 
     ans =
 
@@ -418,20 +419,20 @@ Verify the size of the data matrix::
 
 Let's look at the data points for 2nd cluster::
 
->> data_points.X(:, data_points.start_indices(2):data_points.end_indices(2))
+  >> data_points.X(:, data_points.start_indices(2):data_points.end_indices(2))
 
-ans =
+  ans =
 
-    0.0987    0.5278   -0.4014    0.2963
-   -0.1793    0.0614    0.1551    0.2283
-    0.4603    0.1510   -0.0926    0.0340
-    0.3573   -0.1289    0.1654    0.4519
-    0.1202   -0.0495    0.1382   -0.4503
-   -0.1857   -0.6572   -0.1129   -0.3851
-    0.4265    0.1540   -0.6315   -0.0117
-   -0.4420    0.4131    0.0530    0.1565
-    0.0262    0.1973   -0.2354    0.1153
-   -0.4377   -0.1022    0.5385   -0.5155
+      0.0987    0.5278   -0.4014    0.2963
+     -0.1793    0.0614    0.1551    0.2283
+      0.4603    0.1510   -0.0926    0.0340
+      0.3573   -0.1289    0.1654    0.4519
+      0.1202   -0.0495    0.1382   -0.4503
+     -0.1857   -0.6572   -0.1129   -0.3851
+      0.4265    0.1540   -0.6315   -0.0117
+     -0.4420    0.4131    0.0530    0.1565
+      0.0262    0.1973   -0.2354    0.1153
+     -0.4377   -0.1022    0.5385   -0.5155
 
 Complete example code can be downloaded
 :download:`here <demo_uniform_points_multiple_subspaces.m>`.
