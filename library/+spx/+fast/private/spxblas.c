@@ -685,6 +685,21 @@ void print_index_vector(const mwIndex v_x[], int n, char* vec_name){
     }
     mexPrintf("\n");
 }
+
+void print_index_vector_plus1(const mwIndex v_x[], int n, char* vec_name){
+    int i;
+    mexPrintf("\n%s = \n\n", vec_name);
+    if (n==0) {
+        mexPrintf("   Empty vector");
+        return;
+    }
+    for (i=0; i<n; ++i) {
+        mexPrintf("   %d", v_x[i] + 1);
+    }
+    mexPrintf("\n");
+}
+
+
 /* print contents of sparse vector */
 
 void print_sparse_vector(const mxArray *A, char* vector_name)

@@ -118,7 +118,8 @@ classdef SSC_OMP < handle
                 self.Representation = C;
             elseif self.RepresentationMethod.isGOMP_C()
                 nl  = 2;
-                C = spx.fast.gomp_spr(data_matrix, nk, nl, rnorm_thr);
+                options.verbose = 0;
+                C = spx.fast.gomp_spr(data_matrix, nk, nl, rnorm_thr, options);
                 self.Representation = C;
             else
                 error('Invalid representation method.');

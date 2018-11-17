@@ -37,7 +37,7 @@ int chol_update(const double m_subdict[],
     }
     // Update the entry L[k, k]
     d1 = 1 - inner_product(v_w, v_w, k);
-    if (d1 <= 1e-14){
+    if (d1 <= 1e-4){
         // Selected atoms are dependent.
         return -1;
     }

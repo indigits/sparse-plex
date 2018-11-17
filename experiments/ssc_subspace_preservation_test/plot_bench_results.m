@@ -1,7 +1,10 @@
-function print_bench_results(result, solver_name)
+function print_bench_results(result, solver_name, separate_figs)
 
+    if nargin < 3
+        separate_figs = false;
+    end
 
-    if false
+    if separate_figs
         mf = spx.graphics.Figures;
 
 

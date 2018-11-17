@@ -21,6 +21,12 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
     int sparse_output, // Whether output is sparse matrix
     int verbose // Verbose output (profiling data etc.)
     ){
+    // Norms of each data vector
+    double* v_norms = 0;
+    double* v_norms2 = 0;
+    double* v_norm_invs = 0;
+    // normalized data set
+    double* m_dict = 0;
 
     // List of indices of selected atoms
     mwIndex *selected_atoms = 0; 
@@ -72,6 +78,8 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
     mwIndex new_atom_index;
     // misc variables 
     double d1, d2;
+    // information about any low rank issues in DGELS
+    mwSignedIndex info;
 
     // Maximum number of columns to be used in representations
     mwSize max_atoms;
@@ -87,6 +95,15 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
     // maximum number of rows in L
     lrows = M;
     // Memory allocations
+
+    // Space for calculating norms
+    v_norms =(double*)mxMalloc(S*sizeof(double)); 
+    v_norms2 =(double*)mxMalloc(S*sizeof(double)); 
+    v_norm_invs = (double*)mxMalloc(S*sizeof(double));
+    // Space for normalized dataset
+    m_dict  = (double*)mxMalloc(M*S*sizeof(double));
+
+
     // Number of selected atoms cannot exceed M
     selected_atoms = (mwIndex*) mxMalloc(M*sizeof(mwIndex));
     // Total number of atoms is S
@@ -125,12 +142,25 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
         jc_alpha[0] = 0;
     }
     omp_profile_init(&profile);
+    // Compute norm of each vector in dataset
+    mat_col_norms(m_dataset, v_norms, M, S);
+    // Compute the norm inverse for each column
+    vec_elt_wise_inv(v_norms, v_norm_invs, S);
+    // Compute the m_dict directly here
+    copy_vec_vec(m_dataset, m_dict, M*S);
+    // mat_col_norms(m_dict, v_norms2, M, S);
+    // print_vector(v_norms2, 10, "Phi norms");
+    mat_col_scale(m_dict, v_norm_invs, M, S);
 
     for(s=0; s<S; ++s){
+        if (s > 0 && verbose > 1) {
+            verbose = 1;
+        }
         // Counter for selected atoms
+        // In each iteration below one or more atoms get selected.
         int kk = 0;
         // Current data point
-        wv_x = m_dataset + M*s;
+        wv_x = m_dict + M*s;
         // Initialization
         res_norm_sqr = 1;
         //Compute proxy p  = D' * x
@@ -163,22 +193,38 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
                 new_atom_index = atom_indices[i];
                 selected_atoms[kk] = new_atom_index;
                 // Copy the new atom to the sub-dictionary
-                wv_new_atom = m_dataset + new_atom_index*M;
+                wv_new_atom = m_dict + new_atom_index*M;
                 copy_vec_vec(wv_new_atom, m_subdict+kk*M, M);
                 if (verbose > 1){
-                    mexPrintf("%d ", new_atom_index+1);
+                    mexPrintf("%d %.2f ", new_atom_index+1, v_h[i]);
                 }
                 // Cholesky update
                 if (kk == 0){
                     // Simply initialize the L matrix
                     *m_lt = 1;
                 }else{
+                    mwIndex v_b_max_idx;
                     wv_new_atom = m_subdict+kk*M;
                     // Incremental Cholesky decomposition
-                    if (chol_update(m_subdict, wv_new_atom, m_lt, 
-                        v_b, v_w, M, kk) != 0){
+                    info = chol_update(m_subdict, wv_new_atom, m_lt, 
+                        v_b, v_w, M, kk);
+                    if (verbose > 2) {
+                        print_vector(v_b, kk, "v_b");
+                    }
+                    v_b_max_idx = abs_max_index(v_b, kk);
+                    if (i > 0 && v_b[v_b_max_idx] > 0.97) {
+                        // This vector is too similar to one of existing vectors
+                        if (verbose > 1) {
+                            mexPrintf(" skipped similar ");
+                        }
+                        continue;
+                    }
+                    if (info != 0){
                         // We will ignore this atom
                         // as it is linearly dependent on previous atoms
+                        if (verbose > 1) {
+                            mexPrintf(" skipped dependent ");
+                        }
                         continue;
                     }
                 }
@@ -188,7 +234,8 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
             // We can increase the iteration count
             ++k;
             // We will now solve the equation L L' alpha_I = p_I
-            vec_extract(v_proxy, selected_atoms, v_t1, kk);
+            //vec_extract(v_proxy, selected_atoms, v_t1, kk);
+            mult_mat_t_vec(1, m_subdict, wv_x, v_t1, M, k);
             spd_chol_lt_solve2(m_lt, v_t1, v_z, v_t2, lrows, kk);
             omp_profile_toctic(&profile, TIME_LLtSolve);
             // Compute residual
@@ -210,7 +257,25 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
                 mexPrintf(" \\| r \\|_2^2 : %.4f.\n", res_norm_sqr);
             }
         }
-
+        // Solve the LS problem again
+        // Build the sub dictionary from the dataset
+        if (verbose > 1) {
+            print_index_vector_plus1(selected_atoms, kk, "selected_atoms");
+        }
+        for (i=0; i<kk; ++i){
+            new_atom_index = selected_atoms[i];
+            wv_new_atom = m_dataset + new_atom_index*M;
+            copy_vec_vec(wv_new_atom, m_subdict+i*M, M);
+        }
+        // The signal whose representation is to be constructed.
+        wv_x = m_dataset + M*s;
+        copy_vec_vec(wv_x, v_z, M);
+        // Solving the least squares problem using QR through DGELS
+        info = ls_qr_solve(m_subdict, v_z, M, k);
+        if (info > 0) {
+             mexPrintf( "The diagonal element %i of the triangular factor ", info );
+             mexPrintf( "of A is zero, so that A does not have full rank;\n" );
+        }
         // Write the output vector
         if(sparse_output == 0){
             // Write the output vector
@@ -235,6 +300,10 @@ mxArray* gomp_spr(const double *m_dataset, // Dataset
     }
 
     // Memory cleanup
+    mxFree(v_norms);
+    mxFree(v_norms2);
+    mxFree(v_norm_invs);
+    mxFree(m_dict);
     mxFree(selected_atoms);
     mxFree(atom_indices);
     mxFree(m_lt);

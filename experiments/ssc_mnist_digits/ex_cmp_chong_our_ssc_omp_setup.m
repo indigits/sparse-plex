@@ -34,6 +34,6 @@ end
 % Perform PCA to reduce dimensionality
 fprintf('Performing PCA\n');
 tstart = tic;
-Y = spx.la.pca.low_rank_approx(Y, 100);
+Y = spx.la.pca.low_rank_approx(Y, 500);
 elapsed_time = toc(tstart);
 fprintf('Time taken in computing PCA: %.2f seconds\n', elapsed_time);

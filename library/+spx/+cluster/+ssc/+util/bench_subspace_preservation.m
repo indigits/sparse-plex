@@ -12,6 +12,7 @@ setup.rhos = round(5.^[1:.2:3.2]);
 % The following numbers have been picked up from the code provided by Chong You.
 setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396 6132 11075 20000];
 %setup.num_points_per_cluster_list = [30 55 98 177 320 577];
+% DO NOT GO BEYOND 3396. THE LAPTOP CANNOT HANDLE IT. MATLAB CRASHES. OOM. LAPTOP HANGS.
 setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396];
 %setup.num_points_per_cluster_list = [30 55];
 setup.rhos = setup.num_points_per_cluster_list / 6;

@@ -434,6 +434,10 @@ void print_vector(const double v_x[], int n, char* vec_name);
 Prints the contents of a vector
 */
 void print_index_vector(const mwIndex v_x[], int n, char* vec_name);
+/**
+Prints the contents of an index vector with 1 based indexing
+*/
+void print_index_vector_plus1(const mwIndex v_x[], int n, char* vec_name);
 
 /**
 Prints the contents of a sparse vector
