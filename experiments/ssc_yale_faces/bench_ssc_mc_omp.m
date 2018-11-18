@@ -17,7 +17,7 @@ for ns=1:nns
         solver_name = sprintf('ssc_mc_omp_%s', config.name);
         fprintf('Simulating: %s, for %d subjects\n', solver_name, num_subjects);
         result = check_yale_faces(num_subjects, @ssc_mc_omp, solver_name, config);
-        filepath = sprintf('bin/solver_name_%s_subjects=%d.mat', solver_name, num_subjects);
+        filepath = sprintf('bin/%s_subjects=%d.mat', solver_name, num_subjects);
         save(filepath, 'result');
     end
 end

@@ -50,6 +50,7 @@ for r=1:R
         % add to the list of failed examples
         test_result.failed_examples = [test_result.failed_examples r];
         % move on to next example
+        throw(ME)
         continue;
     end
     trial.elapsed_time = toc (tstart);
