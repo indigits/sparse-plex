@@ -100,3 +100,4 @@ eigen vectors to assign the labels. In contrast, eigen vector based estimation
 of number of clusters is involved and slow but it allows us to pick the
 labels very quickly.
 
+.. disqus::

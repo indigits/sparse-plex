@@ -156,3 +156,7 @@ from different subspaces. A simple algorithm for
 data segmentation is thus obtained which puts 
 the :math:`i`-th and :math:`j`-th columns in :math:`Y` in same cluster
 if the corresponding entry :math:`W_{ij}` is non-zero.
+
+
+.. disqus::
+

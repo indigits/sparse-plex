@@ -2,7 +2,7 @@ Inner product spaces
 ===================================================
 
 
- .. contents:: :local:
+.. contents:: :local:
 
 
 Inner product
@@ -620,3 +620,4 @@ When inner product is a complex number, polarization identity is quite useful.
     
 
 
+.. disqus::

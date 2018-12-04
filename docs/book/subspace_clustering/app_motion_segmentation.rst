@@ -462,3 +462,6 @@ valid: perspective distortion of camera, tracking errors, and
 pixel quantization. Thus, a subspace clustering algorithm
 should allow for the presence of noise or corruption of data
 in real life applications. 
+
+.. disqus::
+

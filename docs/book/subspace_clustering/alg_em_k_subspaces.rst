@@ -104,3 +104,6 @@ Both of these algorithms require number of subspaces
 and the dimension of each subspace as input and depend
 on a good initialization of subspaces to converge
 to an optimal solution.
+
+.. disqus::
+

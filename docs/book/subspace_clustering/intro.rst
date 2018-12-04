@@ -154,3 +154,4 @@ and primitive modeling simultaneously. In the sequel, we will
 look at a variety of algorithms for solving the subspace
 clustering problem.
 
+.. disqus::

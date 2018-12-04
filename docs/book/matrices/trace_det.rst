@@ -376,3 +376,4 @@ Following are some results on determinant of a square matrix :math:`A`.
 
 
 
+.. disqus::

@@ -198,3 +198,5 @@ We now state the connection between RIP and NSP.
 
 Note that for  :math:`\delta_{2K} = \sqrt{2} - 1` ,  :math:`C=\infty` .
 
+
+.. disqus::

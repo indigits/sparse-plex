@@ -1361,3 +1361,4 @@ Following is a simple procedure for making a low rank approximation of a given m
    and set all other singular values to 0 to obtain :math:`\widehat{\Sigma}`.
 #. Compute :math:`\widehat{A} = U \widehat{\Sigma} V^H`.
 
+.. disqus::

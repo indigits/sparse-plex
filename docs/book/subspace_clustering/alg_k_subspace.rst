@@ -45,3 +45,7 @@ fitting the subspaces.
 *  Repeat steps 2 and 3 till the clustering keeps changing.
 
 Initial subspaces can be chosen randomly.
+
+
+.. disqus::
+

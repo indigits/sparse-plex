@@ -29,3 +29,4 @@ A simpler version of this algorithm is based on Euclidean distance
 and doesn't compute or updates the covariance matrices for each cluster.
 
 
+.. disqus::

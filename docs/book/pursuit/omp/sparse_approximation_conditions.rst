@@ -414,3 +414,5 @@ If :math:`\| x - x_{\text{opt}} \|_2` is moderate, then the OMP may inflate the 
 a higher value. But in this case, probably sparse approximation is not the right tool for signal
 representation over the dictionary.
 
+.. disqus::
+

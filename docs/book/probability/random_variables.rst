@@ -229,3 +229,4 @@ Cumulant generating function
 ----------------------------------------------------
 
 
+.. disqus::

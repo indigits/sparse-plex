@@ -454,3 +454,7 @@ The benchmark generation code is in `ex_fast_batch_omp_speed_test.m`_.
 .. _spx.fast.batch_omp: https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bfast/batch_omp.m
 
 .. _ex_fast_batch_omp_speed_test.m: https://github.com/indigits/sparse-plex/blob/master/experiments/fast_batch_omp/ex_fast_batch_omp_speed_test.m
+
+
+.. disqus::
+

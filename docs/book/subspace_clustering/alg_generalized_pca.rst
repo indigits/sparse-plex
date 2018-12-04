@@ -197,3 +197,5 @@ Now that we have obtained a basis for the polynomials in :math:`I_K`,
 the next step is to calculate the basis vectors :math:`B_k` for
 each :math:`\UUU_k^{\perp}`.
  
+
+.. disqus::

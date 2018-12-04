@@ -81,3 +81,4 @@ The MGF is defined as
     .. math::
         \Psi_X(j\omega) = \prod_{i=1}^n \Psi_{X_i}(j\omega_i), \quad \forall  \omega \in \RR^n.
     
+.. disqus::

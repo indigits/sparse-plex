@@ -106,3 +106,7 @@ Uncorrelated variables
 
 The two variables :math:`X` and :math:`Y` are called uncorrelated if :math:`\Cov (X, Y)  = 0`.
 Covariance doesn't imply independence.
+
+
+.. disqus::
+

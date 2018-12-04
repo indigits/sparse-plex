@@ -318,3 +318,6 @@ The complete code can be downloaded
     * Yet, most of the energy is concentrated in atoms 6, 8, 11 only. In that sense, MP hasn't failed
       completely. 
     * A simple thresholding can remove the spurious contributions from incorrect atoms.
+
+.. disqus::
+

@@ -294,3 +294,4 @@ Hands-on with Orthogonal Matching Pursuit
     We conclude that our OMP algorithm has converged and we have been able
     to recover the exact 2 sparse representation of :math:`y` in :math:`\Phi`.
 
+.. disqus::

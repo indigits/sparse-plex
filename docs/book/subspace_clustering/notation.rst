@@ -180,3 +180,7 @@ a low dimensional subspace) with a noise vector :math:`e_s \in \RR^M`.
 The clustering problem remains the same. Our goal would
 be to characterize the behavior of the clustering algorithm
 in the presence of noise at different levels.
+
+
+.. disqus::
+

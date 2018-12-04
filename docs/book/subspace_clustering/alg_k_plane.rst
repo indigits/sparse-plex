@@ -100,3 +100,7 @@ the :math:`K`-plane clustering algorithm terminates in
 a finite number of steps at a cluster assignment
 that is locally optimal. This concludes our discussion
 of :math:`K`-plane clustering.
+
+
+.. disqus::
+

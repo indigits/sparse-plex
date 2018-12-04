@@ -144,3 +144,4 @@ The transformation is :math:`Y = [B^{-1} (X - \mu)`.
 
 
 
+.. disqus::

@@ -207,3 +207,6 @@ Yet we can show that:
       \lim_{p\to 0} \| x \|_p^p = | \supp(x) |
 
 which justifies the notation.
+
+.. disqus::
+

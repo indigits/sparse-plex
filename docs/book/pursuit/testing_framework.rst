@@ -316,3 +316,4 @@ for generating compressible signals. It is included
 in ``sparse-plex``.
 
 
+.. disqus::

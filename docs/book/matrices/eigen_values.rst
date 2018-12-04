@@ -1839,3 +1839,4 @@ the columns of :math:`A`.
     must satisfy conditions in :ref:`here <thm:mat:gershgorin_circle_theorem:a>`
     w.r.t. the matrix :math:`A^T`. This completes the proof.
 
+.. disqus::

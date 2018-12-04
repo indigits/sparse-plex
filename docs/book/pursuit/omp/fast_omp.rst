@@ -146,3 +146,6 @@ The benchmark generation code is in `ex_fast_omp_speed_test.m`_.
 .. _OMPBOX: http://www.cs.technion.ac.il/~ronrubin/software.html
 
 .. _ex_fast_omp_speed_test.m: https://github.com/indigits/sparse-plex/blob/master/experiments/fast_omp_chol/ex_fast_omp_speed_test.m
+
+.. disqus::
+

@@ -298,3 +298,8 @@ approximately :math:`2KMN` i.e. dominated by the matching step.
 
 Cholesky update based solution is marginally faster than QR update based solution
 for small values of :math:`M`.
+
+
+.. disqus::
+
+

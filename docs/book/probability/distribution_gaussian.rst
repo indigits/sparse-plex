@@ -278,3 +278,4 @@ One sided Gaussian distribution
 Truncated normal distribution
 ---------------------------------------
 
+.. disqus::

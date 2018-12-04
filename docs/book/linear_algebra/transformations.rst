@@ -889,3 +889,7 @@ forward to matrix representations of linear transformations also.
 Composition of linear transformations
 ----------------------------------------------------
 
+
+
+.. disqus::
+

@@ -915,3 +915,4 @@ singular value decomposition of :math:`A`. This is shown :ref:`here <lem:mat:sin
 
 
 
+.. disqus::

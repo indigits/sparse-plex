@@ -440,3 +440,6 @@ We show how Babel function guarantees that exact recovery condition for OMP hold
     .. math:: 
     
         \frac{\mu_1(K)}{1  - \mu_1(K-1)} < 1 \implies \underset{\psi}{\max} \| \Phi_{\text{opt}}^{\dag} \psi \|_1   < 1.
+
+.. disqus::
+

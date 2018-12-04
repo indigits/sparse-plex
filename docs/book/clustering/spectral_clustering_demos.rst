@@ -483,3 +483,6 @@ to points belonging to different labels::
 
 We can see that the clusters have been clearly 
 identified.
+
+.. disqus::
+

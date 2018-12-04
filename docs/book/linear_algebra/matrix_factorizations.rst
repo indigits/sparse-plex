@@ -46,3 +46,6 @@ the unit sphere under :math:`A`). Thus, if :math:`A` is a
 data matrix, then the SVD of :math:`A`
 is strongly connected with the principal component
 analysis of :math:`A`.
+
+.. disqus::
+

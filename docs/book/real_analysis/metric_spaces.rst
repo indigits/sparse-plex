@@ -586,3 +586,7 @@ Clearly :math:`A \subseteq \Closure{A}`.
     We show that a point :math:`y : d(x, y) > r` is not a closure point of :math:`B (x, r)`.
     Let :math:`r_1 = d(x, y) -r > 0`. Then, :math:`B ( y, r_1) \cap B (x, r) = \EmptySet`. Hence
     :math:`y` is not a closure point of :math:`B (x, r)`.
+
+
+.. disqus::
+

@@ -106,3 +106,6 @@ flop counts is presented in :ref:`sec:complexity:basic_operations`.
       - Least squares through Cholesky :math:`A^T A = L L^T` 
       - :math:`A \in \RR^{m \times n}` 
       - :math:`mn^2 + \frac{1}{3} n^3`
+
+
+.. disqus::

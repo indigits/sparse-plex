@@ -302,3 +302,5 @@ This is also known as Chernoff bound.
 Fréchet inequalities
 ----------------------------------------------------
 
+
+.. disqus::

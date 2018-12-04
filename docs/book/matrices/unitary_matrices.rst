@@ -359,3 +359,4 @@ for complex case.
         \langle U x, U y \rangle = (U y)^T U x = y^T U^T U x = y^T x.
     
 
+.. disqus::

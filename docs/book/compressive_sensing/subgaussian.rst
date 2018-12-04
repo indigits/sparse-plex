@@ -832,3 +832,6 @@ This result tells us that given a vector with entries drawn from a subgaussian
 distribution, we can expect the norm of the vector to concentrate around its 
 expected value  :math:`N\sigma^2`. 
 
+
+
+.. disqus::

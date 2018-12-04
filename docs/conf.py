@@ -45,7 +45,8 @@ extensions = [
         'sphinxcontrib.bibtex',
         'environments',
         'admonitions',
-        'youtube'
+        'youtube',
+        'disqus',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -296,6 +297,11 @@ texinfo_documents = [
 # Indicates if we are on readthedocs.org or local
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True' 
 
+
+
+
+# disqus settings
+disqus_shortname = 'sparse-plex'  # 
 
 
 # if not on_rtd:  # only import and set the theme if we're building docs locally   

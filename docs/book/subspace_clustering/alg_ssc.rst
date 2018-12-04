@@ -103,7 +103,5 @@ respectively. The essential SSC method is described below.
 
 
 
-
-
-
+.. disqus::
 

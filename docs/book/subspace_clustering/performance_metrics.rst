@@ -236,3 +236,7 @@ very small.
 
 Complete example code can be downloaded
 :download:`here <demo_spr.m>`.
+
+
+.. disqus::
+

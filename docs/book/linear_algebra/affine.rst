@@ -193,3 +193,7 @@ independent.
 In general, a set of :math:`k+1` or more points in a :math:`k`-flat is said to be
 in *general linear position* if no hyperplane contains
 more than :math:`k` points.
+
+.. disqus::
+
+

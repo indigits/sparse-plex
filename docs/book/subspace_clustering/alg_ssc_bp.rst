@@ -271,3 +271,6 @@ Print it::
 
 Complete example code can be downloaded
 :download:`here <demo_ssc_bp_random_subspaces.m>`.
+
+.. disqus::
+

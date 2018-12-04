@@ -347,3 +347,4 @@ Block matrix
 
     A **block diagonal matrix** is a block matrix whose off diagonal entries are zero matrices.
 
+.. disqus::

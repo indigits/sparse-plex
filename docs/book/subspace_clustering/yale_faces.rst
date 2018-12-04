@@ -74,3 +74,7 @@ Creating a canvas for a particular subject::
 Pick ten random images from each subject::
 
     images = yf.training_set_a()
+
+
+.. disqus::
+

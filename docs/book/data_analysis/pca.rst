@@ -42,3 +42,4 @@ obtained by keeping just the first :math:`k` columns of :math:`T`.
 
 
 
+.. disqus::

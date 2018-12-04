@@ -662,3 +662,4 @@ Some remarks are in order:
    Still they are quite reasonable.
 
 
+.. disqus::
