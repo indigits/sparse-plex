@@ -10,7 +10,7 @@ which are shipped with MATLAB.
 
 
 This page summarizes available functions
-and their ability.
+and their speed gains.
 
 All of these functions are available in
 the package ``spx.fast``.
