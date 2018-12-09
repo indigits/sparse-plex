@@ -174,13 +174,17 @@ Following OMP options are available in
 
     * - Method
       - Description
+      - Source
     * - CLASSIC_OMP_C
       - Standard OMP algorithm written in C. 
+      - `omp_spr.c <https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bfast/private/omp_spr.c>`_
     * - BATCH_OMP_C
       - Rewritten in the form of Batch OMP :cite:`rubinstein2008efficient`.
+      - `batch_omp_spr.c <https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bfast/private/batch_omp_spr.c>`_
     * - FLIPPED_OMP_MATLAB
       - The OMP implementation on the lines 
         of source code by :cite:`you2015sparse`.
+      - `flipped_omp.m <https://github.com/indigits/sparse-plex/blob/master/library/%2Bspx/%2Bcluster/%2Bssc/flipped_omp.m>`_
 
 Benchmarks comparing OMP implementations in ``SSC_OMP``
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
