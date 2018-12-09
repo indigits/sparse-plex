@@ -1,3 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Note, in order to run this script, you will need
+% the package sparsify v0.5 by Thomas Blumensath
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Signal space 
 N = 1024;
 % Number of measurements
@@ -9,7 +17,8 @@ K = 8;
 % solver = spx.pursuit.single.MatchingPursuit(Phi);
 % Solve the sparse recovery problem
 % result = solver.solve(y);
-options.max_residual_norm = 1e-6;
+max_residual_norm = 1e-6;
+options.max_residual_norm = max_residual_norm;
 tstart = tic;
 T = 1000;
 t1 = 0;
@@ -27,7 +36,13 @@ for i=1:T
     % Measurement vectors
     y = Phi * x;
     tic;
-    result = spx.pursuit.single.mp(Phi, y,options);
+    if 0
+        result = spx.pursuit.single.mp(Phi, y,options);
+    else
+        [s, err_mse, iter_time] = greed_mp(y, Phi, N, ...
+            'stopCrit', 'mse', 'stopTol', max_residual_norm^2, ...
+            'maxIter', 4 * N);
+    end
     % result.iterations
     t1 = t1 + toc;
     % norm(result.r) / norm(y)
