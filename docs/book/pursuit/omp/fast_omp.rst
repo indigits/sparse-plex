@@ -9,7 +9,8 @@ It is up to 4 times faster than the OMP implementation
 in `OMPBOX`_.
 
 This is written in C and uses the
-BLAS and LAPACK features available in MATLAB.
+BLAS and LAPACK features available in 
+MATLAB MEX extensions.
 The implementation is available in the function
 `spx.fast.omp`_.  
 The corresponding C code is in `omp.c`_. 

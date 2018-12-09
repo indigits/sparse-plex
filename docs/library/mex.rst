@@ -22,6 +22,9 @@ the package ``spx.fast``.
     * - Function
       - Purpose
       - Speedup
+    * - mp
+      - Standard Matching Pursuit
+      - Up to 3.8x faster than greedy_mp in sparsify toolbox.
     * - omp
       - Orthogonal Matching Pursuit
       - Up to 4x faster than OMPBOX
@@ -55,6 +58,8 @@ please refer to the sections in following table:
 
     * - Function
       - Section
+    * - mp
+      - :ref:`sec:pursuit:greedy:mp:fast`
     * - omp
       - :ref:`sec:pursuit:omp:fast`
     * - batch_omp
