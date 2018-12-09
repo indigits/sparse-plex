@@ -5,6 +5,9 @@ end
 
 methods(Static)
     function print_list_table(data, headers)
+        if istable(data)
+            data = table2cell(data);
+        end
         if ~iscell(data)
             data = num2cell(data);
         end
@@ -53,7 +56,7 @@ methods(Static)
     end
 
     function print_data_table(tbl)
-        spx.io.rst.print_list_table(tbl, tbl.Properties.VariableNames)
+        spx.io.rst.print_list_table(tbl, tbl.Properties.VariableDescriptions)
     end
 end
 

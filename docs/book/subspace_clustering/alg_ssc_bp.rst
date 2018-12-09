@@ -1,3 +1,5 @@
+.. _sec:sc:ssc:bp:
+
 SSC by Basis Pursuit
 ============================
 
@@ -8,6 +10,7 @@ SSC by Basis Pursuit
     :local:
 
 
+.. _sec:sc:ssc:bp:hands-on:
 
 Hands-on SSC-BP with Synthetic Data
 ---------------------------------------
