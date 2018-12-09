@@ -51,7 +51,7 @@ function [representations, iterations] = flipped_omp(data_matrix, nk, threshold,
                     r = x - submatrix * (submatrix \ x);
                     % put the new residual into residual matrix
                     residual_matrix(:, s) = r;
-                    if sum(r.^2) < threshold
+                    if sum(r.^2) < threshold^2
                         % The processing of this vector is complete
                         termination_vector(s) = iter;
                     end

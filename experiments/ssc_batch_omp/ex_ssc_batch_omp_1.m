@@ -1,13 +1,16 @@
+import spx.cluster.ssc.OMP_REPR_METHOD;
+import spx.cluster.ssc.SSC_OMP;
+
 % dimension of ambient space
-n = 100;
+n = 500;
 % number of subspaces = number of clusters
 ns = 2;
 % dimensions of individual subspaces 1 and 2
-d1  = 2;
-d2 = 2;
+d1  = 20;
+d2 = 20;
 % number of signals in individual subspaces
-s1 = 100;
-s2 = 100;
+s1 = 500;
+s2 = 500;
 % total number of signals
 s = s1 + s2;
 % A random basis for first subspace;
@@ -29,12 +32,13 @@ X = spx.norm.normalize_l2(X);
 true_labels = [1*ones(s1,1) ; 2*ones(s2,1)];
 % the largest dimension amongst all subspaces
 K = max(d1, d2);
+rnorm_thr = 1e-4;
 % All signals are expected to  have a K-sparse representation
 rng('default');
-ssc_batch_omp = spx.cluster.ssc.SSC_BATCH_OMP(X, K, ns);
+ssc_batch_omp = spx.cluster.ssc.SSC_OMP(X, K, ns, rnorm_thr, OMP_REPR_METHOD.BATCH_OMP_C);
 result_batch_omp = ssc_batch_omp.solve();
 rng('default');
-ssc_omp = spx.cluster.ssc.SSC_OMP(X, K, ns);
+ssc_omp = spx.cluster.ssc.SSC_OMP(X, K, ns, rnorm_thr, OMP_REPR_METHOD.FLIPPED_OMP_MATLAB);
 result_omp = ssc_omp.solve();
 combined_labels = [result_omp.Labels result_batch_omp.Labels]';
 %combined_labels = [result_omp.Labels true_labels]'
@@ -61,4 +65,5 @@ fprintf('Difference between adjacency matrices: ');
 max(max(abs(D1 - D2)))
 rptime1 = result_omp.representation_time;
 rptime2 = result_batch_omp.representation_time;
-fprintf('Representation time, SSC-OMP: %.4f, SSC_BATCH_OMP: %.4f\n', rptime1, rptime2);
+fprintf('Representation time, SSC_OMP: %.4f, SSC_BATCH_OMP: %.4f\n', rptime1, rptime2);
+fprintf('Gain: %.2f x\n', rptime1 / rptime2);
