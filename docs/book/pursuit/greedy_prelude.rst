@@ -262,3 +262,6 @@ be part of the support than others and thus drop the
 unlikely ones. 
 
 We are now ready to explore different greedy algorithms.
+
+.. disqus::
+

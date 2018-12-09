@@ -15,6 +15,7 @@ Contents:
    vectorspace
    combinatorics
    factorization
+   mex
    external
    noise
 

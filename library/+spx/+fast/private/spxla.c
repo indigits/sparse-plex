@@ -19,12 +19,15 @@ int linsolve(double A[],
     mwSignedIndex lda = m;
     mwSignedIndex ldb = m;
     mwSignedIndex info;
+    mwSignedIndex mm = m;
+    mwSignedIndex nn = n;
+    mwSignedIndex pp = p;
     if (m == n){
-        mwSize x_size = n*p;
+        mwSignedIndex x_size = n*p;
         mwSignedIndex  inc = 1;
         if (arr_type == 'G'){
             // It's a square matrix
-            dgesv(&n, &p, A, &lda, ipiv, B, &ldb, &info);
+            dgesv(&nn, &pp, A, &lda, ipiv, B, &ldb, &info);
             if( info > 0 ) {
                     mexPrintf( "The diagonal element of the triangular factor of A,\n" );
                     mexPrintf( "U(%i,%i) is zero, so that A is singular;\n", info, info );
@@ -36,7 +39,7 @@ int linsolve(double A[],
             return 0;
         }else if (arr_type == 'S'){
             char uplo = 'U';
-            dposv(&uplo, &n, &p, A, &lda, B, &ldb, &info);            
+            dposv(&uplo, &nn, &pp, A, &lda, B, &ldb, &info);            
             if( info > 0 ) {
                     mexPrintf( "The leading minor of order %i is not positive ", info );
                     mexPrintf( "definite;\nthe solution could not be computed.\n" );
@@ -65,15 +68,18 @@ int least_square(double A[],
     mwSize m, mwSize n, mwSize p){
     mwSignedIndex lda = m;
     mwSignedIndex ldb = m;
+    mwSignedIndex mm = m;
+    mwSignedIndex nn = n;
+    mwSignedIndex pp = p;
     mwSignedIndex info;
-    mwSize lwork = LWORK_SIZE;
+    mwSignedIndex lwork = LWORK_SIZE;
     double work[LWORK_SIZE];
     mwSignedIndex  inc = 1;
     double* x = X;
     double* b = B;
     char trans = 'N';
 
-    dgels(&trans, &m, &n, &p, A, &lda, B, &ldb, work, &lwork,
+    dgels(&trans, &mm, &nn, &pp, A, &lda, B, &ldb, work, &lwork,
                             &info );
     if( info > 0 ) {
         mexPrintf( "The diagonal element %i of the triangular factor ", info );
@@ -83,7 +89,7 @@ int least_square(double A[],
     }
     // Copy the solution from B to X only the first n rows.
     for (int i=0;i < p; ++i){
-        dcopy(&n, b, &inc, x, &inc);
+        dcopy(&nn, b, &inc, x, &inc);
         x += n;
         b += m;
     }

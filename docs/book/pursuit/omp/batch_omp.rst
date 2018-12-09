@@ -1,3 +1,5 @@
+.. _sec:pursuit:batch-omp:
+
 Batch OMP
 ==================
 
@@ -290,6 +292,8 @@ either the dictionary :math:`\Phi` or the signal
     This is more efficient in terms of
     space utilization.
 
+
+.. _sec:pursuit:batch-omp:fast:
 
 
 Fast Batch OMP Implementation

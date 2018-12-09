@@ -3,7 +3,7 @@ classdef MatchingPursuit < handle
     
     properties
         % Maximum residual norm
-        MaxResNorm = 1e-4
+        MaxResNorm = 1e-6
         % Indicates if we should stop on exceeding residual norm
         StopOnResidualNorm = true
         % Indicates if we should stop when residual norm stops improving
@@ -91,7 +91,7 @@ classdef MatchingPursuit < handle
                 r = r - coeff * dict.column(index);
                 if target_k > 0 && target_k == k
                     % We have achieved the required sparsity level
-                    break;
+                    % break;
                 end
                 if self.StopOnResidualNorm || self.StopOnResNormStable
                     resNorm = norm(r);

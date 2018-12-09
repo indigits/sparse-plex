@@ -17,10 +17,26 @@ end
 compile_params{end+1} = '-lmwblas';
 compile_params{end+1} = '-lmwlapack';
 
+cpp_compile_params = cell(0);
+if (is64bit)
+  cpp_compile_params{end+1} = '-largeArrayDims';
+end
+
 
 % Compile files %
+
+
 blas_sources  = {'argcheck.c', 'spxblas.c'};
 common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
+
+common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp'};
+
+% Optimization algorithms
+cg_sources = [common_cpp_sources, 'spx_cg.cpp'];
+
+mp_sources = [common_cpp_sources, 'spx_matching_pursuit.cpp'];
+
+
 omp_sources = [common_sources, 'omp.c', 'omp_util.c', 'omp_profile.c'];
 omp_ar_sources = [common_sources, 'omp_ar.c', 'omp_util.c', 'omp_profile.c'];
 batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
@@ -44,6 +60,12 @@ make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params, clean);
 make_program('mex_test_blas.c', blas_sources,compile_params, clean);
 make_program('mex_linsolve.c', la_sources, compile_params, clean);
 
+make_program('mex_cg.cpp', cg_sources,cpp_compile_params, clean);
+
+
+make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
+
+
 make_program('mex_omp_chol.c', omp_sources,compile_params, clean);
 make_program('mex_omp_ar.c', omp_ar_sources,compile_params, clean);
 make_program('mex_batch_omp.c', batch_omp_sources,compile_params, clean);
@@ -62,7 +84,8 @@ make_program('mex_quickselect.c', quickselect_sources, compile_params, clean);
 end
 
 function make_program(mex_src_file, other_source_files, compile_params, clean)
-    mex_target_file = strrep(mex_src_file, '.c' , '.mexw64');
+    [~, mex_scr_name, extn] = fileparts(mex_src_file);
+    mex_target_file =  [mex_scr_name '.mexw64'];
     if clean
         if exist(mex_target_file)
             fprintf('Deleting: %s\n', mex_target_file);

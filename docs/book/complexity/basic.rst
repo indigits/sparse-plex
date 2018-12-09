@@ -330,3 +330,6 @@ Asymptotically (with :math:`n < m`), this is close to
 least squares problem. This approach gives us
 a series of solutions with sacrificing much
 on computational complexity.
+
+.. disqus::
+

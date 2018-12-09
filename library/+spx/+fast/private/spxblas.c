@@ -214,7 +214,7 @@ void mat_col_scale(double A[], const double v[], mwSize m, mwSize n){
     mwSignedIndex  inc = 1;
     mwSignedIndex  mm = m;
     for (int c=0; c < n; ++c){
-        dscal(&m, v + c, a, &inc);
+        dscal(&mm, v + c, a, &inc);
         a += m;
     }
 }
@@ -231,7 +231,7 @@ void mat_row_scale(double A[], const double v[], mwSize m, mwSize n){
 
 void mat_col_normalize(double A[], mwSize m, mwSize n){
     double *v;
-    v = mxMalloc(n*sizeof(double));
+    v = (double *) mxMalloc(n*sizeof(double));
     // Compute the norms
     mat_col_norms(A, v, m, n);
     // Inverse the norms
@@ -482,7 +482,7 @@ void spd_chol_lt_solve(const double L[],
     double x[], 
     mwSize m, mwSize k){
     double *tmp;
-    tmp = mxMalloc(k*sizeof(double));
+    tmp = (double *) mxMalloc(k*sizeof(double));
     /**
     Solve the problem L t = b
     */
@@ -558,6 +558,8 @@ mwSignedIndex ls_qr_solve(double A[],
     double b[],
     mwSize m, mwSize n) {
 
+    mwSignedIndex mm = m;
+    mwSignedIndex nn  = n;
 
     mwSignedIndex lda = m;
     mwSignedIndex ldb = m;
@@ -570,11 +572,11 @@ mwSignedIndex ls_qr_solve(double A[],
 
     /* Query and allocate the optimal workspace */
     lwork = -1;
-    dgels(&trans, &m, &n, &nrhs, A, &lda, b, &ldb, &wkopt, &lwork, &info);
+    dgels(&trans, &mm, &nn, &nrhs, A, &lda, b, &ldb, &wkopt, &lwork, &info);
     lwork = (mwSignedIndex) wkopt;
-    work = mxMalloc(lwork*sizeof(double));
+    work = (double *) mxMalloc(lwork*sizeof(double));
     // Solve the linear equation
-    dgels(&trans, &m, &n, &nrhs, A, &lda, b, &ldb, work, &lwork, &info);
+    dgels(&trans, &mm, &nn, &nrhs, A, &lda, b, &ldb, work, &lwork, &info);
     // Free the workspace
     mxFree(work);
     return info;
