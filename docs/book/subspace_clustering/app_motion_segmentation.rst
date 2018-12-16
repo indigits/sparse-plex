@@ -1,8 +1,6 @@
-.. _sec:motion_segmentation:
- 
+.. _sec:ac:app:motion_segmentation:
 Motion Segmentation
-----------------------------------------------------
-
+==================================
 
 .. contents::
     :local:
@@ -199,8 +197,6 @@ We rewrite this as
 where :math:`\mathbb{M}` represents the motion
 information of the object and 
 :math:`\mathbb{S}` 
-\footnote{The last row of :math:`\mathbb{S}` as formulated
-above consists of :math:`1`s.}
 represents the shape information
 of the object. 
 This factorization is known as
@@ -214,6 +210,12 @@ of the rigid motion of an object span an
 up to 4-dimensional
 subspace of the trajectory space :math:`\RR^{2F}`. 
  
+
+.. remark::
+
+    The last row of :math:`\mathbb{S}` as formulated
+    above consists of :math:`1` s.
+
 Solving the structure from motion problem
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 

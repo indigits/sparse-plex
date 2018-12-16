@@ -7,7 +7,7 @@ Basic matrix factorization based algorithms were developed
 for solving the motion segmentation problem 
 in :cite:`boult1991factorization,gear1998multibody,costeira1998multibody,kanatani2001motion`. 
 These algorithms are primarily algebraic in nature.
-See :ref:`here <sec:motion_segmentation>`
+See :ref:`here <sec:ac:app:motion_segmentation>`
 for the motivation from motion segmentation problem.
 
 The following derivation is applicable if the

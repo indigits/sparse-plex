@@ -20,6 +20,8 @@ Subspace Clustering
    subspace_clustering/performance_metrics
    subspace_clustering/mnist
    subspace_clustering/yale_faces
+   subspace_clustering/alg_ssc_mc_omp
+
 
 
 

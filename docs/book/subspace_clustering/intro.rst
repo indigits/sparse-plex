@@ -83,7 +83,7 @@ from only one object. This is a fundamental problem
 in applications such as motion capture, vision based navigation,
 target tracking and surveillance. We first track the
 trajectories of feature points (from all objects) over the image
-sequence. It has been shown (see :ref:`here <sec:motion_segmentation>`)
+sequence. It has been shown (see :ref:`here <sec:ac:app:motion_segmentation>`)
 that trajectories of feature points for rigid motion
 for a single object form a low dimensional subspace.
 Thus motion segmentation problem can be solved by

@@ -1,0 +1,50 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-4cm)]
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoLined
+%\setstretch{1.35}
+$x, r, \omega = \text{MC-OMP}(\Phi, y)$\;
+\KwIn{$\Phi$: self expressive dictionary}
+\KwIn{$y$ : data point}
+\KwOut{$x$ : Sparse representation coefficients}
+\KwOut{$\omega$ : support set}
+\KwOut{$r$ : final residual}
+\tcp{Compute first candidates}
+$h \leftarrow \Phi^T y$\;
+$[h, i] \leftarrow \text{sort}(\text{abs}(h), \text{'descend'})$\;
+$\omega^1_1 \leftarrow \{ i(1) \}$;
+$\omega^1_2 \leftarrow \{ i(2) \}$\;
+$\Omega^1 \leftarrow \{\omega^1_1, \omega^1_2\}$\tcp*{Candidate supports}
+$r^1_1 \leftarrow (I - \phi_{i(1)}\phi_{i(1)}^T) y$;
+$r^1_2 \leftarrow (I - \phi_{i(1)}\phi_{i(1)}^T) y$\;
+$R^1 \leftarrow \{r^1_1, r^1_2 \}$ \tcp*{Candidate residuals}
+$p \leftarrow 1$ \tcp*{Iteration counter}
+
+\Repeat{halting criteria is satisfied}{
+    \tcp{We compute new candidate supports}
+    $c \leftarrow 1$ \tcp*{new candidate counter}
+    \ForEach{$(\omega, r) \in (\Omega^p, R^p)$}{
+        \tcp{for each old candidate support and corresponding residual}
+        $h \leftarrow \Phi^T r$\;
+        $[h, i] \leftarrow \text{sort}(\text{abs}(h), \text{'descend'})$\;
+        \tcp{New candidate supports}
+        $\omega^{p+1}_{c} \leftarrow \omega \cup \{ i(1) \}$ ; $c \leftarrow c+1$ \;
+        $\omega^{p+1}_{c} \leftarrow \omega \cup \{ i(2) \}$ ; $c \leftarrow c+1$ \;
+    }
+    Combine all $\omega^{p+1}_c$ to form the new candidate support list $\Omega^{p+1}$\;
+    \ForEach{$\omega_c \in \Omega^{p+1}$}{
+        $r_c \leftarrow (I  - \Phi_{\omega_c}\Phi_{\omega_c}^{\dag}) y$ \tcp*{New candidate residual}
+    }
+    Combine all $r_c$ to form the new candidate residual list $R^{p+1}$\;
+    Prune the new candidate list $(\Omega^{p+1}, R^{p+1})$ if necessary \;
+    $p \leftarrow p + 1$\tcp*{Update iteration counter}
+}
+From the list $R^p$, choose residual $r$ with minimum norm and 
+identify corresponding support $\omega$ \;
+$x \leftarrow 0$ \tcp{Sparse representation vector}
+$x(\omega) \leftarrow \Phi_{\omega}^{\dag} y$\;
+\end{algorithm}
+\end{tcolorbox}
+\end{document}
