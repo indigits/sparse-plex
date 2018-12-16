@@ -33,6 +33,7 @@ common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_ope
 
 % Optimization algorithms
 cg_sources = [common_cpp_sources, 'spx_cg.cpp'];
+hungarian_sources = [common_cpp_sources, 'spx_assignment.cpp'];
 
 mp_sources = [common_cpp_sources, 'spx_matching_pursuit.cpp'];
 
@@ -61,7 +62,7 @@ make_program('mex_test_blas.c', blas_sources,compile_params, clean);
 make_program('mex_linsolve.c', la_sources, compile_params, clean);
 
 make_program('mex_cg.cpp', cg_sources,cpp_compile_params, clean);
-
+make_program('mex_hungarian.cpp', hungarian_sources, cpp_compile_params, clean);
 
 make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
 

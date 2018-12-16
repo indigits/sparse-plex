@@ -77,7 +77,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
          M, N, S, max_iters, tolerance, sparse_output, verbose);
     }
     // Create Sparse Representation Vector
-    spx::MxArrayOperator op(A_IN);
+    spx::MxArray op(A_IN);
     spx::CongugateGradients cg (op);
     if (max_iters > 0) {
         cg.set_max_iterations(max_iters);

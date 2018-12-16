@@ -644,7 +644,7 @@ void mult_mat_t_mat(double alpha,
 
 /* print contents of matrix */
 
-void print_matrix(const double A[], int n, int m, char* matrix_name)
+void print_matrix(const double A[], int n, int m, const char* matrix_name)
 {
   int i, j;
   mexPrintf("\n%s = \n\n", matrix_name);
