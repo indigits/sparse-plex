@@ -13,7 +13,7 @@ setup.rhos = round(5.^[1:.2:3.2]);
 setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396 6132 11075 20000];
 %setup.num_points_per_cluster_list = [30 55 98 177 320 577];
 % DO NOT GO BEYOND 3396. THE LAPTOP CANNOT HANDLE IT. MATLAB CRASHES. OOM. LAPTOP HANGS.
-setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880 3396];
+setup.num_points_per_cluster_list = [30 55 98 177 320 577 1041 1880];
 %setup.num_points_per_cluster_list = [30 55];
 setup.rhos = setup.num_points_per_cluster_list / 6;
 disp(setup.rhos);
@@ -23,7 +23,7 @@ R= numel(setup.rhos);
 % Number of times each experiment should be run.
 setup.num_trials = 20;
 % store the overall experiment setup in a separate file.
-save(sprintf('bin/spx.cluster.ssc.util.bench_subspace_preservation_%s.mat', solver_name), 'setup');
+save(sprintf('bin/bench_subspace_preservation_%s.mat', solver_name), 'setup');
 
 for r=1:R
     rng(r);
@@ -76,7 +76,7 @@ for r=1:R
         trial.spr_perc = spr_stats.spr_perc;
         fprintf('\nPoint density: %0.2f: , clustering error: %0.2f %% , clustering accuracy: %0.2f %%, mean spr error: %0.2f preserving : %0.2f %%, connectivity: %0.2f, elapsed time: %0.2f sec', trial.rho, trial.clustering_error_perc, trial.clustering_acc_perc, spr_stats.spr_error, spr_stats.spr_perc, trial.connectivity, trial.elapsed_time);
         fprintf('\n\n');
-        filepath = sprintf('bin/spx.cluster.ssc.util.bench_subspace_preservation_%s_points=%d_trial=%d.mat', solver_name, trial.Sk, tt);
+        filepath = sprintf('bin/bench_subspace_preservation_%s_points=%d_trial=%d.mat', solver_name, trial.Sk, tt);
         save(filepath, 'trial');
     end
 end
