@@ -6,14 +6,15 @@
 #include "spx_pursuit.hpp"
 
 
-const char* func_name = "mex_mp";
+const char* func_name = "mex_cosamp";
 
 #define D_IN prhs[0]
 #define X_IN prhs[1]
 #define K_IN prhs[2]
 #define EPS_IN prhs[3]
-#define SPARSE_IN prhs[4]
-#define VERBOSE prhs[5]
+#define ITERATIONS_IN prhs[4]
+#define SPARSE_IN prhs[5]
+#define VERBOSE prhs[6]
 
 #define A_OUT plhs[0]
 
@@ -44,14 +45,21 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         eps  = mxGetScalar(EPS_IN);
     }
 
-    int sparse_output = 1;
+    int iterations = 0;
     if (nrhs > 4){
+        check_is_double_scalar(ITERATIONS_IN,  func_name, "iterations");
+        // Read the value of iterations
+        iterations = mxGetScalar(ITERATIONS_IN);
+    }
+
+    int sparse_output = 1;
+    if (nrhs > 5){
         check_is_double_scalar(SPARSE_IN, func_name,"sparse");
         sparse_output = (int) mxGetScalar(SPARSE_IN);
     }
 
     int verbose = 0;
-    if (nrhs > 5){
+    if (nrhs > 6){
         check_is_double_scalar(VERBOSE, func_name, "verbose");
         verbose = (int) mxGetScalar(VERBOSE);
     }
@@ -71,16 +79,21 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         mexPrintf("M: %d, N:%d, S: %d, K: %d, eps: %e, sparse: %d, verbose: %d\n",
          M, N, S, K, eps, sparse_output, verbose);
     }
-    // Create Sparse Representation Vector
-    spx::MxArray op(D_IN);
-    spx::MatchingPursuit mp (op);
-    if (K > 0) {
-        mp.set_max_iterations(K);
+    try {
+        // Create Sparse Representation Vector
+        spx::MxArray op(D_IN);
+        spx::CoSaMP cosamp(op, K);
+        if (eps > 0) {
+            cosamp.set_max_residual_norm(eps);
+        }
+        if (iterations > 0) {
+            cosamp.set_max_iterations(iterations);
+        }
+        cosamp(m_x);
+        A_OUT = spx::d_vec_to_mx_array(cosamp.get_representation());
+    } catch (std::exception& e) {
+        mexErrMsgTxt(e.what());
+        return;
     }
-    if (eps > 0) {
-        mp.set_max_residual_norm(eps);
-    }
-    mp(m_x);
-    A_OUT = spx::d_vec_to_mx_array(mp.get_representation());
 }
 

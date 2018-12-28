@@ -31,6 +31,15 @@ m_bOwned(bOwned)
 {    
 }
 
+Matrix::Matrix(Matrix& source, mwSize start_col, mwSize num_cols):
+m_pMatrix(source.m_pMatrix + source.rows() * start_col),
+m_rows(source.rows()),
+m_cols(num_cols),
+m_bOwned(false){
+
+}
+
+
 Matrix::~Matrix(){
     if (m_bOwned) {
         // release the memory
@@ -58,6 +67,13 @@ void Matrix::column(mwIndex index, double b[]) const {
 void Matrix::extract_columns( const mwIndex indices[], mwSize k, 
     double B[]) const{
      mat_col_extract(m_pMatrix, indices, B, m_rows, k);
+}
+
+void Matrix::extract_columns(const index_vector& indices, Matrix& output) const{
+    double* B = output.m_pMatrix;
+    const mwIndex* indices2 = &indices[0];
+    mwSize k = indices.size();
+    mat_col_extract(m_pMatrix, indices2, B, m_rows, k);
 }
 
 void Matrix::extract_rows( const mwIndex indices[], mwSize k, double B[]) const{
@@ -211,6 +227,19 @@ void Matrix::find_value(const double &value, Matrix& result) const{
     }
 }
 
+void Matrix::gram(Matrix& output) const{
+    if(output.rows() != output.columns()) {
+        throw std::logic_error("Gram matrix must be symmetric");
+    }
+    if(output.columns() != columns()) {
+        throw std::logic_error("Size of gram matrix must be equal to the number of columns in source matrix");
+    }
+    double* src = m_pMatrix;
+    int M = rows();
+    int N = columns();
+    mult_mat_t_mat(1, src, src, output.m_pMatrix, N, N, M);
+}
+
 /************************************************
  *  Matrix Printing
  ************************************************/
@@ -277,6 +306,11 @@ void MxArray::extract_columns( const mwIndex indices[], mwSize k,
     m_impl.extract_columns(indices, k, B);
 }
 
+void MxArray::extract_columns(const index_vector& indices, Matrix& output) const{
+    m_impl.extract_columns(indices, output);
+}
+
+
 void MxArray::extract_rows( const mwIndex indices[], mwSize k, double B[]) const{
     m_impl.extract_rows(indices, k, B);
 }
@@ -298,40 +332,6 @@ void MxArray::add_column_to_vec(double coeff, mwIndex index, double x[]) const{
 
 bool MxArray::copy_matrix_to(Matrix& dst) const {
     return m_impl.copy_matrix_to(dst);
-}
-
-/************************************************
- *  Utility functions
- ************************************************/
-
-mxArray* d_vec_to_mx_array(const d_vector& x)
-{
-    mwSize N = x.size();
-    mxArray* p_alpha = mxCreateDoubleMatrix(N, 1, mxREAL);
-    double* m_alpha =  mxGetPr(p_alpha);
-    copy_vec_vec(&x[0], m_alpha, N);
-    return p_alpha;
-}
-
-void print_d_vec(const d_vector& x, const std::string& name){
-    if (name.size() > 0) {
-      mexPrintf("\n%s = \n\n", name.c_str());
-    }
-    int n = x.size();
-    for (int i=0; i<n; ++i) {
-        mexPrintf("   %lf", x[i]);
-    }
-    mexPrintf("\n");
-}
-void print_i_vec(const i_vector& x, const std::string& name){
-    if (name.size() > 0) {
-      mexPrintf("\n%s = \n\n", name.c_str());
-    }
-    int n = x.size();
-    for (int i=0; i<n; ++i) {
-        mexPrintf("   %d", x[i]);
-    }
-    mexPrintf("\n");
 }
 
 

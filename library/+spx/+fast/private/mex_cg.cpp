@@ -86,7 +86,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         cg.set_tolerance(tolerance);
     }
     if (verbose > 0){
-        cg.set_verbose(verbose);
+        cg.set_verbose( (spx::VERBOSITY) verbose);
     }
     cg(m_x);
     X_OUT = spx::d_vec_to_mx_array(cg.get_x());

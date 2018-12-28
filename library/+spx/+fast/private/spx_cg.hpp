@@ -7,23 +7,6 @@ Conjugate gradients solver
 
 namespace spx {
 
-
-/**
-Conjugate gradients algorithm
-
-Mapping of variables from cgsolve.m
-
-x -> x
-r -> r
-q -> w
-d -> p
-delta -> res_norm_sqr
-alpha -> alpha
-beta -> 
-
-
-*/
-
 class CGProfile {
 public:
     CGProfile() ;
@@ -77,7 +60,21 @@ private:
     void print_step(const char* step, clock_t spent_time) const;
 };
 
+/**
+Conjugate gradients algorithm
 
+Mapping of variables from cgsolve.m
+
+x -> x
+r -> r
+q -> w
+d -> p
+delta -> res_norm_sqr
+alpha -> alpha
+beta -> 
+
+
+*/
 class CongugateGradients{
 public: 
     CongugateGradients(const Operator& op);
@@ -91,22 +88,22 @@ public: // Results
         return m_iterations;
     }
 public: // Parameter setters
-    void set_max_iterations(mwIndex max_iterations){
+    inline void set_max_iterations(mwIndex max_iterations){
         m_max_iterations = max_iterations;
     }
-    mwIndex get_max_iterations() const {
+    inline mwIndex get_max_iterations() const {
         return m_max_iterations;
     }
-    void set_tolerance(double tolerance) {
+    inline void set_tolerance(double tolerance) {
         m_tolerance = tolerance;
     }
-    double get_tolerance() const {
+    inline double get_tolerance() const {
         return m_tolerance;
     }
-    void set_verbose(mwIndex verbose){
+    inline void set_verbose(VERBOSITY verbose){
         m_verbose = verbose;
     }
-    mwIndex get_verbose() const {
+    inline VERBOSITY get_verbose() const {
         return m_verbose;
     }
 private:
@@ -116,7 +113,8 @@ private:
     mwIndex m_max_iterations;
     //! actual number of iterations
     mwIndex m_iterations;
-    int m_verbose;
+    //! Verbosity level
+    VERBOSITY m_verbose;
     //! Result
     d_vector m_x;
     //! Residual
@@ -126,6 +124,7 @@ private:
     d_vector m_best_x;
     CGProfile m_profile;
 };
+
 
 
 

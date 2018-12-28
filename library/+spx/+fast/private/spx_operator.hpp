@@ -6,15 +6,17 @@
 #include <tuple>
 #include <stdexcept>
 #include <string>
+
+#include "spx_vector.hpp"
+
 namespace spx {
 
-typedef std::vector<double> d_vector;
-typedef std::vector<int> i_vector;
 
 /// Level of verbosity in different algorithms
 enum VERBOSITY {
-    BASIC = 1,
-    PROFILE = 2,
+    QUIET = 0,
+    DEBUG_BASIC = 1,
+    DEBUG_PROFILE = 2,
     DEBUG_LOW = 3,
     DEBUG_MID = 4,
     DEBUG_HIGH = 5,
@@ -36,6 +38,7 @@ public:
     //! Returns a particular column from the matrix
     virtual void column(mwIndex index, double b[]) const = 0;
     virtual void extract_columns( const mwIndex indices[], mwSize k, double B[]) const = 0;
+    virtual void extract_columns(const index_vector& indices, Matrix& output) const = 0;
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const = 0;
     virtual void mult_vec(const double x[], double y[]) const = 0;
     virtual void mult_t_vec(const double x[], double y[]) const = 0;
@@ -48,13 +51,19 @@ private:
 
 class Matrix : public Operator {
 public:
+    //! Constructs a self owned matrix
     Matrix(mwSize rows, mwSize cols);
+    //! Construct a matrix on data owned by someone else
     Matrix(double *pMatrix, mwSize rows, mwSize cols, bool bOwned = false);
+    //! Construct a view over a set of columns from another matrix
+    Matrix(Matrix& source, mwSize start_col, mwSize num_cols);
+    //! Destructor
     virtual ~Matrix();
     virtual mwSize rows() const;
     virtual mwSize columns() const;
     virtual void column(mwIndex index, double b[]) const;
     virtual void extract_columns( const mwIndex indices[], mwSize k, double B[]) const;
+    virtual void extract_columns(const index_vector& indices, Matrix& output) const;
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const;
     virtual void mult_vec(const double x[], double y[]) const;
     virtual void mult_t_vec(const double x[], double y[]) const;
@@ -88,6 +97,8 @@ public:
     inline double& operator()(mwIndex row, mwIndex col) {
         return m_pMatrix[col * m_rows + row];
     }
+    //! Computes the gram matrix for the this matrix
+    void gram(Matrix& output) const;
 public:
     // Functions for printing
     void print_matrix(const char* name="") const;
@@ -110,6 +121,7 @@ public:
     virtual mwSize columns() const;
     virtual void column(mwIndex index, double b[]) const;
     virtual void extract_columns( const mwIndex indices[], mwSize k, double B[]) const;
+    virtual void extract_columns(const index_vector& indices, Matrix& output) const;
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const;
     virtual void mult_vec(const double x[], double y[]) const;
     virtual void mult_t_vec(const double x[], double y[]) const;
@@ -126,11 +138,6 @@ private:
     const bool  m_bOwned;
     Matrix m_impl;
 };
-
-mxArray* d_vec_to_mx_array(const d_vector& x);
-
-void print_d_vec(const d_vector& x, const std::string& name = "");
-void print_i_vec(const i_vector& x, const std::string& name = "");
 
 }
 

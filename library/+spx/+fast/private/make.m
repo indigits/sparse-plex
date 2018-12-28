@@ -29,13 +29,14 @@ end
 blas_sources  = {'argcheck.c', 'spxblas.c'};
 common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
 
-common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp'};
+common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp', 'spx_vector.cpp'};
 
 % Optimization algorithms
 cg_sources = [common_cpp_sources, 'spx_cg.cpp'];
 hungarian_sources = [common_cpp_sources, 'spx_assignment.cpp'];
 
 mp_sources = [common_cpp_sources, 'spx_matching_pursuit.cpp'];
+cosamp_sources = [common_cpp_sources, 'spx_cosamp.cpp', 'spx_cg.cpp'];
 
 
 omp_sources = [common_sources, 'omp.c', 'omp_util.c', 'omp_profile.c'];
@@ -65,6 +66,7 @@ make_program('mex_cg.cpp', cg_sources,cpp_compile_params, clean);
 make_program('mex_hungarian.cpp', hungarian_sources, cpp_compile_params, clean);
 
 make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
+make_program('mex_cosamp.cpp', cosamp_sources,cpp_compile_params, clean);
 
 
 make_program('mex_omp_chol.c', omp_sources,compile_params, clean);

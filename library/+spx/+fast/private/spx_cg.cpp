@@ -8,7 +8,7 @@ m_op(op),
 m_max_iterations(4*op.columns()),
 m_tolerance(1e-3), 
 m_iterations(0),
-m_verbose(0){
+m_verbose(QUIET){
 
 }
 
@@ -108,7 +108,7 @@ void CongugateGradients::operator()(const double b[]) {
         }
         m_profile.log_best_x_update();
     }
-    if(m_verbose >= 2){
+    if(m_verbose >= DEBUG_PROFILE){
         m_profile.log_total_time();
         m_profile.print();
     }
