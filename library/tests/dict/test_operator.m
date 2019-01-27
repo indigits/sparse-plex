@@ -142,3 +142,92 @@ function test_partial_dct_orthogonal(testCase)
     tolerance = 1e-8;
     verifyEqual(testCase, y, u, 'AbsTol', tolerance);
 end
+
+
+function test_partial_dft_1(testCase)
+    rng default;
+    M = 8;
+    N = 16;
+    p = randperm(N);
+    % select some rows randomly
+    row_pics = sort(p(1:M));
+    % make sure that the first row is there
+    row_pics(1) = 1;
+    col_perm = randperm(N);
+    Dict = spx.dict.PartialDFT(row_pics, col_perm);
+    x = ones(N, 1);
+    y  = Dict.apply(x);
+    z = Dict.adjoint(y);
+    tolerance = 1e-3;
+    verifyEqual(testCase, y, [4
+     0
+     0
+     0
+     0
+     0
+     0
+     0], 'AbsTol', tolerance);
+    verifyEqual(testCase, z, [1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1], 'AbsTol', tolerance);
+
+    x(1) = x(1) + 2;
+    y  = Dict.apply(x);
+    z = Dict.adjoint(y);
+    verifyEqual(testCase, y, [4.5000 + 0.0000i
+   0.5000 + 0.0000i
+   0.0000 - 0.5000i
+  -0.5000 + 0.0000i
+   0.0000 + 0.5000i
+  -0.5000 + 0.0000i
+   0.0000 - 0.5000i
+   0.0000 + 0.5000i], 'AbsTol', tolerance);
+   verifyEqual(testCase, z, [2.0000 + 0.0000i
+   0.9482 + 0.1250i
+   0.9482 - 0.1250i
+   1.3018 - 0.1250i
+   1.0000 - 0.3536i
+   1.3018 + 0.1250i
+   1.0000 + 0.0000i
+   1.0000 + 0.3536i
+   1.3018 - 0.1250i
+   1.0000 - 0.3536i
+   1.3018 + 0.1250i
+   0.9482 - 0.1250i
+   0.9482 + 0.1250i
+   1.0000 + 0.3536i
+   1.0000 + 0.0000i
+   1.0000 + 0.0000i], 'AbsTol', tolerance);
+end
+
+
+function test_partial_dft_orthogonal(testCase)
+    rng default;
+    M = 32;
+    N = 64;
+    p = randperm(N);
+    % select some rows randomly
+    row_pics = sort(p(1:M));
+    % make sure that the first row is there
+    row_pics(1) = 1;
+    col_perm = randperm(N);
+    Dict = spx.dict.PartialDFT(row_pics, col_perm);
+    y = eye(M);
+    z = Dict.adjoint(y);
+    u = Dict.apply(z);
+    tolerance = 1e-8;
+    verifyEqual(testCase, y, u, 'AbsTol', tolerance);
+end
