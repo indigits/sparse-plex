@@ -2,9 +2,8 @@ classdef Operator < handle
 % Skeleton for any operator in CSF
 
      methods (Abstract)
-        result = size(self)
+        result = get_size(self)
         result = apply(self, vectors)
-        result = apply_transpose(self, vectors)
         result = apply_ctranspose(self, vectors)
         result = norm(self)
      end
@@ -16,8 +15,50 @@ classdef Operator < handle
             result = self.apply(speye(n, n));
         end
 
+        function [m, n] = size(self, dim)
+            [mm, nn]  = self.get_size();
+            if nargin == 2
+                if dim == 1
+                    m = mm;
+                    return;
+                elseif dim == 2
+                    m = nn;
+                    return;
+                else
+                    error('Invalid dimension');
+                end
+            end
+            if nargout <= 1
+                % Return both parts of size in an array
+                m = [mm, nn];
+            elseif nargout == 2
+                % Return the rows and cols separately
+                m = mm;
+                n = nn;
+            else
+                % What is this?
+                error('Invalid output arguments');
+            end
+        end
+
         function result = mtimes(self, other)
             result = self.apply(other);
+        end
+
+        function result = adjoint(self, vectors)
+            % Hermitian Adjoint operator A' *x s
+            result = self.apply_ctranspose(vectors);
+        end
+
+        function result = apply_transpose(self, vectors)
+            % A.' * x = conj (A' * conj(x))
+            if ~isreal(vectors)
+                vectors = conj(vectors)
+            end
+            result = self.apply_ctranspose(vectors);
+            if ~isreal(result)
+                result = conj(result);
+            end
         end
 
         function result = transpose(self)

@@ -13,30 +13,8 @@ classdef MatrixOperator < spx.dict.Operator
             self.AH = A';
         end
         
-        function [m, n] = size(self, dim)
-            [mm, nn]  = size(self.A);
-            if nargin == 2
-                if dim == 1
-                    m = mm;
-                    return;
-                elseif dim == 2
-                    m = nn;
-                    return;
-                else
-                    error('Invalid dimension');
-                end
-            end
-            if nargout <= 1
-                % Return both parts of size in an array
-                m = [mm, nn];
-            elseif nargout == 2
-                % Return the rows and cols separately
-                m = mm;
-                n = nn;
-            else
-                % What is this?
-                error('Invalid output arguments');
-            end
+        function [mm, nn]  = get_size(self)
+            [mm, nn] = size(self.A);
         end
 
         function result = apply(self, vectors)
@@ -44,7 +22,7 @@ classdef MatrixOperator < spx.dict.Operator
         end
 
         function result = apply_transpose(self, vectors)
-            result = self.A.' * vectors;
+            result = transpose(self.A) * vectors;
         end
 
         function result = apply_ctranspose(self, vectors)
