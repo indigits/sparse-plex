@@ -123,6 +123,26 @@ classdef SparseSignalGenerator < handle
             self.X(self.Omega, :) = x;
             result = self.X;
         end
+
+        function result = dynamic_range_in_db(self, db)
+            % range of min and max values
+            range = 10^(db / 10);
+            % generate non-zero values
+            x = rand(self.K, self.S);
+            % min value for each column
+            x_min = min(x);
+            % max value for each column
+            x_max = max(x);
+            % shift required for each column
+            shift = (x_max  - range*x_min) / (range - 1);
+            % shift non-zero values
+            x = bsxfun(@plus, x, shift);
+            % apply signs
+            signs = sign(randn(self.K, self.S));
+            % place the values in the array
+            self.X(self.Omega, :) = signs.*x;
+            result = self.X;
+        end
     end
     
 end
