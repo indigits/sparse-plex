@@ -16,7 +16,12 @@ indices = permutation(1:K);
 % non-zero entries
 x0(indices) = randn(K,1);
 
-b = A * x0;
+b0 = A * x0;
+% noise variance
+sigma = 0.1;
+e = sigma * randn(M, 1);
+% add noise
+b = b0 + e;
 
 % orthonormalize the rows of A
 % perform QR decomposition of rows of A
@@ -28,9 +33,10 @@ b = R'\b;
 
 options.verbose = 0;
 options.max_iterations = 200;
-options.tolerance = 5e-4;
+options.tolerance = 5e-3;
 solver = spx.pursuit.single.L1_ADMM_YZ(A, options);
-x = solver.solve_bp(b);
+mu = sigma;
+x = solver.solve_bpdn_l2(b, mu);
 
 r = x - x0;
 max_diff = max(abs(r));
@@ -58,4 +64,18 @@ if print
     ylabel('Objective Value');
     legend({'Primal Objective', 'Dual Objective'});
     grid on;
+end
+
+cvx = 0;
+if cvx
+% time to compare with a CVX implementation
+cvx_solver = spx.pursuit.single.BasisPursuit(A, b);
+tstart = tic;
+x = cvx_solver.solve_lasso(1/(2*mu));
+elapsed_time = toc(tstart);
+r = x - x0;
+max_diff = max(abs(r));
+rel_error = norm(x-x0) /norm(x0);
+fprintf('Relative error: %e, max diff: %.4f, time: %.4f seconds\n', ...
+    rel_error, max_diff, elapsed_time);
 end

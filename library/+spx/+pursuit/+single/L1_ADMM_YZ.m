@@ -62,10 +62,85 @@ end % function
 
 function [X] = solve_bp(self, B, options)
     % Solves the problem min ||x||_1 s.t. Ax = b
+    if nargin < 2
+        error('B must be specified.');
+    end
     if nargin < 3
         options = struct;
     end
     self.process_options(options);
+    num_problems = size(B, 2);
+    if self.verbose > 0
+        fprintf('Solving l1 minimization problem: BP.\n');
+    end
+    self.init_details(num_problems);
+    max_iterations = self.max_iterations;
+    A  = self.A;
+    X = zeros(self.N, num_problems);
+    % import relevant functions from other modules
+    import spx.opt.projections.proj_linf_ball;
+    % iterate over problems
+    for prob=1:num_problems
+        tstart = tic;
+        b = B(:, prob);
+        b_max = norm(b, 'inf');
+        terminated = false;
+        % Check for zero solution condition
+        if b_max < self.tolerance
+            % There is no need to proceed further
+            % zero solution is best solution
+            self.details.terminated(prob) = true;
+            self.details.iterations(prob) = 0;
+            self.details.elapsed_times(prob) = toc(tstart);
+            X(:, prob) = zeros(self.N, 1);
+            continue;
+        end
+        if self.rho > 0
+            % we will use user defined quadratic term weight
+            rho = self.rho;
+        else
+            rho = mean(abs(b));
+        end
+        gamma = self.gamma;
+        % scale the problem
+        b = b / b_max;
+        % Initialize solution
+        x = A.adjoint(b);
+        z = zeros(self.N, 1);
+        y = zeros(self.M, 1);
+        % compute current primary residual
+        r_primal = A.apply(x) - b;
+        for iter=1:max_iterations
+            % check if we need to iterate further
+            if terminated; break; end;
+            % update z
+            z_prev = z;
+            z = proj_linf_ball(A.adjoint(y) + (x / rho));
+            % update y
+            y_prev = y;
+            Az = A.apply(z);
+            y = (Az - r_primal / rho);
+            % update dual residual
+            Aty = A.adjoint(y);
+            r_dual =  Aty - z;
+            % update x
+            x_prev = x;
+            x = x + (gamma * rho)*r_dual; 
+            % update primary residual
+            r_primal = A.apply(x) - b;
+            % primal objective
+            primal_obj = sum(abs(x));
+            % dual objective
+            dual_obj = real(b' * y);
+            terminated = self.check_termination(x, x_prev, y, z, ...
+                r_primal, r_dual, primal_obj, dual_obj, iter, prob);
+        end % iteration loop
+        self.details.terminated(prob) = terminated;
+        self.details.iterations(prob) = iter-1;
+        self.details.elapsed_times(prob) = toc(tstart);
+        % put the final solution back in result
+        X(:, prob) = x * b_max;
+    end % problem loop
 end % function
 
 function [X] = solve_bpic(self, B, delta, options)
