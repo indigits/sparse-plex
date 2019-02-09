@@ -552,6 +552,8 @@ def setup(app):
     newtheorem(app, 'remark', 'Remark', None)
     newtheorem(app, 'proof', 'Proof', None)
     newtheorem(app, 'think', 'Think', None)
+    newtheorem(app, 'formula', 'Formula', None)
+    newtheorem(app, 'result', 'Result', None)
 
 # test if there is no global name which starts with 'thmnode_', 
 # these names are reserved for thmnodes (newtheorem()).
