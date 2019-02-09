@@ -27,6 +27,7 @@ A journey into sparse and redundant representations.
    book/convex_analysis
    book/probability
    book/geometry
+   book/opt
    book/signal_processing
    book/wavelets
    book/dce
