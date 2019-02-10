@@ -168,7 +168,7 @@ MathJax.Hub.Config({
         Bracket: '\\left [ \\; \\right ]',
         bold: ['{\\bf #1}', 1],
         // OneVec
-        OneVec: '\\mathcal{1}',
+        OneVec: '\\mathbb{1}',
         ZeroVec: '0',
         OneMat: '\\mathbf{1}',
         bigO: ['\\mathop{}\\mathopen{}\\mathcal{O}\\mathopen{}\\left(#1\\right)', 1],

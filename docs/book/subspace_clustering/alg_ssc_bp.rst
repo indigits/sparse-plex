@@ -10,6 +10,163 @@ SSC by Basis Pursuit
     :local:
 
 
+Optimization Program Formulations
+------------------------------------------
+
+Linear subspaces
+''''''''''''''''''''''
+
+
+The self expressive representation of dataset is given by
+
+.. math::
+
+    y_s = Y c_s, \quad c_{s,s} = 0.
+
+Combining representations for all data-points, we get:
+
+.. math::
+
+    Y = Y C, \quad \Diag(C) = 0.
+
+
+We solve for representation of each data-point in terms of
+other data-points by solving the :math:`\ell_1`-minimization
+program
+
+.. math::
+    \min \| c_s \|_1 \quad \text{ s.t. }  y_s = Y c_s, \; c_{ss} = 0. 
+
+
+We can combine for all data-points to give us the optimization
+program:
+
+.. math::
+    \min \| C \|_{1,1} \quad \text{ s.t. }  Y = Y C, \; \Diag(C) = 0. 
+
+Affine Subspaces
+'''''''''''''''''''''''
+
+When the data points belong to affine subspaces of dimension
+D, then each point :math:`y_s` can be written as an 
+affine combination of :math:`D+1` other points belonging to
+same affine subspace as 
+
+.. math::
+
+    y_s = Y c_s, \quad \OneVec^T c_s = 1, \; c_{s,s} = 0.  
+
+
+Combining over all points:
+
+.. math::
+
+    Y = Y C, \quad \OneVec^T C = \OneVec^T, \; \Diag(C) = 0.
+
+
+The corresponding :math:`\ell_1`-minimization program is:
+
+.. math::
+
+    \min \| C \|_{1,1} \quad \text{ s.t. }  Y = Y C, \; 
+    \OneVec^T C = \OneVec^T, \; \Diag(C) = 0. 
+    
+
+
+Noise and Outliers
+''''''''''''''''''''
+
+Let each data point be corrupted by a vector of
+sparse outlying entries and noise with bounded norm:
+
+.. math::
+
+    y_s = y_s^0 + e_s^0 + z_s^0.
+
+The self-expressiveness applies to the error free part 
+as :
+
+.. math::
+
+    y_s^0 = \sum_{j \neq s} c_s(j) y_j^0.
+
+
+Rewrite :math:`y_j^0` in terms of :math:`y_j` and
+:math:`y_s^0` in terms of :math:`y_s`:
+
+.. math::
+
+    y_s - e_s^0 - z_s^0 =  \sum_{j \neq s} c_s(j) (y_j - e_j^0 - z_s^0)
+
+
+Define:
+
+.. math::
+
+    e_s = e_s^0 - \sum_{j \neq s}  c_s(j)  e_j^0.
+
+.. math::
+
+    z_s = z_s^0 - \sum_{j \neq s}  c_s(j)  z_j^0.
+
+We can rewrite above as:
+
+.. math::
+
+    y_s = \sum_{j \neq s} c_s(j) y_j + e_s + z_s.
+
+Collecting for all data points we get:
+
+.. math::
+
+    Y = Y C + E + Z, \quad \Diag(C) = 0. 
+
+Our objective is then to find a solution 
+:math:`(C, E, Z)` where :math:`C` is a sparse
+coefficient matrix, :math:`E` is a sparse matrix
+of outliers and :math:`Z` is noise. This can be
+modeled by following program:
+
+.. math::
+
+    \min \| C \|_{1,1}  + \lambda_e \| E \|_{1,1} + \frac{\lambda_z}{2} \| Z \|_F^2 
+    \quad \text{ s.t. }  Y = Y C + E + Z, \; 
+    \Diag(C) = 0. 
+    
+
+When outliers are not there, the program simplifies to:
+
+.. math::
+
+    \min \| C \|_{1,1} + \frac{\lambda}{2} \| Z \|_F^2 
+    \quad \text{ s.t. }  Y = Y C + Z, \; 
+    \Diag(C) = 0. 
+
+
+Affine subspaces with noise and outliers
+''''''''''''''''''''''''''''''''''''''''''''''''
+
+Essentially, we just need to add the criteria for the
+sum of sparse coefficients to be 1.
+
+
+In the presence of noise, the program becomes: 
+
+.. math::
+
+    \min \| C \|_{1,1} + \frac{\lambda}{2} \| Z \|_F^2 
+    \quad \text{ s.t. }  Y = Y C + Z, \; 
+    \OneVec^T C = \OneVec^T, \; \Diag(C) = 0. 
+
+
+When sparse outliers are also present, the program becomes:
+
+.. math::
+
+    \min \| C \|_{1,1}  + \lambda_e \| E \|_{1,1} + \frac{\lambda_z}{2} \| Z \|_F^2 
+    \quad \text{ s.t. }  Y = Y C + E + Z, \; 
+    \OneVec^T C = \OneVec^T, \; \Diag(C) = 0. 
+
 .. _sec:sc:ssc:bp:hands-on:
 
 Hands-on SSC-BP with Synthetic Data

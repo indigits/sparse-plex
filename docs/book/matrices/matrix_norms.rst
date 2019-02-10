@@ -1817,6 +1817,7 @@ can decrease the length of a vector.
     
 
 
+.. _sec:mat:row_column_norms:
  
 Row column norms
 ----------------------------------------------------

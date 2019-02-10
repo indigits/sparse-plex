@@ -168,3 +168,177 @@ This is one-sided soft-thresholding.
     .. math::
 
         \text{prox}_f(x) = [|x| - \lambda]_+ \sgn(x).
+
+
+.. proof::
+
+    Note that :math:`f` is differentiable for :math:`x \neq 0`.
+    :math:`\text{prox}_f(x)` is the minimizer of the function
+
+    .. math::
+
+        g(u) = \begin{cases}
+        g_1(u) = \lambda u + \frac{1}{2} (u - x)^2 &  u \geq 0 \\
+        g_2(u) = -\lambda u + \frac{1}{2} (u - x)^2 & u < 0
+        \end{cases}
+
+
+    If a minimizer is obtained at :math:`u > 0`, then 
+    :math:`0 = f'(u) = g_1'(u) = \lambda + u - x` giving
+    us :math:`u = x - \lambda`. Since, we assumed that :math:`u > 0`,
+    hence :math:`x > \lambda`. In other words,
+    if :math:`x > \lambda`, then :math:`u = x - \lambda` is the
+    minimizer. Similarly, for :math:`x < -\lambda`, :math:`u = x + \lambda`
+    is the minimizer. For :math:`-\lambda \leq x \leq \lambda`, the minimizer
+    is at the only point of non-differentiability for :math:`g_1` which is
+    :math:`u = 0`. Thus
+
+    .. math::
+
+        \text{prox}_f(x) = \begin{cases}
+        x - \lambda & x > \lambda \\
+        0 & -\lambda \leq x \leq \lambda \\
+        x + \lambda & x < -\lambda 
+        \end{cases}
+
+This is nothing but shrinkage operator or soft thresholding operator.
+
+.. definition::
+
+    The **soft thresholding operator** :math:`S: \RR \to \RR` is
+    defined as:
+
+    .. math::
+
+        S_{\kappa}(x) = \begin{cases}
+        x - \kappa & x > \kappa \\
+        0 & |x| \leq \kappa \\
+        x + \kappa & x < -\kappa
+        \end{cases}.
+
+    An equivalent definition is
+    
+    .. math::
+        S_{\kappa}(x) = (x - \kappa)_+ - (-x-\kappa)_+.
+
+
+
+.. proposition::
+
+    The minimizer of 
+
+    .. math::
+
+        f(x) = \lambda |x|  + \frac{1}{2} (x - u)^2
+
+    is :math:`S_{\lambda}(u)`.
+
+This is a straight-forward application of the proximal operator
+result above.
+
+
+.. proposition::
+
+    The minimizer of 
+
+    .. math::
+
+        f(x) = \lambda |x|  + \frac{\rho}{2} (x - u)^2
+
+    is :math:`S_{\lambda/\rho}(u)`.
+
+
+.. proof::
+
+    .. math::
+
+        f(x) = \begin{cases}
+        f_1(x) = \lambda x + \frac{\rho}{2} (x - u)^2 &  x \geq 0 \\
+        f_2(x) = -\lambda x + \frac{\rho}{2} (x - u)^2 & x < 0
+        \end{cases}.
+
+    :math:`f` is differentiable everywhere except at :math:`x = 0`.
+
+    If a minimizer is obtained at :math:`x > 0`, then
+
+    .. math::
+
+        0 = f'(x) = f_1'(x) = \lambda + \rho (x - u)
+
+    giving us :math:`x = u - \frac{\lambda}{\rho}`. This holds
+    true if :math:`u > \frac{\lambda}{\rho}`. Rest of the argument
+    is similar.
+
+
+
+
+.. definition::
+
+    **Element-wise soft thresholding** operator 
+    :math:`S_{\lambda} : \RR^n \to \RR^n` is defined as
+
+
+    .. math::
+
+        S_{\lambda}(x_i) = \begin{cases}
+        x_i - \lambda & x_i > \lambda \\
+        0 & |x_i| \leq \lambda \\
+        x_i + \lambda & x_i < -\lambda
+        \end{cases}.
+
+
+.. proposition::
+
+    The minimizer of :math:`f: \RR^n \to \RR` defined as
+
+    .. math::
+
+        f(x) = \lambda \|x\|_1  + \frac{\rho}{2} \|x - u\|_2^2
+
+    is :math:`S_{\lambda/\rho}(u)` (applied element-wise).
+
+
+.. proof::
+
+    The result follows from the fact that :math:`f(x)` is
+    separable as :math:`f(x) = \sum f_i(x_i)` where 
+
+    .. math::
+        f_i(x) = \lambda |x_i|  + \frac{\rho}{2} (x_i - u_i)^2.
+
+
+
+.. definition::
+
+    **Element-wise soft thresholding** operator over matrices
+    :math:`S_{\lambda} : \RR^{m\times n} \to \RR^{m\times n}` is defined as
+
+
+    .. math::
+
+        S_{\lambda}(x_{ij}) = \begin{cases}
+        x_{ij} - \lambda & x_{ij} > \lambda \\
+        0 & |x_{ij}| \leq \lambda \\
+        x_{ij} + \lambda & x_{ij} < -\lambda
+        \end{cases}.
+
+
+.. proposition::
+
+    The minimizer of :math:`f: \RR^{m \times n} \to \RR` defined as
+
+    .. math::
+
+        f(X) = \lambda \|X\|_{1,1}  + \frac{\rho}{2} \|X - U\|_F^2
+
+    is :math:`S_{\lambda/\rho}(U)` (applied element-wise).
+
+See :ref:`sec:mat:row_column_norms` for formal definition of 
+:math:`\| \cdot \|_{1,1}` norm. It is essentially the absolute sum
+of all elements of a matrix.
+
+.. proof::
+
+    The result follows from the fact that :math:`f(x)` is
+    separable over all elements of :math:`X`.
+
