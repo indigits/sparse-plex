@@ -155,6 +155,9 @@ We perform the gradient ascent update of :math:`\Delta` as
     \Delta^{k+1} = \Delta^k + \rho (A^{k+1} - C^{k+1}).
 
 
+.. image:: images/alg_spr_admm_linear.png
+
+
 
 Linear Subspaces with Noise and Outliers
 -------------------------------------------------
