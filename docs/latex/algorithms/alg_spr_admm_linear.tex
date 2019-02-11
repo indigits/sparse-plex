@@ -1,0 +1,29 @@
+\documentclass[../article_algorithms.tex]{subfiles}
+\begin{document} 
+\begin{tcolorbox}[width=(\linewidth-2cm)]
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\footnotesize
+\SetAlgoLined
+$C = \text{SPR-ADMM-LINEAR}(Y)$\;
+\KwIn{Data Set: $Y \in \RR^{M \times S}$} 
+Terminate $\leftarrow$ False, $k \leftarrow 0$\;
+Initialize $A^0, C^0, \Delta^0$ to 0\;
+\Repeat{Terminate}{
+\begin{enumerate}
+\item Update $A^{k+1}$ as solution of the equation
+    \begin{equation*}
+    \lambda(Y^T Y + \rho I) A^{k+1} = \lambda Y^T Y + \rho C^k - \Delta^k.
+    \end{equation*}
+\item Update $C^{k+1}$ as $C^{k+1} = J - \Diag(J)$ where
+where $J = S_{\frac{1}{\rho}}(A^{k+1} + \Delta^k / \rho)$.
+\item Update $\Delta^{k+1} = \Delta^k + \rho (A^{k+1} - C^{k+1})$.\;
+\item $k \leftarrow k+1$\;
+\item Terminate $\leftarrow \|A^k  - C^k\|_{\infty,\infty} \leq \epsilon$\;
+$\quad$ and $\|A^k  - A^{k-1}\|_{\infty,\infty} \leq \epsilon$ \;
+$\quad$ or $k \geq$ max\_iterations.
+\end{enumerate}
+}
+\end{algorithm}
+\end{tcolorbox}
+\end{document}
