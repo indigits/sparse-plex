@@ -42,7 +42,7 @@ if try_spx
     % All signals are expected to  have a K-sparse representation
     fprintf('Attempting our implementation of SPR-ADMM-Linear\n');
     tstart = tic;
-    [C1, details] = spx.cluster.ssc.spr_admm_linear(Y);
+    [C1, details] = spx.cluster.ssc.spr_admm(Y);
     elapsed_time = toc(tstart);
     fprintf('Maximum difference: %.4f\n', max(max(abs(Y - Y*C1))));
     fprintf('Number of iterations: %d\n', details.iterations);
