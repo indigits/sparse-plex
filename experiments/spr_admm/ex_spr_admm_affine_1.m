@@ -47,9 +47,10 @@ K = max(d1, d2);
 affine = true;
 
 if try_spx
-    fprintf('Attempting our implementation of SPR-ADMM-Linear\n');
+    fprintf('Attempting our implementation of SPR-ADMM-Affine\n');
     tstart = tic;
-    [C1, details] = spx.cluster.ssc.spr_admm_linear(Y);
+    options.affine = true;
+    [C1, details] = spx.cluster.ssc.spr_admm_linear(Y, options);
     elapsed_time = toc(tstart);
     fprintf('Maximum difference: %.4f\n', max(max(abs(Y - Y*C1))));
     fprintf('Number of iterations: %d\n', details.iterations);
