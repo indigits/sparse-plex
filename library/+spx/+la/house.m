@@ -88,6 +88,8 @@ end % func
 
 
 function [QF, R] = qr(A)
+    % Performs A = QR factorization
+    % using Householder reflections
     % GVL4: Algorithm 5.2.1
     import spx.la.house;
     [m,n] = size(A);
@@ -215,6 +217,46 @@ function Q = q_back_accum_full(QF)
    end
 end % function
 
+function [UF, B, VF] = bidiag(A)
+    % Performs bidiagonalization of A = U B V'. 
+    % U and V are stored in factored forms.
+    % GVL4: algorithm 5.4.2
+    import spx.la.house;
+    [m,n] = size(A);
+    % Iterate over columns of A from first to last column.
+    % If A is tall, then we can process all columns.
+    % If A is square, then we will process m -1 columns
+    % If A is wide, we can process all columns.
+    for j=1:min(n,m-1)
+        % zero out the j-th column
+        % Compute the jth Householder vector  for U_j
+        [u,beta] = house.gen(A(j:m,j));
+        % Update... A = U_j A
+        A(j:m,j:n) = A(j:m,j:n) - (beta*u)*(u'*A(j:m,j:n));
+        % Save the essential part of householder vector...
+        A(j+1:m,j) = u(2:m-j+1);
+        if j+2<=n
+            % zero out the j-th row now
+            % Compute the j-th Householder vector for V_j
+            [v,beta] = house.gen(A(j,j+1:n)');
+            % Update... A = A V_j
+            A(j:m,j+1:n) = A(j:m,j+1:n) - (A(j:m,j+1:n)*v)*(beta*v)';
+            % Save the essential Householder vector in j-th row
+            A(j,j+2:n) = v(2:n-j)';  
+        end  
+    end
+    % Extract the diagonal and first super-diagonal
+    B = tril(triu(A),1);
+    % Extract the subdiagonal lower triangular part
+    UF = tril(A,-1);
+    % Space for V factors
+    VF = zeros(n,n);
+    % Extract the factors row by row
+    for j=1:n-2
+        % j-th row householder vector
+        VF(j+2:n,j+1) = A(j,j+2:n)';
+    end
+end % function
 
 end % methods 
 
