@@ -8,5 +8,5 @@ A = A(:, 1:n)
 x0 = (1:n)'
 b = A * x0
 
-x = spx.opt.ls.normal_gvl4(A, b)
+x = spx.opt.ls.normal_eq(A, b)
 
