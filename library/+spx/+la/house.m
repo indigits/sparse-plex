@@ -42,23 +42,23 @@ end % func
 
 function beta = beta_from_v(v)
     beta = 2/(v'*v);
-end
+end% function
 
 function v = from_essential_v(essential)
     v = [zeros(j-1,1); 1; essential];
-end
+end% function
 
-function [W, Y] = wy(Q_factors)
+function [W, Y] = wy(QF)
     % Let Q be stored in the factored form Q = Q_1 * ... * Q_r
     % where Q_i = I - beta * v * v'
     % This algorithm computes W and Y such that
     % Q = I_r - W * Y';
     % GVL4: algorithm 5.1.2
-    [m,r] = size(Q_factors);
+    [m,r] = size(QF);
     for j=1:r
         % extract j-th v from the factors array
         % The essential part of v
-        essential = Q_factors(j+1:m,j);
+        essential = QF(j+1:m,j);
         % Insert additional zeros and one to complete v
         v = [zeros(j-1,1); 1; essential];
         % Compute beta from v [it is not stored in factors array]
@@ -74,7 +74,7 @@ function [W, Y] = wy(Q_factors)
             W = [W z]; 
         end
     end
-end
+end% function
 
 function B = wy_premul(A, W, Y)
     % Efficiently computes B = (I - WY') A
@@ -87,15 +87,14 @@ function B = wy_postmul(A, W, Y)
 end % func
 
 
-function [Q_factors, R] = qr(A)
+function [QF, R] = qr(A)
     % GVL4: Algorithm 5.2.1
     import spx.la.house;
     [m,n] = size(A);
     for j=1:min(n,m-1)
         % Compute the jth Householder matrix Q{j}...
         [v,beta] = house.gen(A(j:m,j));
-        % Update...
-        % A = Q{j}A
+        % Update... A = Q_j A
         A(j:m,j:n) = house.premul(A(j:m,j:n), v, beta);
         % Save the essential part of householder vector...
         A(j+1:m,j) = v(2:m-j+1);
@@ -103,22 +102,70 @@ function [Q_factors, R] = qr(A)
     % extract the R component
     R = triu(A(1:n,1:n));
     % extract the Q component in factored form
-    Q_factors = tril(A,-1);
-end
+    QF = tril(A,-1);
+end% function
 
-function Q = q_back_accum_thin(Q_factors)
+function [QF, R, P] = qr_pivot(A)
+    % Householder QR with column pivoting
+    % Achieves factorization AP = QR
+    % GVL4 : algorithm 5.4.1 
+    import spx.la.house;
+    [m,n] = size(A);
+    % Space for keeping squared norms of columns
+    c = zeros(1,n);
+    % Compute squared norms of each column
+    for j=1:n
+        c(j) = A(:,j)'*A(:,j);
+    end
+    % space for the permutation matrix
+    P = 1:n;
+    % index of column being processed
+    r = 0;
+    % Find the index of maximum norm column
+    [tau,k] = max(c);
+    % The tau > 0 check ensures that we process only till 
+    % rank of A
+    while tau>1e-10 && r<min(m,n)
+        r = r+1;
+        % Column interchange between current column and max norm column
+        A(:,[r k]) = A(:,[k r]);
+        % Corresponding column interchange in the permutation matrix
+        P([r k]) = P([k r]);
+        % Corresponding interchange in the squared norm vector
+        c([r k]) = c([k r]);
+        % Compute the r-th Householder vector
+        [v,beta] = house.gen(A(r:m,r));
+        % Update by premultiplication A = Q_r A
+        A(r:m,r:n) = A(r:m,r:n) - (beta*v)*(v'*A(r:m,r:n));
+        % Save the essential part of householder vector.
+        A(r+1:m,r) = v(2:m-r+1);
+        if r<min(m,n)
+            % update the squared norms
+            c(r+1:n) = c(r+1:n)- A(r,r+1:n).^2;
+            [tau k] = max(c(r+1:n));
+            k = k+r;
+        end
+    end
+    % extract the R component
+    R = triu(A(1:n,1:n));
+    % extract the Q component in factored form below sub-diagonal
+    QF = tril(A,-1);
+end % function
+
+
+function Q = q_back_accum_thin(QF)
     % Explicit formation of an orthogonal matrix from its factored form
     %   representation. Uses backward accumulation.
     % GVL4: Section 5.2.2
     % Produces a "thin", m x n Q
     % with orthonormal columns, the first n columns of Q_{1}...Q_{n}.
-    [m,n] = size(Q_factors);
+    [m,n] = size(QF);
     % start with an empty matrix
     Q = [];
     % iterate over columns backwards
     for j=n:-1:1
         % extract the essential part of the j-th householder vector
-        essential = Q_factors(j+1:m,j);
+        essential = QF(j+1:m,j);
         % expand it
         v = [1;essential];
         % Compute beta from the vector
@@ -133,16 +180,16 @@ function Q = q_back_accum_thin(Q_factors)
             Q = Q - (beta*v)*(v'*Q);
         end
     end
-end
+end% function
 
 
-function Q = q_back_accum_full(Q_factors)
+function Q = q_back_accum_full(QF)
     % Explicit formation of an orthogonal matrix from its factored form
     %   representation. Uses backward accumulation.
-    % Q_factors is m x n and 
+    % QF is m x n and 
     % Produces an m x m Q that is the product of of Q_{1}...Q_{n}.
     % GVL4: Section 5.2.2
-    [m,n] = size(Q_factors);
+    [m,n] = size(QF);
     % We start with a matrix of size (m-n) x (m -n)
     % If m <= n, then we start with a matrix of size 1 x 1
     Q = eye(max(m-n,1),max(m-n,1));
@@ -151,7 +198,7 @@ function Q = q_back_accum_full(Q_factors)
         % Q_fact(j+1:m,j) is the essential part of the 
         % j-th Householder matrix Q_{j}.
         % Get the essential part of householder vector in this column
-        essential = Q_factors(j+1:m,j);
+        essential = QF(j+1:m,j);
         % Extend the vector with 1
         v = [1;essential];
         % Compute beta from the householder vector
