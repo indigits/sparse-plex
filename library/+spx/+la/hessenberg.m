@@ -4,6 +4,36 @@ classdef hessenberg
 methods(Static)
 
 
+function [Q, R] = qr(A)
+    % Givens method for computing the QR factorization A = QR of a Hessenberg matrix.
+    % A is modified in the algorithm
+    % GVL4: algorithm 5.2.5
+    import spx.la.givens.rotation;
+    [n,n] = size(A);
+    % Space for saving the Q factor
+    Q = eye(n, n);
+    % iterate over each column from first to last but one.
+    for j=1:n-1
+        % We need to process only one pair of rows
+        % The diagonal element and immediate sub-diagonal element.
+        a = A(j,j);
+        b = A(j+1,j);
+        % Compute the needed rotation for making b 0.
+        [c,s] = rotation(a,b);
+        % Form the givens rotation matrix.
+        G = [c s;-s c];
+        % Rotate the two consecutive rows based submatrix
+        A(j:j+1,j:n) = G'*A(j:j+1,j:n);
+        % Rotate corresponding columns n Q matrix
+        % by postmultiplication with G
+        Q(:,j:j+1) = Q(:,j:j+1)*G;
+    end
+    % Return the triangular form
+    R = A;
+end % function
+
+
+
 function H = qr_rq(H)
     % Takes a Hessenberg matrix H = QR and returns RQ
     % GVL4: algorithm 7.4.1

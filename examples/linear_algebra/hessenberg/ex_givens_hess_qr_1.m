@@ -5,7 +5,7 @@ clearvars;
 n = 8;
 A = gallery('binomial',n);
 H = hess(A);
-[Q1, R1] = spx.la.givens.hess_qr(H);
+[Q1, R1] = spx.la.hessenberg.qr(H);
 H1 = Q1 * R1;
 H
 H1
