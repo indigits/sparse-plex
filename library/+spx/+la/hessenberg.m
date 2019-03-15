@@ -34,7 +34,7 @@ end % function
 
 
 
-function H = qr_rq(H)
+function [H, cs, ss] = qr_rq(H)
     % Takes a Hessenberg matrix H = QR and returns RQ
     % GVL4: algorithm 7.4.1
     import spx.la.givens.rotation;
@@ -64,6 +64,8 @@ function H = qr_rq(H)
         G = [cs(k) ss(k); -ss(k) cs(k)];
         H(1:k+1,k:k+1) = H(1:k+1,k:k+1) * G;
     end
+    % The product of these Givens rotations is also upper Hessenberg.
+    % Product of two Hessenberg matrices is Hessenberg.
 end % function
 
 
