@@ -3,6 +3,8 @@ classdef eig
 methods(Static)
 
 function [x, lambda, details] = power(A, x, tolerance, options)
+    % Power method for computing the largest eigen value and vector of A
+    % GVL4: section 7.3.1
     if nargin < 3
         options = struct;
     end
@@ -17,24 +19,28 @@ function [x, lambda, details] = power(A, x, tolerance, options)
     if nargin < 2
         x = zeros(size(A, 2),1);
         x(1) = 1;
+    else
+        % make sure x is unit norm
+        x = x / norm(x);
     end
     % Power method for computing largest eigen-value
     gap = 1;
-    prev_lambda = norm(x);
+    prev_lambda = -inf;
     iter = 0;
     details.lambdas = [];
     while gap > tolerance && iter < max_iterations
         %  Apply the matrix
         y = A * x;
-        % current norm
-        lambda = norm(y);
+        % current estimate of the largest eigen value
+        lambda = x' * y;
         % eigen gap
         gap = abs(lambda  - prev_lambda);
         % normalize
-        x = y / lambda;
+        x = y / norm(y);
         % keep previous lambda
         prev_lambda = lambda;
         iter = iter + 1;
+        % Save history of eigen value estimates
         details.lambdas(end + 1) = lambda;
     end % while
     details.iterations = iter;
