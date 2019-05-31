@@ -99,6 +99,38 @@ function [H, U0] = hess(A)
 end % function
 
 
+function [H, i1, i2] = backsearch(H, z)
+    % Searches for a subdiagonal entry in H which is
+    % negligible. From last row to first row.
+    if nargin < 2
+        z = size(H, 2);
+    end
+    i1 = z;
+    i2 = z;
+    % Compute the Frobenius norm of H
+    h_norm = norm(H, 'fro');
+    % The threshold for negligible entries
+    thr = eps * h_norm
+    % iterate over diagonal entries backwards
+    while i1 >1
+        % check for negligible subdiagonal entry.
+        fprintf('%d, %d, %e\n', i1, i1-1, H(i1, i1-1));
+        if (abs(H(i1, i1-1)) < thr )
+            % Make this entry zero
+            H(i1, i1-1) = 0;
+            if (i1 == i2)
+                i2 = i1 - 1;
+                i1 = i1 - 1;
+            else
+                return;
+            end
+        else
+            i1 = i1 - 1;
+        end
+
+    end
+end
+
 
 end % methods 
 
