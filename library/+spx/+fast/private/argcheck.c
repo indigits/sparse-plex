@@ -96,3 +96,13 @@ void check_is_sparse(const mxArray *arg,
     mexErrMsgTxt(errmsg);
   }
 }
+
+void check_is_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name){
+  char errmsg[100];
+  sprintf(errmsg, "%.15s: %.25s must be a structure.", function_name, arg_name);
+  if (!mxIsStruct(arg)) {
+    mexErrMsgTxt(errmsg);
+  }
+}
+

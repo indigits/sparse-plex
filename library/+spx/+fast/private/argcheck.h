@@ -35,6 +35,11 @@ void check_is_double_scalar(const mxArray *arg,
 void check_is_sparse(const mxArray *arg, 
     const char *function_name, const char *arg_name);
 
+//! Checks if an argument is a structure
+void check_is_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name);
+
+
 //! Checks that the input is a character scalar
 void check_is_char_scalar(const mxArray *arg,
   const char *function_name, const char *arg_name);
