@@ -54,6 +54,8 @@ gomp_mmv_sources = [common_sources, 'gomp_mmv.c', 'omp_util.c', 'omp_profile.c']
 gomp_spr_sources = [common_sources, 'gomp_spr.c', 'omp_util.c', 'omp_profile.c'];
 
 
+% Singular Value Problems
+lansvd_sources = [common_cpp_sources, 'spx_lanbd.cpp', 'spx_lansvd.cpp'];
 
 make_program('mex_mult_mat_vec.c', blas_sources,compile_params, clean);
 make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params, clean);
@@ -67,6 +69,7 @@ make_program('mex_hungarian.cpp', hungarian_sources, cpp_compile_params, clean);
 
 make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
 make_program('mex_cosamp.cpp', cosamp_sources,cpp_compile_params, clean);
+make_program('mex_lansvd.cpp', lansvd_sources, cpp_compile_params, clean);
 
 
 make_program('mex_omp_chol.c', omp_sources,compile_params, clean);
@@ -83,6 +86,8 @@ make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, clean);
 
 
 make_program('mex_quickselect.c', quickselect_sources, compile_params, clean);
+
+
 
 end
 

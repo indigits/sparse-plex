@@ -4,10 +4,10 @@
 #include "spxblas.h"
 namespace spx {
 
-Operator::Operator(){
+Operator::Operator() {
 }
 
-Operator::~Operator(){
+Operator::~Operator() {
 
 }
 
@@ -16,31 +16,31 @@ Operator::~Operator(){
  ************************************************/
 
 Matrix::Matrix(mwSize rows, mwSize cols):
-m_pMatrix((double*)mxMalloc(rows*cols*sizeof(double))),
-m_rows(rows),
-m_cols(cols),
-m_bOwned(true)
+    m_pMatrix((double*)mxMalloc(rows * cols * sizeof(double))),
+    m_rows(rows),
+    m_cols(cols),
+    m_bOwned(true)
 {
 }
 
 Matrix::Matrix(double *pMatrix, mwSize rows, mwSize cols, bool bOwned):
-m_pMatrix(pMatrix),
-m_rows(rows),
-m_cols(cols),
-m_bOwned(bOwned)
-{    
+    m_pMatrix(pMatrix),
+    m_rows(rows),
+    m_cols(cols),
+    m_bOwned(bOwned)
+{
 }
 
 Matrix::Matrix(Matrix& source, mwSize start_col, mwSize num_cols):
-m_pMatrix(source.m_pMatrix + source.rows() * start_col),
-m_rows(source.rows()),
-m_cols(num_cols),
-m_bOwned(false){
+    m_pMatrix(source.m_pMatrix + source.rows() * start_col),
+    m_rows(source.rows()),
+    m_cols(num_cols),
+    m_bOwned(false) {
 
 }
 
 
-Matrix::~Matrix(){
+Matrix::~Matrix() {
     if (m_bOwned) {
         // release the memory
         mxFree(m_pMatrix);
@@ -58,42 +58,85 @@ mwSize Matrix::columns() const {
 
 
 void Matrix::column(mwIndex index, double b[]) const {
-    double* a = m_pMatrix + index*m_rows;
+    double* a = m_pMatrix + index * m_rows;
     mwSignedIndex  inc = 1;
-    mwSignedIndex mm = m_rows; 
+    mwSignedIndex mm = m_rows;
     dcopy(&mm, a, &inc, b, &inc);
 }
 
-void Matrix::extract_columns( const mwIndex indices[], mwSize k, 
-    double B[]) const{
-     mat_col_extract(m_pMatrix, indices, B, m_rows, k);
+void Matrix::extract_columns( const mwIndex indices[], mwSize k,
+                              double B[]) const {
+    mat_col_extract(m_pMatrix, indices, B, m_rows, k);
 }
 
-void Matrix::extract_columns(const index_vector& indices, Matrix& output) const{
+void Matrix::extract_columns(const index_vector& indices, Matrix& output) const {
     double* B = output.m_pMatrix;
     const mwIndex* indices2 = &indices[0];
     mwSize k = indices.size();
     mat_col_extract(m_pMatrix, indices2, B, m_rows, k);
 }
 
-void Matrix::extract_rows( const mwIndex indices[], mwSize k, double B[]) const{
+void Matrix::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
     mat_row_extract(m_pMatrix, indices, B, m_rows, m_cols, k);
 }
 
-void Matrix::mult_vec(const double x[], double y[]) const{
+void Matrix::mult_vec(const double x[], double y[]) const {
     mult_mat_vec(1, m_pMatrix, x, y, m_rows, m_cols);
 }
-void Matrix::mult_t_vec(const double x[], double y[]) const{
+
+// y = A * x
+void Matrix::mult_vec(const Vec& x, Vec& y) const{
+    if (m_cols != x.length()) {
+        throw std::invalid_argument("x doesn't have appropriate size.");
+    }
+    if (m_rows != y.length()) {
+        throw std::invalid_argument("y doesn't have appropriate size.");
+    }
+    mwSignedIndex  incx = x.inc();
+    mwSignedIndex  incy = y.inc();
+    char trans = 'N';
+    double beta = 0;
+    mwSignedIndex  mm = m_rows;
+    mwSignedIndex  nn = m_cols;
+    double alpha = 1;
+    double* A = m_pMatrix;
+    // y := alpha*A*x + beta*y
+    dgemv(&trans, &mm, &nn, &alpha, A, &mm, x.head(), &incx, 
+        &beta, y.head(), &incy);
+}
+
+// y = A' * x
+void Matrix::mult_t_vec(const double x[], double y[]) const {
     mult_mat_t_vec(1, m_pMatrix, x, y, m_rows, m_cols);
 }
 
-void Matrix::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const{
+void Matrix::mult_t_vec(const Vec& x, Vec& y) const {
+    if (m_rows != x.length()) {
+        throw std::invalid_argument("x doesn't have appropriate size.");
+    }
+    if (m_cols != y.length()) {
+        throw std::invalid_argument("y doesn't have appropriate size.");
+    }
+    mwSignedIndex  incx = x.inc();
+    mwSignedIndex  incy = y.inc();
+    char trans = 'T';
+    double beta = 0;
+    mwSignedIndex  mm = m_rows;
+    mwSignedIndex  nn = m_cols;
+    double alpha = 1;
+    double* A = m_pMatrix;
+    dgemv(&trans, &mm, &nn, &alpha, A, &mm, x.head(), &incx, 
+        &beta, y.head(), &incy);
+
+}
+
+void Matrix::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
     ::mult_submat_vec(1, m_pMatrix, indices, x, y, m_rows, k);
 }
 
-void Matrix::add_column_to_vec(double coeff, mwIndex index, double x[]) const{
-    double* a = m_pMatrix + index*m_rows;
-    sum_vec_vec(coeff, a, x, m_rows);    
+void Matrix::add_column_to_vec(double coeff, mwIndex index, double x[]) const {
+    double* a = m_pMatrix + index * m_rows;
+    sum_vec_vec(coeff, a, x, m_rows);
 }
 
 bool Matrix::copy_matrix_to(Matrix& dst) const {
@@ -114,13 +157,13 @@ bool Matrix::copy_matrix_to(Matrix& dst) const {
 /************************************************
  *  Matrix Manipulation
  ************************************************/
-std::tuple<double, mwIndex> Matrix::col_max(mwIndex col) const{
+std::tuple<double, mwIndex> Matrix::col_max(mwIndex col) const {
     // Pointer to the beginning of column
-    const double* x = m_pMatrix + col*m_rows;
-    mwIndex max_index=0, k;
+    const double* x = m_pMatrix + col * m_rows;
+    mwIndex max_index = 0, k;
     double cur_value, max_value = *x;
     mwSize n = m_rows;
-    for (k=1; k<n; ++k) {
+    for (k = 1; k < n; ++k) {
         cur_value = x[k];
         if (cur_value > max_value) {
             max_value = cur_value;
@@ -129,13 +172,13 @@ std::tuple<double, mwIndex> Matrix::col_max(mwIndex col) const{
     }
     return std::tuple<double, mwIndex>(max_value, max_index);
 }
-std::tuple<double, mwIndex> Matrix::col_min(mwIndex col) const{
+std::tuple<double, mwIndex> Matrix::col_min(mwIndex col) const {
     // Pointer to the beginning of column
-    const double* x = m_pMatrix + col*m_rows;
-    mwIndex min_index=0, k;
+    const double* x = m_pMatrix + col * m_rows;
+    mwIndex min_index = 0, k;
     double cur_value, min_value = *x;
     mwSize n = m_rows;
-    for (k=1; k<n; ++k) {
+    for (k = 1; k < n; ++k) {
         cur_value = x[k];
         if (cur_value < min_value) {
             min_value = cur_value;
@@ -144,13 +187,13 @@ std::tuple<double, mwIndex> Matrix::col_min(mwIndex col) const{
     }
     return std::tuple<double, mwIndex>(min_value, min_index);
 }
-std::tuple<double, mwIndex> Matrix::row_max(mwIndex row) const{
+std::tuple<double, mwIndex> Matrix::row_max(mwIndex row) const {
     // Pointer to the beginning of row
     const double* x = m_pMatrix + row;
-    mwIndex max_index=0, k;
+    mwIndex max_index = 0, k;
     double cur_value, max_value = *x;
     mwSize n = m_cols;
-    for (k=1; k<n; ++k) {
+    for (k = 1; k < n; ++k) {
         x += m_rows;
         cur_value = *x;
         if (cur_value > max_value) {
@@ -160,13 +203,13 @@ std::tuple<double, mwIndex> Matrix::row_max(mwIndex row) const{
     }
     return std::tuple<double, mwIndex>(max_value, max_index);
 }
-std::tuple<double, mwIndex> Matrix::row_min(mwIndex row) const{
+std::tuple<double, mwIndex> Matrix::row_min(mwIndex row) const {
     // Pointer to the beginning of row
     const double* x = m_pMatrix + row;
-    mwIndex min_index=0, k;
+    mwIndex min_index = 0, k;
     double cur_value, min_value = *x;
     mwSize n = m_cols;
-    for (k=1; k<n; ++k) {
+    for (k = 1; k < n; ++k) {
         x += m_rows;
         cur_value = *x;
         if (cur_value < min_value) {
@@ -177,40 +220,68 @@ std::tuple<double, mwIndex> Matrix::row_min(mwIndex row) const{
     return std::tuple<double, mwIndex>(min_value, min_index);
 }
 
-void Matrix::add_to_col(mwIndex col, const double &value){
-    double* x = m_pMatrix + col*m_rows;
+void Matrix::add_to_col(mwIndex col, const double &value) {
+    double* x = m_pMatrix + col * m_rows;
     mwSize n = m_rows;
-    for (mwIndex k=0; k<n; ++k) {
+    for (mwIndex k = 0; k < n; ++k) {
         x[k] += value;
     }
 }
 
-void Matrix::add_to_row(mwIndex row, const double &value){
+
+void Matrix::add_to_row(mwIndex row, const double &value) {
     double* x = m_pMatrix + row;
     mwSize n = m_cols;
-    for (mwIndex k=0; k<n; ++k) {
+    for (mwIndex k = 0; k < n; ++k) {
         *x += value;
         x += m_rows;
     }
 }
 
+void Matrix::set_column(mwIndex col, const Vec& input, double alpha) {
+    if (col >= m_cols){
+        throw std::length_error("Column number beyond range.");
+    }
+    if (m_rows != input.length()) {
+        throw std::length_error("Number of rows mismatch");
+    }
+    double* x = m_pMatrix + col * m_rows;
+    mwSize n = m_rows;
+    const double* y = input.head();
+    mwIndex inc = input.inc();
+    if (alpha == 1) {
+        for (mwIndex k = 0; k < n; ++k) {
+            *x = *y;
+            ++x;
+            y += inc;
+        }
+    } else {
+        for (mwIndex k = 0; k < n; ++k) {
+            *x = alpha * (*y);
+            ++x;
+            y += inc;
+        }
+    }
+}
+
+
 void Matrix::subtract_col_mins_from_cols() {
     mwSize n = m_cols;
-    for (mwIndex c = 0; c < n; ++c){
+    for (mwIndex c = 0; c < n; ++c) {
         auto min_val = col_min(c);
         add_to_col(c, -std::get<0>(min_val));
     }
 }
 
-void Matrix::subtract_row_mins_from_rows(){
+void Matrix::subtract_row_mins_from_rows() {
     mwSize n = m_rows;
-    for (mwIndex r = 0; r < n; ++r){
+    for (mwIndex r = 0; r < n; ++r) {
         auto min_val = row_min(r);
         add_to_row(r, -std::get<0>(min_val));
     }
 }
 
-void Matrix::find_value(const double &value, Matrix& result) const{
+void Matrix::find_value(const double &value, Matrix& result) const {
     if (m_rows != result.rows()) {
         throw std::length_error("Number of rows mismatch");
     }
@@ -220,18 +291,18 @@ void Matrix::find_value(const double &value, Matrix& result) const{
     mwSize n  = m_rows * m_cols;
     double* p_src = m_pMatrix;
     double* p_dst = result.m_pMatrix;
-    for (mwIndex i = 0; i < n; ++i){
+    for (mwIndex i = 0; i < n; ++i) {
         *p_dst = *p_src == value;
         ++p_src;
         ++p_dst;
     }
 }
 
-void Matrix::gram(Matrix& output) const{
-    if(output.rows() != output.columns()) {
+void Matrix::gram(Matrix& output) const {
+    if (output.rows() != output.columns()) {
         throw std::logic_error("Gram matrix must be symmetric");
     }
-    if(output.columns() != columns()) {
+    if (output.columns() != columns()) {
         throw std::logic_error("Size of gram matrix must be equal to the number of columns in source matrix");
     }
     double* src = m_pMatrix;
@@ -248,89 +319,102 @@ void Matrix::print_matrix(const char* name) const {
     ::print_matrix(m_pMatrix, m_rows, m_cols, name);
 }
 
-void Matrix::print_int_matrix(const char* name) const{
-  int i, j;
-  if (name[0]) {
-      mexPrintf("\n%s = \n\n", name);
-  }
-  mwSize m = m_rows;
-  mwSize n = m_cols;
+void Matrix::print_int_matrix(const char* name) const {
+    int i, j;
+    if (name[0]) {
+        mexPrintf("\n%s = \n\n", name);
+    }
+    mwSize m = m_rows;
+    mwSize n = m_cols;
 
-  if (n*m==0) {
-    mexPrintf("   Empty matrix: %d-by-%d\n\n", n, m);
-    return;
-  }
-  double* A = m_pMatrix;
-  for (i=0; i<n; ++i) {
-    for (j=0; j<m; ++j)
-      mexPrintf("   %d", (int)A[j*n+i]);
+    if (n * m == 0) {
+        mexPrintf("   Empty matrix: %d-by-%d\n\n", n, m);
+        return;
+    }
+    double* A = m_pMatrix;
+    for (i = 0; i < n; ++i) {
+        for (j = 0; j < m; ++j)
+            mexPrintf("   %d", (int)A[j * n + i]);
+        mexPrintf("\n");
+    }
     mexPrintf("\n");
-  }
-  mexPrintf("\n");
 }
 
 
 /************************************************
- *  MxArray Operator Implementation
+ *  MxFullMat Operator Implementation
  ************************************************/
 
-MxArray::MxArray(const mxArray *pMatrix, 
-    bool bOwned):
-m_pMatrix(pMatrix),
-m_bOwned(bOwned),
-m_impl(mxGetPr(pMatrix), mxGetM(pMatrix), mxGetN(pMatrix), false)
+MxFullMat::MxFullMat(const mxArray *pMatrix):
+    m_pMatrix(pMatrix),
+    m_impl(mxGetPr(pMatrix), mxGetM(pMatrix), mxGetN(pMatrix), false)
 {
-}
-
-MxArray::~MxArray(){
-    if (m_bOwned) {
-        // release the memory
+    if (!mxIsNumeric(pMatrix)){
+        throw std::invalid_argument("Must be a numerical matrix.");
+    }
+    if(!mxIsDouble(pMatrix)){
+        throw std::invalid_argument("Must be a double matrix.");
+    }
+    if (mxIsSparse(pMatrix)){
+        throw std::invalid_argument("Must be a full matrix.");
     }
 }
 
-mwSize MxArray::rows() const {
+MxFullMat::~MxFullMat() {
+}
+
+mwSize MxFullMat::rows() const {
     return m_impl.rows();
 }
 
-mwSize MxArray::columns() const {
+mwSize MxFullMat::columns() const {
     return m_impl.columns();
 }
 
 
-void MxArray::column(mwIndex index, double b[]) const {
+void MxFullMat::column(mwIndex index, double b[]) const {
     m_impl.column(index, b);
 }
 
-void MxArray::extract_columns( const mwIndex indices[], mwSize k, 
-    double B[]) const{
+void MxFullMat::extract_columns( const mwIndex indices[], mwSize k,
+                               double B[]) const {
     m_impl.extract_columns(indices, k, B);
 }
 
-void MxArray::extract_columns(const index_vector& indices, Matrix& output) const{
+void MxFullMat::extract_columns(const index_vector& indices, Matrix& output) const {
     m_impl.extract_columns(indices, output);
 }
 
 
-void MxArray::extract_rows( const mwIndex indices[], mwSize k, double B[]) const{
+void MxFullMat::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
     m_impl.extract_rows(indices, k, B);
 }
 
-void MxArray::mult_vec(const double x[], double y[]) const{
+void MxFullMat::mult_vec(const double x[], double y[]) const {
     m_impl.mult_vec(x, y);
 }
-void MxArray::mult_t_vec(const double x[], double y[]) const{
+
+void MxFullMat::mult_vec(const Vec& x, Vec& y) const {
+    m_impl.mult_vec(x, y);
+}
+
+void MxFullMat::mult_t_vec(const double x[], double y[]) const {
     m_impl.mult_t_vec(x, y);
 }
 
-void MxArray::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const{
+void MxFullMat::mult_t_vec(const Vec& x, Vec& y) const {
+    m_impl.mult_t_vec(x, y);
+}
+
+void MxFullMat::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
     m_impl.mult_submat_vec(indices, k, x, y);
 }
 
-void MxArray::add_column_to_vec(double coeff, mwIndex index, double x[]) const{
+void MxFullMat::add_column_to_vec(double coeff, mwIndex index, double x[]) const {
     m_impl.add_column_to_vec(coeff, index, x);
 }
 
-bool MxArray::copy_matrix_to(Matrix& dst) const {
+bool MxFullMat::copy_matrix_to(Matrix& dst) const {
     return m_impl.copy_matrix_to(dst);
 }
 

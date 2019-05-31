@@ -72,7 +72,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
          M, N, S, K, eps, sparse_output, verbose);
     }
     // Create Sparse Representation Vector
-    spx::MxArray op(D_IN);
+    spx::MxFullMat op(D_IN);
     spx::MatchingPursuit mp (op);
     if (K > 0) {
         mp.set_max_iterations(K);

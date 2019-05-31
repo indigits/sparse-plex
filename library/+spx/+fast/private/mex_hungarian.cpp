@@ -37,7 +37,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         mexErrMsgTxt("Cost matrix must be square");
     }
     // Create Sparse Representation Vector
-    spx::MxArray op(A_IN);
+    spx::MxFullMat op(A_IN);
     spx:: HungarianAssignment hg(op.impl());
     hg.set_verbose((spx::VERBOSITY) verbose);
     spx::d_vector result = hg();

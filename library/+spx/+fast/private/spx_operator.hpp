@@ -24,7 +24,7 @@ enum VERBOSITY {
 };
 
 class Matrix;
-class MxArray;
+class MxFullMat;
 
 // Base class for operators
 class Operator {
@@ -41,7 +41,9 @@ public:
     virtual void extract_columns(const index_vector& indices, Matrix& output) const = 0;
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const = 0;
     virtual void mult_vec(const double x[], double y[]) const = 0;
+    virtual void mult_vec(const Vec& x, Vec& y) const = 0;
     virtual void mult_t_vec(const double x[], double y[]) const = 0;
+    virtual void mult_t_vec(const Vec& x, Vec& y) const = 0;
     virtual void mult_submat_vec(const mwIndex indices[], mwSize k, const double x[], double y[]) const = 0;
     virtual void add_column_to_vec(double coeff, mwIndex index, double x[]) const = 0;
     //! Copies contents of the matrix to destination matrix
@@ -59,16 +61,34 @@ public:
     Matrix(Matrix& source, mwSize start_col, mwSize num_cols);
     //! Destructor
     virtual ~Matrix();
+    //! Returns the number of rows
     virtual mwSize rows() const;
+    //! Returns the number of columns
     virtual mwSize columns() const;
+    //! Returns reference to a column
+    inline Vec column_ref(mwIndex col) {
+        double* beg = m_pMatrix + col * m_rows;
+        return Vec(beg, m_rows, 1);
+    }
+    //! Copies the data of one column in b
     virtual void column(mwIndex index, double b[]) const;
+    //! Extracts the data of multiple columns into a raw array
     virtual void extract_columns( const mwIndex indices[], mwSize k, double B[]) const;
+    //! Extracts the data of multiple columns into an output matrix
     virtual void extract_columns(const index_vector& indices, Matrix& output) const;
+    //! Extracts the data of multiple rows into an output array
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const;
+    //! y = A * x
     virtual void mult_vec(const double x[], double y[]) const;
+    virtual void mult_vec(const Vec& x, Vec& y) const;
+    //! y = A' * x
     virtual void mult_t_vec(const double x[], double y[]) const;
+    virtual void mult_t_vec(const Vec& x, Vec& y) const;
+    //! y = A(:, indices) * x
     virtual void mult_submat_vec(const mwIndex indices[], mwSize k, const double x[], double y[]) const;
+    //! x += coeff * A(:, column)
     virtual void add_column_to_vec(double coeff, mwIndex index, double x[]) const;
+    //! dst = src (full copy)
     virtual bool copy_matrix_to(Matrix& dst) const;
 public:
     //! max for a particular column
@@ -81,6 +101,8 @@ public:
     std::tuple<double, mwIndex> row_min(mwIndex row) const;
     //! add a particular value to a column
     void add_to_col(mwIndex col, const double &value);
+    //! set the contents of a column
+    void set_column(mwIndex col, const Vec& input, double alpha = 1.0);
     //! add a particular value to a row
     void add_to_row(mwIndex row, const double &value);
     //! subtract column minimums from columns
@@ -113,10 +135,10 @@ private:
 };
 
 
-class MxArray : public Operator {
+class MxFullMat : public Operator {
 public:
-    MxArray(const mxArray *pMatrix, bool bOwned = false);
-    virtual ~MxArray();
+    MxFullMat(const mxArray *pMatrix);
+    virtual ~MxFullMat();
     virtual mwSize rows() const;
     virtual mwSize columns() const;
     virtual void column(mwIndex index, double b[]) const;
@@ -124,18 +146,22 @@ public:
     virtual void extract_columns(const index_vector& indices, Matrix& output) const;
     virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const;
     virtual void mult_vec(const double x[], double y[]) const;
+    virtual void mult_vec(const Vec& x, Vec& y) const;
     virtual void mult_t_vec(const double x[], double y[]) const;
+    virtual void mult_t_vec(const Vec& x, Vec& y) const;
     virtual void mult_submat_vec(const mwIndex indices[], mwSize k, const double x[], double y[]) const;
     virtual void add_column_to_vec(double coeff, mwIndex index, double x[]) const;
     virtual bool copy_matrix_to(Matrix& dst) const;
     inline const Matrix& impl() const {
         return m_impl;
     }
+    inline Matrix& impl() {
+        return m_impl;
+    }
 private:
-    MxArray();
+    MxFullMat();
 private:
     const mxArray *m_pMatrix;
-    const bool  m_bOwned;
     Matrix m_impl;
 };
 

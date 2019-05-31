@@ -81,7 +81,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     }
     try {
         // Create Sparse Representation Vector
-        spx::MxArray op(D_IN);
+        spx::MxFullMat op(D_IN);
         spx::CoSaMP cosamp(op, K);
         if (eps > 0) {
             cosamp.set_max_residual_norm(eps);
