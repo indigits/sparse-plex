@@ -1,5 +1,4 @@
 #include <stdexcept>
-#include <random>
 #include "spx_vector.hpp"
 #include "spxblas.h"
 #include "blas.h"
@@ -298,18 +297,6 @@ double Vec::inner_product(const Vec& o) const {
     return ddot(&nn, x, &x_inc, y, &y_inc);
 }
 
-void Vec::init_uniform_real(double a, double b) {
-    std::mt19937 gen(0);
-    std::uniform_real_distribution<> dis(a, b);
-    double* x = m_pVec;
-    mwSignedIndex  x_inc = m_inc;
-    // mexPrintf("inc: x_inc, n: m_n\n", x_inc, m_n);
-    for (int n = 0; n < m_n; ++n) {
-        double value = dis(gen);
-        *x = value;
-        x += x_inc;
-    }
-}
 
 void Vec::print(const std::string& name) const {
     if (name.size() > 0) {

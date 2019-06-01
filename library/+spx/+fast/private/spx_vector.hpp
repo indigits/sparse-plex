@@ -150,8 +150,6 @@ public:
   void multiply(const Vec& o);
   //! Inner product with another vector
   double inner_product(const Vec& o) const;
-  //! Initialize by uniform random numbers
-  void init_uniform_real(double a, double b);
   //! print the contents of the vector
   void print(const std::string& name = "") const;
 private:

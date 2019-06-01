@@ -1,4 +1,5 @@
 #include "spx_lansvd.hpp"
+#include "spx_rand.hpp"
 
 namespace spx {
 
@@ -85,7 +86,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
         (*m_v_p) = Vec(options.p0);
     }
     else {
-        m_v_p->init_uniform_real(-0.5, 0.5);        
+        rand::init_uniform_real(*m_v_p, -0.5, 0.5);
     }
 
     if (m_options.verbosity > 1){

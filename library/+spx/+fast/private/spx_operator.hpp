@@ -55,6 +55,8 @@ class Matrix : public Operator {
 public:
     //! Constructs a self owned matrix
     Matrix(mwSize rows, mwSize cols);
+    //! Constructs a matrix object for an mxArray full matrix
+    Matrix(const mxArray* pMat);
     //! Construct a matrix on data owned by someone else
     Matrix(double *pMatrix, mwSize rows, mwSize cols, bool bOwned = false);
     //! Construct a view over a set of columns from another matrix
@@ -65,6 +67,14 @@ public:
     virtual mwSize rows() const;
     //! Returns the number of columns
     virtual mwSize columns() const;
+    //! Returns the head of the matrix
+    inline const double* head() const {
+        return m_pMatrix;
+    }
+    //! Returns the head of the matrix [for modification]
+    inline double* head() {
+        return m_pMatrix;
+    }
     //! Returns reference to a column
     inline Vec column_ref(mwIndex col) {
         double* beg = m_pMatrix + col * m_rows;

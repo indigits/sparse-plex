@@ -662,7 +662,7 @@ void print_matrix(const double A[], int n, int m, const char* matrix_name)
   mexPrintf("\n");
 }
 
-void print_vector(const double v_x[], int n, char* vec_name){
+void print_vector(const double v_x[], int n, const char* vec_name){
     int i;
     mexPrintf("\n%s = \n\n", vec_name);
     if (n==0) {
@@ -675,7 +675,7 @@ void print_vector(const double v_x[], int n, char* vec_name){
     mexPrintf("\n");
 }
 
-void print_index_vector(const mwIndex v_x[], int n, char* vec_name){
+void print_index_vector(const mwIndex v_x[], int n, const char* vec_name){
     int i;
     mexPrintf("\n%s = \n\n", vec_name);
     if (n==0) {
@@ -688,7 +688,7 @@ void print_index_vector(const mwIndex v_x[], int n, char* vec_name){
     mexPrintf("\n");
 }
 
-void print_index_vector_plus1(const mwIndex v_x[], int n, char* vec_name){
+void print_index_vector_plus1(const mwIndex v_x[], int n, const char* vec_name){
     int i;
     mexPrintf("\n%s = \n\n", vec_name);
     if (n==0) {
@@ -704,7 +704,7 @@ void print_index_vector_plus1(const mwIndex v_x[], int n, char* vec_name){
 
 /* print contents of sparse vector */
 
-void print_sparse_vector(const mxArray *A, char* vector_name)
+void print_sparse_vector(const mxArray *A, const char* vector_name)
 {
   mwIndex *aJc = mxGetJc(A);
   mwIndex *aIr = mxGetIr(A);

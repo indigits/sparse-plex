@@ -25,69 +25,96 @@ end
 
 % Compile files %
 
-
+% Simple matrix multiplication routines
 blas_sources  = {'argcheck.c', 'spxblas.c'};
-common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
-
-common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp', 'spx_vector.cpp'};
-
-% Optimization algorithms
-cg_sources = [common_cpp_sources, 'spx_cg.cpp'];
-hungarian_sources = [common_cpp_sources, 'spx_assignment.cpp'];
-
-mp_sources = [common_cpp_sources, 'spx_matching_pursuit.cpp'];
-cosamp_sources = [common_cpp_sources, 'spx_cosamp.cpp', 'spx_cg.cpp'];
-
-
-omp_sources = [common_sources, 'omp.c', 'omp_util.c', 'omp_profile.c'];
-omp_ar_sources = [common_sources, 'omp_ar.c', 'omp_util.c', 'omp_profile.c'];
-batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
-batch_omp_spr_sources = [common_sources, 'batch_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
-omp_spr_sources = [common_sources, 'omp_spr.c', 'omp_util.c'];
-batch_flipped_omp_spr_sources = [common_sources, 'batch_flipped_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
-quickselect_sources = {'argcheck.c', 'spxalg.c'};
-
-la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
-
-gomp_sources = [common_sources, 'gomp.c', 'omp_util.c', 'omp_profile.c'];
-gomp_mmv_sources = [common_sources, 'gomp_mmv.c', 'omp_util.c', 'omp_profile.c'];
-gomp_spr_sources = [common_sources, 'gomp_spr.c', 'omp_util.c', 'omp_profile.c'];
-
-
-% Singular Value Problems
-lansvd_sources = [common_cpp_sources, 'spx_lanbd.cpp', 'spx_lansvd.cpp'];
-
 make_program('mex_mult_mat_vec.c', blas_sources,compile_params, clean);
 make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params, clean);
 make_program('mex_mult_mat_mat.c', blas_sources, compile_params, clean);
 make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params, clean);
 make_program('mex_test_blas.c', blas_sources,compile_params, clean);
+
+% Routine for solving a linear equation
+la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
 make_program('mex_linsolve.c', la_sources, compile_params, clean);
 
-make_program('mex_cg.cpp', cg_sources,cpp_compile_params, clean);
-make_program('mex_hungarian.cpp', hungarian_sources, cpp_compile_params, clean);
 
-make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
-make_program('mex_cosamp.cpp', cosamp_sources,cpp_compile_params, clean);
-make_program('mex_lansvd.cpp', lansvd_sources, cpp_compile_params, clean);
+common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
 
+common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp', 'spx_vector.cpp'};
 
-make_program('mex_omp_chol.c', omp_sources,compile_params, clean);
-make_program('mex_omp_ar.c', omp_ar_sources,compile_params, clean);
-make_program('mex_batch_omp.c', batch_omp_sources,compile_params, clean);
-make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params, clean);
-make_program('mex_omp_spr.c', omp_spr_sources,compile_params, clean);
-make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compile_params, clean);
-
-
-make_program('mex_gomp.c', gomp_sources,compile_params, clean);
-make_program('mex_gomp_mmv.c', gomp_mmv_sources,compile_params, clean);
-make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, clean);
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Searching, Sorting, Selection algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% quick select algorithm
+quickselect_sources = {'argcheck.c', 'spxalg.c'};
 make_program('mex_quickselect.c', quickselect_sources, compile_params, clean);
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Optimization algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Conjugate Gradient
+cg_sources = [common_cpp_sources, 'spx_cg.cpp'];
+make_program('mex_cg.cpp', cg_sources,cpp_compile_params, clean);
+
+% Hungarian assignment
+hungarian_sources = [common_cpp_sources, 'spx_assignment.cpp'];
+make_program('mex_hungarian.cpp', hungarian_sources, cpp_compile_params, clean);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Matching Pursuit Algorithms
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Matching Pursuit
+mp_sources = [common_cpp_sources, 'spx_matching_pursuit.cpp'];
+make_program('mex_mp.cpp', mp_sources,cpp_compile_params, clean);
+% Compressive Sampling Matching Pursuit
+cosamp_sources = [common_cpp_sources, 'spx_cosamp.cpp', 'spx_cg.cpp'];
+make_program('mex_cosamp.cpp', cosamp_sources,cpp_compile_params, clean);
+
+% Orthogonal Matching Pursuit
+omp_sources = [common_sources, 'omp.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_omp_chol.c', omp_sources,compile_params, clean);
+
+omp_ar_sources = [common_sources, 'omp_ar.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_omp_ar.c', omp_ar_sources,compile_params, clean);
+
+batch_omp_sources = [common_sources, 'batch_omp.c', 'omp_util.c'];
+make_program('mex_batch_omp.c', batch_omp_sources,compile_params, clean);
+
+omp_spr_sources = [common_sources, 'omp_spr.c', 'omp_util.c'];
+make_program('mex_omp_spr.c', omp_spr_sources,compile_params, clean);
+
+batch_omp_spr_sources = [common_sources, 'batch_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_batch_omp_spr.c', batch_omp_spr_sources,compile_params, clean);
+
+batch_flipped_omp_spr_sources = [common_sources, 'batch_flipped_omp_spr.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_batch_flipped_omp_spr.c', batch_flipped_omp_spr_sources,compile_params, clean);
+
+% Generalized Orthogonal Matching Pursuit
+gomp_sources = [common_sources, 'gomp.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_gomp.c', gomp_sources,compile_params, clean);
+
+% GOMP MMV
+gomp_mmv_sources = [common_sources, 'gomp_mmv.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_gomp_mmv.c', gomp_mmv_sources,compile_params, clean);
+
+% GOMP for SPR
+gomp_spr_sources = [common_sources, 'gomp_spr.c', 'omp_util.c', 'omp_profile.c'];
+make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, clean);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Singular Value Problems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% BDSQR for bidiagonal matrices.
+bdsqr_sources = [common_cpp_sources, 'spx_svd.cpp'];
+make_program('mex_bdsqr.cpp', bdsqr_sources, cpp_compile_params, clean);
+
+% Lanczos Bidiagonalization and Partial Reorthogonalization
+lansvd_sources = [common_cpp_sources, 'spx_lanbd.cpp', 'spx_lansvd.cpp', 'spx_rand.cpp'];
+make_program('mex_lansvd.cpp', lansvd_sources, cpp_compile_params, clean);
 
 end
 

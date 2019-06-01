@@ -428,21 +428,21 @@ void print_matrix(const double A[], int m, int n, const char* matrix_name);
 /**
 Prints the contents of a vector
 */
-void print_vector(const double v_x[], int n, char* vec_name);
+void print_vector(const double v_x[], int n, const char* vec_name);
 
 /**
 Prints the contents of a vector
 */
-void print_index_vector(const mwIndex v_x[], int n, char* vec_name);
+void print_index_vector(const mwIndex v_x[], int n, const char* vec_name);
 /**
 Prints the contents of an index vector with 1 based indexing
 */
-void print_index_vector_plus1(const mwIndex v_x[], int n, char* vec_name);
+void print_index_vector_plus1(const mwIndex v_x[], int n, const char* vec_name);
 
 /**
 Prints the contents of a sparse vector
 */
-void print_sparse_vector(const mxArray *A, char* vector_name);
+void print_sparse_vector(const mxArray *A, const char* vector_name);
 
 
 #endif 

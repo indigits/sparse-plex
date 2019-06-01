@@ -23,6 +23,14 @@ Matrix::Matrix(mwSize rows, mwSize cols):
 {
 }
 
+Matrix::Matrix(const mxArray* pMat):
+    m_pMatrix(mxGetPr(pMat)),
+    m_rows(mxGetM(pMat)),
+    m_cols(mxGetN(pMat)),
+    m_bOwned(false){
+
+}
+
 Matrix::Matrix(double *pMatrix, mwSize rows, mwSize cols, bool bOwned):
     m_pMatrix(pMatrix),
     m_rows(rows),
