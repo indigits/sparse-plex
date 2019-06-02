@@ -51,6 +51,12 @@ public:
 private:
 };
 
+
+/************************************************
+ *  Matrix Operator Declaration
+ ************************************************/
+
+
 class Matrix : public Operator {
 public:
     //! Constructs a self owned matrix
@@ -113,6 +119,12 @@ public:
     void add_to_col(mwIndex col, const double &value);
     //! set the contents of a column
     void set_column(mwIndex col, const Vec& input, double alpha = 1.0);
+    //! Set all entries to a fixed value
+    void set(double value);
+    //! Set diagonal entries to a fixed value
+    void set_diag(double value);
+    //! Set diagonal entries from a vector
+    void set_diag(const Vec& input);
     //! add a particular value to a row
     void add_to_row(mwIndex row, const double &value);
     //! subtract column minimums from columns
@@ -144,6 +156,9 @@ private:
     const bool  m_bOwned;
 };
 
+/************************************************
+ *  MxFullMat Operator Declaration
+ ************************************************/
 
 class MxFullMat : public Operator {
 public:

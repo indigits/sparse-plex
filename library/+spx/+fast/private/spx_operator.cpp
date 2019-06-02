@@ -272,6 +272,29 @@ void Matrix::set_column(mwIndex col, const Vec& input, double alpha) {
     }
 }
 
+void Matrix::set(double value) {
+    int n = m_rows * m_cols;
+    double* x = m_pMatrix;
+    for (int i=0; i < n; ++i) {
+        *x = value;
+    }
+}
+void Matrix::set_diag(double value) {
+    int n = std::min(m_rows, m_cols);
+    for (int i=0; i < n; ++i) {
+        (*this)(i, i) = value;
+    }
+}
+void Matrix::set_diag(const Vec& input) {
+    int n = std::min(m_rows, m_cols);
+    if (input.length() < n) {
+        throw std::length_error("Input vector has insufficient data.");
+    }
+    for (int i=0; i < n; ++i) {
+        (*this)(i, i) = input[i];
+    }
+}
+
 
 void Matrix::subtract_col_mins_from_cols() {
     mwSize n = m_cols;
