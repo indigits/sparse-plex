@@ -18,10 +18,7 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
         throw std::length_error("S has incorrect length.");
     }
     if (pU) {
-        if(pU->rows() != pU->columns()) {
-            throw std::length_error("U must be square matrix.");
-        }
-        if(pU->rows() != m){
+        if(pU->columns() != m){
             throw std::length_error("U has incorrect dimensions.");
         }
     }
@@ -49,23 +46,17 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
         ncvt = &m;
         ldvt = &m;
         vt = pVT->head();
-        for(int i=0; i < m; ++i) {
-            vt[i*(m+1)] = 1;
-        }
     }
     // Number of rows in U
-    const ptrdiff_t *nru = &zero;
+    ptrdiff_t nru = zero;
     // Leading dimension of U
-    const ptrdiff_t *ldu = &one;
+    ptrdiff_t ldu = one;
     // Pointer to U matrix data
     double *u = &dummy;
     if (pU != 0) {
-        nru = &m;
-        ldu = &m;
+        nru = pU->rows();
+        ldu = pU->rows();
         u = pU->head();
-        for(int i=0; i < m; ++i) {
-            u[i*(m+1)] = 1;
-        }
     } 
     // No C matrix involved here
     const ptrdiff_t *ncc = &zero;
@@ -82,15 +73,18 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
     double *work = (double*) mxCalloc(4*m-4,sizeof(double));
     ptrdiff_t info = 0;
 
-    dbdsqr(&uplo, n, ncvt, nru, ncc, d, e,
-        vt, ldvt, u, ldu, c, ldc, 
+    dbdsqr(&uplo, n, ncvt, &nru, ncc, d, e,
+        vt, ldvt, u, &ldu, c, ldc, 
         work, &info);
     /* Free work arrays */
     mxFree(e);
     mxFree(work);
-    if (info != 0) {
-        throw std::logic_error("Problem in BDSQR");
+    if (info < 0) {
+        throw std::invalid_argument("dbdsqr called with illegal arguments.");
+    } else if (info > 0) {
+        throw std::logic_error("BDSQR: singular values didn't converge.");        
     }
+    // Everything went well.
 }
 
 
