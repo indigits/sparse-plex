@@ -5,6 +5,7 @@
 
 #if !defined(_WIN32)
 #define dbdsqr dbdsqr_
+#define dlartg dlartg_
 #endif
 
 namespace spx {
@@ -86,6 +87,44 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
     }
     // Everything went well.
 }
+
+
+void convert_bd_kxkp1_to_kxk(Vec& alpha, Vec& beta, double& c, double& s){
+    if (alpha.length() < 1){
+        // There is nothing to do
+        return;
+    }
+    size_t n = alpha.length();
+    if (n != beta.length()){
+        throw std::length_error("Length of alpha and beta must be same.");
+    }
+    // local variables
+    double f;
+    double g;
+    double cs;
+    double sn;
+    double r;
+    int i;
+    for (i=0; i < n-1; ++i){
+        // rotate alpha[i], beta[i]
+        f = alpha[i];
+        g = beta[i];
+        dlartg(&f, &g, &cs, &sn, &r);
+        alpha[i] = r;
+        beta[i] = sn*alpha[i+1];
+        alpha[i+1] = cs*alpha[i+1];
+    }
+    // last iteration
+    f = alpha[i];
+    g = beta[i];
+    dlartg(&f, &g, &cs, &sn, &r);
+    alpha[i] = r;
+    beta[i] = 0;
+    c = cs;
+    s = sn;
+}
+
+
 
 
 }
