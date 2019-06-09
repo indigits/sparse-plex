@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <string.h>
 #include <stdexcept>
 #include "spx_operator.hpp"
 #include "blas.h"
@@ -62,6 +64,22 @@ mwSize Matrix::rows() const {
 
 mwSize Matrix::columns() const {
     return m_cols;
+}
+
+
+Matrix Matrix::columns_ref(mwIndex start, mwIndex end) const {
+    if (start < 0){
+        throw std::invalid_argument("start cannot be negative.");
+    }
+    if (end <= start){
+        throw std::invalid_argument("end cannot be less than or equal to start.");
+    }
+    if (end > m_cols){
+        throw std::invalid_argument("end cannot go beyond last column of matrix");
+    }
+    double* beg = m_pMatrix + start * m_rows;
+    mwIndex ncols = end - start;
+    return Matrix(beg, m_rows, ncols, false);
 }
 
 
@@ -138,7 +156,34 @@ void Matrix::mult_t_vec(const Vec& x, Vec& y) const {
 
 }
 
-void Matrix::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
+void Matrix::mult_t_vec(const index_vector& indices, const Vec& x, Vec& y) const{
+    if (m_rows != x.length()) {
+        throw std::invalid_argument("x doesn't have appropriate size.");
+    }
+    if (indices.size() != y.length()) {
+        throw std::invalid_argument("y doesn't have appropriate size.");
+    }
+    ::mult_submat_t_vec(1, m_pMatrix, &(indices[0]), 
+        x.head(), y.head(), m_rows, indices.size());
+}
+
+
+
+void Matrix::mult_vec(const index_vector& indices, const Vec& x, Vec& y) const{
+    if (x.length() != indices.size() ){
+        throw std::length_error("Dimension of x is not same as number of columns.");
+    }
+    if (y.length() != m_rows ){
+        throw std::length_error("Dimension of y is not same as number of rows");
+    }
+    const mwIndex *pindices = &(indices[0]);
+    const double *px = x.head();
+    double *py = y.head();
+    int k = indices.size();
+    ::mult_submat_vec(1, m_pMatrix, pindices, px, py, m_rows, k);
+}
+
+void Matrix::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
     ::mult_submat_vec(1, m_pMatrix, indices, x, y, m_rows, k);
 }
 
@@ -380,11 +425,17 @@ MxFullMat::MxFullMat(const mxArray *pMatrix):
     m_pMatrix(pMatrix),
     m_impl(mxGetPr(pMatrix), mxGetM(pMatrix), mxGetN(pMatrix), false)
 {
+    if (mxGetNumberOfDimensions(pMatrix) != 2){
+        throw std::invalid_argument("Must be a two dimensional matrix.");
+    }
     if (!mxIsNumeric(pMatrix)){
         throw std::invalid_argument("Must be a numerical matrix.");
     }
     if(!mxIsDouble(pMatrix)){
         throw std::invalid_argument("Must be a double matrix.");
+    }
+    if(mxIsComplex(pMatrix)){
+       throw std::invalid_argument("Must be a real matrix."); 
     }
     if (mxIsSparse(pMatrix)){
         throw std::invalid_argument("Must be a full matrix.");
@@ -437,8 +488,8 @@ void MxFullMat::mult_t_vec(const Vec& x, Vec& y) const {
     m_impl.mult_t_vec(x, y);
 }
 
-void MxFullMat::mult_submat_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
-    m_impl.mult_submat_vec(indices, k, x, y);
+void MxFullMat::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
+    m_impl.mult_vec(indices, k, x, y);
 }
 
 void MxFullMat::add_column_to_vec(double coeff, mwIndex index, double x[]) const {
@@ -450,4 +501,368 @@ bool MxFullMat::copy_matrix_to(Matrix& dst) const {
 }
 
 
+bool resize_fullmat_columns(mxArray *pMatrix, int n){
+    if (mxGetN(pMatrix) == n) {
+        // Nothing to do
+        return true;
+    }
+    double* pU = mxGetPr(pMatrix);
+    int m = mxGetM(pMatrix);
+    pU = (double*) mxRealloc(pU, m*n*sizeof(double));
+    if (pU != 0){
+        // Reallocation happened successfully
+        mxSetN(pMatrix, n);
+        mxSetPr(pMatrix, pU);
+        return true;
+    }
+    // reallocation failed
+    return false;
 }
+
+
+/************************************************
+ *  MxSparseMat Operator Implementation
+ ************************************************/
+
+/*
+    - nzmax is the space allocated for non-zero entries
+    - nnz is the total number of non-zero entries
+    - Let us assume that the sparse matrix A is of size m x n.
+    - Assume that the arrays pr, ir and jc have been extracted from it.
+    - This discussion follows 0 based indexing
+    - non-zero elements are stored in column major order
+    - pr  is the array of values
+    - ir is the array of row indices  (i-th row)
+    - jc is the array of column indices (j-th column)
+    - For each non-zero value, its row number and value are stored in ir and pr arrays
+    - The index of first non-zero entry for j-th column in pr array is stored at jc[j]
+    - jc[j+1] -1 is the index of the last non-zero entry in the j-th  column
+    - jc[j] is the total number of non-zero entries in all columns before j.
+    - jc[n] stores the total number of non-zero entries [i.e. nnz]
+    - The number of rows m is irrelevant for the storage of non-zero entries
+if nnz < nzmax, it is possible to store more non-zero entries without any reallocation
+*/
+
+
+MxSparseMat::MxSparseMat(const mxArray *pMatrix):
+    m_pMatrix(pMatrix)
+{
+    if (mxGetNumberOfDimensions(pMatrix) != 2){
+        throw std::invalid_argument("Must be a two dimensional sparse matrix.");
+    }
+    if (!mxIsNumeric(pMatrix)){
+        throw std::invalid_argument("Must be a numerical matrix.");
+    }
+    if(!mxIsDouble(pMatrix)){
+        throw std::invalid_argument("Must be a double matrix.");
+    }
+    if(mxIsComplex(pMatrix)){
+       throw std::invalid_argument("Must be a real matrix."); 
+    }
+    if (!mxIsSparse(pMatrix)){
+        throw std::invalid_argument("Must be a sparse matrix.");
+    }
+    M = mxGetM(pMatrix);
+    N = mxGetN(pMatrix);
+    m_pr = mxGetPr(pMatrix);
+    m_ir = mxGetIr(pMatrix);
+    m_jc = mxGetJc(pMatrix);
+}
+
+MxSparseMat::~MxSparseMat() {
+}
+
+mwSize MxSparseMat::rows() const {
+    return M;
+}
+
+mwSize MxSparseMat::columns() const {
+    return N;
+}
+
+
+void MxSparseMat::column(mwIndex c, double b[]) const {
+    if (c >= N) {
+        throw std::invalid_argument("index out of range.");
+    }
+    double* pr = m_pr;
+    mwIndex* ir = m_ir;
+    mwIndex* jc = m_jc;
+    // Move the pointer to the beginning of the column
+    pr += jc[c];
+    ir += jc[c];
+    // Zero initialize the output
+    for(int r=0; r < M; ++r){
+        b[r] = 0;
+    }
+    // Number of row elements for this column
+    int nrow = jc[c+1] - jc[c];
+    while( nrow > 0 ) {
+        b[*ir] = *pr;
+        ++ir;
+        ++pr;
+        // Next non-zero element in column
+        --nrow;
+    }
+}
+
+void MxSparseMat::extract_columns( const mwIndex indices[], mwSize k,
+                               double B[]) const {
+    double* pr = 0;
+    mwIndex* ir = 0;
+    mwIndex* jc = m_jc;
+    for (int i=0; i < k; ++i){
+        mwIndex c = indices[i];
+        if (c >= N) {
+            throw std::invalid_argument("index out of range.");
+        }
+        // Move the pointer to the beginning of the column
+        pr = m_pr + jc[c];
+        ir = m_ir + jc[c];
+        double *b = B + M * i;
+        // Zero initialize the output
+        for(int r=0; r < M; ++r){
+            b[r] = 0;
+        }
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            b[*ir] = *pr;
+            ++ir;
+            ++pr;
+            // Next non-zero element in column
+            --nrow;
+        }
+    }
+}
+
+void MxSparseMat::extract_columns(const index_vector& indices, Matrix& output) const {
+    if (indices.size() > output.columns()){
+        throw std::length_error("Output doesn't have sufficient space");
+    }
+    if (output.rows() != M){
+        throw std::length_error("Output matrix size not compatible.");
+    }
+    extract_columns(&(indices[0]), indices.size(), output.head());
+}
+
+
+void MxSparseMat::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
+    i_vector mapping(M);
+    // Mapping from source row to destination row
+    for (int i=0; i < M; ++i){
+        mapping[i] = -1;
+    }
+    // Map the source row to destination row
+    for (int i=0; i < k; ++i){
+        if (indices[i] >= M){
+            throw std::length_error("row index out of range.");
+        }
+        mapping[indices[i]] = i;
+    }
+    // Initialize the output
+    // memset(B, 0, k*N*sizeof(double));
+    double* pr = 0;
+    mwIndex* ir = 0;
+    mwIndex* jc = m_jc;
+    int sz = k*N;
+    for (mwIndex c=0; c < N; ++c){
+        // Move the pointer to the beginning of the column
+        pr = m_pr + jc[c];
+        ir = m_ir + jc[c];
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            mwIndex src_r = *ir;
+            int dst_r = mapping[src_r];
+            if (dst_r >= 0){
+                // place it in the output
+                mwIndex dst_index = k*c + dst_r;
+                if (dst_index >= sz){
+                    throw std::length_error("dst index out of range.");
+                }
+                B[dst_index] = *pr;
+            }
+            ++ir;
+            ++pr;
+            // Next non-zero element in column
+            --nrow;
+        }
+    }
+}
+
+void MxSparseMat::mult_vec(const double x[], double y[]) const {
+    double* pr = m_pr;
+    mwIndex* ir = m_ir;
+    mwIndex* jc = m_jc;
+    // Zero initialize the output
+    for(int r=0; r < M; ++r){
+        y[r] = 0;
+    }
+    // Iterate over the columns in the matrix
+    for(int c=0; c<N; c++ ) {
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            // row number of this element
+            mwIndex r = *ir;
+            // value of A[r,c]
+            double value = *pr;
+            // Accumulate contribution of x[c] for y[r]
+            // y[r] += A(r, c) * x[c]
+            y[r] += value * x[c];
+            ++ir;
+            ++pr;
+            // Move on to next non-zero element in the column
+            --nrow;
+        }
+    }
+}
+
+void MxSparseMat::mult_vec(const Vec& x, Vec& y) const {
+    if (x.length() != N){
+        throw std::length_error("x must have length equal to number of columns of A.");
+    }
+    if (y.length() != M){
+        throw std::length_error("y must have length equal to the number of rows of A.");
+    }
+    mult_vec(x.head(), y.head());
+}
+
+void MxSparseMat::mult_t_vec(const double x[], double y[]) const {
+    double* pr = m_pr;
+    mwIndex* ir = m_ir;
+    mwIndex* jc = m_jc;
+    // Zero initialize the output
+    for(int c=0; c < N; ++c){
+        y[c] = 0;
+    }
+    // Iterate over the columns in the matrix
+    for(int c=0; c<N; c++ ) {
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            // row number of this element
+            mwIndex r = *ir;
+            // value of A[r,c]
+            double value = *pr;
+            // Accumulate contribution of x[r] for y[c]
+            // y[c] += A(r, c) * x[r]
+            y[c] += value * x[r];
+            ++ir;
+            ++pr;
+            // Move on to next non-zero element in the column
+            --nrow;
+        }
+    }
+}
+
+void MxSparseMat::mult_t_vec(const Vec& x, Vec& y) const {
+    if (x.length() != M){
+        throw std::length_error("x must have length equal to number of rows of A.");
+    }
+    if (y.length() != N){
+        throw std::length_error("y must have length equal to the number of columns of A.");
+    }
+    mult_t_vec(x.head(), y.head());
+}
+
+void MxSparseMat::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
+    double* pr = 0;
+    mwIndex* ir = 0;
+    mwIndex* jc = m_jc;
+    // Zero initialize the output
+    for(int r=0; r < M; ++r){
+        y[r] = 0;
+    }
+    // Iterate over the indices
+    for(int i=0; i<k; i++ ) {
+        // Corresponding column number
+        mwIndex c = indices[i];
+        if (c >= N) {
+            throw std::invalid_argument("index out of range.");
+        }
+        pr = m_pr + jc[c];
+        ir = m_ir + jc[c];
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            // row number of this element
+            mwIndex r = *ir;
+            // value of A[r,c]
+            double value = *pr;
+            // Accumulate contribution of x[i] for y[r]
+            // y[r] += A(r, c) * x[i]
+            y[r] += value * x[i];
+            ++ir;
+            ++pr;
+            // Move on to next non-zero element in the column
+            --nrow;
+        }
+    }
+}
+
+void MxSparseMat::add_column_to_vec(double coeff, mwIndex c, double x[]) const {
+    if (c >= N) {
+        throw std::invalid_argument("index out of range.");
+    }
+    double* pr = m_pr;
+    mwIndex* ir = m_ir;
+    mwIndex* jc = m_jc;
+    // Move the pointer to the beginning of the column
+    pr += jc[c];
+    ir += jc[c];
+    // Number of row elements for this column
+    int nrow = jc[c+1] - jc[c];
+    while( nrow > 0 ) {
+        x[*ir] += coeff * (*pr);
+        ++ir;
+        ++pr;
+        // Next non-zero element in column
+        --nrow;
+    }
+}
+
+bool MxSparseMat::copy_matrix_to(Matrix& dst) const {
+    if (M != dst.rows()){
+        throw std::invalid_argument("mismatch in number or rows");
+    }
+    if (N != dst.columns()){
+        throw std::invalid_argument("mismatch in number of columns.");
+    }
+    double* pr = m_pr;
+    mwIndex* ir = m_ir;
+    mwIndex* jc = m_jc;
+    // Initialize with 0 first
+    dst.set(0);
+    // Iterate over the columns in the matrix
+    for(mwIndex c=0; c<N; c++ ) {
+        // Number of row elements for this column
+        int nrow = jc[c+1] - jc[c];
+        while( nrow > 0 ) {
+            // row number of this element
+            mwIndex r = *ir;
+            // value of A[r,c]
+            double value = *pr;
+            dst(r, c) = value;
+            ++ir;
+            ++pr;
+            // Move on to next non-zero element in the column
+            --nrow;
+        }
+    }
+}
+
+
+mwSize MxSparseMat::nnz() const{
+    return m_jc[N];
+}
+
+mwSize MxSparseMat::nnz_col(mwIndex c) const {
+    if (c >= N){
+        return 0;
+    }
+    return (m_jc[c+1] - m_jc[c]);
+}
+
+} // spx
