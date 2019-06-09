@@ -15,6 +15,34 @@ const char* func_name = "mex_lansvd";
 #define U_OUT plhs[0]
 #define S_OUT plhs[1]
 #define V_OUT plhs[2]
+#define A_OUT plhs[3]
+#define B_OUT plhs[4]
+#define P_OUT plhs[5]
+
+/**
+
+TODO LIST
+
+Input
+- Sparse matrices
+- Function handles
+
+
+LAN BD
+- Empty matrix
+- Single column matrix
+- ANORM estimation after 5 iterations
+- Bailout conditions for early convergence
+- Extended local reorthogonalization understanding
+- force reorthogonalization understanding
+- U indices computation under force reorth 
+- 
+
+LAN SVD
+- Error handling if the algorithm fails
+- Return the convergence error bounds
+
+*/
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
@@ -23,7 +51,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 
     double eps = mxGetEps();
     check_num_input_args(nrhs, 1, 3);
-    check_num_output_args(nlhs, 0, 3);
+    check_num_output_args(nlhs, 6, 6);
 
     check_is_double_matrix(A_IN, func_name, "A");
 
@@ -90,13 +118,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         }
     }
     try {
-        spx::LanSVD solver(A_IN, k, options);
-        solver();
-        /// Prepare output
-        if (nlhs >= 2) {
-            U_OUT = solver.transfer_u();
-            S_OUT = solver.transfer_v();
+        if (options.verbosity >= 2) {
+            mexPrintf("Constructing LanSVD Solver.\n");
         }
+        spx::LanSVD solver(A_IN, k, options);
+        if(options.verbosity >= 2){
+            mexPrintf("Running LanSVD Solver.\n");
+        }
+        // Carry out the Lanczos Bidiagonalization with
+        // Partial Reorthogonalization process to
+        // compute the required singular values
+        solver();
+        U_OUT = solver.transfer_u();
+        S_OUT = solver.transfer_s();
+        V_OUT = solver.transfer_v();
+        A_OUT = solver.transfer_alpha();
+        B_OUT = solver.transfer_beta();
+        P_OUT = solver.transfer_p();
     } catch (std::exception& e) {
         mexErrMsgTxt(e.what());
         return;
