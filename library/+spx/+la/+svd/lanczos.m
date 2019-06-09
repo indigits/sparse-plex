@@ -238,6 +238,9 @@ function [U, B, V, p, details] = bdpro(A, k, options)
     fro = (delta == 0);
     % Iterate for k vectors
     for j=1:k
+        if options.verbosity > 1
+            fprintf('\nIteration: j: %d\n\n', j);
+        end
         % Compute the new left vector U_j
         if beta(j) ~= 0
             % normalization of p and assignment as new vector
@@ -401,7 +404,7 @@ function [U, B, V, p, details] = bdpro(A, k, options)
             end % if bailout      
         elseif  j<k & ~fro & anorm*eps > delta*alpha(j)
             ierr = j;
-        end % if
+        end % if Check for convergence
         % Compute V_j
         if alpha(j) ~= 0
             V(:,j) = r/alpha(j);
@@ -442,7 +445,7 @@ function [U, B, V, p, details] = bdpro(A, k, options)
             end
         end %  est_norm
         if ~fro & beta(j+1) ~= 0
-            % Update estimates of the level of orthogonality for the columns of V.
+            % Update estimates of the level of orthogonality for the columns of U.
             mu = update_mu(mu,nu,j,alpha,beta,anorm);
             mumax(j) = max(abs(mu(1:j)));  
         end % update mu
@@ -709,7 +712,7 @@ function [r,normr,nre,s] = reorth(Q,r,normr,index,alpha,method)
         end
     end
     if nargin<5 | isempty(alpha)
-        alpha=0.5;  % This choice garanties that 
+        alpha=0.5;  % This choice guaranties that 
                     % || Q^T*r_new - e_{k+1} ||_2 <= 2*eps*||r_new||_2,
                     % cf. Kahans ``twice is enough'' statement proved in 
                     % Parletts book.
