@@ -185,7 +185,7 @@ void CoSaMP::prune_k(){
 
 void CoSaMP::update_approximation(){
     // Choose the first K indices and corresponding coefficients
-    m_sub_phi.mult_submat_vec(&m_sorted_3k[0], m_sparsity, &m_z_k[0], &m_approximation[0]);
+    m_sub_phi.mult_vec(&m_sorted_3k[0], m_sparsity, &m_z_k[0], &m_approximation[0]);
     print_d_vec(m_approximation, "approximation");
 }
 
