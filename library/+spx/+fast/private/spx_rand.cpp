@@ -5,10 +5,16 @@
 namespace spx
 {
 
-namespace rand{
+Rng::Rng(unsigned seed):
+gen(seed){
 
-void init_uniform_real(Vec& v, double a, double b) {
-    std::mt19937 gen(0);
+}
+
+Rng::~Rng(){
+    
+}
+
+void Rng::uniform_real(double a, double b, Vec& v) {
     std::uniform_real_distribution<> dis(a, b);
     double* x = v.head();
     mwSignedIndex  x_inc = v.inc();
@@ -19,8 +25,6 @@ void init_uniform_real(Vec& v, double a, double b) {
         *x = value;
         x += x_inc;
     }
-}
-
 }
 
 }
