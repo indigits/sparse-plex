@@ -3,11 +3,13 @@
 #include <mex.h>
 #include "argcheck.h"
 #include "spx_operator.hpp"
+#include "spx_matarr.hpp"
 
 const char* func_name = "mex_sparse_demo";
 
 
 #define A_IN prhs[0]
+#define S_OUT plhs[0]
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
@@ -75,6 +77,21 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
             mwIndex ind[2] = {0, 2};
             mat.extract_rows(ind, 2, A3.head());
             A3.print_matrix("A3");
+        }
+        {
+            std::vector<std::string> fields;
+            fields.push_back("a");
+            fields.push_back("b");
+            fields.push_back("c");
+            fields.push_back("d");
+            fields.push_back("e");
+            S_OUT = spx::create_struct(fields);
+            spx::set_struct_int_field(S_OUT, 0, 10);
+            spx::set_struct_bool_field(S_OUT, 1, true);
+            spx::set_struct_double_field(S_OUT, 2, 5.0);
+            spx::set_struct_string_field(S_OUT, 3, "ABC");
+            spx::d_vector vd{10, 20, 30};
+            spx::set_struct_d_vec_field(S_OUT, 4, vd);
         }
     } catch (std::exception& e) {
         mexErrMsgTxt(e.what());

@@ -34,7 +34,7 @@ end
 
 blas_sources  = {'argcheck.c', 'spxblas.c'};
 common_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c'};
-common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp', 'spx_vector.cpp'};
+common_cpp_sources = {'argcheck.c', 'spxblas.c', 'spxla.c', 'spxalg.c', 'spx_operator.cpp', 'spx_pursuit.cpp', 'spx_vector.cpp', 'spx_matarr.cpp'};
 % Simple matrix multiplication routines
 make_program('mex_mult_mat_vec.c', blas_sources,compile_params, options);
 make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params, options);
