@@ -3,6 +3,7 @@
 
 #include "spx_operator.hpp"
 #include "spx_vector.hpp"
+#include "spx_rand.hpp"
 
 namespace spx {
 
@@ -38,7 +39,8 @@ public:
     LanczosBD(const Operator& A, 
         Vec& alpha,
         Vec& beta,
-        Vec& p);
+        Vec& p,
+        Rng& rng);
     //! Destructor
     ~LanczosBD();
     //! Complete iterations up to k Lanczos vectors
@@ -55,13 +57,10 @@ private:
     Vec& m_alpha;
     Vec& m_beta;
     Vec& m_p;
-    d_vector m_r;
+    Rng& rng;
+    Vec m_r;
     // Running estimate of the norm of A
     double m_anorm;
-    //! Number of U inner products
-    int m_npu;
-    //! Number of V inner products
-    int m_npv;
     //! Indicator for finishing before k iterations
     int ierr;
     //! Tracker for U inner products
@@ -76,8 +75,23 @@ private:
     int m_nreorthu;
     //! Number of reorthogonalizations on V
     int m_nreorthv;
+    //! Number of U inner products
+    int m_npu;
+    //! Number of V inner products
+    int m_npv;
+    //! Number of times v vectors were renewed 
+    int m_nrenewv;
     //! Set of indices to orthogonalize against
     b_vector m_indices;
+    //! Indicates if reorthogonalization is forced in next iter
+    int force_reorth;
+    //! iteration number for j-th Lanczos vector
+    int j;
+    // Flag which indicates whether norm of A is to
+    // be estimated
+    bool est_anorm;
+    //! flag to indicate if full reorthogonalization is to be done
+    bool fro;
 private:
     // Updates nu
     void update_nu(int j, const LanczosBDOptions& options);
@@ -85,6 +99,17 @@ private:
     void update_mu(int j, const LanczosBDOptions& options);
     // Compute the indexes for orthogonalization
     void compute_ind(d_vector& mu, int j, int LL, int strategy, int extra, const LanczosBDOptions& options);
+
+    // Extended local reorthogonalization
+    void do_elr(const Vec& v_prev, Vec& v, double& v_norm, 
+        double& v_coeff, const LanczosBDOptions& options);
+    // Helper functions for norm estimations
+    void estimate_anorm_from_largest_ritz_value(const LanczosBDOptions& options);
+
+    void check_for_v_convergence(const LanczosBDOptions& options, Matrix& V, int k);
+
+    /// With friends like these.
+    friend class LanSVD;
 };
 
 

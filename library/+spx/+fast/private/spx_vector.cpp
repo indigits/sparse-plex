@@ -100,32 +100,45 @@ void square(const d_vector& src, d_vector& dst) {
  *
  ***********************************************/
 
+Vec::Vec(mwSize n):
+m_pVec(new double[n]),
+m_n(n),
+m_inc(1),
+m_bOwned(true){
+
+}
+
 Vec::Vec(double* pVec, mwSize n, mwSignedIndex  inc):
     m_pVec(pVec),
     m_n(n),
-    m_inc(inc) {
+    m_inc(inc),
+    m_bOwned(false) {
 
 }
 
 Vec::Vec(d_vector& vec):
-m_pVec(&(vec[0])),
-m_n(vec.size()),
-m_inc(1){
+    m_pVec(&(vec[0])),
+    m_n(vec.size()),
+    m_inc(1),
+    m_bOwned(false) {
 
 }
 
 Vec::Vec(const mxArray* vec):
-m_pVec(mxGetPr(vec)),
-m_n(mxGetM(vec)*mxGetN(vec)),
-m_inc(1){
+    m_pVec(mxGetPr(vec)),
+    m_n(mxGetM(vec) * mxGetN(vec)),
+    m_inc(1),
+    m_bOwned(false) {
 
 }
 
 Vec::~Vec() {
-
+    if (m_bOwned){
+        delete[] m_pVec;
+    }
 }
 
-double Vec::abs_max(mwSignedIndex start, mwSignedIndex end) const{
+double Vec::abs_max(mwSignedIndex start, mwSignedIndex end) const {
     if (end < 0) {
         end = m_n;
     }
@@ -138,7 +151,7 @@ double Vec::abs_max(mwSignedIndex start, mwSignedIndex end) const{
     mwSignedIndex  incx = m_inc;
     mwSignedIndex nn = end - start;
     mwSignedIndex maxIndex = idamax(&nn, m_pVec + start * incx, &incx) - 1;
-    return fabs(m_pVec[maxIndex*incx]);
+    return fabs(m_pVec[maxIndex * incx]);
 }
 
 mwIndex Vec::abs_max_index() const {
@@ -211,6 +224,7 @@ Vec& Vec::operator = (const Vec &o) {
     const double* y = o.m_pVec;
     mwSignedIndex x_inc = m_inc;
     mwSignedIndex y_inc = o.m_inc;
+    // Copy as much as possible
     for (mwIndex i = 0; i < n; ++i) {
         *x = *y;
         x += x_inc;
@@ -219,11 +233,11 @@ Vec& Vec::operator = (const Vec &o) {
     return *this;
 }
 
-void Vec::set(const index_vector& indices, const double& value){
+void Vec::set(const index_vector& indices, const double& value) {
     size_t n = indices.size();
-    for (int i = 0; i < n; ++i){
+    for (int i = 0; i < n; ++i) {
         mwIndex index = indices[i];
-        if (index >= m_n){
+        if (index >= m_n) {
             throw std::length_error("Vec.set:: Out of range index.");
         }
         m_pVec[index * m_inc] = value;
@@ -272,7 +286,7 @@ Vec& Vec::inv() {
     return *this;
 }
 
-Vec& Vec::abs(){
+Vec& Vec::abs() {
     mwSize n = m_n;
     mwSignedIndex inc = m_inc;
     double* x = m_pVec;
@@ -283,7 +297,7 @@ Vec& Vec::abs(){
     return *this;
 }
 
-Vec& Vec::scale(double value){
+Vec& Vec::scale(double value) {
     mwSize n = m_n;
     mwSignedIndex inc = m_inc;
     double* x = m_pVec;
@@ -362,28 +376,28 @@ void Vec::print(const std::string& name, mwSignedIndex end, bool scientific) con
     }
     double* x = m_pVec;
     for (int i = 0; i < n; ++i) {
-        if (scientific){
+        if (scientific) {
             mexPrintf("   %e", *x);
-        }else{
+        } else {
             mexPrintf("   %.4lf", *x);
         }
         x += m_inc;
     }
-    if (end < m_n){
+    if (end < m_n) {
         mexPrintf(" ...");
     }
-    mexPrintf("\n");    
+    mexPrintf("\n");
 }
 
-void flags_to_indices(const b_vector& flags, index_vector& indices, int n){
+void flags_to_indices(const b_vector& flags, index_vector& indices, int n) {
     size_t m = flags.size();
-    if (n > 0){
+    if (n > 0) {
         m = std::min(m, (size_t) n);
     }
     // identify how many columns are selected
     n = 0;
-    for (int i= 0; i < m; ++i){
-        if (flags[i]){
+    for (int i = 0; i < m; ++i) {
+        if (flags[i]) {
             n += 1;
         }
     }
@@ -391,23 +405,23 @@ void flags_to_indices(const b_vector& flags, index_vector& indices, int n){
     indices.resize(n);
     int j = 0;
     // iterate over flags and identify the indices of selected columns
-    for (int i=0; i < m; ++i){
-        if (flags[i]){
+    for (int i = 0; i < m; ++i) {
+        if (flags[i]) {
             indices[j] = i;
             ++j;
         }
     }
 }
 
-void indices_to_flags(const index_vector& indices, b_vector& flags){
+void indices_to_flags(const index_vector& indices, b_vector& flags) {
     size_t m = flags.size();
-    for (int i=0; i <m; ++i){
+    for (int i = 0; i < m; ++i) {
         flags[i] = false;
     }
     size_t n = indices.size();
-    for (int i=0; i < n; ++i){
+    for (int i = 0; i < n; ++i) {
         size_t index = indices[i];
-        if (index >= m){
+        if (index >= m) {
             continue;
         }
         flags[index] = true;

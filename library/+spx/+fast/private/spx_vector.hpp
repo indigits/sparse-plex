@@ -89,7 +89,9 @@ A wrapper class for representing vectors
 */
 class Vec {
 public:
-  //! Constructor
+  //! Constructor for a self owned vector
+  Vec(mwSize n);
+  //! Constructor from external data
   Vec(double* pVec, mwSize n, mwSignedIndex  inc = 1);
   //! Constructor from vector
   Vec(d_vector& vec);
@@ -196,6 +198,8 @@ private:
   mwSize m_n;
   //! Step size between vector elements
   mwIndex m_inc;
+  //! Indicates if the contents are owned
+  bool m_bOwned;
 };
 
 

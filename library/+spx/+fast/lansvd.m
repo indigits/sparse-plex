@@ -8,10 +8,10 @@ function [U, S, V, details]  = lansvd(A, k, options)
     if nargin < 2
         k = 6;
     end
-    [U, S, V, alpha, beta, p] = mex_lansvd(A, k, options);
+    [U, S, V, alpha, beta, p, details] = mex_lansvd(A, k, options);
     % number of Lanczos vectors computed
-    k_done = size(alpha, 1)
-    p_norm = beta(k_done+1)
+    k_done = size(alpha, 1);
+    p_norm = beta(k_done+1);
     % Let's compute all the singular vectors if requested by caller
     if nargout>2 % computation of Ritz vectors
         % Form the k+1 x k bidiagonal matrix from alpha and beta

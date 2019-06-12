@@ -1,7 +1,13 @@
 #include "spx_lanbd.hpp"
 #include "spx_qr.hpp"
+#include "spx_svd.hpp"
 
 namespace spx {
+
+// Fudge factor for A norm estimate
+const double FUDGE = 1.01;
+const double m2 = 3.0 / 2;
+const double n2 = 3.0 / 2;
 
 LanczosBDOptions::LanczosBDOptions(double eps, int k) {
     delta = sqrt(eps / k);
@@ -20,25 +26,26 @@ LanczosBDOptions::LanczosBDOptions(double eps, int k) {
 LanczosBD::LanczosBD(const Operator& A,
                      Vec& alpha,
                      Vec& beta,
-                     Vec& p):
+                     Vec& p,
+                     Rng& rng_):
     m_A(A),
     m_alpha(alpha),
     m_beta(beta),
     m_p(p),
+    rng(rng_),
+    m_r(A.columns()),
     m_anorm(-1),
     m_npu(0),
     m_npv(0),
     ierr(0),
     m_nreorthu(0),
-    m_nreorthv(0)
+    m_nreorthv(0),
+    m_nrenewv(0),
+    force_reorth(0),
+    j(0),
+    est_anorm(true),
+    fro(false)
 {
-    // mexPrintf("A : %d\n", &m_A);
-    // mexPrintf("U : %d\n", &m_U);
-    // mexPrintf("V : %d\n", &m_V);
-    // mexPrintf("alpha : %d\n", &m_alpha);
-    // mexPrintf("beta : %d\n", &m_beta);
-    // mexPrintf("p : %d\n", &m_p);
-    m_r.resize(A.columns());
     m_indices.resize(A.columns());
 }
 
@@ -59,7 +66,7 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
     Vec& alpha = m_alpha;
     Vec& beta = m_beta;
     Vec& p = m_p;
-    Vec r(m_r);
+    Vec&r = m_r;
     int verbosity = options.verbosity;
     // Options
     double delta  = options.delta;
@@ -68,8 +75,6 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
     bool cgs = options.cgs;
     int elr = options.elr;
     double eps = options.eps;
-    int force_reorth  = 0;
-
     // Verify the dimensions
     if(U.columns() < k){
         mexPrintf("Number of columns in U: %d, expected: %d\n", U.columns(), k);
@@ -83,21 +88,14 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
     //! Number of columns
     mwSize n = m_A.columns();
 
-    double m2 = 3.0 / 2;
-    double n2 = 3.0 / 2;
 
-    // Flag which indicates whether norm of A is to
-    // be estimated
-    bool est_anorm = true;
-    // Fudge factor for A norm estimate
-    double FUDGE = 1.01;
     // Ensure that inner product trackers have sufficient space
     m_nu.resize(k);
     m_mu.resize(k + 1);
     m_numax.resize(k);
     m_mumax.resize(k);
     // if delta is zero, then user has requested full reorthogonalization
-    bool fro = (delta == 0);
+    fro = (delta == 0);
     /// Initialization for first iteration
     if (k_done == 0) {
         if (verbosity >= 2) {
@@ -110,10 +108,11 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
         }
         m_nu[0] = 1;
         m_mu[0] = 1;
+        m_npu = m_npv = 0;
     }
 
     // Iterate over computing Lanczos vectors
-    for (int j = k_done; j < k; ++j) {
+    for (j = k_done; j < k; ++j) {
         /**
         In each iteration, we update following quantities:
         - U(:, j) from last computed value of p and beta[j]
@@ -145,7 +144,7 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             mexPrintf("Computing V[%d]\n", j);
         }
         if (j == 5) {
-            //TODO Replace A norm estimate with largest Ritz value
+            estimate_anorm_from_largest_ritz_value(options);
         }
         // At this moment U_j has been obtained and V_j computation begins
         // U(:, j)
@@ -169,35 +168,7 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             // alpha[j] estimate
             alpha[j] = r.norm();
             // Extended local reorthogonalization
-            if ((alpha[j] < gamma * beta[j]) && elr && (!fro)) {
-                // We iterate till r has significant V_{j-1} component
-                bool stop = false;
-                double normold = alpha[j];
-                int nelr = 0;
-                while (!stop) {
-                    // Component of r along V_{j-1}
-                    double t = V_jm1.inner_product(r);
-                    // Subtract it from r
-                    r.add(V_jm1, -t);
-                    // Update its norm
-                    alpha[j] = r.norm();
-                    if (beta[j] != 0) {
-                        // add this correction term to beta_j
-                        beta[j] += t;
-                    }
-                    if (alpha[j] >= gamma * normold) {
-                        // Not enough reduction. We stop
-                        stop = true;
-                    } else {
-                        // continue reorthogonalization
-                        normold = alpha[j];
-                    }
-                    ++nelr;
-                } // stop
-                if (verbosity >= 4) {
-                    mexPrintf("ELR for V[%d]: %d times\n", j, nelr);
-                }
-            } // Extended local reorthogonalization
+            do_elr(V_jm1, r, alpha[j], beta[j], options);
             // update norm estimate for j > 0
             if (est_anorm) {
                 double tmp = 0;
@@ -257,7 +228,6 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
                 // Reset nu for orthogonalized vectors.
                 Vec nu(m_nu);
                 nu.set(indices, n2 * eps);
-                // TODO what's going on here
                 if (force_reorth == 0) {
                     force_reorth = 1;
                 } else {
@@ -267,9 +237,7 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             } // end Reorthogonalize
         } // end j > 0
         // Check for convergence or failure to maintain semiorthogonality
-        if ((alpha[j] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
-            /// TODO finish this
-        } // check for convergence
+        check_for_v_convergence(options, V, k);
         // Update V_j
         if (verbosity >= 2) {
             mexPrintf("Setting V[%d]\n", j);
@@ -277,6 +245,8 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
         if (alpha[j] != 0) {
             V.set_column(j, r, 1 / alpha[j]);
         } else {
+            // We found a new starting vector to work with
+            // which is orthogonal to existing columns in V
             V.set_column(j, r);
         }
         if (verbosity >= 2) {
@@ -296,34 +266,7 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
         beta[j + 1] = p.norm();
         /// This may change due to reorthogonalization
         // Extended local reorthogonalization
-        if ((beta[j + 1] < gamma * alpha[j]) && elr && (!fro)) {
-            bool stop = false;
-            double normold = beta[j + 1];
-            int nelr = 0;
-            while (!stop) {
-                // Component of p along U_j
-                double t = U_j.inner_product(p);
-                // Subtract it from p
-                p.add(U_j, -t);
-                // Update its norm
-                beta[j + 1] = p.norm();
-                if (alpha[j] != 0) {
-                    // add this correction term to alpha_j
-                    alpha[j] += t;
-                }
-                if (beta[j + 1] >= gamma * normold) {
-                    // Not enough reduction. We stop
-                    stop = true;
-                } else {
-                    // continue reorthogonalization
-                    normold = beta[j + 1];
-                }
-                ++nelr;
-            } // stop
-            if (verbosity >= 4) {
-                mexPrintf("ELR for U[%d]: %d times\n", j + 1, nelr);
-            }
-        }
+        do_elr(U_j, p, beta[j+1], alpha[j], options);
         if (est_anorm) {
             double tmp = 0;
             if (j == 0) {
@@ -377,18 +320,17 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             // Reset mu for orthogonalized vectors.
             Vec mu(m_mu);
             mu.set(indices, n2 * eps);
-            // TODO what's going on here
             if (force_reorth == 0) {
                 // Force reorthogonalization of v_{j+1}.
                 force_reorth = 1;
             } else {
                 force_reorth = 0;
             }
-            m_nreorthv += 1;
+            m_nreorthu += 1;
         }
         // TODO Check for convergence or failure to maintain semiorthogonality
         if ((beta[j+1] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
-
+            throw std::logic_error("beta[j+1] is too small.");
         } // end check for convergence
         // Count the number of iterations completed.
         k_done += 1;
@@ -624,6 +566,114 @@ void LanczosBD::compute_ind(d_vector& mmu, int j, int LL, int strategy, int extr
     }
 }
 
+void LanczosBD::estimate_anorm_from_largest_ritz_value(const LanczosBDOptions& options){
+    //TODO Replace A norm estimate with largest Ritz value
+    Vec a(m_alpha.head(), j);
+    Vec b(m_beta.head() + 1, j);
+    double anorm = norm_kp1xk_mat(a, b);
+    if (options.verbosity >= 2){
+        mexPrintf("Estimated A norm at j=%d is %.4f\n", j, anorm);
+    }
+    return;
+    m_anorm = FUDGE*anorm;
+    // We don't need to update norm of A anymore
+    est_anorm = 0;    
+}
+
+
+void LanczosBD::do_elr(const Vec& v_prev, Vec& v, double& v_norm, 
+    double& v_coeff, const LanczosBDOptions& options) {
+    // We iterate till r has significant v_prev component
+    bool stop = false;
+    double normold = v_norm;
+    double gamma = options.gamma;
+    if ((v_norm < gamma * v_coeff) && options.elr && (!fro)){
+        int nelr = 0;
+        while (!stop) {
+            // Component of v along v_prev
+            double t = v_prev.inner_product(v);
+            // Subtract it from v
+            v.add(v_prev, -t);
+            // Update its norm
+            v_norm = v.norm();
+            if (v_coeff != 0) {
+                // add this correction term to v_coeff
+                v_coeff += t;
+            }
+            if (v_norm >= gamma * normold) {
+                // Not enough reduction. We stop
+                stop = true;
+            } else {
+                // continue reorthogonalization
+                normold = v_norm;
+            }
+            ++nelr;
+        } // stop
+        if (options.verbosity >= 4) {
+            mexPrintf("ELR: %d times\n", nelr);
+        }    
+    }
+}
+
+void LanczosBD::check_for_v_convergence(const LanczosBDOptions& options, Matrix& V, int k) {
+    double eps = options.eps;
+    const Operator& A = m_A;
+    mwSize m = A.rows();
+    mwSize n = A.columns();
+    Vec& alpha = m_alpha;
+    Vec& beta = m_beta;
+    bool bailout = false;
+    double r_norm = 0;
+    if ((alpha[j] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
+        /// TODO finish this
+        alpha[j] = 0;
+        bailout = true;
+        Vec tmp(m);
+        index_vector indices(j);
+        for (int i=0; i < j; ++i){
+            indices[i] = (mwIndex) i;
+        }
+        for (int attempt = 0; attempt < 3; ++attempt){
+            rng.uniform_real(-0.5, 0.5, tmp);
+            A.mult_t_vec(tmp, m_r);
+            r_norm = m_r.norm();
+            // The previous j columns of V
+            Matrix Q = V.columns_ref(0, j);
+            // Reorthogonalize r against existing V vectors
+            int nre = qr::reorth(Q, indices, m_r, r_norm, 
+                options.gamma, options.cgs);
+            m_npv += nre * indices.size();
+            m_nreorthv += 1;
+            Vec nu(m_nu);
+            nu.set(indices, n2 * eps);
+            if (r_norm > 0){
+                // A vector numerically orthogonal to span(V_k(:,1:j-1)) was found. 
+                // Continue iteration
+                bailout = false;
+                m_nrenewv += 1;
+                break;
+            }
+        }
+        if (bailout){
+            // Number of iterations for which V vectors were successfully identified.
+            j = j - 1;
+            // Indicator that we failed in j-th iteration
+            ierr = -j;
+            throw std::logic_error("alpha[j] is too small. Could not find another vector.");
+        }
+        else {
+            // Continue with new normalized r as starting vector.
+            m_r.scale(1/r_norm);
+            force_reorth = 1;
+            if (options.delta > 0){
+                // Turn off full reorthogonalization.
+                fro = 0;
+            }
+        }
+    } else if (j < k - 1 && !fro && (m_anorm * eps > options.delta * alpha[j])) {
+        ierr = j;
+    } // check for convergence  
+}
 
 
 }

@@ -1,5 +1,6 @@
 #include "spx_lansvd.hpp"
 #include "spx_svd.hpp"
+#include "spx_matarr.hpp"
 
 namespace spx {
 
@@ -25,6 +26,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     m_cols(0),
     m_rows(0),
     m_k(k),
+    k_done(0),
     m_options(options),
     // Arrays
     m_u_arr(0),
@@ -43,26 +45,10 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     if(A == 0){
         throw std::invalid_argument("input operator A hasn't been specified.");
     }
-    int M, N;
-    // Number of signal space dimension
-    M = mxGetM(A);
-    // Number of atoms
-    N = mxGetN(A);
-    int min_mn = std::min(M, N);
-    if (k < 0) {
-        m_k = std::min(min_mn, 6);
-    }
-    if (m_k < 1) {
-        throw std::invalid_argument("Number of required singular values is 0.");
-    }
-    m_max_iters = min_mn;
     double eps = mxGetEps();
     m_tolerance = 16 * eps;
     if (options.tolerance > 0) {
         m_tolerance = options.tolerance;
-    }
-    if (options.max_iters > 0){
-        m_max_iters = options.max_iters;
     }
     Operator* a_op = 0;
     if(mxIsNumeric(A) && !mxIsSparse(A)){
@@ -75,21 +61,29 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
         // We couldn't build the operator
         throw std::invalid_argument("Could not create A operator.");
     }
+    int min_mn = std::min(m_cols, m_rows);
+    if (k < 0) {
+        m_k = std::min(min_mn, 6);
+    }
+    if (m_k < 1) {
+        throw std::invalid_argument("Number of required singular values is 0.");
+    }
+    m_max_iters = min_mn;
+    if (options.max_iters > 0){
+        m_max_iters = options.max_iters;
+    }
+
     // allocate initial memory for U matrix
-    m_u_arr = mxCreateDoubleMatrix(M, m_k, mxREAL);
+    m_u_arr = mxCreateDoubleMatrix(m_rows, m_k, mxREAL);
     // allocate initial memory for V matrix
-    m_v_arr = mxCreateDoubleMatrix(N, m_k, mxREAL);
+    m_v_arr = mxCreateDoubleMatrix(m_cols, m_k, mxREAL);
     // allocate initial memory for S array
     m_s_arr = mxCreateDoubleMatrix(m_k, 1, mxREAL);
 
     // Vectors
-    m_alpha_space.resize(N);
-    m_beta_space.resize(N+1);
-    m_p_space.resize(M);
-
-    m_v_alpha = new Vec(m_alpha_space);
-    m_v_beta = new Vec(m_beta_space);
-    m_v_p = new Vec(m_p_space);
+    m_v_alpha = new Vec(m_cols);
+    m_v_beta = new Vec(m_cols + 1);
+    m_v_p = new Vec(m_rows);
     if(options.p0){
         (*m_v_p) = Vec(options.p0);
     }
@@ -103,7 +97,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     if (options.verbosity >= 2) {
         mexPrintf("Constructing LanczosBD solver\n");
     }
-    mp_solver = new LanczosBD(*a_op, *m_v_alpha, *m_v_beta, *m_v_p);
+    mp_solver = new LanczosBD(*a_op, *m_v_alpha, *m_v_beta, *m_v_p, rng);
 }
 
 LanSVD::~LanSVD() {
@@ -141,7 +135,7 @@ void LanSVD::operator()() {
     if (mp_solver == 0){
         mexErrMsgTxt("The LanczosBD solver hasn't been setup.");
     }
-    int k_done = 0;
+    k_done = 0;
     /// Number of singular values which have converged
     int n_converged = 0;
     bool bad_alloc = false;
@@ -155,7 +149,7 @@ void LanSVD::operator()() {
     // We cannot go beyond max iterations
     for (int iter=1; n_converged < m_k ; ++iter){
         //! Options for the LanczosBD algorithm
-        if (verbosity >= 2){
+        if (verbosity >= 1){
             mexPrintf("Setting up options for LanczosBD solver\n");
             mexPrintf("\nStarting LanSVD iter [%d]: k_req=%d, k_done: %d\n\n", iter, k_req, k_done);
         }
@@ -179,7 +173,7 @@ void LanSVD::operator()() {
         /// TODO provide support for handling the issue of degenerate cases.
 
         // Norm of the residual
-        double p_norm = m_beta_space[k_done];
+        double p_norm = (*m_v_beta)[k_done];
         // Prepare for computing the singular values of bidiagonal matrix
         if(mxGetM(m_s_arr) < k_done){
             // We need to allocate more space
@@ -196,8 +190,8 @@ void LanSVD::operator()() {
         }
         ////// Conversion of the lower k+1, k bidiagonal matrix to k x k upper bidiagonal matrix
         // source values
-        Vec alpha(&(m_alpha_space[0]), k_done);
-        Vec beta(&(m_beta_space[1]), k_done);
+        Vec alpha(m_v_alpha->head(), k_done);
+        Vec beta(m_v_beta->head() + 1, k_done);
         // destination
         Vec alpha2(&(alpha2_space[0]), k_done);
         Vec beta2(&(beta2_space[0]), k_done);
@@ -207,7 +201,7 @@ void LanSVD::operator()() {
         // perform the conversion
         double cs = 0;
         double sn = 0;
-        convert_bd_kxkp1_to_kxk(alpha2, beta2, cs, sn);
+        convert_bd_kp1xk_to_kxk(alpha2, beta2, cs, sn);
         Vec beta3(beta2.head(), k_done-1);
         /////// Compute the singular values of the bidiagonal matrix
         Vec S(m_s_arr);
@@ -238,7 +232,7 @@ void LanSVD::operator()() {
                 break;
             }
         }
-        if (verbosity >= 2){
+        if (verbosity >= 1){
             mexPrintf("Finishing LanSVD iter [%d]: k_req=%d, k_done: %d\n", iter, k_req, k_done);
             mexPrintf("Converged singular values: %d, pnorm: %e\n", n_converged, p_norm);
             S.print("Singular values");
@@ -259,21 +253,26 @@ void LanSVD::operator()() {
             // As long a very few singular values have converged, increase k rapidly.
             k_req = (int) std::max((int)(1.5*k_req), k_req + 10);
         }
+        // We cannot request more iterations than the rank.
+        k_req = std::min(k_req, m_max_iters);
     }
-    if (verbosity >= 2){
+    if (verbosity >= 1){
         mexPrintf("Final: k_done: %d\n", k_done);
     }
-    if (verbosity >= 2){
+    if (verbosity >= 1){
         m_v_alpha->print("alpha", k_done);
         m_v_beta->print("beta", k_done + 1);
+        mexPrintf("nreorthu: %d, nreorthv: %d, npu: %d, npv: %d, ierr: %d\n",
+            mp_solver->m_nreorthu, 
+            mp_solver->m_nreorthv,
+            mp_solver->m_npu,
+            mp_solver->m_npv,
+            mp_solver->ierr);
     }
     if (bad_alloc){
         // Problem in memory allocation.
         throw std::bad_alloc();
     }
-    // Keep only as much space as needed for all the computed values
-    m_alpha_space.resize(k_done);
-    m_beta_space.resize(k_done+1);
 }
 
 mxArray* LanSVD::transfer_u() {
@@ -295,17 +294,40 @@ mxArray* LanSVD::transfer_s(){
 }
 
 mxArray* LanSVD::transfer_alpha() {
-    return d_vec_to_mx_array(m_alpha_space);
+    if(m_v_alpha == 0){
+        return 0;
+    }
+    return d_vec_to_mx_array(*m_v_alpha, k_done);
 }
 
 mxArray* LanSVD::transfer_beta(){
-    return d_vec_to_mx_array(m_beta_space);
+    if (m_v_beta == 0){
+        return 0;
+    }
+    return d_vec_to_mx_array(*m_v_beta, k_done+1);
 }
 
 mxArray* LanSVD::transfer_p(){
-    return d_vec_to_mx_array(m_p_space);
+    return d_vec_to_mx_array(*m_v_p);
 }
 
+mxArray* LanSVD::transfer_details(){
+    std::vector<std::string> fields;
+    fields.push_back("nreorthu");
+    fields.push_back("nreorthv");
+    fields.push_back("npu");
+    fields.push_back("npv");
+    fields.push_back("nrenewv");
+    fields.push_back("ierr");
+    mxArray* result = create_struct(fields);
+    set_struct_int_field(result, 0, mp_solver->m_nreorthu);
+    set_struct_int_field(result, 1, mp_solver->m_nreorthv);
+    set_struct_int_field(result, 2, mp_solver->m_npu);
+    set_struct_int_field(result, 3, mp_solver->m_npv);
+    set_struct_int_field(result, 4, mp_solver->m_nrenewv);
+    set_struct_int_field(result, 5, mp_solver->ierr);
+    return result;
+}
 
 }
 

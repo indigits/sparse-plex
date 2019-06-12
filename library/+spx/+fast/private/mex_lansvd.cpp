@@ -17,7 +17,8 @@ const char* func_name = "mex_lansvd";
 #define V_OUT plhs[2]
 #define A_OUT plhs[3]
 #define B_OUT plhs[4]
-#define P_OUT plhs[5]
+#define P_OUT plhs[5] 
+#define DETAILS_OUT plhs[6]
 
 /**
 
@@ -36,7 +37,7 @@ LAN BD
 - Extended local reorthogonalization understanding
 - force reorthogonalization understanding
 - U indices computation under force reorth 
-- 
+- est_norm flag should be reset at the right time
 
 LAN SVD
 - Error handling if the algorithm fails
@@ -51,7 +52,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 
     double eps = mxGetEps();
     check_num_input_args(nrhs, 1, 3);
-    check_num_output_args(nlhs, 6, 6);
+    check_num_output_args(nlhs, 7, 7);
 
     check_is_double_matrix(A_IN, func_name, "A");
 
@@ -135,6 +136,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         A_OUT = solver.transfer_alpha();
         B_OUT = solver.transfer_beta();
         P_OUT = solver.transfer_p();
+        DETAILS_OUT = solver.transfer_details();
     } catch (std::exception& e) {
         mexErrMsgTxt(e.what());
         return;

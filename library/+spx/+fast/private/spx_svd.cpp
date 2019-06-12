@@ -10,20 +10,26 @@
 
 namespace spx {
 
-void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT){
-    if (alpha.length() != beta.length() + 1) {
-        throw std::length_error("Length of subdiagonal incorrect.");
+void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, 
+    Matrix* pU, Matrix* pVT, mwSignedIndex m){
+    if (m < 0){
+        m = alpha.length();
     }
-    mwSignedIndex m = alpha.length();
-    if (S.length() != m){
-        throw std::length_error("S has incorrect length.");
+    if (alpha.length() < m){
+        throw std::length_error("alpha has insufficient elements.");
     }
-    if (pU) {
+    if (beta.length() < m -1){
+        throw std::length_error("beta has insufficient elements.");
+    }
+    if (S.length() < m){
+        throw std::length_error("S has insufficient space.");
+    }
+    if (pU != 0) {
         if(pU->columns() != m){
             throw std::length_error("U has incorrect dimensions.");
         }
     }
-    if (pVT) {
+    if (pVT != 0) {
         if(pVT->rows() != pVT->columns()) {
             throw std::length_error("V must be square matrix.");
         }
@@ -32,26 +38,23 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
         }
     }
     // Prepare for calling the bdsqr function
-    ptrdiff_t zero = 0;
-    ptrdiff_t one = 1;
     double dummy = 0;
     char   uplo = 'U';
-    const ptrdiff_t *n = &m;
     // Number of columns in VT [i.e. length of V vectors]
-    const ptrdiff_t *ncvt = &zero;
+    ptrdiff_t ncvt = 0;
     // Leading dimension of vt
-    const ptrdiff_t *ldvt = &one;
+    ptrdiff_t ldvt = 1;
     // Pointer to VT matrix
     double *vt = &dummy;
     if (pVT != 0) {
-        ncvt = &m;
-        ldvt = &m;
+        ncvt = pVT->rows();
+        ldvt = pVT->rows();
         vt = pVT->head();
     }
     // Number of rows in U
-    ptrdiff_t nru = zero;
+    ptrdiff_t nru = 0;
     // Leading dimension of U
-    ptrdiff_t ldu = one;
+    ptrdiff_t ldu = 1;
     // Pointer to U matrix data
     double *u = &dummy;
     if (pU != 0) {
@@ -60,22 +63,24 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
         u = pU->head();
     } 
     // No C matrix involved here
-    const ptrdiff_t *ncc = &zero;
-    const ptrdiff_t *ldc = &one;
+    ptrdiff_t ncc = 0;
+    ptrdiff_t ldc = 1;
     double *c  = &dummy;
     // diagonal elements alpha
     double *d = S.head();
     // Copy alpha in to S
     memcpy(d, alpha.head(), m*sizeof(double));
     // subdiagonal elements
+    // double *e = (double*) mxCalloc(m-1,sizeof(double));
     double *e = (double*) mxCalloc(m-1,sizeof(double));
-    memcpy(e,beta.head(), (m-1)*sizeof(double));
+    memcpy(e, beta.head(), (m-1)*sizeof(double));
     // Space for work in the algorithm
     double *work = (double*) mxCalloc(4*m-4,sizeof(double));
     ptrdiff_t info = 0;
-
-    dbdsqr(&uplo, n, ncvt, &nru, ncc, d, e,
-        vt, ldvt, u, &ldu, c, ldc, 
+    // mexPrintf("uplo: %c, m: %d, ncvt: %d, nru: %d, ncc: %d, ldvt: %d, ldu: %d, ldc: %d, info: %d\n",
+    //     uplo, m, ncvt, nru, ncc, ldvt, ldu, ldc, info);
+    dbdsqr(&uplo, &m, &ncvt, &nru, &ncc, d, e,
+        vt, &ldvt, u, &ldu, c, &ldc, 
         work, &info);
     /* Free work arrays */
     mxFree(e);
@@ -89,7 +94,7 @@ void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix
 }
 
 
-void convert_bd_kxkp1_to_kxk(Vec& alpha, Vec& beta, double& c, double& s){
+void convert_bd_kp1xk_to_kxk(Vec& alpha, Vec& beta, double& c, double& s){
     if (alpha.length() < 1){
         // There is nothing to do
         return;
@@ -125,6 +130,30 @@ void convert_bd_kxkp1_to_kxk(Vec& alpha, Vec& beta, double& c, double& s){
 }
 
 
-
+double norm_kp1xk_mat(const Vec& alpha, const Vec& beta){
+    mwSize k = alpha.length();
+    if (k != beta.length()){
+        throw std::length_error("alpha beta should have same size.");
+    }
+    if (k < 2){
+        throw std::length_error("Too small matrix.");
+    }
+    Vec alpha2(k);
+    Vec beta2(k);
+    // copy all coefficients from alpha
+    alpha2 = alpha;
+    // copy all coefficients from beta
+    beta2 = beta;
+    double cs = 0;
+    double sn = 0;
+    convert_bd_kp1xk_to_kxk(alpha2, beta2, cs, sn);
+    // Space for singular values
+    Vec S(k);
+    Matrix U(1, k);
+    U.set(0);
+    U(0, k-1) = 1;
+    svd_bd_square(alpha2, beta2, S, &U, 0);
+    return S[0];
+}
 
 }

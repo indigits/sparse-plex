@@ -49,4 +49,18 @@ void set_struct_d_vec_field(mxArray* s, int field_num, const d_vector& value){
     mxSetFieldByNumber(s,0,field_num, field);
 }
 
+
+mxArray* d_vec_to_mx_array(const Vec& x, int n)
+{
+    mwSize N = x.length();
+    if (n >= 0){
+        N = n;
+    }
+    mxArray* p_alpha = mxCreateDoubleMatrix(N, 1, mxREAL);
+    double* m_alpha =  mxGetPr(p_alpha);
+    copy_vec_vec(x.head(), m_alpha, N);
+    return p_alpha;
+}
+
+
 }

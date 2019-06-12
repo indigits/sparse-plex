@@ -56,6 +56,8 @@ public:
     mxArray* transfer_beta();
     //! Transfer the p vector
     mxArray* transfer_p();
+    //! Transfer the details of computation
+    mxArray* transfer_details();
 private:
     //! Array
     const mxArray* m_a_input;
@@ -65,6 +67,8 @@ private:
     size_t m_rows;
     //! Number of singular values needed
     int m_k;
+    //! Number of Lanczos iterations completed
+    int k_done;
     //! Options
     const LanSVDOptions& m_options;
     //! maximum number of iterations
@@ -81,14 +85,10 @@ private:
     //! Operator to be passed
     MxFullMat* m_a_op_fullmat;
     //! space for storing alpha
-    d_vector m_alpha_space; 
-    //! space for storing beta
-    d_vector m_beta_space;
-    //! space for storing p
-    d_vector m_p_space;
-    // Wrapper vectors
     Vec* m_v_alpha;
+    //! space for storing beta
     Vec* m_v_beta;
+    //! space for storing p
     Vec* m_v_p;
     //! Lanczos Bidiagonalization with Partial Reorthogonalization solver
     LanczosBD* mp_solver;

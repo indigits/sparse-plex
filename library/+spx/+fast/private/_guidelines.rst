@@ -27,3 +27,11 @@ Verbosity
 * 4: Second level iteration numbers and iteration results.
 * 5: Intermediate values inside second level iterations.
 * 6: Anything.
+
+
+Tips and Tricks
+----------------------
+
+Pausing ::
+
+    mexEvalString("pause(.001);");

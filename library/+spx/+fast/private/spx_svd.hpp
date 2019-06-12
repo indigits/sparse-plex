@@ -7,9 +7,12 @@
 namespace spx {
 
 //! Wrapper over dbdsqr function
-void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT);
-//! Converts a k x (k+1) lower bidiagonal system into a kxk upper bidiagonal system
-void convert_bd_kxkp1_to_kxk(Vec& alpha, Vec& beta, double& c, double& s);
+void svd_bd_square(const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex m = -1);
+//! Converts a (k+1) x k lower bidiagonal system into a kxk upper bidiagonal system
+void convert_bd_kp1xk_to_kxk(Vec& alpha, Vec& beta, double& c, double& s);
+
+//! Norm of a k+1 by k lower bidiagonal matrix
+double norm_kp1xk_mat(const Vec& alpha, const Vec& beta);
 
 }
 

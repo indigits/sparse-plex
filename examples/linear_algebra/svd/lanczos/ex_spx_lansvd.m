@@ -1,6 +1,7 @@
 clc;
 close all;
 clearvars;
+rng default;
 
 n = 50;
 A = mat_simple_1(n);
@@ -8,7 +9,7 @@ A = mat_simple_1(n);
 true_singular_values = svd(A);
 fprintf('True singular values: ');
 spx.io.print.vector(true_singular_values(1:min(n, 20)));
-k = 7;
+k = 2;
 options.verbosity = 1;
 options.p0 = ones(size(A, 1), 1);
 fprintf('Running spx.la.svd.lanczos.bdpro for k=%d\n', k);
@@ -26,6 +27,9 @@ fprintf('Running spx.fast.lansvd\n')
 options.verbosity = 0;
 [U, S, V, details] = spx.fast.lansvd(A, k, options);
 rem_norm = norm(A - U * diag(S) * V');
-fprintf('Norm of remainder: %f, corresponding singular value: %f\n', rem_norm, true_singular_values(k+1))
+fprintf('Norm of remainder: %f, corresponding singular value: %f\n', rem_norm, true_singular_values(k+1));
+fprintf('Estimated singular values: ');
 spx.io.print.vector(S);
+fprintf('Algorithm details: \n');
+disp(details)
 

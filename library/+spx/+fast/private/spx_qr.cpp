@@ -83,6 +83,7 @@ int reorth(const Matrix& Q, const index_vector& ind, Vec& r, double& r_norm,
             return nre;
         }
     }
+    return nre;
 }
 
 
