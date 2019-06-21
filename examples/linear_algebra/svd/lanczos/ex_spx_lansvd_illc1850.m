@@ -1,0 +1,14 @@
+A = mmread('illc1850.mtx');
+k = 4;
+fprintf('Running SPX fast LAN SVD with k=%d\n', k);
+tstart = tic;
+s = svds(A, k);
+svds_time = toc(tstart);
+fprintf('svds singular values: ');
+spx.io.print.vector(s(1:k));
+options.verbosity = 1;
+tstart = tic;
+[U, S, V, details] = spx.fast.lansvd(A, k, options);
+lansvd_time = toc(tstart);
+fprintf('lansvd singular values: ');
+spx.io.print.vector(S);

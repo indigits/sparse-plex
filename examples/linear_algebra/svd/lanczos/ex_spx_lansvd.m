@@ -24,7 +24,7 @@ fprintf('Measured singular values: ');
 spx.io.print.vector(svd(B2));
 
 fprintf('Running spx.fast.lansvd\n')
-options.verbosity = 0;
+options.verbosity = 1;
 [U, S, V, details] = spx.fast.lansvd(A, k, options);
 rem_norm = norm(A - U * diag(S) * V');
 fprintf('Norm of remainder: %f, corresponding singular value: %f\n', rem_norm, true_singular_values(k+1));

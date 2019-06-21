@@ -1,6 +1,7 @@
 #include "spx_lansvd.hpp"
 #include "spx_svd.hpp"
 #include "spx_matarr.hpp"
+#include <limits>
 
 namespace spx {
 
@@ -33,6 +34,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     m_v_arr(0),
     // A operator
     m_a_op_fullmat(0),
+    m_a_op_sparsemat(0),
     // Vectors
     m_v_alpha(0),
     m_v_beta(0),
@@ -46,6 +48,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
         throw std::invalid_argument("input operator A hasn't been specified.");
     }
     double eps = mxGetEps();
+    // m_tolerance = 1e6 *16 * eps;
     m_tolerance = 16 * eps;
     if (options.tolerance > 0) {
         m_tolerance = options.tolerance;
@@ -56,6 +59,12 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
         a_op = m_a_op_fullmat;
         m_cols = m_a_op_fullmat->columns();
         m_rows = m_a_op_fullmat->rows();
+    }
+    if (mxIsNumeric(A) && mxIsSparse(A)){
+        m_a_op_sparsemat = new MxSparseMat(m_a_input);
+        a_op = m_a_op_sparsemat;
+        m_cols = m_a_op_sparsemat->columns();
+        m_rows = m_a_op_sparsemat->rows();
     }
     if (a_op == 0){
         // We couldn't build the operator
@@ -90,7 +99,9 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     else {
         rng.uniform_real(-0.5, 0.5, *m_v_p);
     }
-
+    if (m_options.verbosity >= 1){
+        mexPrintf("tolerance: %e\n", m_tolerance);
+    }
     if (m_options.verbosity >= 2){
         m_v_p->print("p0", 8);
     }
@@ -136,8 +147,7 @@ void LanSVD::operator()() {
         mexErrMsgTxt("The LanczosBD solver hasn't been setup.");
     }
     k_done = 0;
-    /// Number of singular values which have converged
-    int n_converged = 0;
+    n_converged = 0;
     bool bad_alloc = false;
     // Initial number of Lanczos vectors to compute
     int k_req = std::min(m_k + std::max(8, m_k) + 1, m_max_iters);
@@ -192,6 +202,8 @@ void LanSVD::operator()() {
         // source values
         Vec alpha(m_v_alpha->head(), k_done);
         Vec beta(m_v_beta->head() + 1, k_done);
+        Vec S(m_s_arr);
+#if 0
         // destination
         Vec alpha2(&(alpha2_space[0]), k_done);
         Vec beta2(&(beta2_space[0]), k_done);
@@ -204,22 +216,33 @@ void LanSVD::operator()() {
         convert_bd_kp1xk_to_kxk(alpha2, beta2, cs, sn);
         Vec beta3(beta2.head(), k_done-1);
         /////// Compute the singular values of the bidiagonal matrix
-        Vec S(m_s_arr);
         // We want to pickup the last row of the U matrix
         Matrix U_bottom(1, k_done);
+        U_bottom.set(0);
         U_bottom(0, k_done-1) = cs;
+        alpha2.print("alpha2: ");
+        beta2.print("beta2: ");
+        mexPrintf("cs: %.4f, sn: %.4f\n", cs, sn);
         // Computation of SVD of the bidiagonal matrix
         svd_bd_square(alpha2, beta3, S, &U_bottom, 0);
+        // Error bounds
+        Vec bnd(U_bottom.head(), k_done);
+#else
+        Vec bnd(k_done);
+        gesvd_kp1xk(alpha, beta, S, bnd);
+#endif
         // Value of norm of A
         double a_norm = S[0];
         // Save this value with the solver for future use.
         mp_solver->set_anorm(a_norm);
-        // Error bounds
-        Vec bnd(U_bottom.head(), k_done);
+        bnd.print("U_bottom: ");
         // Set simple error bounds
         bnd.abs().scale(p_norm);
+        mexPrintf("anorm: %.4f, pnorm: %.4f\n", a_norm, p_norm);
+        bnd.print("Scaled bnd: ");
 
-        // TODO: Examine gap structure and refine error bounds
+        // Examine gap structure and refine error bounds
+        refine_bounds(S, bnd, m_cols*eps*a_norm);
 
         // Check convergence criterion
         n_converged = 0;
@@ -235,7 +258,9 @@ void LanSVD::operator()() {
         if (verbosity >= 1){
             mexPrintf("Finishing LanSVD iter [%d]: k_req=%d, k_done: %d\n", iter, k_req, k_done);
             mexPrintf("Converged singular values: %d, pnorm: %e\n", n_converged, p_norm);
-            S.print("Singular values");
+            S.print("Singular values", m_k);
+            // bnd.divide(S);
+            bnd.print("Convergence bounds", m_k, true);
         }
         if (k_done >= m_max_iters){
             break;
@@ -317,17 +342,103 @@ mxArray* LanSVD::transfer_details(){
     fields.push_back("nreorthv");
     fields.push_back("npu");
     fields.push_back("npv");
+    fields.push_back("nrenewu");
     fields.push_back("nrenewv");
+    fields.push_back("converged");
     fields.push_back("ierr");
     mxArray* result = create_struct(fields);
     set_struct_int_field(result, 0, mp_solver->m_nreorthu);
     set_struct_int_field(result, 1, mp_solver->m_nreorthv);
     set_struct_int_field(result, 2, mp_solver->m_npu);
     set_struct_int_field(result, 3, mp_solver->m_npv);
-    set_struct_int_field(result, 4, mp_solver->m_nrenewv);
-    set_struct_int_field(result, 5, mp_solver->ierr);
+    set_struct_int_field(result, 4, mp_solver->m_nrenewu);
+    set_struct_int_field(result, 5, mp_solver->m_nrenewv);
+    set_struct_int_field(result, 6, n_converged);
+    set_struct_int_field(result, 7, mp_solver->ierr);
     return result;
 }
+
+void LanSVD::refine_bounds(const Vec& S, Vec& bnd, double tolerance){
+    int j = S.length();
+    if (j <= 1){
+        return;
+    }
+    double eps = mxGetEps();
+    double eps34 = sqrt(eps*sqrt(eps));
+    /**
+    There is no need for sorting. The singular values
+    are ordered in decreasing order. We reverse them
+    in increasing order.
+    */
+    Vec D(j);
+    Vec bnd2(j);
+    for (int i=0; i < j; ++i){
+        D[i] = square(S[j -1 -i]);
+        bnd2[i] = bnd[j - 1 -i];
+    }
+    bnd2.print("bnd post sort");
+    // Find the maximum value of the bnd
+    mwIndex mid = bnd.max_index();
+    /// We need to massage error bounds for very close Ritz values
+    // Split the indices into two zones 
+    // left of the peak and right of the peak.
+    // Work on the right side of mid
+    int begin = j-1;
+    int end = mid;
+    for (int i = begin; i > end; --i) {
+        double diff = D[i] - D[i-1];
+        double limit = eps34 * D[i];
+        if (diff < limit){
+            // These two singular values are too close
+            if (bnd2[i] > tolerance && bnd2[i-1] > tolerance){
+                // These two bounds are high
+                bnd2[i-1] = pythag(bnd2[i], bnd2[i-1]);
+                // We will assume that i-th singular value has converged.
+                bnd2[i] = 0;
+            }
+        }
+    }
+    begin = 0;
+    end = mid;
+    for (int i=begin; i < end; ++i){
+        double diff = D[i+1] - D[i];
+        double limit = eps34 * D[i];
+        if (diff < limit){
+            // These two singular values are too close
+            if (bnd2[i] > tolerance && bnd2[i+1] > tolerance){
+                // These two bounds are high
+                bnd2[i+1] = pythag(bnd2[i], bnd2[i+1]);
+                // We will assume that i-th singular value has converged.
+                bnd2[i] = 0;
+            }
+        }
+    }
+    bnd2.print("bnd post clen");
+    // Create a vec to measure gaps
+    Vec gap(j);
+    gap = std::numeric_limits<float>::max();
+    // Measure the gap between the difference of adjacent singular values
+    // and the bound value.
+    for (int i=0; i < j -1 ; ++i){
+        gap[i] = D[i+1] - D[i] - bnd2[i+1];
+    }
+    for (int i=1; i < j; ++i ){
+        gap[i] = std::min(gap[i], D[i] - D[i-1] - bnd2[i-1]);
+    }
+    // If gap is larger than bound, then change the bound.
+    for (int i = 0; i < j; ++i){
+        if (gap[i] > bnd2[i]){
+            bnd2[i] = square(bnd2[i]) / gap[i];
+        }
+    }
+
+    // Reverse the bounds vector
+    for (int i=0; i < j; ++i){
+        bnd[i] = bnd2[j - 1 -i];
+    }
+    bnd.print("bnd final   ");
+}
+
 
 }
 

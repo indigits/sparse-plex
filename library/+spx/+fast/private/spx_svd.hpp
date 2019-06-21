@@ -14,6 +14,20 @@ void convert_bd_kp1xk_to_kxk(Vec& alpha, Vec& beta, double& c, double& s);
 //! Norm of a k+1 by k lower bidiagonal matrix
 double norm_kp1xk_mat(const Vec& alpha, const Vec& beta);
 
+//! kp1 x k lower matrix devision using dgesvd
+void gesvd_kp1xk(const Vec& alpha, const Vec& beta, Vec& s, Vec& u_bot);
+
+
+struct SVDBIHIZSQROptions{
+    int verbosity;
+    SVDBIHIZSQROptions():
+        verbosity(0){
+        }
+};
+//! Implementation of Hybrid Implicit Zero Shift QR algorithm for SVD of bidiagonal matrices
+void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex n, const SVDBIHIZSQROptions& options);
+
+
 }
 
 #endif // _SPX_SVD_HPP_

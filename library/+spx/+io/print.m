@@ -38,7 +38,11 @@ methods (Static)
             precision = 2;
         end
         n = numel(x);
-        format = sprintf('%%.%df ', precision);
+        if (precision == 'e')
+            format = '%e ';
+        else
+            format = sprintf('%%.%df ', precision);
+        end
         for i=1:n
             fprintf(format, x(i));
             if mod(i, 20) == 0

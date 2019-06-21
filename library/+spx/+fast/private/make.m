@@ -118,6 +118,7 @@ make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, options);
 % BDSQR for bidiagonal matrices.
 bdsqr_sources = [common_cpp_sources, 'spx_svd.cpp'];
 make_program('mex_bdsqr.cpp', bdsqr_sources, cpp_compile_params, options);
+make_program('mex_svd_bd_hizqr.cpp', bdsqr_sources, cpp_compile_params, options);
 
 % Lanczos Bidiagonalization and Partial Reorthogonalization
 lansvd_sources = [common_cpp_sources, 'spx_lanbd.cpp', 'spx_lansvd.cpp', 'spx_rand.cpp', 'spx_qr.cpp', 'spx_svd.cpp'];

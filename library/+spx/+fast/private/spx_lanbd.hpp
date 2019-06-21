@@ -79,6 +79,8 @@ private:
     int m_npu;
     //! Number of V inner products
     int m_npv;
+    //! Number of times u vectors were renewed 
+    int m_nrenewu;
     //! Number of times v vectors were renewed 
     int m_nrenewv;
     //! Set of indices to orthogonalize against
@@ -105,8 +107,13 @@ private:
         double& v_coeff, const LanczosBDOptions& options);
     // Helper functions for norm estimations
     void estimate_anorm_from_largest_ritz_value(const LanczosBDOptions& options);
-
+    //! Update a norm in U_{j+1} calculation
+    void update_a_norm_for_u(const Vec& alpha, const Vec& beta);
+    //! Update a norm in V_j calculation
+    void update_a_norm_for_v(const Vec& alpha, const Vec& beta);
+    void check_for_u_convergence(const LanczosBDOptions& options, Matrix& U, int k);
     void check_for_v_convergence(const LanczosBDOptions& options, Matrix& V, int k);
+
 
     /// With friends like these.
     friend class LanSVD;

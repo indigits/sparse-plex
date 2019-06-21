@@ -69,6 +69,8 @@ private:
     int m_k;
     //! Number of Lanczos iterations completed
     int k_done;
+    /// Number of singular values which have converged
+    int n_converged;
     //! Options
     const LanSVDOptions& m_options;
     //! maximum number of iterations
@@ -84,6 +86,8 @@ private:
     // Arguments to be passed to the LAN BD solver
     //! Operator to be passed
     MxFullMat* m_a_op_fullmat;
+    //! Sparse operator 
+    MxSparseMat* m_a_op_sparsemat;
     //! space for storing alpha
     Vec* m_v_alpha;
     //! space for storing beta
@@ -94,6 +98,10 @@ private:
     LanczosBD* mp_solver;
     //! Random number generator
     Rng rng;
+private:
+    // Helper functions
+    //! Refine the bounds on the singular values
+    void refine_bounds(const Vec& S, Vec& bnd, double tolerance);
 };
 
 

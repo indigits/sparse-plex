@@ -181,6 +181,8 @@ public:
   void subtract(const Vec& o);
   //! element wise multiply
   void multiply(const Vec& o);
+  //! element wise divide
+  void divide(const Vec& o);
   //! Inner product with another vector
   double inner_product(const Vec& o) const;
  /*****************************************************************************

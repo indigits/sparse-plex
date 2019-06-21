@@ -40,6 +40,7 @@ LanczosBD::LanczosBD(const Operator& A,
     ierr(0),
     m_nreorthu(0),
     m_nreorthv(0),
+    m_nrenewu(0),
     m_nrenewv(0),
     force_reorth(0),
     j(0),
@@ -170,30 +171,12 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             // Extended local reorthogonalization
             do_elr(V_jm1, r, alpha[j], beta[j], options);
             // update norm estimate for j > 0
-            if (est_anorm) {
-                double tmp = 0;
-                if (j == 1) {
-                    // alpha(j-1)* beta(j-1) component not applicable for j=1
-                    double a0 = alpha[0];
-                    double b1 = beta[1];
-                    double a1 = alpha[1];
-                    tmp = square(a0) + square(b1) + a1 * b1;
-                } else {
-                    double a1 = alpha[j - 1];
-                    double a2 = alpha[j];
-                    double b1 = beta[j - 1];
-                    double b2 = beta[j];
-                    tmp = square(a1) + square(b2) + a1 * b1 + a2 * b2;
-                }
-                tmp = sqrt(tmp);
-                m_anorm = std::max(m_anorm, FUDGE * tmp);
-            }
+            update_a_norm_for_v(alpha, beta);
             // step 2.1 a update nu
             if ((!fro) && (alpha[j] != 0)) {
                 update_nu(j, options);
             }
             if ((elr > 0)) {
-                // TODO what's going on here?
                 // We always reorthogonalize against the previous vector
                 m_nu[j - 1] = n2 * eps;
             }
@@ -267,19 +250,8 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
         /// This may change due to reorthogonalization
         // Extended local reorthogonalization
         do_elr(U_j, p, beta[j+1], alpha[j], options);
-        if (est_anorm) {
-            double tmp = 0;
-            if (j == 0) {
-                tmp = square(alpha[0]) + square(beta[1]);
-            } else {
-                double a1 = alpha[j];
-                double b1 = beta[j];
-                double b2 = beta[j + 1];
-                tmp = square(a1) + square(b2) + a1 * b1;
-            }
-            tmp = sqrt(tmp);
-            m_anorm = std::max(m_anorm, FUDGE * tmp);
-        }
+        //! Update the estimate of a norm if necessary
+        update_a_norm_for_u(alpha, beta);
         if (!fro & beta[j + 1] != 0) {
             // Update estimates of the orthogonality for the columns of U.
             update_mu(j, options);
@@ -328,10 +300,8 @@ int LanczosBD::operator()(Matrix& U, Matrix& V, int k, int k_done, const Lanczos
             }
             m_nreorthu += 1;
         }
-        // TODO Check for convergence or failure to maintain semiorthogonality
-        if ((beta[j+1] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
-            throw std::logic_error("beta[j+1] is too small.");
-        } // end check for convergence
+        // Check for convergence or failure to maintain semiorthogonality
+        check_for_u_convergence(options, U, k);
         // Count the number of iterations completed.
         k_done += 1;
     }
@@ -615,6 +585,103 @@ void LanczosBD::do_elr(const Vec& v_prev, Vec& v, double& v_norm,
     }
 }
 
+void LanczosBD::update_a_norm_for_u(const Vec& alpha, const Vec& beta){
+    if(!est_anorm){
+        return;
+    }
+    double tmp = 0;
+    if (j == 0) {
+        tmp = square(alpha[0]) + square(beta[1]);
+    } else {
+        double a1 = alpha[j];
+        double b1 = beta[j];
+        double b2 = beta[j + 1];
+        tmp = square(a1) + square(b2) + a1 * b1;
+    }
+    tmp = sqrt(tmp);
+    m_anorm = std::max(m_anorm, FUDGE * tmp);
+}
+
+void LanczosBD::update_a_norm_for_v(const Vec& alpha, const Vec& beta){
+    if(!est_anorm){
+        return;
+    }
+    double tmp = 0;
+    if (j == 1) {
+        // alpha(j-1)* beta(j-1) component not applicable for j=1
+        double a0 = alpha[0];
+        double b1 = beta[1];
+        double a1 = alpha[1];
+        tmp = square(a0) + square(b1) + a1 * b1;
+    } else {
+        double a1 = alpha[j - 1];
+        double a2 = alpha[j];
+        double b1 = beta[j - 1];
+        double b2 = beta[j];
+        tmp = square(a1) + square(b2) + a1 * b1 + a2 * b2;
+    }
+    tmp = sqrt(tmp);
+    m_anorm = std::max(m_anorm, FUDGE * tmp);
+}
+
+void LanczosBD::check_for_u_convergence(const LanczosBDOptions& options, Matrix& U, int k){
+    double eps = options.eps;
+    const Operator& A = m_A;
+    mwSize m = A.rows();
+    mwSize n = A.columns();
+    Vec& alpha = m_alpha;
+    Vec& beta = m_beta;
+    bool bailout = false;
+    double p_norm = 0;
+    if ((beta[j+1] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
+        beta[j+1] = 0;
+        bailout = true;
+        Vec tmp(n);
+        index_vector indices(j+1);
+        for (int i=0; i <= j; ++i){
+            indices[i] = (mwIndex) i;
+        }
+        for (int attempt = 0; attempt < 3; ++attempt){
+            rng.uniform_real(-0.5, 0.5, tmp);
+            A.mult_vec(tmp, m_p);
+            p_norm = m_p.norm();
+            // The previous j columns of V
+            Matrix Q = U.columns_ref(0, j+1);
+            // Reorthogonalize p against existing U vectors
+            int nre = qr::reorth(Q, indices, m_p, p_norm, 
+                options.gamma, options.cgs);
+            m_npu += nre * indices.size();
+            m_nreorthu += 1;
+            Vec mu(m_mu);
+            //! The new vector is orthogonal to all existing vectors
+            mu.set(indices, m2 * eps);
+            if (p_norm > 0){
+                // A vector numerically orthogonal to span(U_k(:,1:j)) was found. 
+                // Continue iteration
+                bailout = false;
+                m_nrenewu += 1;
+                break;
+            }
+        }
+        if (bailout){
+            // Indicator that we failed in j-th iteration
+            ierr = -j;
+            throw std::logic_error("beta[j+1] is too small. Could not find another vector.");
+        }
+        else {
+            // Continue with new normalized r as starting vector.
+            m_p.scale(1/p_norm);
+            force_reorth = 1;
+            if (options.delta > 0){
+                // Turn off full reorthogonalization.
+                fro = 0;
+            }
+        }
+    } else if (j < k - 1 && !fro && (m_anorm * eps > options.delta * alpha[j])) {
+        ierr = j;
+    } // check for convergence
+}
+
 void LanczosBD::check_for_v_convergence(const LanczosBDOptions& options, Matrix& V, int k) {
     double eps = options.eps;
     const Operator& A = m_A;
@@ -625,7 +692,6 @@ void LanczosBD::check_for_v_convergence(const LanczosBDOptions& options, Matrix&
     bool bailout = false;
     double r_norm = 0;
     if ((alpha[j] < std::max(n, m)*m_anorm * eps) && (j < k - 1)) {
-        /// TODO finish this
         alpha[j] = 0;
         bailout = true;
         Vec tmp(m);

@@ -356,6 +356,25 @@ void Vec::multiply(const Vec& o) {
     }
 }
 
+void Vec::divide(const Vec& o){
+    mwSize n = std::min(m_n, o.m_n);
+    mwSignedIndex x_inc = m_inc;
+    double* x = m_pVec;
+    const double* y = o.m_pVec;
+    mwSignedIndex y_inc = o.m_inc;
+    for (mwIndex i = 0 ; i < n; ++i) {
+        double value  = *y;
+        if (value != 0){
+            *x = (*x) / value;
+        } else {
+            *x = 0;
+        }
+        x += x_inc;
+        y += y_inc;
+    }
+}
+
+
 double Vec::inner_product(const Vec& o) const {
     mwSignedIndex  nn = std::min(m_n, o.m_n);
     const double* x = m_pVec;
