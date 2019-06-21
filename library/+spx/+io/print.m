@@ -39,7 +39,7 @@ methods (Static)
         end
         n = numel(x);
         if (precision == 'e')
-            format = '%e ';
+            format = '%.4e ';
         else
             format = sprintf('%%.%df ', precision);
         end

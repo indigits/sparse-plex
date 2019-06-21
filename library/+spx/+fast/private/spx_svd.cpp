@@ -631,6 +631,11 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
         // Compute shift
         // first, test if shifting would ruin relative accuracy
         // if so set the shift to zero.
+        if (options.verbosity >= 3){
+            mexPrintf("zero_shift_test: SV ratio: %.2e, LHS: %.2e, RHS: %.2e\n",
+            sminl / smax,
+            n*tol*(sminl/smax), max(eps, hndrth*tol));
+        }
         if ((tol >= zero) &&
          (n*tol*(sminl/smax) <= max(eps, hndrth*tol))
             ) {
@@ -670,6 +675,9 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
             if (idir == 1){
                 // chase bulge from top to bottom
                 cs = one;
+                if (options.verbosity >= 2){
+                    mexPrintf("Chasing implicit zero shift bulge from top to bottom\n");
+                }
                 oldcs = one;
                 for (int ii = ll; ii < m; ++ii){
                     f = d[ii] * cs;
@@ -702,6 +710,9 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                 // End top to bottom for zero shift
             } else {
                 // bottom to top
+                if (options.verbosity >= 2){
+                    mexPrintf("Chasing implicit zero shift bulge from bottom to top\n");
+                }
                 cs = one;
                 oldcs = one;
                 for (int ii = m; ii > ll; --ii){
@@ -712,7 +723,7 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                         e[ii] = oldsn * r;
                     }
                     f  = oldcs*r;
-                    g = d[ii]*sn;
+                    g = d[ii-1]*sn;
                     dlartg(&f, &g, &oldcs, &oldsn, &(d[ii]));
                     cosines[ii - ll] = cs;
                     sines[ii -ll] = -sn;
@@ -855,7 +866,7 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
 
                 }
                 if (pU != 0){
-                    
+
                 }
             }
         }
