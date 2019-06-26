@@ -8,7 +8,7 @@
 
 #include "spx_svd.hpp"
 
-const char* func_name="mex_svd_bd_hizqr";
+const char* func_name="mex_svd_bd_hizsqr";
 
 #define ALPHA_IN prhs[0]
 #define BETA_IN prhs[1]

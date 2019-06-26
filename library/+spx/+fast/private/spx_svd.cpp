@@ -568,10 +568,14 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
             if (fabs(d[ll]) >= fabs(d[m])){
                 // Chase bulge from top (big end) to bottom (small end)
                 idir = 1;
-                mexPrintf("Shift direction from top to bottom\n");
+                if (options.verbosity >= 2){
+                    mexPrintf("Shift direction from top to bottom\n");
+                }
             } else {
                 // chase bulge from bottom (big end) o top (small end)
-                mexPrintf("Shift direction from bottom to top\n");
+                if(options.verbosity >= 2){
+                    mexPrintf("Shift direction from bottom to top\n");
+                }
                 idir = 2;
             }
         }

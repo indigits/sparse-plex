@@ -24,8 +24,9 @@ A = full(spdiags([a [0; b]], [0 1], n, n));
 
 [UU, SS, VV] = svd(A);
 
-make mex_svd_bd_hizqr.cpp; 
-[U, S, VT] = mex_svd_bd_hizqr(a,b);
+make mex_svd_bd_hizsqr.cpp; 
+options.verbosity = 1;
+[U, S, VT] = mex_svd_bd_hizsqr(a,b, options);
 fprintf('Original singular values: ');
 spx.io.print.vector(diag(SS), 'e');
 fprintf('SPX singular values: ');
