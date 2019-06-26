@@ -12,7 +12,7 @@ const char* func_name="mex_svd_bd_hizqr";
 
 #define ALPHA_IN prhs[0]
 #define BETA_IN prhs[1]
-#define U_ROWS_IN prhs[2]
+#define OPTIONS_IN prhs[2]
 
 
 /**
@@ -37,8 +37,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]){
     if (m2 != m-1) {
         mexErrMsgTxt("Length of subdiagonal elements is incorrect.");
     }
-    if(nrhs > 2){
-        check_is_double_vector(U_ROWS_IN, func_name, "u_rows");
+    spx::SVDBIHIZSQROptions options;
+    mxArray* u_rows = 0;
+    if (nrhs > 2){
+        check_struct_array_is_singleton(OPTIONS_IN, func_name, "options");
+        extract_int_field_from_struct(OPTIONS_IN, func_name, "options.verbosity",
+            "verbosity", options.verbosity);     
+        if (options.verbosity > 0) {
+            mexPrintf("verbosity: %d\n", options.verbosity);
+        }
+        extract_double_vec_field_from_struct(OPTIONS_IN, func_name, "options.u_rows",
+            "u_rows", &u_rows);
     }
     /// Store for left singular vectors
     mxArray *U = 0;
@@ -51,8 +60,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]){
     int nru = 0;
     if (nlhs >= 2){
         nru = m;
-        if (nrhs == 3) {
-            nru = mxGetM(U_ROWS_IN) * mxGetN(U_ROWS_IN);
+        if (u_rows != 0) {
+            nru = mxGetM(u_rows) * mxGetN(u_rows);
         }
         // U will be returned
         U = mxCreateDoubleMatrix(nru,m,mxREAL);
@@ -84,11 +93,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]){
     spx::Matrix* pmU = 0;
     if (U != 0) {
         pmU = new spx::Matrix(U);
-        if (nrhs < 3) {
+        if (u_rows == 0) {
             pmU->set_diag(1);
         } else {
-            int nru = mxGetM(U_ROWS_IN) * mxGetN(U_ROWS_IN);
-            double* v = mxGetPr(U_ROWS_IN);
+            int nru = mxGetM(u_rows) * mxGetN(u_rows);
+            double* v = mxGetPr(u_rows);
             for (int i=0; i < nru; ++i) {
                 int index = ((int) v[i]) - 1;
                 if (index >= m) {
@@ -104,8 +113,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]){
         pmVT->set_diag(1);
     }
     try {
-        spx::SVDBIHIZSQROptions options;
-        options.verbosity = 3;
         spx::svd_bd_hizsqr('U', v_alpha, v_beta, v_S, pmU, pmVT, -1, options);
         if (pmU) {
             delete pmU;

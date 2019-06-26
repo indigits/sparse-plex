@@ -39,6 +39,16 @@ void check_is_sparse(const mxArray *arg,
 void check_is_struct(const mxArray *arg, 
     const char *function_name, const char *arg_name);
 
+//! Checks if a structure array has just one element
+void check_struct_array_is_singleton(const mxArray *arg, 
+    const char *function_name, const char *arg_name);
+//! Extracts an integer field from struct if present
+void extract_int_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, int& output);
+//! Extracts a double vector field from struct if present
+void extract_double_vec_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, mxArray** output);
+
 
 //! Checks that the input is a character scalar
 void check_is_char_scalar(const mxArray *arg,

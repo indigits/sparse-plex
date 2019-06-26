@@ -706,20 +706,38 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     f  = oldcs*r;
                     g = d[ii+1]*sn;
                     dlartg(&f, &g, &oldcs, &oldsn, &(d[ii]));
-                    cosines1[ii - ll] = cs;
-                    sines1[ii -ll] = sn;
-                    cosines2[ii -ll] = oldcs;
-                    sines2[ii -ll] = oldsn;
+                    int iii = ii - ll;
+                    cosines1[iii] = cs;
+                    sines1[iii] = sn;
+                    cosines2[iii] = oldcs;
+                    sines2[iii] = oldsn;
                 }
                 h = d[m] * cs;
                 d[m] = h * oldcs;
                 e[m-1] = h * oldsn;
-                // TODO Update singular vectors
                 if (pVT != 0){
                     // Update V
+                    const char side = 'L';
+                    const char pivot = 'V';
+                    const char direct  = 'F';
+                    const ptrdiff_t mm = m - ll + 1;
+                    const ptrdiff_t nn = ncvt;
+                    const double* c = cosines1.head();
+                    const double* s = sines1.head();
+                    double* a = &((*pVT)(ll, 0));
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
                 }
                 if (pU != 0){
                     // Update U
+                    const char side = 'R';
+                    const char pivot = 'V';
+                    const char direct  = 'F';
+                    const ptrdiff_t mm = nru;
+                    const ptrdiff_t nn = m - ll + 1;
+                    const double* c = cosines2.head();
+                    const double* s = sines2.head();
+                    double* a = &((*pU)(0, ll));
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
                 // Test convergence
                 if (fabs(e[m-1]) <= thresh){
@@ -763,9 +781,7 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const double* c = cosines2.head();
                     const double* s = sines2.head();
                     double* a = &((*pVT)(ll, 0));
-                    //pVT->print_matrix("VT");
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
-                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
@@ -829,9 +845,7 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const double* c = cosines1.head();
                     const double* s = sines1.head();
                     double* a = &((*pVT)(ll, 0));
-                    //pVT->print_matrix("VT");
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
-                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
@@ -877,9 +891,9 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     }
                     int iii = ii -ll  - 1;
                     cosines1[iii] = cosr;
-                    sines1[iii] = sinr;
+                    sines1[iii] = -sinr;
                     cosines2[iii]  = cosl;
-                    sines2[iii] = sinl;
+                    sines2[iii] = -sinl;
                 }
                 e[ll] = f;
                 // Test convergence
@@ -897,9 +911,7 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const double* c = cosines2.head();
                     const double* s = sines2.head();
                     double* a = &((*pVT)(ll, 0));
-                    //pVT->print_matrix("VT");
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
-                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
