@@ -6,6 +6,13 @@
 #include "lapack.h"
 #include "stddef.h"
 
+#if !defined(_WIN32)
+
+#define dswap dswap_
+#define dscal dscal_
+
+#endif
+
 namespace spx {
 
 /************************************************
@@ -298,13 +305,14 @@ Vec& Vec::abs() {
 }
 
 Vec& Vec::scale(double value) {
-    mwSize n = m_n;
+    ptrdiff_t n = m_n;
     mwSignedIndex inc = m_inc;
     double* x = m_pVec;
-    for (mwIndex i = 0 ; i < n; ++i) {
-        *x = (*x) * value;
-        x += inc;
-    }
+    dscal(&n, &value, x, &inc);
+    // for (mwIndex i = 0 ; i < n; ++i) {
+    //     *x = (*x) * value;
+    //     x += inc;
+    // }
     return *this;
 }
 
@@ -372,6 +380,15 @@ void Vec::divide(const Vec& o){
         x += x_inc;
         y += y_inc;
     }
+}
+
+void Vec::swap(const Vec& o){
+    ptrdiff_t n = std::min(m_n, o.m_n);
+    double* x = m_pVec;
+    mwSignedIndex x_inc = m_inc;
+    double* y = o.m_pVec;
+    mwSignedIndex y_inc = o.m_inc;
+    dswap(&n, x, &x_inc, y, &y_inc);
 }
 
 

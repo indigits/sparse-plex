@@ -25,7 +25,7 @@ struct SVDBIHIZSQROptions{
         }
 };
 //! Implementation of Hybrid Implicit Zero Shift QR algorithm for SVD of bidiagonal matrices
-void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex n, const SVDBIHIZSQROptions& options);
+bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex n, const SVDBIHIZSQROptions& options);
 
 
 }

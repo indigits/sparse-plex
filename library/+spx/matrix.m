@@ -142,6 +142,11 @@ classdef matrix < handle
         A(logical(eye(size(A)))) = dd;
         end
 
+        function compare(A, B)
+            C = abs(A - B);
+            max_diff = max(max(abs(C)));
+            fprintf('Maximum difference: %.4e\n', max_diff);
+        end
 
 
     end

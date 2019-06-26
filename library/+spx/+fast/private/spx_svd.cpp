@@ -13,6 +13,7 @@
 #define dlasr dlasr_
 #define dlas2 dlas2_
 #define dlasv2 dlasv2_
+#define drot drot_
 #endif
 
 using namespace std;
@@ -277,7 +278,7 @@ void gesvd_kp1xk(const Vec& alpha, const Vec& beta, Vec& s, Vec& u_bot){
 *
 ***********************************************************/
 
-void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, 
+bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, 
     Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex n, 
     const SVDBIHIZSQROptions& options){
     if (n < 0){
@@ -347,8 +348,10 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
     // variables for returning values from dlartg
     double cs;
     double sn;
-    Vec cosines(n);
-    Vec sines(n);
+    Vec cosines1(n+1);
+    Vec sines1(n+1);
+    Vec cosines2(n+1);
+    Vec sines2(n+1);
     double r;
     // Number of U rows
     ptrdiff_t nru = 0;
@@ -377,12 +380,12 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
             d[i] = r;
             e[i] = sn * d[i+1];
             d[i+1] = cs*d[i+1];
-            cosines[i] = cs;
-            sines[i] = sn;
+            cosines1[i] = cs;
+            sines1[i] = sn;
         }
         //The rotations should be applied on U if needed
         if(pU){
-            dlasr(&RR, &VV, &FF, &nru, &n, cosines.head(), sines.head(), pU->head(), &ldu);
+            dlasr(&RR, &VV, &FF, &nru, &n, cosines1.head(), sines1.head(), pU->head(), &ldu);
         }
     }
     // tolerance
@@ -424,8 +427,6 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
     int maxit = maxiter * n * n;
     int maxitdivn = maxiter*n;
     int iterdivn = 0;
-    // TODO remove this
-    // maxit = maxiter*n;
     int oldll = -1;
     int oldm = -1;
     bool converged = false;
@@ -528,8 +529,7 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
         */
         if (ll == m-1){
             // This is a 2x2 block 
-            // We provide special handling for 
-            // TODO computing SVD for this block
+            // We provide special handling for 2x2 blocks
             if (options.verbosity >=2){
                 mexPrintf("A 2 x 2 block has been found.\n");
             }
@@ -541,7 +541,24 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
             d[m-1] = sig_max;
             e[m-1] = zero;
             d[m] = sig_min;
-            // TODO compute singular vectors if required
+            if (pVT != 0){
+                // We need to rotate the last two rows of V
+                const ptrdiff_t n  = ncvt;
+                double* dx = &((*pVT)(m-1, 0));
+                const ptrdiff_t incx = ldvt;
+                double* dy = &((*pVT)(m, 0));
+                const ptrdiff_t incy = ldvt;
+                drot(&n, dx, &incx, dy, &incy, &cosr, &sinr);
+            }
+            if (pU != 0){
+                // We need to rotate the last two columns of U
+                const ptrdiff_t n  = nru;
+                double* dx = &((*pU)(0, m-1));
+                const ptrdiff_t incx = 1;
+                double* dy = &((*pU)(0, m));
+                const ptrdiff_t incy = 1;
+                drot(&n, dx, &incx, dy, &incy, &cosl, &sinl);
+            }
             m = m - 2;
             continue;
         }
@@ -689,9 +706,10 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     f  = oldcs*r;
                     g = d[ii+1]*sn;
                     dlartg(&f, &g, &oldcs, &oldsn, &(d[ii]));
-                    cosines[ii - ll] = cs;
-                    sines[ii -ll] = sn;
-                    // TODO old cosines and sines
+                    cosines1[ii - ll] = cs;
+                    sines1[ii -ll] = sn;
+                    cosines2[ii -ll] = oldcs;
+                    sines2[ii -ll] = oldsn;
                 }
                 h = d[m] * cs;
                 d[m] = h * oldcs;
@@ -725,9 +743,11 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     f  = oldcs*r;
                     g = d[ii-1]*sn;
                     dlartg(&f, &g, &oldcs, &oldsn, &(d[ii]));
-                    cosines[ii - ll] = cs;
-                    sines[ii -ll] = -sn;
-                    // TODO old cosines and sines
+                    int iii = ii - ll - 1;
+                    cosines1[iii] = cs;
+                    sines1[iii] = -sn;
+                    cosines2[iii] = oldcs;
+                    sines2[iii] = -oldsn;
                 }
                 h = d[ll] * cs;
                 d[ll] = h * oldcs;
@@ -735,9 +755,29 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                 // TODO Update singular vectors
                 if (pVT != 0){
                     // Update V
+                    const char side = 'L';
+                    const char pivot = 'V';
+                    const char direct  = 'B';
+                    const ptrdiff_t mm = m - ll + 1;
+                    const ptrdiff_t nn = ncvt;
+                    const double* c = cosines2.head();
+                    const double* s = sines2.head();
+                    double* a = &((*pVT)(ll, 0));
+                    //pVT->print_matrix("VT");
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
+                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
+                    const char side = 'R';
+                    const char pivot = 'V';
+                    const char direct  = 'B';
+                    const ptrdiff_t mm = nru;
+                    const ptrdiff_t nn = m - ll + 1;
+                    const double* c = cosines1.head();
+                    const double* s = sines1.head();
+                    double* a = &((*pU)(0, ll));
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
                 // Test convergence
                 if (fabs(e[ll]) <= thresh){
@@ -771,16 +811,39 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                         g = sinl * e[ii+1];
                         e[ii+1] = cosl * e[ii+1];
                     }
-                    cosines[ii - ll] = cosr;
-                    sines[ii -ll] = sinr;
+                    int iii = ii -ll;
+                    cosines1[iii] = cosr;
+                    sines1[iii] = sinr;
+                    cosines2[iii] = cosl;
+                    sines2[iii] = sinl;
                 }
                 e[m-1] = f;
                 // TODO Update singular vectors
                 if (pVT != 0){
                     // Update V
+                    const char side = 'L';
+                    const char pivot = 'V';
+                    const char direct  = 'F';
+                    const ptrdiff_t mm = m - ll + 1;
+                    const ptrdiff_t nn = ncvt;
+                    const double* c = cosines1.head();
+                    const double* s = sines1.head();
+                    double* a = &((*pVT)(ll, 0));
+                    //pVT->print_matrix("VT");
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
+                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
+                    const char side = 'R';
+                    const char pivot = 'V';
+                    const char direct  = 'F';
+                    const ptrdiff_t mm = nru;
+                    const ptrdiff_t nn = m - ll + 1;
+                    const double* c = cosines2.head();
+                    const double* s = sines2.head();
+                    double* a = &((*pU)(0, ll));
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
                 // Test convergence
                 if (fabs(e[m-1]) <= thresh){
@@ -812,8 +875,11 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                         g = sinl * e[ii-2];
                         e[ii-2] = cosl * e[ii-2];
                     }
-                    cosines[ii - ll] = cosr;
-                    sines[ii -ll] = sinr;
+                    int iii = ii -ll  - 1;
+                    cosines1[iii] = cosr;
+                    sines1[iii] = sinr;
+                    cosines2[iii]  = cosl;
+                    sines2[iii] = sinl;
                 }
                 e[ll] = f;
                 // Test convergence
@@ -823,9 +889,29 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                 // TODO Update singular vectors
                 if (pVT != 0){
                     // Update V
+                    const char side = 'L';
+                    const char pivot = 'V';
+                    const char direct  = 'B';
+                    const ptrdiff_t mm = m - ll + 1;
+                    const ptrdiff_t nn = ncvt;
+                    const double* c = cosines2.head();
+                    const double* s = sines2.head();
+                    double* a = &((*pVT)(ll, 0));
+                    //pVT->print_matrix("VT");
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
+                    //pVT->print_matrix("VT");
                 }
                 if (pU != 0){
                     // Update U
+                    const char side = 'R';
+                    const char pivot = 'V';
+                    const char direct  = 'B';
+                    const ptrdiff_t mm = nru;
+                    const ptrdiff_t nn = m - ll + 1;
+                    const double* c = cosines1.head();
+                    const double* s = sines1.head();
+                    double* a = &((*pU)(0, ll));
+                    dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
                 // finish chase bulge from bottom to top
             }
@@ -842,9 +928,19 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                 d[i] = - d[i];
                 if (pVT != 0){
                     // TODO Change the sign of singular vector also
+                    pVT->scale_row(i, -1);
                 }
             }
         } // sign change complete
+        if (options.verbosity >= 3){
+            mexPrintf("Results before sorting.");
+            if(pU != 0){
+                pU->print_matrix("U");
+            }
+            if (pVT != 0){
+                pVT->print_matrix("VT");
+            }
+        }
         // sort the singular values in decreasing order
         // insertion sort on singular values
         // but only one transposition per singular vector
@@ -853,7 +949,7 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
             int min_index = 0;
             smin = d[0];
             for (int j = 1; j <= i; ++j){
-                if (d[j] < smin) {
+                if (d[j] <= smin) {
                     min_index = j;
                     smin = d[j];
                 }
@@ -863,14 +959,16 @@ void svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                 d[i] = smin;
                 // TODO swap singular vectors
                 if(pVT != 0){
-
+                    pVT->swap_rows(min_index, i);
                 }
                 if (pU != 0){
-
+                    mexPrintf("U: Swapping col: %d, %d\n", min_index, i);
+                    pU->swap_columns(min_index, i);
                 }
             }
         }
     }
+    return converged;
 }
 
 

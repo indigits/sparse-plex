@@ -185,6 +185,8 @@ public:
   void divide(const Vec& o);
   //! Inner product with another vector
   double inner_product(const Vec& o) const;
+  //! Swap the contents of this vector with another
+  void swap(const Vec& o);
  /*****************************************************************************
  *  Debugging support
  *****************************************************************************/

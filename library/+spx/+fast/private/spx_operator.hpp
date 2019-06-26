@@ -243,6 +243,14 @@ public:
     }
     //! Computes the gram matrix for the this matrix
     void gram(Matrix& output) const;
+    //! Swap columns 
+    void swap_columns(mwIndex i, mwIndex j);
+    //! Swap rows 
+    void swap_rows(mwIndex i, mwIndex j);
+    //! Scale column by a factor value
+    void scale_column(mwIndex i, double value);
+    //! Scale row by a factor value
+    void scale_row(mwIndex i, double value);
 public:
     // Functions for printing
     void print_matrix(const char* name="") const;

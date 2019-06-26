@@ -4,6 +4,14 @@
 #include "spx_operator.hpp"
 #include "blas.h"
 #include "spxblas.h"
+
+#if !defined(_WIN32)
+
+#define dswap dswap_
+#define dscal dscal_
+
+#endif
+
 namespace spx {
 
 Operator::Operator() {
@@ -317,6 +325,7 @@ void Matrix::set_column(mwIndex col, const Vec& input, double alpha) {
     }
 }
 
+
 void Matrix::set(double value) {
     int n = m_rows * m_cols;
     double* x = m_pMatrix;
@@ -386,6 +395,43 @@ void Matrix::gram(Matrix& output) const {
     int N = columns();
     mult_mat_t_mat(1, src, src, output.m_pMatrix, N, N, M);
 }
+
+void Matrix::swap_columns(mwIndex i, mwIndex j){
+    if (i >= m_cols || j >= m_cols){
+        throw std::length_error("Column number beyond range.");
+    }
+    ptrdiff_t n = m_rows;
+    mwSignedIndex inc = 1;
+    double* x = m_pMatrix + i*m_rows;
+    double* y = m_pMatrix + j*m_rows;
+    dswap(&n, x, &inc, y, &inc);
+}
+
+void Matrix::swap_rows(mwIndex i, mwIndex j){
+    if (i >= m_rows || j >= m_rows){
+        throw std::length_error("Column number beyond range.");
+    }
+    ptrdiff_t n = m_cols;
+    mwSignedIndex inc = m_rows;
+    double* x = m_pMatrix + i;
+    double* y = m_pMatrix + j;
+    dswap(&n, x, &inc, y, &inc);
+}
+
+void Matrix::scale_column(mwIndex i, double value){
+    ptrdiff_t n = m_rows;
+    mwSignedIndex inc = 1;
+    double* x = m_pMatrix + i*m_rows;
+    dscal(&n, &value, x, &inc);    
+}
+
+void Matrix::scale_row(mwIndex i, double value){
+    ptrdiff_t n = m_cols;
+    mwSignedIndex inc = m_rows;
+    double* x = m_pMatrix + i;
+    dscal(&n, &value, x, &inc);    
+}
+
 
 /************************************************
  *  Matrix Printing
