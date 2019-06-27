@@ -19,13 +19,17 @@ void gesvd_kp1xk(const Vec& alpha, const Vec& beta, Vec& s, Vec& u_bot);
 
 
 struct SVDBIHIZSQROptions{
-    int verbosity;
+public:
     SVDBIHIZSQROptions():
         verbosity(0){
         }
+public:
+    int verbosity;
 };
+
 //! Implementation of Hybrid Implicit Zero Shift QR algorithm for SVD of bidiagonal matrices
-bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, Vec& S, Matrix* pU, Matrix* pVT, mwSignedIndex n, const SVDBIHIZSQROptions& options);
+bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta, Vec& S, 
+    Matrix* pU, Matrix* pVT, mwSignedIndex n, const SVDBIHIZSQROptions& options);
 
 
 }

@@ -6,6 +6,7 @@
 namespace spx {
 
 
+const double LANSVD_DEFAULT_TOLMUL = 1e6 * 16;
 
 LanSVDOptions::LanSVDOptions(double eps, int k):
     delta(-1),
@@ -49,7 +50,7 @@ LanSVD::LanSVD(const mxArray* A, int k, const LanSVDOptions& options):
     }
     double eps = mxGetEps();
     // m_tolerance = 1e6 *16 * eps;
-    m_tolerance = 16 * eps;
+    m_tolerance = LANSVD_DEFAULT_TOLMUL * eps;
     if (options.tolerance > 0) {
         m_tolerance = options.tolerance;
     }
@@ -203,7 +204,7 @@ void LanSVD::operator()() {
         Vec alpha(m_v_alpha->head(), k_done);
         Vec beta(m_v_beta->head() + 1, k_done);
         Vec S(m_s_arr);
-#if 0
+#if 1
         // destination
         Vec alpha2(&(alpha2_space[0]), k_done);
         Vec beta2(&(beta2_space[0]), k_done);
@@ -220,11 +221,19 @@ void LanSVD::operator()() {
         Matrix U_bottom(1, k_done);
         U_bottom.set(0);
         U_bottom(0, k_done-1) = cs;
-        alpha2.print("alpha2: ");
-        beta2.print("beta2: ");
-        mexPrintf("cs: %.4f, sn: %.4f\n", cs, sn);
+        // U_bottom.print_matrix("U_bottom");
+        // alpha2.print("alpha2: ");
+        // beta2.print("beta2: ");
+        // mexPrintf("cs: %.4f, sn: %.4f\n", cs, sn);
         // Computation of SVD of the bidiagonal matrix
         svd_bd_square(alpha2, beta3, S, &U_bottom, 0);
+#if 0
+        SVDBIHIZSQROptions options;
+        options.verbosity = 0;
+        if (!svd_bd_hizsqr('U', alpha2, beta3, S, &U_bottom, 0, k_done, options)){
+            throw std::logic_error("svd_bd_hizsqr failed to converge.");
+        }
+#endif
         // Error bounds
         Vec bnd(U_bottom.head(), k_done);
 #else
@@ -235,14 +244,13 @@ void LanSVD::operator()() {
         double a_norm = S[0];
         // Save this value with the solver for future use.
         mp_solver->set_anorm(a_norm);
-        bnd.print("U_bottom: ");
         // Set simple error bounds
         bnd.abs().scale(p_norm);
-        mexPrintf("anorm: %.4f, pnorm: %.4f\n", a_norm, p_norm);
-        bnd.print("Scaled bnd: ");
+        // mexPrintf("anorm: %.4f, pnorm: %.4f\n", a_norm, p_norm);
 
         // Examine gap structure and refine error bounds
         refine_bounds(S, bnd, m_cols*eps*a_norm);
+        // bnd.print("Refined bnd: ", -1, true);
 
         // Check convergence criterion
         n_converged = 0;
@@ -272,7 +280,7 @@ void LanSVD::operator()() {
         // Update number of Lanczos vectors to compute
         if (n_converged > 0){
             // increase k by approx. half the average number of steps pr. converged
-            int kk = 0.5 * (k_req - n_converged)*k_req / (n_converged + 1);
+            int kk = 0.5 * (m_k - n_converged)*k_req / (n_converged + 1);
             k_req = k_req + std::min(100, (int) std::max(2, kk));
         } else {
             // As long a very few singular values have converged, increase k rapidly.
@@ -376,7 +384,7 @@ void LanSVD::refine_bounds(const Vec& S, Vec& bnd, double tolerance){
         D[i] = square(S[j -1 -i]);
         bnd2[i] = bnd[j - 1 -i];
     }
-    bnd2.print("bnd post sort");
+    //bnd2.print("bnd post sort");
     // Find the maximum value of the bnd
     mwIndex mid = bnd.max_index();
     /// We need to massage error bounds for very close Ritz values
@@ -413,7 +421,7 @@ void LanSVD::refine_bounds(const Vec& S, Vec& bnd, double tolerance){
             }
         }
     }
-    bnd2.print("bnd post clen");
+    //bnd2.print("bnd post clen");
     // Create a vec to measure gaps
     Vec gap(j);
     gap = std::numeric_limits<float>::max();
@@ -436,7 +444,7 @@ void LanSVD::refine_bounds(const Vec& S, Vec& bnd, double tolerance){
     for (int i=0; i < j; ++i){
         bnd[i] = bnd2[j - 1 -i];
     }
-    bnd.print("bnd final   ");
+    //bnd.print("bnd final   ");
 }
 
 

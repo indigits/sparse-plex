@@ -331,6 +331,7 @@ void Matrix::set(double value) {
     double* x = m_pMatrix;
     for (int i=0; i < n; ++i) {
         *x = value;
+        ++x;
     }
 }
 void Matrix::set_diag(double value) {
