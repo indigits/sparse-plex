@@ -159,10 +159,14 @@ double norm_kp1xk_mat(const Vec& alpha, const Vec& beta){
     convert_bd_kp1xk_to_kxk(alpha2, beta2, cs, sn);
     // Space for singular values
     Vec S(k);
+    SVDBIHIZSQROptions options;
+    svd_bd_hizsqr('U', alpha2, beta2, S, 0, 0, -1, options);
+#if 0
     Matrix U(1, k);
     U.set(0);
     U(0, k-1) = 1;
     svd_bd_square(alpha2, beta2, S, &U, 0);
+#endif
     return S[0];
 }
 
