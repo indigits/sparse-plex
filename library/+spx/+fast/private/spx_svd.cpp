@@ -348,10 +348,11 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
     // variables for returning values from dlartg
     double cs;
     double sn;
-    Vec cosines1(n+1);
-    Vec sines1(n+1);
-    Vec cosines2(n+1);
-    Vec sines2(n+1);
+    Vec work(4*n + 4);
+    double* cosines1 = work.head();
+    double* sines1 = work.head() + n + 1;
+    double* cosines2 = work.head() + 2*n + 2;
+    double* sines2 = work.head() + 3*n + 3;
     double r;
     // Number of U rows
     ptrdiff_t nru = 0;
@@ -385,7 +386,7 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
         }
         //The rotations should be applied on U if needed
         if(pU){
-            dlasr(&RR, &VV, &FF, &nru, &n, cosines1.head(), sines1.head(), pU->head(), &ldu);
+            dlasr(&RR, &VV, &FF, &nru, &n, cosines1, sines1, pU->head(), &ldu);
         }
     }
     // tolerance
@@ -726,8 +727,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'F';
                     const ptrdiff_t mm = m - ll + 1;
                     const ptrdiff_t nn = ncvt;
-                    const double* c = cosines1.head();
-                    const double* s = sines1.head();
+                    const double* c = cosines1;
+                    const double* s = sines1;
                     double* a = &((*pVT)(ll, 0));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
                 }
@@ -738,8 +739,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'F';
                     const ptrdiff_t mm = nru;
                     const ptrdiff_t nn = m - ll + 1;
-                    const double* c = cosines2.head();
-                    const double* s = sines2.head();
+                    const double* c = cosines2;
+                    const double* s = sines2;
                     double* a = &((*pU)(0, ll));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
@@ -782,8 +783,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'B';
                     const ptrdiff_t mm = m - ll + 1;
                     const ptrdiff_t nn = ncvt;
-                    const double* c = cosines2.head();
-                    const double* s = sines2.head();
+                    const double* c = cosines2;
+                    const double* s = sines2;
                     double* a = &((*pVT)(ll, 0));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
                 }
@@ -794,8 +795,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'B';
                     const ptrdiff_t mm = nru;
                     const ptrdiff_t nn = m - ll + 1;
-                    const double* c = cosines1.head();
-                    const double* s = sines1.head();
+                    const double* c = cosines1;
+                    const double* s = sines1;
                     double* a = &((*pU)(0, ll));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
@@ -846,8 +847,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'F';
                     const ptrdiff_t mm = m - ll + 1;
                     const ptrdiff_t nn = ncvt;
-                    const double* c = cosines1.head();
-                    const double* s = sines1.head();
+                    const double* c = cosines1;
+                    const double* s = sines1;
                     double* a = &((*pVT)(ll, 0));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
                 }
@@ -858,8 +859,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'F';
                     const ptrdiff_t mm = nru;
                     const ptrdiff_t nn = m - ll + 1;
-                    const double* c = cosines2.head();
-                    const double* s = sines2.head();
+                    const double* c = cosines2;
+                    const double* s = sines2;
                     double* a = &((*pU)(0, ll));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
@@ -912,8 +913,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'B';
                     const ptrdiff_t mm = m - ll + 1;
                     const ptrdiff_t nn = ncvt;
-                    const double* c = cosines2.head();
-                    const double* s = sines2.head();
+                    const double* c = cosines2;
+                    const double* s = sines2;
                     double* a = &((*pVT)(ll, 0));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldvt);
                 }
@@ -924,8 +925,8 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     const char direct  = 'B';
                     const ptrdiff_t mm = nru;
                     const ptrdiff_t nn = m - ll + 1;
-                    const double* c = cosines1.head();
-                    const double* s = sines1.head();
+                    const double* c = cosines1;
+                    const double* s = sines1;
                     double* a = &((*pU)(0, ll));
                     dlasr(&side, &pivot, &direct, &mm, &nn, c, s, a, &ldu);
                 }
@@ -978,7 +979,6 @@ bool svd_bd_hizsqr(char uplo, const Vec& alpha, const Vec& beta,
                     pVT->swap_rows(min_index, i);
                 }
                 if (pU != 0){
-                    mexPrintf("U: Swapping col: %d, %d\n", min_index, i);
                     pU->swap_columns(min_index, i);
                 }
             }
