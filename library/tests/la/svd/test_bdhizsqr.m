@@ -1,4 +1,4 @@
-function tests = test_spaces
+function tests = test_bdhizsqr
   tests = functiontests(localfunctions);
 end
 
