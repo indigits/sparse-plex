@@ -42,6 +42,7 @@ make_program('mex_mult_mat_mat.c', blas_sources, compile_params, options);
 make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params, options);
 make_program('mex_test_blas.c', blas_sources,compile_params, options);
 make_program('mex_sparse_demo.cpp', common_cpp_sources,cpp_compile_params, options);
+make_program('mex_demo_func_handle.cpp', common_cpp_sources,cpp_compile_params, options);
 
 % Routine for solving a linear equation
 la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};

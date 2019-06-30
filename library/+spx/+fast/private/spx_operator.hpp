@@ -337,7 +337,7 @@ public:
 private:
     MxSparseMat();
 private:
-    //! pointer to the spars array
+    //! pointer to the sparse array
     const mxArray *m_pMatrix;
     //! Number of rows
     mwSize M;
@@ -351,6 +351,49 @@ private:
     mwIndex *m_jc;
 };
 
+/************************************************
+ *  Operator Wrapper over function handles
+ *  A, At, M, N should be provided
+ ************************************************/
+class FuncOp : public Operator {
+public:
+    FuncOp(const mxArray *pStruct);
+    virtual ~FuncOp();
+    virtual mwSize rows() const;
+    virtual mwSize columns() const;
+    virtual void column(mwIndex index, double b[]) const;
+    virtual void row(mwIndex index, double b[], mwIndex inc) const;
+    virtual void extract_columns( const mwIndex indices[], mwSize k, double B[]) const;
+    virtual void extract_columns(const index_vector& indices, Matrix& output) const;
+    virtual void extract_rows( const mwIndex indices[], mwSize k, double B[]) const;
+    virtual void mult_vec(const double x[], double y[]) const;
+    virtual void mult_vec(const Vec& x, Vec& y) const;
+    virtual void mult_t_vec(const double x[], double y[]) const;
+    virtual void mult_t_vec(const Vec& x, Vec& y) const;
+    virtual void mult_vec(const mwIndex indices[], mwSize k, const double x[], double y[]) const;
+    virtual void add_column_to_vec(double coeff, mwIndex index, double x[]) const;
+    virtual bool copy_matrix_to(Matrix& dst) const;
+public:
+private:
+    FuncOp();
+private:
+    //! pointer to the spars array
+    const mxArray *m_pStruct;
+    mxArray *m_pA;
+    mxArray *m_pAt;
+    //! Number of rows
+    mwSize M;
+    //! Number of columns
+    mwSize N;
+private:
+    mxArray* m_pXArr;
+    mxArray* m_pYArr;
+    double* m_x;
+    double* m_y;
+};
+
+//! Checks if the structure is a valid function handle operator
+bool is_func_op(const mxArray *pStruct);
 
 }
 

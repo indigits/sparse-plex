@@ -912,4 +912,323 @@ mwSize MxSparseMat::nnz_col(mwIndex c) const {
     return (m_jc[c+1] - m_jc[c]);
 }
 
+/************************************************
+ *  FuncOp Operator Implementation
+ ************************************************/
+
+bool is_func_op(const mxArray *pStruct){
+    if(!mxIsStruct(pStruct)){
+        return false;
+    }
+    mxArray* field =  mxGetField(pStruct, 0, "A");
+    if (field == 0){
+        return false;
+    }
+    field =  mxGetField(pStruct, 0, "At");
+    if (field == 0){
+        return false;
+    }
+    field =  mxGetField(pStruct, 0, "M");
+    if (field == 0){
+        return false;
+    }
+    field =  mxGetField(pStruct, 0, "N");
+    if (field == 0){
+        return false;
+    }
+    return true;
+}
+
+
+FuncOp::FuncOp(const mxArray *pStruct):
+m_pStruct(pStruct),
+m_pXArr(0),
+m_pYArr(0),
+m_x(0),
+m_y(0)
+{
+    if (!mxIsStruct(pStruct)){
+        throw std::invalid_argument("Must be a structure.");
+    }
+    mxArray* a_field = mxGetField(pStruct, 0, "A");
+    if(a_field == 0){
+        throw std::invalid_argument("A unspecified.");
+    }
+    if( !mxIsClass( a_field , "function_handle")) {
+        throw std::invalid_argument("A must be a function handle.");
+    }
+    mxArray* at_field = mxGetField(pStruct, 0, "At");
+    if(at_field == 0){
+        throw std::invalid_argument("At unspecified.");
+    }
+    if( !mxIsClass(at_field , "function_handle")) {
+        throw std::invalid_argument("At must be a function handle.");
+    }
+    
+    mxArray* m_field = mxGetField(pStruct, 0, "M");
+    if(m_field == 0){
+        throw std::invalid_argument("M unspecified.");
+    }
+    if (!mxIsDouble(m_field) || mxIsComplex(m_field) 
+    || mxGetNumberOfDimensions(m_field)>2
+    || mxGetM(m_field)!=1 
+    || mxGetN(m_field)!=1) {
+        throw std::invalid_argument("M must be a number.");
+    }
+
+    
+    mxArray* n_field = mxGetField(pStruct, 0, "N");
+    if(n_field == 0){
+        throw std::invalid_argument("N unspecified.");
+    }
+    if (!mxIsDouble(n_field) || mxIsComplex(n_field) 
+    || mxGetNumberOfDimensions(n_field)>2
+    || mxGetM(n_field)!=1 
+    || mxGetN(n_field)!=1) {
+        throw std::invalid_argument("N must be a number.");
+    }
+    m_pA = a_field;
+    m_pAt = at_field;
+    M = (int) mxGetScalar(m_field);
+    N = (int) mxGetScalar(n_field);
+    m_pXArr = mxCreateDoubleMatrix(N, 1, mxREAL);
+    m_x = mxGetPr(m_pXArr);
+    m_pYArr = mxCreateDoubleMatrix(M, 1, mxREAL);
+    m_y = mxGetPr(m_pYArr);
+}
+
+FuncOp::~FuncOp() {
+    if (m_pXArr != 0){
+        mxDestroyArray(m_pXArr);
+    }
+    if (m_pYArr != 0){
+        mxDestroyArray(m_pYArr);
+    }
+}
+
+mwSize FuncOp::rows() const {
+    return M;
+}
+
+mwSize FuncOp::columns() const {
+    return N;
+}
+
+
+void FuncOp::column(mwIndex c, double b[]) const {
+    if (c >= N) {
+        throw std::invalid_argument("index out of range.");
+    }
+    // Now set the input properly
+    for (int i=0; i < N; ++i){
+        m_x[i] = 0;
+    }
+    m_x[c] = 1;
+
+    mxArray* prhs[2];
+    prhs[0] = m_pA;
+    prhs[1] = m_pXArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    for (int i=0; i < M; ++i){
+        b[i] = dy[i];
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+void FuncOp::row(mwIndex r, double b[], mwIndex inc) const {
+    if (r >= M) {
+        throw std::invalid_argument("index out of range.");
+    }
+    // Now set the input properly
+    for (int i=0; i < M; ++i){
+        m_y[i] = 0;
+    }
+    m_y[r] = 1;
+
+    mxArray* prhs[2];
+    prhs[0] = m_pAt;
+    prhs[1] = m_pYArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    double* bb = b;
+    for (int i=0; i < N; ++i){
+        *b = dy[i];
+        b += inc;
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+void FuncOp::extract_columns( const mwIndex indices[], mwSize k,
+                               double B[]) const {
+    for (int i=0; i < k; ++i){
+        mwIndex c = indices[i];
+        if (c >= N) {
+            throw std::invalid_argument("index out of range.");
+        }
+        double *b = B + M * i;
+        column(c, b);
+    }
+}
+
+void FuncOp::extract_columns(const index_vector& indices, Matrix& output) const {
+    if (indices.size() > output.columns()){
+        throw std::length_error("Output doesn't have sufficient space");
+    }
+    if (output.rows() != M){
+        throw std::length_error("Output matrix size not compatible.");
+    }
+    extract_columns(&(indices[0]), indices.size(), output.head());
+}
+
+
+void FuncOp::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
+    for (int i=0; i < k; ++i){
+        mwIndex r = indices[i];
+        if (r >= M) {
+            throw std::invalid_argument("index out of range.");
+        }
+        double *b = B +  i;
+        row(r, b, k);
+    }
+}
+
+void FuncOp::mult_vec(const double x[], double y[]) const {
+    // Set the input properly
+    for (int i=0; i < N; ++i){
+        m_x[i] = x[i];
+    }
+    mxArray* prhs[2];
+    prhs[0] = m_pA;
+    prhs[1] = m_pXArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    for (int i=0; i < M; ++i){
+        y[i] = dy[i];
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+void FuncOp::mult_vec(const Vec& x, Vec& y) const {
+    if (x.length() != N){
+        throw std::length_error("x must have length equal to number of columns of A.");
+    }
+    if (y.length() != M){
+        throw std::length_error("y must have length equal to the number of rows of A.");
+    }
+    mult_vec(x.head(), y.head());
+}
+
+void FuncOp::mult_t_vec(const double x[], double y[]) const {
+    // Now set the input properly
+    for (int i=0; i < M; ++i){
+        m_y[i] = x[i];
+    }
+    mxArray* prhs[2];
+    prhs[0] = m_pAt;
+    prhs[1] = m_pYArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    for (int i=0; i < N; ++i){
+        y[i] = dy[i];
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+void FuncOp::mult_t_vec(const Vec& x, Vec& y) const {
+    if (x.length() != M){
+        throw std::length_error("x must have length equal to number of rows of A.");
+    }
+    if (y.length() != N){
+        throw std::length_error("y must have length equal to the number of columns of A.");
+    }
+    mult_t_vec(x.head(), y.head());
+}
+
+void FuncOp::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
+    for (int i=0; i < N; ++i){
+        m_x[i] = 0;
+    }
+    for(int i=0; i<k; i++ ) {
+        // Corresponding column number
+        mwIndex c = indices[i];
+        if (c >= N) {
+            throw std::invalid_argument("index out of range.");
+        }
+        m_x[c] = x[i];
+    }
+    mxArray* prhs[2];
+    prhs[0] = m_pA;
+    prhs[1] = m_pXArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    for (int i=0; i < M; ++i){
+        y[i] = dy[i];
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+void FuncOp::add_column_to_vec(double coeff, mwIndex c, double x[]) const {
+    if (c >= N) {
+        throw std::invalid_argument("index out of range.");
+    }
+    for (int i=0; i < N; ++i){
+        m_x[i] = 0;
+    }
+    m_x[c] = 1;
+
+    mxArray* prhs[2];
+    prhs[0] = m_pA;
+    prhs[1] = m_pXArr;
+    mxArray* plhs[1];
+    mexCallMATLAB(1,plhs, 2, prhs,"feval");
+
+    // Copy the result back
+    mxArray* y_arr = plhs[0];
+    double* dy = mxGetPr(y_arr);
+    for (int i=0; i < M; ++i){
+        x[i] += coeff*dy[i];
+    }
+    // Destroy the returned array
+    mxDestroyArray(y_arr);
+}
+
+bool FuncOp::copy_matrix_to(Matrix& dst) const {
+    if (M != dst.rows()){
+        throw std::invalid_argument("mismatch in number or rows");
+    }
+    if (N != dst.columns()){
+        throw std::invalid_argument("mismatch in number of columns.");
+    }
+    // Copy column by column
+    double* out = dst.head();
+    for (int i=0; i < N; ++i){
+        column(i, out + M * i);
+    }
+}
+
+
+
 } // spx
