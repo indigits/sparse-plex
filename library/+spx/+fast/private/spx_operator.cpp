@@ -913,10 +913,10 @@ mwSize MxSparseMat::nnz_col(mwIndex c) const {
 }
 
 /************************************************
- *  FuncOp Operator Implementation
+ *  AAtFuncOp Operator Implementation
  ************************************************/
 
-bool is_func_op(const mxArray *pStruct){
+bool is_aat_func_op(const mxArray *pStruct){
     if(!mxIsStruct(pStruct)){
         return false;
     }
@@ -940,7 +940,7 @@ bool is_func_op(const mxArray *pStruct){
 }
 
 
-FuncOp::FuncOp(const mxArray *pStruct):
+AAtFuncOp::AAtFuncOp(const mxArray *pStruct):
 m_pStruct(pStruct),
 m_pXArr(0),
 m_pYArr(0),
@@ -997,7 +997,7 @@ m_y(0)
     m_y = mxGetPr(m_pYArr);
 }
 
-FuncOp::~FuncOp() {
+AAtFuncOp::~AAtFuncOp() {
     if (m_pXArr != 0){
         mxDestroyArray(m_pXArr);
     }
@@ -1006,16 +1006,16 @@ FuncOp::~FuncOp() {
     }
 }
 
-mwSize FuncOp::rows() const {
+mwSize AAtFuncOp::rows() const {
     return M;
 }
 
-mwSize FuncOp::columns() const {
+mwSize AAtFuncOp::columns() const {
     return N;
 }
 
 
-void FuncOp::column(mwIndex c, double b[]) const {
+void AAtFuncOp::column(mwIndex c, double b[]) const {
     if (c >= N) {
         throw std::invalid_argument("index out of range.");
     }
@@ -1041,7 +1041,7 @@ void FuncOp::column(mwIndex c, double b[]) const {
     mxDestroyArray(y_arr);
 }
 
-void FuncOp::row(mwIndex r, double b[], mwIndex inc) const {
+void AAtFuncOp::row(mwIndex r, double b[], mwIndex inc) const {
     if (r >= M) {
         throw std::invalid_argument("index out of range.");
     }
@@ -1069,7 +1069,7 @@ void FuncOp::row(mwIndex r, double b[], mwIndex inc) const {
     mxDestroyArray(y_arr);
 }
 
-void FuncOp::extract_columns( const mwIndex indices[], mwSize k,
+void AAtFuncOp::extract_columns( const mwIndex indices[], mwSize k,
                                double B[]) const {
     for (int i=0; i < k; ++i){
         mwIndex c = indices[i];
@@ -1081,7 +1081,7 @@ void FuncOp::extract_columns( const mwIndex indices[], mwSize k,
     }
 }
 
-void FuncOp::extract_columns(const index_vector& indices, Matrix& output) const {
+void AAtFuncOp::extract_columns(const index_vector& indices, Matrix& output) const {
     if (indices.size() > output.columns()){
         throw std::length_error("Output doesn't have sufficient space");
     }
@@ -1092,7 +1092,7 @@ void FuncOp::extract_columns(const index_vector& indices, Matrix& output) const 
 }
 
 
-void FuncOp::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
+void AAtFuncOp::extract_rows( const mwIndex indices[], mwSize k, double B[]) const {
     for (int i=0; i < k; ++i){
         mwIndex r = indices[i];
         if (r >= M) {
@@ -1103,7 +1103,7 @@ void FuncOp::extract_rows( const mwIndex indices[], mwSize k, double B[]) const 
     }
 }
 
-void FuncOp::mult_vec(const double x[], double y[]) const {
+void AAtFuncOp::mult_vec(const double x[], double y[]) const {
     // Set the input properly
     for (int i=0; i < N; ++i){
         m_x[i] = x[i];
@@ -1123,7 +1123,7 @@ void FuncOp::mult_vec(const double x[], double y[]) const {
     mxDestroyArray(y_arr);
 }
 
-void FuncOp::mult_vec(const Vec& x, Vec& y) const {
+void AAtFuncOp::mult_vec(const Vec& x, Vec& y) const {
     if (x.length() != N){
         throw std::length_error("x must have length equal to number of columns of A.");
     }
@@ -1133,7 +1133,7 @@ void FuncOp::mult_vec(const Vec& x, Vec& y) const {
     mult_vec(x.head(), y.head());
 }
 
-void FuncOp::mult_t_vec(const double x[], double y[]) const {
+void AAtFuncOp::mult_t_vec(const double x[], double y[]) const {
     // Now set the input properly
     for (int i=0; i < M; ++i){
         m_y[i] = x[i];
@@ -1153,7 +1153,7 @@ void FuncOp::mult_t_vec(const double x[], double y[]) const {
     mxDestroyArray(y_arr);
 }
 
-void FuncOp::mult_t_vec(const Vec& x, Vec& y) const {
+void AAtFuncOp::mult_t_vec(const Vec& x, Vec& y) const {
     if (x.length() != M){
         throw std::length_error("x must have length equal to number of rows of A.");
     }
@@ -1163,7 +1163,7 @@ void FuncOp::mult_t_vec(const Vec& x, Vec& y) const {
     mult_t_vec(x.head(), y.head());
 }
 
-void FuncOp::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
+void AAtFuncOp::mult_vec( const mwIndex indices[], mwSize k, const double x[], double y[]) const {
     for (int i=0; i < N; ++i){
         m_x[i] = 0;
     }
@@ -1190,7 +1190,7 @@ void FuncOp::mult_vec( const mwIndex indices[], mwSize k, const double x[], doub
     mxDestroyArray(y_arr);
 }
 
-void FuncOp::add_column_to_vec(double coeff, mwIndex c, double x[]) const {
+void AAtFuncOp::add_column_to_vec(double coeff, mwIndex c, double x[]) const {
     if (c >= N) {
         throw std::invalid_argument("index out of range.");
     }
@@ -1215,7 +1215,7 @@ void FuncOp::add_column_to_vec(double coeff, mwIndex c, double x[]) const {
     mxDestroyArray(y_arr);
 }
 
-bool FuncOp::copy_matrix_to(Matrix& dst) const {
+bool AAtFuncOp::copy_matrix_to(Matrix& dst) const {
     if (M != dst.rows()){
         throw std::invalid_argument("mismatch in number or rows");
     }

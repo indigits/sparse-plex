@@ -15,8 +15,7 @@ A = [
         y = A *x;
     end
     function y = backward(x)
-        x
-        y = (x' * A)'
+        y = (x' * A)';
     end
 
 %input.A = @(x) A * x;

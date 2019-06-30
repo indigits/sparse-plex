@@ -15,10 +15,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
     check_num_input_args(nrhs, 1, 1);
     try {
-        if (!spx::is_func_op(A_IN)){
+        if (!spx::is_aat_func_op(A_IN)){
             mexErrMsgTxt("Input not function handle pair.");
         }
-        spx::FuncOp mat(A_IN);
+        spx::AAtFuncOp mat(A_IN);
         mexPrintf("rows: %d\n", mat.rows());
         mexPrintf("columns: %d\n", mat.columns());
         spx::d_vector aa(mat.rows());

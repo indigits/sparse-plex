@@ -354,11 +354,12 @@ private:
 /************************************************
  *  Operator Wrapper over function handles
  *  A, At, M, N should be provided
+ * TODO: Support the case where At is missing.
  ************************************************/
-class FuncOp : public Operator {
+class AAtFuncOp : public Operator {
 public:
-    FuncOp(const mxArray *pStruct);
-    virtual ~FuncOp();
+    AAtFuncOp(const mxArray *pStruct);
+    virtual ~AAtFuncOp();
     virtual mwSize rows() const;
     virtual mwSize columns() const;
     virtual void column(mwIndex index, double b[]) const;
@@ -375,7 +376,7 @@ public:
     virtual bool copy_matrix_to(Matrix& dst) const;
 public:
 private:
-    FuncOp();
+    AAtFuncOp();
 private:
     //! pointer to the spars array
     const mxArray *m_pStruct;
@@ -393,7 +394,7 @@ private:
 };
 
 //! Checks if the structure is a valid function handle operator
-bool is_func_op(const mxArray *pStruct);
+bool is_aat_func_op(const mxArray *pStruct);
 
 }
 
