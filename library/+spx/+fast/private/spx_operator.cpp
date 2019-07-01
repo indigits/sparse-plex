@@ -21,6 +21,18 @@ Operator::~Operator() {
 
 }
 
+Operator* Operator::create(const mxArray* A) {
+    Operator* result = 0;
+    if(mxIsNumeric(A) && !mxIsSparse(A)){
+        result = new MxFullMat(A);
+    }
+    if (mxIsNumeric(A) && mxIsSparse(A)){
+        result = new MxSparseMat(A);
+    }
+    return result;
+}
+
+
 /************************************************
  *  Matrix Operator Implementation
  ************************************************/
@@ -548,23 +560,6 @@ bool MxFullMat::copy_matrix_to(Matrix& dst) const {
 }
 
 
-bool resize_fullmat_columns(mxArray *pMatrix, int n){
-    if (mxGetN(pMatrix) == n) {
-        // Nothing to do
-        return true;
-    }
-    double* pU = mxGetPr(pMatrix);
-    int m = mxGetM(pMatrix);
-    pU = (double*) mxRealloc(pU, m*n*sizeof(double));
-    if (pU != 0){
-        // Reallocation happened successfully
-        mxSetN(pMatrix, n);
-        mxSetPr(pMatrix, pU);
-        return true;
-    }
-    // reallocation failed
-    return false;
-}
 
 
 /************************************************

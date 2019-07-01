@@ -29,8 +29,23 @@ void set_struct_string_field(mxArray* s, int field_num, const std::string& value
 //! Fill a double vector field in the structure
 void set_struct_d_vec_field(mxArray* s, int field_num, const d_vector& value);
 
+
+//! Checks if the structure has a double field or not
+bool has_double_field(mxArray* s, const char* field_name);
+
 //! Converts a double vector to an MX Array
 mxArray* d_vec_to_mx_array(const Vec& x, int n = -1);
+
+/************************************************
+ *  Utility functions for full matrices
+ ************************************************/
+
+//! Resizes the number of elements of a Matlab vector
+bool resize_mat_vec(mxArray *pVector, int n);
+
+//! Resizes the number of columns of a full MATLAB matrix
+bool resize_fullmat_columns(mxArray *pMatrix, int n);
+
 
 }
 

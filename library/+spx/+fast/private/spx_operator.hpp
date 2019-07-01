@@ -28,6 +28,8 @@ class MxFullMat;
 
 // Base class for operators
 class Operator {
+public:
+    static Operator* create(const mxArray* A);
 public: 
     Operator();
     virtual ~Operator();
@@ -50,6 +52,8 @@ public:
     virtual bool copy_matrix_to(Matrix& dst) const = 0;
 private:
 };
+
+
 
 
 /************************************************
@@ -302,12 +306,6 @@ private:
     Matrix m_impl;
 };
 
-/************************************************
- *  Utility functions for full matrices
- ************************************************/
-
-//! Resizes the number of columns of a full MATLAB matrix
-bool resize_fullmat_columns(mxArray *pMatrix, int n);
 
 /************************************************
  *  MxSparseMat Operator Wrapper over sparse MATLAB arrays

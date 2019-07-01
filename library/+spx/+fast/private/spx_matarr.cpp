@@ -49,6 +49,22 @@ void set_struct_d_vec_field(mxArray* s, int field_num, const d_vector& value){
     mxSetFieldByNumber(s,0,field_num, field);
 }
 
+bool has_double_field(mxArray* s, const char* field_name){
+    mxArray* field = mxGetField(s, 0, field_name);
+    if (0 == field){
+        return false;
+    }
+    if (!mxIsDouble(field) || mxIsComplex(field) 
+        || mxGetNumberOfDimensions(field)>2
+        || mxGetM(field)!=1 
+        || mxGetN(field)!=1) {
+            return false;
+    }
+    return true;
+}
+
+
+
 
 mxArray* d_vec_to_mx_array(const Vec& x, int n)
 {
@@ -60,6 +76,42 @@ mxArray* d_vec_to_mx_array(const Vec& x, int n)
     double* m_alpha =  mxGetPr(p_alpha);
     copy_vec_vec(x.head(), m_alpha, N);
     return p_alpha;
+}
+
+bool resize_fullmat_columns(mxArray *pMatrix, int n){
+    if (mxGetN(pMatrix) == n) {
+        // Nothing to do
+        return true;
+    }
+    double* pU = mxGetPr(pMatrix);
+    int m = mxGetM(pMatrix);
+    pU = (double*) mxRealloc(pU, m*n*sizeof(double));
+    if (pU != 0){
+        // Reallocation happened successfully
+        mxSetN(pMatrix, n);
+        mxSetPr(pMatrix, pU);
+        return true;
+    }
+    // reallocation failed
+    return false;
+}
+
+
+bool resize_mat_vec(mxArray *pVector, int n){
+    if (mxGetM(pVector) == n) {
+        // Nothing to do
+        return true;
+    }
+    double* pU = mxGetPr(pVector);
+    pU = (double*) mxRealloc(pU, n*sizeof(double));
+    if (pU != 0){
+        // Reallocation happened successfully
+        mxSetM(pVector, n);
+        mxSetPr(pVector, pU);
+        return true;
+    }
+    // reallocation failed
+    return false;    
 }
 
 

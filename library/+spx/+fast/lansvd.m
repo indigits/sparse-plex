@@ -1,17 +1,67 @@
-function [U, S, V, details]  = lansvd(A, k, options)
+function [U, S, V, details]  = lansvd(A, varargin)
+    % We need to parse the options one by one
+    params = inputParser;
+    params.addRequired('A');
+    % Number of singular values to compute
+    params.addParameter('k', NaN);
+    % Threshold for singular values
+    params.addParameter('lambda', NaN);
+    % Desired level of orthogonality
+    params.addParameter('delta', -1);
+    % Desired level of orthogonality after reorthogonalization
+    params.addParameter('eta', -1);
+    % Tolerance for iterated Gram-Schmidt procedure
+    params.addParameter('gamma', -1);
+    % Flag for classic/modified Gram-Schmidt
+    params.addParameter('cgs', true);
+    % Flag for extended local reorthogonalization
+    params.addParameter('elr', false);
+    % Verbosity level
+    params.addParameter('verbosity', 0);
+    % Maximum number of iterations
+    params.addParameter('max_iters', -1);
+    % Tolerance for convergence of singular values
+    params.addParameter('tolerance', -1);
+    % Initial vector specified by user
+    params.addParameter('p0', []);
+    % Parse the results
+    params.parse(A, varargin{:});
+    results = params.Results;
+    options = struct;
     if(isobject(A))
         A = double(A);
     end
-    if nargin < 3
-        options = struct;
+    if ~isnan(results.k)
+        options.k = results.k;
     end
-    if nargin < 2
-        k = 6;
+    if ~isnan(results.lambda)
+        options.lambda = results.lambda;
     end
-    [U, S, V, alpha, beta, p, details] = mex_lansvd(A, k, options);
+    if ~isfield(options, 'k') && ~isfield(options, 'lambda')
+        % By default we compute 6 singular values
+        options.k = 6;
+    end
+    options.delta  = results.delta;
+    options.eta  = results.eta;
+    options.gamma = results.gamma;
+    options.cgs = results.cgs;
+    options.elr = results.elr;
+    options.verbosity = results.verbosity;
+    options.max_iters = results.max_iters;
+    options.tolerance = results.tolerance;
+    if ~isempty(results.p0)
+        options.p0 = results.p0;
+    end
+    [U, S, V, alpha, beta, p, details] = mex_lansvd(A, options);
     % number of Lanczos vectors computed
     k_done = size(alpha, 1);
     p_norm = beta(k_done+1);
+    if isfield(options, 'k')
+        k = options.k;
+    end
+    if isfield(options, 'lambda')
+        k = find(S <= options.lambda,1) - 1;
+    end
     % Let's compute all the singular vectors if requested by caller
     if nargout>2 % computation of Ritz vectors
         % Form the k+1 x k bidiagonal matrix from alpha and beta

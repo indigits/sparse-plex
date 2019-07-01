@@ -13,11 +13,15 @@ namespace spx {
 
 struct LanSVDOptions{
 public:
+    //! Number of singular values requested
+    int k_req;
+    //! Threshold for singular values
+    double lambda;
     //! desired level of orthogonality
     double delta;
     //! desired level of orthogonality after reorthogonalization
     double eta;
-    //! Tolerance for iterate Gram-Schmidt
+    //! Tolerance for iterated Gram-Schmidt
     double gamma;
     //! Flag for Classic / Modified Gram Schmidt
     bool cgs;
@@ -25,21 +29,26 @@ public:
     bool elr;
     //! verbosity level
     int verbosity;
-    //! maximum number of iterations
-    int max_iters;
     //! tolerance
     double tolerance;
+    //! maximum number of iterations
+    int max_iters;
     //! p0 specified by user
     mxArray*  p0;
 public:
-    LanSVDOptions(double eps, int k);
+    LanSVDOptions();
 };
 
 
 class LanSVD {
 public:
+    enum STOPPING_CRITERION {
+        SV_COUNT,
+        SV_THRESHOLD
+    };
+public:
     //! Constructor
-    LanSVD(const mxArray* A, int k, const LanSVDOptions& options);
+    LanSVD(const mxArray* A, const LanSVDOptions& options);
     //! Destructor
     ~LanSVD();
     //! Executes the SVD operation
@@ -61,12 +70,12 @@ public:
 private:
     //! Array
     const mxArray* m_a_input;
+    //! Stopping criterion
+    STOPPING_CRITERION m_stop_crit;
     //! Number of columns in A
     size_t m_cols;
     //! Number of rows in A
     size_t m_rows;
-    //! Number of singular values needed
-    int m_k;
     //! Number of Lanczos iterations completed
     int k_done;
     /// Number of singular values which have converged
@@ -85,9 +94,7 @@ private:
     mxArray* m_s_arr;
     // Arguments to be passed to the LAN BD solver
     //! Operator to be passed
-    MxFullMat* m_a_op_fullmat;
-    //! Sparse operator 
-    MxSparseMat* m_a_op_sparsemat;
+    Operator* m_a_op;
     //! space for storing alpha
     Vec* m_v_alpha;
     //! space for storing beta

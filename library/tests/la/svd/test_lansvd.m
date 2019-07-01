@@ -19,14 +19,17 @@ end
 function verify_lansvd(A, k, testCase)
     S1 = svds(A, k);
     options.verbosity = 0;
-    S2 = spx.fast.lansvd(A, k, options);
-    verifyEqual(testCase, S1, S2, 'RelTol', 1e-8);
+    options.tolerance = 16 * eps;
+    options.k = k;
+    S2 = spx.fast.lansvd(A, options);
+    verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
 end
 
 function test_1(testCase)
     verify_lansvd(spx.data.mtx_mkt.abb313, 4, testCase);
     verify_lansvd(spx.data.mtx_mkt.abb313, 10, testCase);
 end
+
 function test_2(testCase)
     verify_lansvd(spx.data.mtx_mkt.illc1850, 4, testCase);
     verify_lansvd(spx.data.mtx_mkt.illc1850, 10, testCase);
@@ -39,3 +42,10 @@ end
 function test_4(testCase)
     verify_lansvd(mat_simple1_1(50), 10, testCase);
 end
+
+function test_cryg10000(testCase)
+    % TODO the amount of error is pretty high.
+    verify_lansvd(spx.data.mtx_mkt.cryg10000, 4, testCase);
+    verify_lansvd(spx.data.mtx_mkt.cryg10000, 10, testCase);
+end
+
