@@ -7,9 +7,19 @@ function A = abb313()
     A = read_file('abb313.mtx');
 end
 
+function A = bfwb398()
+    A = read_file('bfwb398.mtx');
+end
+
+function A = cryg10000()
+    A = read_file('cryg10000.mtx');
+end
+
 function A = illc1850()
     A = read_file('illc1850.mtx');
 end
+
+
 
 function A = matrix(name)
     filename = [name '.mtx'];
