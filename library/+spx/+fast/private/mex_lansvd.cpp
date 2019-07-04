@@ -52,8 +52,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
     check_num_input_args(nrhs, 1, 2);
     check_num_output_args(nlhs, 7, 7);
 
-    check_is_double_matrix(A_IN, func_name, "A");
-
     spx::LanSVDOptions options;
     if (nrhs > 1) {
         /**

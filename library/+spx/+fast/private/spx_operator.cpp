@@ -26,8 +26,14 @@ Operator* Operator::create(const mxArray* A) {
     if(mxIsNumeric(A) && !mxIsSparse(A)){
         result = new MxFullMat(A);
     }
-    if (mxIsNumeric(A) && mxIsSparse(A)){
+    else if (mxIsNumeric(A) && mxIsSparse(A)){
         result = new MxSparseMat(A);
+    }
+    else if (is_aat_func_op(A)){
+        result = new AAtFuncOp(A);
+    }
+    if (0 == result){
+        throw std::invalid_argument("A is none of: full matrix, sparse matrix, pair of function handles.");
     }
     return result;
 }
