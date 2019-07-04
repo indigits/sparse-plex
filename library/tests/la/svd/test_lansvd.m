@@ -25,6 +25,19 @@ function verify_lansvd(A, k, testCase)
     verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
 end
 
+function verify_lansvd_svt(A, lambda, testCase)
+    options.verbosity = 0;
+    options.tolerance = 16 * eps;
+    options.lambda = lambda;
+    S2 = spx.fast.lansvd(A, options);
+    k = numel(S2);
+    S1 = svds(A, k+1);
+    % verify that the singular value after k-th one is smaller than the threshold
+    verifyTrue(testCase, S1(k+1) <= lambda);
+    verifyEqual(testCase, S1(1:k), S2, 'RelTol', 1e-9);
+end
+
+
 function test_1(testCase)
     verify_lansvd(spx.data.mtx_mkt.abb313, 4, testCase);
     verify_lansvd(spx.data.mtx_mkt.abb313, 10, testCase);
@@ -44,8 +57,15 @@ function test_4(testCase)
 end
 
 function test_cryg10000(testCase)
-    % TODO the amount of error is pretty high.
     verify_lansvd(spx.data.mtx_mkt.cryg10000, 4, testCase);
     verify_lansvd(spx.data.mtx_mkt.cryg10000, 10, testCase);
 end
 
+function test_abb313_svt(testCase)
+    verify_lansvd_svt(spx.data.mtx_mkt.abb313, 7.51, testCase);
+end
+
+function test_illc1850_svt(testCase)
+    %TODO . The test should pass at much lower thresholds
+    verify_lansvd_svt(spx.data.mtx_mkt.illc1850, 1.5, testCase);
+end
