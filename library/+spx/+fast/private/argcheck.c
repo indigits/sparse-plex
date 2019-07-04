@@ -122,29 +122,3 @@ void check_struct_array_is_singleton(const mxArray *arg,
   }
 }
 
-void extract_int_field_from_struct(const mxArray *arg, 
-    const char *function_name, const char *arg_name, const char* field_name, int& output){
-      mxArray* field = mxGetField(arg, 0, field_name);
-      if (field != NULL) {
-          check_is_double_scalar(field, function_name, arg_name);
-          output = (int) mxGetScalar(field);
-      }
-}
-void extract_double_field_from_struct(const mxArray *arg, 
-    const char *function_name, const char *arg_name, const char* field_name, double& output){
-      mxArray* field = mxGetField(arg, 0, field_name);
-      if (field != NULL) {
-          check_is_double_scalar(field, function_name, arg_name);
-          output = mxGetScalar(field);
-      }
-}
-
-
-void extract_double_vec_field_from_struct(const mxArray *arg, 
-    const char *function_name, const char *arg_name, const char* field_name, mxArray** output){
-        mxArray* field = mxGetField(arg, 0, field_name);
-        if (field != NULL) {
-          check_is_double_vector(field, function_name, arg_name);
-          *output = field;
-        }
-}

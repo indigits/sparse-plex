@@ -11,8 +11,23 @@ Helper functions to work with Matlab arrays
 
 namespace spx {
 
+/************************************************
+ *  Utility functions for MATLAB structures
+ ************************************************/
+
 //! Create a MATLAB structure array of length 1
 mxArray* create_struct(const std::vector<std::string> &fields);
+
+//! Extracts an integer field from struct if present
+void extract_int_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, int& output);
+//! Extracts a double field from struct if present
+void extract_double_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, double& output);
+//! Extracts a double vector field from struct if present
+void extract_double_vec_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, mxArray** output);
+
 
 //! Fill an integer field in the structure
 void set_struct_int_field(mxArray* s, int field_num, int value);

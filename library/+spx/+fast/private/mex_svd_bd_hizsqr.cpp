@@ -2,6 +2,7 @@
 #include <string.h>
 #include <mex.h>
 #include "argcheck.h"
+#include "spx_matarr.hpp"
 
 #include "blas.h"
 #include "lapack.h"
@@ -41,12 +42,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]){
     mxArray* u_rows = 0;
     if (nrhs > 2){
         check_struct_array_is_singleton(OPTIONS_IN, func_name, "options");
-        extract_int_field_from_struct(OPTIONS_IN, func_name, "options.verbosity",
+        spx::extract_int_field_from_struct(OPTIONS_IN, func_name, "options.verbosity",
             "verbosity", options.verbosity);     
         if (options.verbosity > 0) {
             mexPrintf("verbosity: %d\n", options.verbosity);
         }
-        extract_double_vec_field_from_struct(OPTIONS_IN, func_name, "options.u_rows",
+        spx::extract_double_vec_field_from_struct(OPTIONS_IN, func_name, "options.u_rows",
             "u_rows", &u_rows);
     }
     /// Store for left singular vectors

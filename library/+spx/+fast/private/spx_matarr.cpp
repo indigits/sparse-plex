@@ -1,7 +1,12 @@
+#include "argcheck.h"
 #include "spx_matarr.hpp"
 #include "spxblas.h"
 
 namespace spx {
+
+/************************************************
+ *  Utility functions for MATLAB structures
+ ************************************************/
 
 mxArray* create_struct(const std::vector<std::string> &v){
     int nfields = v.size();
@@ -13,6 +18,33 @@ mxArray* create_struct(const std::vector<std::string> &v){
     mxArray* result = mxCreateStructMatrix(1,1,nfields,fieldnames);
     mxFree(fieldnames);
     return result;
+}
+
+void extract_int_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, int& output){
+      mxArray* field = mxGetField(arg, 0, field_name);
+      if (field != NULL) {
+          check_is_double_scalar(field, function_name, arg_name);
+          output = (int) mxGetScalar(field);
+      }
+}
+void extract_double_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, double& output){
+      mxArray* field = mxGetField(arg, 0, field_name);
+      if (field != NULL) {
+          check_is_double_scalar(field, function_name, arg_name);
+          output = mxGetScalar(field);
+      }
+}
+
+
+void extract_double_vec_field_from_struct(const mxArray *arg, 
+    const char *function_name, const char *arg_name, const char* field_name, mxArray** output){
+        mxArray* field = mxGetField(arg, 0, field_name);
+        if (field != NULL) {
+          check_is_double_vector(field, function_name, arg_name);
+          *output = field;
+        }
 }
 
 void set_struct_int_field(mxArray* s, int field_num, int value) {
@@ -64,7 +96,9 @@ bool has_double_field(mxArray* s, const char* field_name){
 }
 
 
-
+/************************************************
+ *  Utility functions for MATLAB arrays
+ ************************************************/
 
 mxArray* d_vec_to_mx_array(const Vec& x, int n)
 {
@@ -113,6 +147,7 @@ bool resize_mat_vec(mxArray *pVector, int n){
     // reallocation failed
     return false;    
 }
+
 
 
 }

@@ -3,6 +3,7 @@
 #include <vector>
 #include <mex.h>
 #include "argcheck.h"
+#include "spx_matarr.hpp"
 #include "spx_lansvd.hpp"
 
 
@@ -61,23 +62,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
         check_is_struct(OPTIONS_IN, func_name, "options");
         check_struct_array_is_singleton(OPTIONS_IN, func_name, "options");
         mxArray* field;
-        extract_int_field_from_struct(OPTIONS_IN, func_name, 
+        spx::extract_int_field_from_struct(OPTIONS_IN, func_name, 
             "options.verbosity", "verbosity", options.verbosity);
-        extract_int_field_from_struct(OPTIONS_IN, func_name, 
+        spx::extract_int_field_from_struct(OPTIONS_IN, func_name, 
             "options.k", "k", options.k_req);
-        extract_double_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_field_from_struct(OPTIONS_IN, func_name,
             "options.lambda", "lambda", options.lambda);
-        extract_double_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_field_from_struct(OPTIONS_IN, func_name,
             "options.delta", "delta", options.delta);
-        extract_double_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_field_from_struct(OPTIONS_IN, func_name,
             "options.eta", "eta", options.eta);
-        extract_double_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_field_from_struct(OPTIONS_IN, func_name,
             "options.gamma", "gamma", options.gamma);
-        extract_double_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_field_from_struct(OPTIONS_IN, func_name,
             "options.tolerance", "tolerance", options.tolerance);
-        extract_int_field_from_struct(OPTIONS_IN, func_name, 
+        spx::extract_int_field_from_struct(OPTIONS_IN, func_name, 
             "options.max_iters", "max_iters", options.max_iters);
-        extract_double_vec_field_from_struct(OPTIONS_IN, func_name,
+        spx::extract_double_vec_field_from_struct(OPTIONS_IN, func_name,
             "options.p0", "p0", &(options.p0));
         field = mxGetField(OPTIONS_IN, 0, "p0");
         if (options.verbosity > 0) {
