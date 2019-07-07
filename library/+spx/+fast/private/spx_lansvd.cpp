@@ -210,7 +210,7 @@ void LanSVD::operator()() {
         // We want to pickup the last row of the U matrix
         Matrix U_bottom(1, k_done);
         U_bottom.set(0);
-        U_bottom(0, k_done-1) = cs;
+        U_bottom(0, k_done-1) = sn;
         // Computation of SVD of the bidiagonal matrix
         svd_bd_square(alpha2, beta3, S, &U_bottom, 0);
         // Error bounds
@@ -221,7 +221,10 @@ void LanSVD::operator()() {
         mp_solver->set_anorm(a_norm);
         // Set simple error bounds
         bnd.abs().scale(p_norm);
-        // mexPrintf("anorm: %.4f, pnorm: %.4f\n", a_norm, p_norm);
+        if (verbosity >= 1){
+            mexPrintf("anorm: %.4f, pnorm: %.4f\n", a_norm, p_norm);
+            bnd.print("bnd", k_done, true);
+        }
         // Examine gap structure and refine error bounds
         refine_bounds(S, bnd, m_cols*eps*a_norm);
         // Check convergence criterion
@@ -439,6 +442,10 @@ void LanSVD::refine_bounds(const Vec& S, Vec& bnd, double tolerance){
 
 // Unused code here
 #if 0
+
+// Computation of SVD of the bidiagonal matrix
+svd_bd_square(alpha2, beta3, S, &U_bottom, 0);
+
 // Computing the SVD of BD matrix using our own implementation
 SVDBIHIZSQROptions options;
 options.verbosity = 0;
