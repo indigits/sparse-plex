@@ -52,6 +52,42 @@ function [U, S, V, details]  = lansvd(A, varargin)
     if ~isempty(results.p0)
         options.p0 = results.p0;
     end
+    if isstruct(A)
+        M = A.M;
+        N = A.N;
+    elseif isnumeric(A)
+        [M, N] = size(A);
+    end
+    details = struct;
+    if min(M, N) < 1
+        % A is empty
+        U = []; S = []; V = []; ;
+        if nargout == 1; U = zeros(0, 1); end;
+        return;
+    end
+    if M*N == 1
+        % This is the case of a singleton
+        U = [1]; V = [1]; 
+        a = A(1,1);
+        S = [a];
+        if nargout == 1; U = S; end;
+        return;
+    end
+    if min(M, N) == 1
+        % either a column vector or a row vector
+        if isstruct(A)
+            % function objects
+            if N == 1
+                % Single column
+                A = A.A(1);
+            else
+                % Single row
+                A = (A.At(1))';
+            end
+        end
+        [U, S, V] = svd(full(A));
+        if nargout == 1; U = S; end;
+    end
     [U, S, V, alpha, beta, p, details] = mex_lansvd(A, options);
     % number of Lanczos vectors computed
     k_done = size(alpha, 1);

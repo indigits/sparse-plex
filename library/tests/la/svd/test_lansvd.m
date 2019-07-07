@@ -23,6 +23,39 @@ function verify_lansvd(A, k, testCase)
     options.k = k;
     S2 = spx.fast.lansvd(A, options);
     verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
+
+    [U1, S1, V1] = svds(A, k);
+    S1 = diag(S1);
+    [U2, S2, V2] = spx.fast.lansvd(A, options);
+    verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
+    verifyEqual(testCase, spx.la.nonorthogonality(U2), 0, 'AbsTol', 1e-9);
+    verifyEqual(testCase, spx.la.nonorthogonality(V2), 0, 'AbsTol', 1e-9);
+    % TODO this tolerance is very high
+    verifyEqual(testCase, abs(U1), abs(U2), 'AbsTol', 1e-5);
+    % verifyEqual(testCase, abs(V1), abs(V2), 'AbsTol', 1e-12);
+end
+
+function verify_lansvd_func_handle(A, k, testCase)
+    S.A = @(x)  A *x;
+    S.At = @(x)  (x' * A)';
+    [M, N] = size(A);
+    S.M = M;
+    S.N = N;
+
+    S1 = svds(A, k);
+    options.verbosity = 0;
+    options.tolerance = 16 * eps;
+    options.k = k;
+    S2 = spx.fast.lansvd(S, options);
+    verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
+
+    [U1, S1, V1] = svds(A, k);
+    [U2, S2, V2] = spx.fast.lansvd(S, options);
+    verifyEqual(testCase, S1, S2, 'RelTol', 1e-9);
+    verifyEqual(testCase, spx.la.nonorthogonality(U2), 0, 'AbsTol', 1e-10);
+    verifyEqual(testCase, spx.la.nonorthogonality(V2), 0, 'AbsTol', 1e-10);
+    verifyEqual(testCase, abs(U1), abs(U2), 'AbsTol', 1e-12);
+    verifyEqual(testCase, abs(V1), abs(V2), 'AbsTol', 1e-12);
 end
 
 function verify_lansvd_svt(A, lambda, testCase)
@@ -37,6 +70,24 @@ function verify_lansvd_svt(A, lambda, testCase)
     verifyEqual(testCase, S1(1:k), S2, 'RelTol', 1e-9);
 end
 
+
+function test_simple_cases(testCase)
+    A = [];
+    verify_lansvd(A, 1, testCase);
+    A = [2.4];
+    verify_lansvd(A, 1, testCase);
+end
+
+function test_single_row(testCase)
+    A = [1 2 3];
+    verify_lansvd(A, 1, testCase);
+    verify_lansvd_func_handle(A, 1, testCase);
+end
+
+function test_single_col(testCase)
+    A = [1 2 3]';
+    verify_lansvd(A, 1, testCase);
+end
 
 function test_1(testCase)
     verify_lansvd(spx.data.mtx_mkt.abb313, 4, testCase);
