@@ -1,0 +1,9 @@
+Low Rank Subspace Clustering Experiments
+==============================================
+
+This directory includes experiments over
+
+* The LRSC library developed for CVPR11 paper 
+  by Rene Vidal.
+
+  
