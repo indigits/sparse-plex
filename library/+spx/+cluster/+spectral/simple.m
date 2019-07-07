@@ -137,15 +137,16 @@ methods(Static)
         result.connectivity = singular_values(end-1);
     end
 
+
     % NCut spectral clustering algorithm adopted from Chong You SSC-OMP work.
     % The computation is equivalent to:
     % - compute the largest eigenvectors of D^{-1} W
     % - normalize the rows of the resultant matrix
     % - then apply kmeans to the rows.
     function result = normalized_symmetric_sparse(W, num_clusters)
-        if ~issymmetric(W)
-            error('Adjacency matrix must be symmetric.');
-        end
+        % if ~issymmetric(W)
+        %     error('Adjacency matrix must be symmetric.');
+        % end
         % Maximum iteration for KMeans Algorithm
         max_iterations = 1000; 
         % Replication for KMeans Algorithm
@@ -169,8 +170,57 @@ methods(Static)
             );
         result.labels = labels;
         result.num_clusters = num_clusters;
-        % second last element is the connectivity value
-        result.connectivity = -1;
+    end
+
+    function result = normalized_symmetric_fast(W, num_clusters)
+        % Maximum iteration for KMeans Algorithm
+        max_iterations = 1000; 
+        % Replication for KMeans Algorithm
+        replicates = 100;
+        % maximum number of clusters supported by the algorithm
+        max_clusters = 200;
+        % number of nodes
+        [m, n] = size(W);
+        assert (m == n);
+        num_nodes = m;
+        % following is a shortcut to compute D^{-1} W
+        W = spx.norm.normalize_l1_rw(W);
+        max_w = max(max(W));
+        % Reset all the small entries in W
+        W(W < max_w / 1000) = 0;
+        % Make it a sparse matrix
+        W = sparse(W);
+        [~, S, V] = spx.fast.lansvd(W, 'k', num_clusters);
+        singular_values = S;
+        % if num_clusters < 0
+        %     % strategy to compute the number of clusters
+        %     [ min_val , ind_min ] = min( diff( singular_values(1:end-1) ) ) ;
+        %     % Number of 0 singular values
+        %     % Number of clusters
+        %     num_clusters = size(W, 1) - ind_min;
+        % end
+        % Choose the last num_clusters eigen vectors
+        Kernel = V;
+        % We need to normalize the rows of kernel
+        Kernel = spx.norm.normalize_l2_rw(Kernel);
+        % Result of clustering the rows of eigen vectors
+        %fprintf('Number of clusters: %d\n', num_clusters);
+        if num_clusters >  max_clusters 
+            % We will restrict the number of clusters
+            num_clusters = max_clusters;
+            % we don't want kmeans to run indefinitely.
+            % max_iterations = 2;
+            % replicates = 2;
+        end
+        labels = kmeans(Kernel, num_clusters, ...
+            'start','sample', ...
+            'maxiter',max_iterations,...
+            'replicates',replicates, ...
+            'EmptyAction','singleton'...
+            );
+        result.labels = labels;
+        result.singular_values = singular_values;
+        result.num_clusters = num_clusters;
     end
 
 
