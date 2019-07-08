@@ -263,6 +263,18 @@ Vec& Vec::square() {
     return *this;
 }
 
+Vec& Vec::sqrt(){
+    mwSize n = m_n;
+    mwSignedIndex inc = m_inc;
+    double* x = m_pVec;
+    for (mwIndex i = 0 ; i < n; ++i) {
+        *x = ::sqrt(*x);
+        x += inc;
+    }
+    return *this;
+}
+
+
 void Vec::square(Vec& out) const {
     mwSize n = std::min(m_n, out.m_n);
     mwSignedIndex x_inc = m_inc;

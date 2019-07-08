@@ -149,6 +149,8 @@ public:
   void set(const index_vector& indices, const double& value);
   //! Square all entries in the vector
   Vec& square();
+  //! Compute square root of all entries in the vector (in place)
+  Vec& sqrt();
   //! Invert all entries in the vector
   Vec& inv();
   //! Compute absolute value of all entries in the vector
@@ -170,7 +172,7 @@ public:
   double norm_squared() const;
   //! Return the norm of the vector
   inline double norm() const {
-    return sqrt(norm_squared());
+    return ::sqrt(norm_squared());
   }
  /*****************************************************************************
  *  Vector - Vector operations
