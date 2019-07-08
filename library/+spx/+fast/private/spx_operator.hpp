@@ -245,8 +245,10 @@ public:
     inline double& operator()(mwIndex row, mwIndex col) {
         return m_pMatrix[col * m_rows + row];
     }
-    //! Computes the gram matrix for the this matrix
+    //! Computes the gram matrix for this matrix
     void gram(Matrix& output) const;
+    //! Computes the frame operator A * A' for this matrix
+    void frame(Matrix& output) const;
     //! Swap columns 
     void swap_columns(mwIndex i, mwIndex j);
     //! Swap rows 

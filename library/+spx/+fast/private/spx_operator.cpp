@@ -9,7 +9,7 @@
 
 #define dswap dswap_
 #define dscal dscal_
-
+#define dgemm dgemm_
 #endif
 
 namespace spx {
@@ -412,8 +412,60 @@ void Matrix::gram(Matrix& output) const {
     double* src = m_pMatrix;
     int M = rows();
     int N = columns();
+    /* 
+    It is funny to note that GEMM is much faster than the inner product
+    approach.
+    */
+#if 0
+    for (int i=0; i < N; ++i){
+        double* vi = src + i*M;
+        for (int j=i; j < N; ++j){
+            double* vj = src + j*M;
+            double result = inner_product(vi, vj, M);
+            // double result = vi[0] * vj[0];
+            // for (int k=1; k < M; ++k){
+            //     result += vi[k] * vj[k];
+            // }
+            output(i, j) = result;
+            if (j != i){
+                output(j, i) = result;
+            }
+        }
+    }
+#else
     mult_mat_t_mat(1, src, src, output.m_pMatrix, N, N, M);
+#endif
 }
+
+void Matrix::frame(Matrix& output) const{
+    if (output.rows() != output.columns()) {
+        throw std::logic_error("Frame matrix must be symmetric");
+    }
+    if (output.rows() != rows()) {
+        throw std::logic_error("Size of frame matrix must be equal to the number of rows in source matrix");
+    }
+    double* src = m_pMatrix;
+    int M = rows();
+    int N = columns();
+    char atrans = 'N';
+    char btrans = 'T';
+    double alpha = 1;
+    double beta = 0;
+    double* C = output.m_pMatrix;
+    // Output is M x M,  Product is ( M x N )  x (N x M)
+    // m = M, n = M, k = N
+    mwSignedIndex  mm = rows();
+    mwSignedIndex  nn = rows();
+    mwSignedIndex  kk = columns();
+    dgemm(&atrans, &btrans, 
+        &mm, &nn, &kk, 
+        &alpha, 
+        src, &mm, 
+        src, &mm, 
+        &beta,
+        C, &mm);
+}
+
 
 void Matrix::swap_columns(mwIndex i, mwIndex j){
     if (i >= m_cols || j >= m_cols){
