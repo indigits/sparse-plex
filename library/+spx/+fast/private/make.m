@@ -116,6 +116,9 @@ make_program('mex_gomp_spr.c', gomp_spr_sources,compile_params, options);
 %%%%% Singular Value Problems
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% eigen value composition
+make_program('mex_sqrt_times.cpp', common_cpp_sources, cpp_compile_params, options);
+
 % BDSQR for bidiagonal matrices.
 bdsqr_sources = [common_cpp_sources, 'spx_svd.cpp'];
 make_program('mex_bdsqr.cpp', bdsqr_sources, cpp_compile_params, options);
