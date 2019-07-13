@@ -5,6 +5,7 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <mex.h>
 
 namespace spx {
@@ -37,7 +38,6 @@ index_vector sort_asc_indices(const std::vector<T> &v) {
   index_vector idx(v.size());
   // fill with the values 0,1,2,.. n-1
   std::iota(idx.begin(), idx.end(), 0);
-
   // sort indexes based on comparing values in v
   std::sort(idx.begin(), idx.end(),
   [&v](size_t i1, size_t i2) {return v[i1] < v[i2];});
