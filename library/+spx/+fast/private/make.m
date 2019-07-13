@@ -28,6 +28,10 @@ cpp_compile_params = cell(0);
 if (is64bit)
   cpp_compile_params{end+1} = '-largeArrayDims';
 end
+if isunix
+cpp_compile_params{end+1} = '-lmwblas';
+cpp_compile_params{end+1} = '-lmwlapack';
+end
 
 
 % Compile files %
