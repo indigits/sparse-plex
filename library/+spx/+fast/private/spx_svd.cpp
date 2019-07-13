@@ -1,19 +1,51 @@
 #include <mex.h>
+#include <string.h> 
 #include "blas.h"
 #include "lapack.h"
 #include "spx_svd.hpp"
 
 #if !defined(_WIN32)
+
+#ifndef dbdsqr 
 #define dbdsqr dbdsqr_
+#endif
+
+#ifndef dlartg
 #define dlartg dlartg_
+#endif
+
+#ifndef dgesvd
 #define dgesvd dgesvd_
+#endif
+
+#ifndef dgesdd
 #define dgesdd dgesdd_
+#endif
+
+#ifndef dlamch
 #define dlamch dlamch_
+#endif
+
+#ifndef lsame
 #define lsame lsame_
+#endif
+
+#ifndef dlasr
 #define dlasr dlasr_
+#endif
+
+#ifndef dlas2
 #define dlas2 dlas2_
+#endif 
+
+#ifndef dlasv2
 #define dlasv2 dlasv2_
+#endif 
+
+#ifndef drot
 #define drot drot_
+#endif 
+
 #endif
 
 using namespace std;
