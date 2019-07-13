@@ -5,7 +5,11 @@
 
 
 #if !defined(_WIN32)
+
+#ifndef dgesv
 #define dgesv dgesv_
+#endif
+
 #endif
 
 int linsolve(double A[], 
