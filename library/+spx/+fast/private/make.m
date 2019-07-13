@@ -143,6 +143,9 @@ function make_program(mex_src_file, other_source_files, compile_params, options)
     end
     [~, mex_scr_name, extn] = fileparts(mex_src_file);
     mex_target_file =  [mex_scr_name '.mexw64'];
+    if isunix
+        mex_target_file =  [mex_scr_name '.mexa64'];
+    end
     if clean
         if exist(mex_target_file)
             fprintf('Deleting: %s\n', mex_target_file);
