@@ -8,8 +8,13 @@
 
 #if !defined(_WIN32)
 
+#ifndef dswap
 #define dswap dswap_
+#endif
+
+#ifndef dscal
 #define dscal dscal_
+#endif
 
 #endif
 
