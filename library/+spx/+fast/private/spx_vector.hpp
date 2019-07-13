@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <math.h>
 #include <mex.h>
 
 namespace spx {
