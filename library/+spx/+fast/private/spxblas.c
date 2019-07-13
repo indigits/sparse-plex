@@ -14,9 +14,19 @@ Some useful references:
 */
 
 #if !defined(_WIN32)
+
+#ifndef dgemm
 #define dgemm dgemm_
+#endif
+
+#ifndef dgemv
 #define dgemv dgemv_
+#endif
+
+#ifndef dgels
 #define dgels dgels_
+#endif 
+
 #endif
 
 
