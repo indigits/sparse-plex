@@ -57,6 +57,14 @@ methods(Static)
         result = sprintf('Min: %.2f (%d), Max: %.2f (%d), Mean: %.2f, Median: %.2f, Range : %.2f, IQR: %.2f, Deviation: %.2f, MAD: %.2f', m1, min_idx, m2, max_idx, mu, med, rng, r, sigma, m3);
     end
 
+    function y = rand_subset(n, k)
+        % Returns y has a column vector of k values sampled uniformly
+        % at random without replacement from the integers 1:n
+        rp = randperm(n);
+        y = rp(1:k);
+        y = y(:);
+    end
+
 end
 
 end
