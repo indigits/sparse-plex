@@ -45,8 +45,14 @@ make_program('mex_mult_mat_t_vec.c', blas_sources, compile_params, options);
 make_program('mex_mult_mat_mat.c', blas_sources, compile_params, options);
 make_program('mex_mult_mat_t_mat.c', blas_sources, compile_params, options);
 make_program('mex_test_blas.c', blas_sources,compile_params, options);
-make_program('mex_sparse_demo.cpp', common_cpp_sources,cpp_compile_params, options);
 make_program('mex_demo_func_handle.cpp', common_cpp_sources,cpp_compile_params, options);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Helper functions for sparse arrays
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+make_program('mex_sparse_demo.cpp', common_cpp_sources,cpp_compile_params, options);
+make_program('mex_update_sparse_data.cpp', common_cpp_sources,cpp_compile_params, options);
+
 
 % Routine for solving a linear equation
 la_sources = {'argcheck.c', 'spxblas.c', 'spxla.c'};
@@ -131,6 +137,10 @@ make_program('mex_svd_bd_hizsqr.cpp', bdsqr_sources, cpp_compile_params, options
 % Lanczos Bidiagonalization and Partial Reorthogonalization
 lansvd_sources = [common_cpp_sources, 'spx_lanbd.cpp', 'spx_lansvd.cpp', 'spx_rand.cpp', 'spx_qr.cpp', 'spx_svd.cpp'];
 make_program('mex_lansvd.cpp', lansvd_sources, cpp_compile_params, options);
+
+% Composition of SVD over a smaller subset of indices
+make_program('mex_partial_svd_compose.cpp', common_cpp_sources, cpp_compile_params, options);
+ 
 
 end
 
