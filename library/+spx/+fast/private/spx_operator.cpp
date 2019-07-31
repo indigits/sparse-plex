@@ -974,6 +974,18 @@ mwSize MxSparseMat::nnz_col(mwIndex c) const {
     return (m_jc[c+1] - m_jc[c]);
 }
 
+
+void MxSparseMat::update_values(const Vec& b){
+    mwSize n = b.length();
+    n = std::min(n, nnz());
+    const double* src = b.head();
+    double* dst = m_pr;
+    for (int i=0; i < n; ++i){
+        dst[i] = src[i];
+    }
+}
+
+
 /************************************************
  *  AAtFuncOp Operator Implementation
  ************************************************/

@@ -334,6 +334,8 @@ public:
     mwSize nnz() const;
     //! Number of non-zero entries in c-th column
     mwSize nnz_col(mwIndex c) const;
+    //! Update the sparse values
+    void update_values(const Vec& b);
 private:
     MxSparseMat();
 private:
