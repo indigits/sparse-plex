@@ -6,15 +6,15 @@ rng default;
 % Ambient space dimension
 M = 4000;
 % Number of subspaces
-K = 10;
+K = 4;
 % common dimension for each subspace
-D = 20;
+D = 10;
 % dimensions of each subspace
 Ds = D * ones(1, K);
 fprintf('Generating synthetic data.\n');
 bases = spx.data.synthetic.subspaces.random_subspaces(M, K, Ds);
 % Number of points on each subspace
-Sk = 8 * D;
+Sk = 16 * D;
 cluster_sizes = Sk * ones(1, K);
 % total number of points
 S = sum(cluster_sizes);
@@ -33,21 +33,27 @@ tstart = tic;
 % Apply low rank subspace clustering
 C = lrsc_noiseless(X);
 elapsed_time = toc(tstart);
+t1 = elapsed_time;
 fprintf('Vidal version Time taken: %.2f seconds\n', elapsed_time);
 
 tstart = tic;
 % Apply low rank subspace clustering
 C2 = spx.cluster.lrsc.clean_relaxed(X);
 elapsed_time = toc(tstart);
+t2  = elapsed_time;
 fprintf('SPX Version Time taken: %.2f seconds\n', elapsed_time);
 
+fprintf('Gain %.2f x\n', t1/t2);
+
+fprintf('Max diff between two versions: %.4f\n', ...
+    max(max(abs(C - C2))));
 
 fprintf('Performing clustering: \n');
 tstart = tic;
 % Adjacency matrix
 W = abs(C2);
-% clustering_result = spx.cluster.spectral.simple.normalized_symmetric_sparse(W, K);
-clustering_result = spx.cluster.spectral.simple.normalized_symmetric_fast(W, K);
+clustering_result = spx.cluster.spectral.simple.normalized_symmetric_sparse(W, K);
+%clustering_result = spx.cluster.spectral.simple.normalized_symmetric_fast(W, K);
 cluster_labels = clustering_result.labels;
 elapsed_time = toc(tstart);
 fprintf('Time taken: %.2f seconds \n', elapsed_time);
