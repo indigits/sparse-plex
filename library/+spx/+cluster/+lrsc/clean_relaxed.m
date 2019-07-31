@@ -22,9 +22,7 @@ function C = clean_relaxed(A,tau)
     options.tolerance =  16*eps;
     M = size(A, 1);
     options.p0 = ones(M, 1);
-    % options.k = 200;
     [~, S, V, details] = spx.fast.lansvd(A, options);
-    spx.io.print.vector(S);
-    r = numel(S)
+    r = numel(S);
     C = V * (eye(r) - diag(1./(S.^2)/tau)) * V';
 end
