@@ -143,9 +143,15 @@ classdef matrix < handle
         end
 
         function compare(A, B)
+            % Compares two matrices
             C = abs(A - B);
             max_diff = max(max(abs(C)));
             fprintf('Maximum difference: %.4e\n', max_diff);
+        end
+
+        function df = dof_lowrank(m, n, r)
+            % Returns the degrees of freedom of a low rank matrix
+            df = r * (m + n - r);
         end
 
 
