@@ -184,6 +184,11 @@ public:
         double* beg = m_pMatrix + col * m_rows;
         return Vec(beg, m_rows, 1);
     }
+    //! Returns reference to a row
+    inline Vec row_ref(mwIndex row) const {
+        double* beg = m_pMatrix + row;
+        return Vec(beg, m_cols, m_rows);
+    }
     //! Returns reference to sub-matrix of columns
     Matrix columns_ref(mwIndex start, mwIndex end) const;
     //! Copies the data of one column in b
@@ -274,6 +279,8 @@ private:
     const bool  m_bOwned;
 };
 
+// ! Computes the product of two matrices A and B into C
+void multiply(const Matrix& A, const Matrix& B, Matrix& C, bool a_transpose=false, bool b_transpose=false);
 /************************************************
  *  MxFullMat Operator Declaration
  ************************************************/

@@ -512,6 +512,30 @@ void Matrix::scale_row(mwIndex i, double value){
     dscal(&n, &value, x, &inc);    
 }
 
+void multiply(const Matrix& A, const Matrix& B, Matrix& C, 
+    bool a_transpose, bool b_transpose){
+    char atrans = a_transpose ? 'T' :  'N';
+    char btrans = b_transpose ? 'T': 'N';
+    mwSignedIndex a_rows = A.rows();
+    mwSignedIndex a_cols = A.columns();
+    mwSignedIndex b_rows = B.rows();
+    mwSignedIndex b_cols = B.columns();
+    mwSignedIndex c_rows = C.rows();
+    double beta = 0;
+    mwSignedIndex  mm = a_transpose ? a_cols : a_rows;
+    mwSignedIndex  nn = b_transpose ? b_rows : b_cols;
+    mwSignedIndex  kk = a_transpose ? a_rows : a_cols;
+    double alpha = 1;
+    dgemm(&atrans, &btrans, 
+        &mm, &nn, &kk, 
+        &alpha, 
+        A.head(), &a_rows, 
+        B.head(), &b_rows, 
+        &beta, 
+        C.head(), &c_rows);
+    return;
+}
+
 
 /************************************************
  *  Matrix Printing
