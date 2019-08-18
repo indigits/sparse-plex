@@ -13,11 +13,12 @@
 
 const char* func_name = "mex_partial_svd_compose";
 
+const double BLAS_CUTOFF = 0.2;
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
     try {
-        check_num_input_args(nrhs, 4, 4);
+        check_num_input_args(nrhs, 4, 5);
         check_num_output_args(nlhs, 0, 1);
 
         check_is_double_matrix(U_IN, func_name, "U");
@@ -27,12 +28,50 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 
         spx::MxFullMat U(U_IN);
         spx::MxFullMat V(V_IN);
+        const spx::Matrix& mU = U.impl();
+        const spx::Matrix& mV = V.impl();
 
+        spx::Matrix* p_l3prod = 0;
+
+        mwSize m = U.rows();
+        mwSize l1 = U.columns();
+        mwSize n = V.rows();
+        mwSize l2 = V.columns();
+        if (l1 != l2){
+            mexErrMsgTxt("Inner dimensions of U and V do not agree");
+            return;
+        }
         spx::Vec I(I_IN);
         spx::Vec J(J_IN);
 
-        mwSize n = I.length();
-        Y_OUT = mxCreateDoubleMatrix(n, 1, mxREAL);
+        mwSize num_indices = I.length();
+
+        bool use_l3 = num_indices >= BLAS_CUTOFF * m * n;
+        // mexPrintf("M = %d, N = %d, Total= %d, Needed= %d, L3=%d", 
+        //     m, n, m*n,num_indices, use_l3);
+        if (use_l3){
+            p_l3prod = new spx::Matrix(m, n);
+            spx::multiply(mU, mV, *p_l3prod, false, true);
+        }
+        Y_OUT = mxCreateDoubleMatrix(num_indices, 1, mxREAL);
+        spx::Vec Y(Y_OUT);
+        for (mwSize i=0; i < num_indices; ++i){
+            // row number from U
+            mwIndex k1 = I[i] - 1;
+            // row number from V
+            mwIndex k2 = J[i] - 1;
+            if (use_l3){
+                Y[i] = (*p_l3prod)(k1, k2);
+            } else {
+                spx::Vec v1 = mU.row_ref(k1);
+                spx::Vec v2 = mV.row_ref(k2);
+                Y[i] = v1.inner_product(v2);
+            }
+        }
+        if (p_l3prod){
+            delete p_l3prod;
+            p_l3prod = 0;
+        }
     } catch (std::exception& e) {
         mexErrMsgTxt(e.what());
         return;
