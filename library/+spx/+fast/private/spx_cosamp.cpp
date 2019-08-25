@@ -144,13 +144,14 @@ void CoSaMP::least_square() {
     //! Compute the gram matrix for this sub-matrix
     Matrix sub_gram(&m_sub_gram_space[0], num_3k_indices, num_3k_indices);
     sub_phi.gram(sub_gram);
+    MatrixOp sub_gram_op(sub_gram);
     // sub_gram.print_matrix();
     //! Compute subphi' x
     double* p_xx  = &m_sub_phi_t_x[0]; 
     sub_phi.mult_t_vec(m_signal, p_xx);
     //! Estimation over the submatrix
     //! Apply Conjugate Gradients Solver
-    spx::CongugateGradients cg(sub_gram);
+    spx::CongugateGradients cg(sub_gram_op);
     // cg.set_verbose(m_verbose);
     cg(p_xx);
     // if (max_iters > 0) {
