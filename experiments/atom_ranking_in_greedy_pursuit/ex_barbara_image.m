@@ -52,7 +52,7 @@ for nt = 1:num_tests
     r = y - y_hat;
     omp_support = spx.commons.sparse.support(z);
     if VERBOSE 
-        fprintf('OMP   : Image norm:  %0.2f approximation norm:  %0.2f residual norm: %0.2f, SNR: %.2f dB\n', norm(y), norm(y_hat), norm(r), spx.commons.snr.recSNRdB(y, y_hat));
+        fprintf('OMP   : Image norm:  %0.2f approximation norm:  %0.2f residual norm: %0.2f, SNR: %.2f dB\n', norm(y), norm(y_hat), norm(r), spx.snr.recSNRdB(y, y_hat));
     end
     barbara_omp(:, nt) = y_hat;
     tstart = tic;
@@ -66,7 +66,7 @@ for nt = 1:num_tests
     omp_ar_support = spx.commons.sparse.support(z);
     barbara_omp_ar(:, nt) = y_hat;
     if VERBOSE
-        fprintf('OMP-AR: Image norm:  %0.2f approximation norm:  %0.2f residual norm: %0.2f, SNR: %.2f dB\n', norm(y), norm(y_hat), norm(r), spx.commons.snr.recSNRdB(y, y_hat));
+        fprintf('OMP-AR: Image norm:  %0.2f approximation norm:  %0.2f residual norm: %0.2f, SNR: %.2f dB\n', norm(y), norm(y_hat), norm(r), spx.snr.recSNRdB(y, y_hat));
     end
     % Analyze the differences in sparse representation
     common = intersect(omp_support, omp_ar_support);

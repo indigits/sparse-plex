@@ -32,7 +32,7 @@ methods(Static)
         ng = spx.data.noise.Basic(problem.N, problem.S);
         problem.noises = ng.gaussian(problem.sigma);
         problem.signals = problem.signals0 + problem.noises;
-        problem.snrs = spx.commons.snr.SNR(problem.signals0, problem.noises);
+        problem.snrs = spx.snr.SNR(problem.signals0, problem.noises);
     end
 
 

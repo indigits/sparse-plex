@@ -153,7 +153,7 @@ methods(Access=private)
         % very similar.
         T2 = 0.99;
         residual = self.X - dict * alpha;
-        errorEnergy = spx.commons.snr.energies(residual);
+        errorEnergy = spx.snr.energies(residual);
         [errorEnergy, sigPositions] = sort(errorEnergy, 'descend');
         c = self.counter;
         totalError = sqrt(sum(sum(residual.^2))/numel(residual));
