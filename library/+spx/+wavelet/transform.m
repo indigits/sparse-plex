@@ -92,8 +92,14 @@ methods(Static)
             c = w(indices);
             % Compute the low pass portion of the next level of approximation
             x_low = spx.wavelet.up_sample_lo_pass(qmf, x);
+            if iscolumn(x_low)
+                x_low = x_low';
+            end
             % Compute the high pass portion of the next level of approximation
             x_hi = spx.wavelet.up_sample_hi_pass(qmf, c);
+            if iscolumn(x_hi)
+                x_hi = x_hi';
+            end
             % Compute the next level approximation of x
             x = x_low + x_hi;
         end
