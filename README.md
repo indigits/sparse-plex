@@ -1,6 +1,6 @@
 # sparse-plex
 
-[![Join the chat at https://gitter.im/indigits/sparse-plex](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/indigits/sparse-plex?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+NOTE: Please visit [cr-sparse](https://github.com/carnotresearch/cr-sparse) for an up-to-date functional implementation in Python using Google JAX which is hardware accelerated for CPU/GPU/TPUs. Thus, same code works on all types of hardware.  [Docs](https://cr-sparse.readthedocs.io/en/latest/). All activate development is happening in [cr-sparse](https://github.com/carnotresearch/cr-sparse) only. `sparse-plex` is now in maintenance mode.  
 
 A  MATLAB library for exploiting the sparsity in data representations for solving
 real life problems. 
