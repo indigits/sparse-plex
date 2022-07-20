@@ -101,7 +101,7 @@ def visit_environment_html(self, node):
     self.body.append('</div>')
     self.body.append('<div class="environment_body %s_body">' % node['envname'])
     # self.body.append(self.starttag(node, 'div', CLASS=('environment_body %s_body' % node['envname'])))
-    self.set_first_last(node)
+    # self.set_first_last(node)
 
 def depart_environment_html(self, node):
     self.body.append('</div>')
@@ -420,7 +420,7 @@ def visit_theorem_html(self, node):
         self.body.append('<span class="theoremenv_title %(thmname)s_title">%(thmtitle)s</span>' % node)
     self.body.append('</div>')
     self.body.append('<div class="theoremenv_body %(thmname)s_body">' % node)
-    self.set_first_last(node)
+    # self.set_first_last(node)
 
 def depart_theorem_html(self, node):
     self.body.append('</div>')

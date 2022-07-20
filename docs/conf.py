@@ -322,9 +322,12 @@ disqus_shortname = 'sparse-plex'  #
 #         ],                                                                       
 #     }
 
+
+bibtex_bibfiles = ['sksrrcs.bib']
+
 def setup(app):
-    app.add_stylesheet('css/custom.css')
-    app.add_javascript('mathconf.js')
+    app.add_css_file('css/custom.css')
+    app.add_js_file('mathconf.js')
     app.add_config_value('on_rtd', on_rtd, 'env')
-    app.add_stylesheet('css/theme_overrides.css')  
+    app.add_css_file('css/theme_overrides.css')  
 

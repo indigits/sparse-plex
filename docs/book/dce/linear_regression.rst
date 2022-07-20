@@ -6,4 +6,3 @@ Linear Models for Regression
 .. toctree::
    :maxdepth: 2
 
-   linear_regression/basis_functions
